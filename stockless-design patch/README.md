@@ -1,4 +1,4 @@
-# StockLess — Step 1 (Upload) redesign + workspace background
+# StockLess — Steps 1 and 2 redesign + workspace background
 
 Targets **`HansYap/StockLess`** (the live app behind `stockless.pages.dev`), not the Figma Make
 prototype. I checked first: the wording PDF's strings — *"What data can StockLess use?"*,
@@ -9,7 +9,7 @@ prototype. I checked first: the wording PDF's strings — *"What data can StockL
 
 | File | What it is |
 | --- | --- |
-| `step1-upload-redesign.patch` | all seven file changes, 632 lines, +192 / −102 |
+| `steps-1-2-redesign.patch` | all seven file changes, 632 lines, +192 / −102 |
 | `WorkspaceDecor.tsx` | the new component on its own, if you'd rather copy it in by hand |
 | `../StockLess-Step1-Upload.html` | a static preview of the result — double-click to open |
 
@@ -116,6 +116,66 @@ made it more obvious. One line fixes it:
 ```
 
 All three widths (1440 / 1280 / 390) now scroll clean.
+
+## Step 2 — Map columns
+
+Checked against the live site first (`stockless.pages.dev/#workspace` with a file loaded), then
+revised against *Homepage and Step Suggestion UI Wording* and Iteration 3's E1 stories.
+
+### Wording
+
+| Where | Before | After |
+| --- | --- | --- |
+| Eyebrow | Confirm what your columns mean | **Make sure StockLess understands your data** |
+| Heading | We found likely matches. Check them before continuing. | **We found your data. Let's make sure it's right.** |
+| Lede | Your original file is not changed. Mapping only tells StockLess how to interpret it… | Review the suggested column matches before continuing. Your original file won't be changed. |
+| Banner | Sample data loaded. | Sample data loaded — **review the mappings before continuing.** |
+| Bulk button | Looks well, next step | **Confirm all and continue →** |
+| Identity heading | How should products be kept separate? | **How should StockLess identify each product?** |
+| Identity lede | Pick one path and confirm it. This choice is recorded as evidence… | Choose the format that keeps different products and pack sizes separate. |
+| Format 1 | One code column | ① One code column — *SKU, barcode or product code* |
+| Format 2 | Product name together with pack size | ② Product name + pack size |
+| Final CTA | Run readiness check → | **Check my data →** |
+
+### Colour now means something
+
+The PDF's point was that green was doing every job. It now carries one:
+
+- **Sage** `#EDF3EE` / `#3F7A5D` / `#D8E6DA` — confirmed
+- **Amber** — needs attention (the sample-data banner, unconfirmed matches)
+- **Red** — error
+
+Once every field is confirmed and nothing is blocking, a quiet line appears above the table:
+*✓ Your data is ready to analyse.*
+
+### The dark panel is gone
+
+`This file unlocks` was a near-black teal block listing capabilities, with a
+`LOCKED UNTIL ITERATION 3` group still in it — during iteration 3. Two things pointed the same way:
+the PDF asked for a sage card, and **US1.5a** says the feature-unlock presentation is replaced.
+
+It's now a sage card carrying guidance instead of an inventory: *🌱 How to check your data* with the
+four numbered steps, then *Keep products separated* with the two identity formats, then the privacy
+note.
+
+**This removes a visible feature**, so it's worth a look before merging. The "what can my data
+support" question doesn't disappear — it's US1.5a's subject and belongs on Step 3 (Check readiness),
+where it can be answered properly rather than as a locked list. The immediate "what's missing"
+answer is still on this screen, in the `Still needed:` line beside the button.
+
+### Iteration 3 stories covered
+
+- **US1.4** — confirm all matches together or edit individually. The bulk confirm already existed;
+  it now says what it does.
+- **US1.6** — the identity conflict alert already explains clashes between names, codes and pack
+  sizes; the format choice above it is now numbered and in plain language.
+- **US1.5a** — the unlock presentation is replaced, as above.
+
+### One bug fixed
+
+The `Suggested — please check` pill is `white-space: nowrap`, which is right everywhere else but
+made it overflow the narrow status column in the mapping table. It wraps there now, and the column
+is 23% rather than 20%.
 
 ## Two things to know before you merge
 

@@ -20,10 +20,162 @@ index a78c4f1..b2a3d16 100644
      capabilities: featureList(
        "weekly_history",
 diff --git a/backend/src/field-registry.ts b/backend/src/field-registry.ts
-index 527221f..3d7779a 100644
+index 527221f..8592da8 100644
 --- a/backend/src/field-registry.ts
 +++ b/backend/src/field-registry.ts
-@@ -192,12 +192,12 @@ export const UPLOAD_REQUIREMENTS = Object.freeze({
+@@ -7,7 +7,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   transaction_date: {
+     field: "transaction_date",
+     label: "Sale date",
+-    description: "The calendar date on which the sale or return was recorded.",
++    description: "When did each sale or return happen?",
+     status: "core",
+     valueKind: "date",
+     grain: "transaction",
+@@ -18,7 +18,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   product_code: {
+     field: "product_code",
+     label: "Product code, SKU or barcode",
+-    description: "A stable identifier that keeps each product separate.",
++    description: "A code that is unique to each product, so two products are never mixed up.",
+     status: "conditional_core",
+     valueKind: "text",
+     grain: "product",
+@@ -29,7 +29,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   product_name: {
+     field: "product_name",
+     label: "Product name",
+-    description: "A readable product label and one part of composite identity.",
++    description: "The name you use for the product.",
+     status: "conditional_core",
+     valueKind: "text",
+     grain: "product",
+@@ -40,7 +40,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   pack_variant: {
+     field: "pack_variant",
+     label: "Pack size",
+-    description: "The pack size or unit needed to prevent unlike products being merged.",
++    description: "The pack size, so a 10-pack is never counted as the same thing as a 20-pack.",
+     status: "conditional_core",
+     valueKind: "text",
+     grain: "product",
+@@ -51,7 +51,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   quantity_sold: {
+     field: "quantity_sold",
+     label: "Quantity sold",
+-    description: "The sale or return quantity recorded for the transaction.",
++    description: "How many units were sold or returned.",
+     status: "core",
+     valueKind: "decimal",
+     grain: "transaction",
+@@ -62,7 +62,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   current_stock: {
+     field: "current_stock",
+     label: "Stock on hand",
+-    description: "The current product-level stock snapshot; repeated values are not summed.",
++    description: "How much you have on the shelf right now.",
+     status: "feature_dependent",
+     valueKind: "non_negative_decimal",
+     grain: "product",
+@@ -73,7 +73,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   stock_as_of_date: {
+     field: "stock_as_of_date",
+     label: "Stock count date",
+-    description: "The date on which the current-stock snapshot was measured.",
++    description: "When was your current stock counted?",
+     status: "feature_dependent",
+     valueKind: "date",
+     grain: "product",
+@@ -84,7 +84,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   planned_order_quantity: {
+     field: "planned_order_quantity",
+     label: "Planned orders",
+-    description: "A planned purchase quantity for Purchase audit.",
++    description: "An order you have already planned but not yet placed.",
+     status: "feature_dependent",
+     valueKind: "non_negative_integer",
+     grain: "order",
+@@ -95,7 +95,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   incoming_stock_quantity: {
+     field: "incoming_stock_quantity",
+     label: "Incoming stock",
+-    description: "Stock already expected to arrive.",
++    description: "Stock you have ordered that has not arrived yet.",
+     status: "feature_dependent",
+     valueKind: "non_negative_integer",
+     grain: "inbound",
+@@ -106,7 +106,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   incoming_stock_expected_date: {
+     field: "incoming_stock_expected_date",
+     label: "Incoming stock date",
+-    description: "The expected arrival date of incoming stock.",
++    description: "When you expect that stock to arrive.",
+     status: "later_locked",
+     valueKind: "date",
+     grain: "inbound",
+@@ -117,7 +117,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   expiry_date: {
+     field: "expiry_date",
+     label: "Expiry date",
+-    description: "The expiry date of a product lot.",
++    description: "When a batch of the product expires.",
+     status: "feature_dependent",
+     valueKind: "date",
+     grain: "lot",
+@@ -128,7 +128,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   expiry_quantity: {
+     field: "expiry_quantity",
+     label: "Expiry quantity",
+-    description: "The quantity affected by a product-lot expiry date.",
++    description: "How many units are in that expiring batch.",
+     status: "later_locked",
+     valueKind: "non_negative_decimal",
+     grain: "lot",
+@@ -139,7 +139,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   supplier_id_or_name: {
+     field: "supplier_id_or_name",
+     label: "Supplier details",
+-    description: "The supplier responsible for the product.",
++    description: "Who you buy this product from.",
+     status: "later_locked",
+     valueKind: "text",
+     grain: "supplier",
+@@ -150,7 +150,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   supplier_lead_time_days: {
+     field: "supplier_lead_time_days",
+     label: "Supplier lead time in days",
+-    description: "The number of days a supplier usually needs to deliver.",
++    description: "How many days your supplier usually takes to deliver.",
+     status: "later_locked",
+     valueKind: "non_negative_integer",
+     grain: "supplier",
+@@ -161,7 +161,7 @@ export const FIELD_REGISTRY: Readonly<Record<CanonicalField, FieldDefinition>> =
+   pack_size: {
+     field: "pack_size",
+     label: "Pack size",
+-    description: "A numeric or well-defined pack size used for later pack rounding.",
++    description: "How many units come in one case, for rounding orders.",
+     status: "later_locked",
+     valueKind: "text",
+     grain: "product",
+@@ -177,11 +177,15 @@ export const CORE_COLUMN_PATHS = Object.freeze([
+   {
+     id: "stable" as const,
+     label: "One code column",
++    hint: "SKU, barcode or product code",
++    detail: "Use a SKU, barcode, or product code to identify each product.",
+     requiredFields: ["transaction_date", "product_code", "quantity_sold"] as const,
+   },
+   {
+     id: "composite" as const,
+-    label: "Product name together with pack size",
++    label: "Product name + pack size",
++    hint: "Product name + pack size",
++    detail: "Use the product name together with its pack size.",
+     requiredFields: ["transaction_date", "product_name", "pack_variant", "quantity_sold"] as const,
+   },
+ ]);
+@@ -192,12 +196,12 @@ export const UPLOAD_REQUIREMENTS = Object.freeze({
    supportedExtension: ".csv",
    supportedDelimiters: [",", ";", "\t"] as const,
    coreDescription:
@@ -38,11 +190,26 @@ index 527221f..3d7779a 100644
    persistence:
      "Only saved column matching remains for returning use. Dataset rows, forecasts and purchase plans stay in the active session and are not saved in the browser database.",
  });
+diff --git a/frontend/src/App.tsx b/frontend/src/App.tsx
+index 92abde4..92d9963 100644
+--- a/frontend/src/App.tsx
++++ b/frontend/src/App.tsx
+@@ -243,7 +243,9 @@ export default function App() {
+     setAnalysisDate(malaysiaDate());
+     setSessionNotice(previousMode && previousMode !== sourceMode
+       ? `${previousMode === "sample" ? "Sample data" : "The retailer file"} was replaced. Dataset-specific mappings and results were cleared.`
+-      : sourceMode === "sample" ? "Sample data loaded." : "Retailer file loaded locally.");
++      : sourceMode === "sample"
++        ? "Sample data loaded — review the mappings before continuing."
++        : "Retailer file loaded — review the mappings before continuing.");
+     goTo(2);
+   }, [envelope, goTo, resetReadinessEvidence]);
+ 
 diff --git a/frontend/src/components/AppShell.tsx b/frontend/src/components/AppShell.tsx
-index 5e36885..9abbb1b 100644
+index 5e36885..8ba3dd3 100644
 --- a/frontend/src/components/AppShell.tsx
 +++ b/frontend/src/components/AppShell.tsx
-@@ -3,6 +3,7 @@ import { t, useLanguage } from "../i18n/index.ts";
+@@ -3,14 +3,19 @@ import { t, useLanguage } from "../i18n/index.ts";
  import type { ReactNode } from "react";
  import type { SourceMode } from "../engine.ts";
  import { Logo } from "./Logo.tsx";
@@ -50,26 +217,67 @@ index 5e36885..9abbb1b 100644
  
  export type StepId = 1 | 2 | 3 | 4;
  
-@@ -39,6 +40,7 @@ export function AppShell({
+-const STEPS: readonly { id: StepId; label: string }[] = [
+-  { id: 1, label: "Upload" },
+-  { id: 2, label: "Map columns" },
+-  { id: 3, label: "Check readiness" },
+-  { id: 4, label: "Plan purchases" },
++/* The plant grows as the retailer moves through the workflow — the
++   sustainability story on the one progress indicator the screen already has,
++   rather than a second tracker competing with it. Decorative: the dot still
++   carries the step number and the tick, so nothing depends on the glyph. */
++const STEPS: readonly { id: StepId; label: string; plant: string }[] = [
++  { id: 1, label: "Upload", plant: "🌱" },
++  { id: 2, label: "Map columns", plant: "🌿" },
++  { id: 3, label: "Check readiness", plant: "🍃" },
++  { id: 4, label: "Plan purchases", plant: "🌳" },
+ ];
+ 
+ interface AppShellProps {
+@@ -39,11 +44,18 @@ export function AppShell({
    useLanguage();
    return (
      <div className="frame">
 +      <WorkspaceDecor />
        <header className="topbar">
-         <button type="button" className="brand brand--button" onClick={() => onNavigate(1)} aria-label={t("StockLess — upload")}>
+-        <button type="button" className="brand brand--button" onClick={() => onNavigate(1)} aria-label={t("StockLess — upload")}>
++        <a className="brand" href="#home" aria-label={t("StockLess — back to the homepage")}>
            <Logo />
+-        </button>
+-        <a className="workspace-home-link" href="#home">{t("← Homepage")}</a>
++        </a>
++        <a className="workspace-home-link" href="#home">
++          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
++            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
++            <path d="M3.5 11.2 12 4l8.5 7.2M6 9.8V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9.8" />
++          </svg>
++          {t("Homepage")}
++        </a>
+         <LanguageSwitcher />
+         {t(sourceMode && (
+           <div className="session-status" aria-label={t("Active session")}>
+@@ -77,6 +89,7 @@ export function AppShell({
+                   aria-current={isCurrent ? "step" : undefined}
+                   onClick={() => onNavigate(step.id)}
+                 >
++                  <span className="step__plant" aria-hidden="true">{step.plant}</span>
+                   <span className="step__dot">{t(done ? "✓" : step.id)}</span>
+                   <span className="step__label">{t(step.label)}</span>
+                 </button>
 diff --git a/frontend/src/components/WorkspaceDecor.tsx b/frontend/src/components/WorkspaceDecor.tsx
 new file mode 100644
-index 0000000..a46616c
+index 0000000..e6059ad
 --- /dev/null
 +++ b/frontend/src/components/WorkspaceDecor.tsx
-@@ -0,0 +1,48 @@
+@@ -0,0 +1,61 @@
 +/* Decorative background for the workspace shell.
-+   Same language as the homepage — waves, leaves and dot grids in SVG, colours
-+   sampled from the StockLess background mockup. This is an app rather than a
-+   marketing page, so it is deliberately quieter: the artwork is pinned to the
-+   viewport edges, the centre column is left clear, and nothing here takes a
-+   pointer event or is read by a screen reader. */
++
++   The artwork lives in the two gutters beside the 1180px content column and
++   nowhere else, so no wave, leaf or dot ever passes under a heading, a card or
++   a table. Below 1330px there is no gutter left to draw in, so it is dropped
++   rather than allowed behind the text. Colours are sampled from the StockLess
++   background mockup; the wash fades to the page colour, which matches the
++   homepage. Decorative only — it never takes a pointer event. */
 +
 +function Leaf({ x, y, s, rot, fill, op }: {
 +  x: number; y: number; s: number; rot: number; fill: string; op: number;
@@ -86,29 +294,40 @@ index 0000000..a46616c
 +
 +function Dots({ x, y }: { x: number; y: number }) {
 +  const circles = [];
-+  for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++)
-+    circles.push(<circle key={`${i}-${j}`} cx={i * 16} cy={j * 16} r="2.5" />);
-+  return <g transform={`translate(${x} ${y})`} fill="#9CC9A0" opacity=".45">{circles}</g>;
++  for (let i = 0; i < 3; i++) for (let j = 0; j < 4; j++)
++    circles.push(<circle key={`${i}-${j}`} cx={i * 15} cy={j * 15} r="2.3" />);
++  return <g transform={`translate(${x} ${y})`} fill="#9CC9A0" opacity=".5">{circles}</g>;
++}
++
++/** One gutter strip. The right-hand copy is mirrored in CSS. */
++function Gutter({ id }: { id: string }) {
++  return (
++    <svg viewBox="0 0 160 900" preserveAspectRatio="xMinYMid slice">
++      <defs>
++        <linearGradient id={id} x1="0" y1="0" x2="1" y2="0">
++          <stop offset="0" stopColor="#DCEFD8" stopOpacity=".6" />
++          <stop offset=".5" stopColor="#EDF7E9" stopOpacity=".4" />
++          <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
++        </linearGradient>
++      </defs>
++      <rect width="160" height="900" fill={`url(#${id})`} />
++      {/* waves settle at the foot of the strip */}
++      <path d="M0 900V688c50-28 102 16 160-4v216Z" fill="#B8DFBE" opacity=".45" />
++      <path d="M0 900V772c54-24 106 18 160 0v128Z" fill="#83B480" opacity=".26" />
++      <Leaf x={14} y={128} s={0.52} rot={-16} fill="#8FBC8B" op={0.55} />
++      <Leaf x={86} y={236} s={0.34} rot={31} fill="#A5CDA0" op={0.5} />
++      <Leaf x={22} y={556} s={0.44} rot={12} fill="#A6CEA4" op={0.5} />
++      <Dots x={96} y={404} />
++      <Dots x={18} y={392} />
++    </svg>
++  );
 +}
 +
 +export function WorkspaceDecor() {
 +  return (
 +    <div className="ws-decor" aria-hidden="true">
-+      <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
-+        {/* a soft wash along the top edge and waves along the foot */}
-+        <path d="M0 0h1440v70c-300 104-500-32-820 32C360 138 206 60 0 168Z" fill="#EDF7E9" opacity=".7" />
-+        <path d="M0 900V742c236-62 470 54 752 8 282-46 488 56 688 12v138Z" fill="#DCEFD8" opacity=".75" />
-+        <path d="M0 900V812c282-46 526 50 846 10 264-32 432 42 594 10v68Z" fill="#B8DFBE" opacity=".55" />
-+        {/* leaves sit in the margins, outside the centred content column */}
-+        <Leaf x={40} y={120} s={0.5} rot={-18} fill="#8FBC8B" op={0.55} />
-+        <Leaf x={118} y={228} s={0.32} rot={34} fill="#A5CDA0" op={0.5} />
-+        <Leaf x={1310} y={150} s={0.44} rot={156} fill="#A6CEA4" op={0.55} />
-+        <Leaf x={1382} y={286} s={0.3} rot={200} fill="#9AC698" op={0.5} />
-+        <Leaf x={62} y={618} s={0.42} rot={14} fill="#8FBC8B" op={0.5} />
-+        <Leaf x={1338} y={648} s={0.36} rot={-26} fill="#A5CDA0" op={0.5} />
-+        <Dots x={1348} y={430} />
-+        <Dots x={56} y={402} />
-+      </svg>
++      <div className="ws-decor__side ws-decor__side--left"><Gutter id="wsGutterL" /></div>
++      <div className="ws-decor__side ws-decor__side--right"><Gutter id="wsGutterR" /></div>
 +    </div>
 +  );
 +}
@@ -126,8 +345,355 @@ index cc5c2d6..aba2b05 100644
 +@media(max-width:760px){.sl-container{width:calc(100% - 36px)}.sl-nav{min-height:88px;gap:12px;flex-wrap:wrap;padding-top:18px;padding-bottom:15px}.sl-nav .brand__logo{height:35px!important}.sl-nav nav{order:3;width:100%;justify-content:center;gap:26px;font-size:13px;padding-top:7px}.sl-nav>.sl-button{font-size:12px;min-height:40px;padding:9px 12px;gap:14px}.sl-hero{padding-top:40px}.sl-home h1{font-size:clamp(37px,7.5vw,55px);letter-spacing:-2px}.sl-hero-eyebrow{font-size:9px;letter-spacing:1.2px}.sl-hero-copy{font-size:15px}.sl-mobile-break{display:block}.sl-hero-actions{gap:20px;flex-wrap:wrap;margin-top:23px}.sl-hero-actions .sl-button{font-size:14px;padding:13px 16px}.sl-preview-stage{margin-top:37px;padding-inline:10px}.sl-preview-stage:before{inset:60px 0 0;border-radius:16px}.sl-demo{border-width:4px;border-radius:13px}.sl-demo-bar{padding:10px;font-size:7px}.sl-demo-bar>span:nth-child(2){display:none}.sl-demo-grid{grid-template-columns:1fr}.sl-evidence{padding:19px}.sl-product h3{font-size:20px}.sl-warning p{font-size:12px}.sl-warning strong{font-size:12px}.sl-chart-heading{flex-direction:row}.sl-chart-heading>span{font-size:8px}.sl-chart h4{font-size:11px}.sl-demo-baseline{font-size:10px}.sl-demo-baseline b{font-size:12px}.sl-scenario{border-left:0;border-top:1px solid var(--sl-line);padding:22px}.sl-scenario h3{font-size:21px}.sl-scenario>p,.sl-scenario label{font-size:13px}.sl-scenario input{min-height:32px}.sl-text-button{font-size:13px!important;min-height:35px}.sl-scenario-result{padding:18px}.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:12px}.sl-range-ends{font-size:11px}.sl-demo-note{font-size:10px}.sl-section{padding-top:68px}.sl-home h2{font-size:34px;letter-spacing:-1.4px}.sl-section-copy{font-size:16px;margin-top:17px!important}.sl-benefits,.sl-steps{grid-template-columns:1fr 1fr;gap:28px 22px;margin-top:33px}.sl-benefits h3{font-size:16px}.sl-benefits p,.sl-steps p{font-size:15px}.sl-wide-photo{margin-top:36px!important;border-radius:13px}.sl-wide-photo img{height:250px}.sl-wide-photo figcaption{left:20px;bottom:20px;font-size:12px;right:20px}.sl-story,.sl-impact{grid-template-columns:1fr;gap:32px;padding-top:68px}.sl-story-image{height:380px;min-height:0;object-position:center 35%}.sl-statistics>div{grid-template-columns:125px 1fr}.sl-statistics dd{font-size:15px}.sl-source{font-size:12px}.sl-comparison{margin-top:65px;padding-top:55px}.sl-table-hint{display:flex;justify-content:space-between}.sl-table-hint span{display:inline}.sl-comparison table{min-width:760px}.sl-comparison th,.sl-comparison td{padding:16px}.sl-comparison-tagline{font-size:16px}.sl-impact{gap:35px}.sl-sdg{min-height:360px;max-width:500px;width:100%;margin-inline:auto}.sl-sdg svg{height:170px}.sl-sdg b{font-size:18px}.sl-impact-lede{font-size:18px}.sl-section-header{align-items:flex-start;flex-direction:column;gap:20px}.sl-steps{margin-top:32px}.sl-step-number{font-size:48px;margin-bottom:13px}.sl-steps h3{font-size:16px}.sl-final-cta{grid-template-columns:1fr;margin-top:40px}.sl-final-cta>div{padding:30px}.sl-final-cta h2{font-size:34px}.sl-final-cta img{height:250px;min-height:0}.sl-footer{flex-wrap:wrap;margin-top:45px;padding-block:25px}.sl-footer p{order:3;width:100%;font-size:13px}.sl-desktop-break{display:none}.workspace-home-link{margin-right:10px;font-size:13px}}
  @media(prefers-reduced-motion:no-preference){html:has(.sl-home){scroll-behavior:smooth}}
  @media(prefers-reduced-motion:reduce){.sl-button{transition:none}}
+diff --git a/frontend/src/screens/MappingScreen.tsx b/frontend/src/screens/MappingScreen.tsx
+index 5d2f91a..cb52861 100644
+--- a/frontend/src/screens/MappingScreen.tsx
++++ b/frontend/src/screens/MappingScreen.tsx
+@@ -1,13 +1,13 @@
+ import { t, useLanguage } from "../i18n/index.ts";
+ import { useMemo } from "react";
+ import {
++  evaluateCapabilities,
++  partitionCapabilities,
+   CANONICAL_FIELDS,
+   CORE_COLUMN_PATHS,
+   FIELD_REGISTRY,
+   detectIdentityConflicts,
+-  evaluateCapabilities,
+   getReadinessBlockers,
+-  partitionCapabilities,
+   type CanonicalField,
+   type MappingProposalResult,
+   type MappingState,
+@@ -32,6 +32,29 @@ interface MappingScreenProps {
+ }
+ 
+ /** Screen 02. Every mapping starts unconfirmed; the retailer confirms each one. */
++const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
++
++/** A preview that reads at a glance.
++ *  A stock-count column repeats one date on every row, so printing it five
++ *  times says nothing — distinct values only, and ISO dates in the form a
++ *  person writes them. */
++function formatPreview(values: readonly string[]): string {
++  const seen: string[] = [];
++  for (const raw of values) {
++    const value = String(raw ?? "").trim();
++    if (!value || seen.includes(value)) continue;
++    seen.push(value);
++    if (seen.length === 3) break;
++  }
++  if (seen.length === 0) return "—";
++  const pretty = seen.map((value) => {
++    const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
++    if (!iso) return value;
++    return `${Number(iso[3])} ${MONTHS[Number(iso[2]) - 1]} ${iso[1]}`;
++  });
++  return pretty.join(" · ");
++}
++
+ export function MappingScreen(props: MappingScreenProps) {
+   useLanguage();
+   const { dataset, mapping, proposals } = props;
+@@ -41,7 +64,35 @@ export function MappingScreen(props: MappingScreenProps) {
+     [],
+   );
+ 
+-  const capabilities = useMemo(() => partitionCapabilities(evaluateCapabilities(mapping)), [mapping]);
++  /* The old panel listed seven capabilities, four of which repeated the same
++     sentence about sale date. This inverts it: what is missing, and what it
++     would unlock. Columns that unlock exactly the same things are merged onto
++     one row — stock on hand and stock count date always travel together, so
++     listing them separately just says everything twice. */
++  const unlocks = useMemo(() => {
++    const groups = partitionCapabilities(evaluateCapabilities(mapping));
++    const byField = new Map<string, { label: string; unlocks: string[] }>();
++    for (const item of groups.needsMoreInformation) {
++      for (const reason of item.reasons) {
++        if (!reason.field) continue;
++        const entry = byField.get(reason.field)
++          ?? { label: FIELD_REGISTRY[reason.field].label, unlocks: [] };
++        if (!entry.unlocks.includes(item.label)) entry.unlocks.push(item.label);
++        byField.set(reason.field, entry);
++      }
++    }
++    const merged = new Map<string, { fields: string[]; unlocks: string[] }>();
++    for (const entry of byField.values()) {
++      const key = [...entry.unlocks].sort().join("|");
++      const group = merged.get(key) ?? { fields: [], unlocks: entry.unlocks };
++      group.fields.push(entry.label);
++      merged.set(key, group);
++    }
++    return [...merged.values()]
++      .sort((a, b) => b.unlocks.length - a.unlocks.length)
++      .slice(0, 3);
++  }, [mapping]);
++
+   const conflicts = useMemo(() => detectIdentityConflicts(dataset, mapping), [dataset, mapping]);
+   const blockers = useMemo(() => getReadinessBlockers(mapping), [mapping]);
+ 
+@@ -60,12 +111,10 @@ export function MappingScreen(props: MappingScreenProps) {
+ 
+   return (
+     <>
+-      <p className="eyebrow">{t("Confirm what your columns mean")}</p>
+-      <h1 className="title">
+-        {t("We found likely matches.")}<br />
+-        {t("Check them before continuing.")}</h1>
++      <p className="eyebrow">{t("Make sure StockLess understands your data")}</p>
++      <h1 className="title">{t("We found your data. Let's make sure it's right.")}</h1>
+       <p className="lede">
+-        {t("Your original file is not changed. Mapping only tells StockLess how to interpret it during this session.")}</p>
++        {t("Review the suggested column matches before continuing. Your original file won't be changed.")}</p>
+ 
+       <div className="filebar">
+         <div className="filebar__left">
+@@ -94,10 +143,15 @@ export function MappingScreen(props: MappingScreenProps) {
+               <p className="card-sub">
+                 {t("Nothing is applied until you confirm it. Sale date, quantity sold and how your products are named or coded are required.")}</p>
+             </div>
+-            <span className={`pill ${confirmedCount === fields.length ? "pill--teal" : "pill--grey"}`}>
++            <span className={`pill ${confirmedCount === fields.length ? "pill--confirmed" : "pill--grey"}`}>
+               {t(confirmedCount)} {t("of ")}{t(fields.length)} {t("confirmed")}</span>
+           </div>
+ 
++          {t(confirmedCount === fields.length && blockers.length === 0 && (
++            <p className="all-set" role="status">
++              <span aria-hidden="true">✓</span>{t("Your data is ready to analyse.")}</p>
++          ))}
++
+           <div className="mapping-bulk">
+             <div>
+               <b>{t("All matches look right?")}</b>
+@@ -108,7 +162,7 @@ export function MappingScreen(props: MappingScreenProps) {
+             <button type="button" className="btn btn--primary"
+               disabled={bulkBlockers.length > 0 || props.checking}
+               aria-busy={props.checking} onClick={props.onConfirmAllAndContinue}>
+-              {t(props.checking ? "Checking locally…" : "Looks well, next step")}
++              {t(props.checking ? "Checking locally…" : "Confirm all and continue →")}
+             </button>
+           </div>
+           <div className="table-scroll">
+@@ -117,7 +171,7 @@ export function MappingScreen(props: MappingScreenProps) {
+                 <tr>
+                   <th style={{ width: "28%" }}>{t("StockLess field")}</th>
+                   <th style={{ width: "27%" }}>{t("Your column")}</th>
+-                  <th style={{ width: "25%" }}>{t("Preview")}</th>
++                  <th style={{ width: "22%" }}>{t("Preview")}</th>
+                   <th style={{ width: "20%" }}>{t("Status")}</th>
+                 </tr>
+               </thead>
+@@ -131,9 +185,14 @@ export function MappingScreen(props: MappingScreenProps) {
+                   return (
+                     <tr key={field}>
+                       <td>
+-                        <b className="dtable__label">{t(definition.label)}</b>
+-                        {t(required && <span className="req">{t("Required")}</span>)}
+-                        <div className="dtable__hint">{t(definition.description)}</div>
++                        <span className="field-head">
++                          <b className="dtable__label">{t(definition.label)}</b>
++                          <button type="button" className="hint" aria-label={t(definition.description)}>
++                            <span aria-hidden="true">?</span>
++                            <span className="hint__bubble" role="tooltip">{t(definition.description)}</span>
++                          </button>
++                          {t(required && <span className="req">{t("Required")}</span>)}
++                        </span>
+                       </td>
+                       <td>
+                         <select
+@@ -154,14 +213,14 @@ export function MappingScreen(props: MappingScreenProps) {
+                         </select>
+                       </td>
+                       <td className="num">
+-                        {column ? column.previewValues.slice(0, 5).join(" · ") || "—" : "—"}
++                        {column ? formatPreview(column.previewValues) : "—"}
+                       </td>
+                       <td>
+                         {t(current?.confirmed ? (
+-                          <span className="pill pill--teal">{t("Confirmed")}</span>
++                          <span className="pill pill--confirmed">{t("✓ Confirmed")}</span>
+                         ) : current ? (
+                           <div className="mapping-status">
+-                            <span className="pill pill--amber">{t("Suggested — please check")}</span>
++                            <span className="pill pill--amber">{t("Please confirm")}</span>
+                             <button
+                               type="button"
+                               className="btn btn--small btn--ghost"
+@@ -182,31 +241,37 @@ export function MappingScreen(props: MappingScreenProps) {
+           </div>
+ 
+           <div className="identity">
+-            <h3 className="identity__title">{t("How should products be kept separate?")}</h3>
++            <h3 className="identity__title">{t("How should StockLess identify your products?")}</h3>
+             <p className="identity__lede">
+-              {t("Pick one path and confirm it. This choice is recorded as evidence for the rest of the session.")}</p>
+-            <div className="identity__paths">
+-              {t(CORE_COLUMN_PATHS.map((path) => {
++              {t("Choose how each product should be identified in your sales data.")}</p>
++            {/* Two mutually exclusive choices, so: a radio group. The whole
++                card is the target — a small button inside a large card is the
++                thing people click past. No nested buttons either, which the
++                old markup had. */}
++            <div className="identity__paths" role="radiogroup"
++              aria-label={t("How should StockLess identify your products?")}>
++              {t(CORE_COLUMN_PATHS.map((path, index) => {
+                 const ready = identityPathReady(path.id);
+                 const chosen = mapping.identityMode === path.id && mapping.identityConfirmed;
+                 return (
+-                  <div key={path.id} className={`identity__path${chosen ? " identity__path--on" : ""}`}>
+-                    <div className="identity__path-name">{t(path.label)}</div>
+-                    <div className="identity__path-fields">
+-                      {t(path.requiredFields
+-                        .filter((f) => f !== "transaction_date" && f !== "quantity_sold")
+-                        .map((f) => t(FIELD_REGISTRY[f].label))
+-                        .join(" + "))}
+-                    </div>
+-                    <button
+-                      type="button"
+-                      className={`btn btn--small ${chosen ? "btn--ghost" : "btn--primary"}`}
+-                      disabled={!ready || chosen || props.checking}
+-                      onClick={() => props.onConfirmIdentity(path.id)}
+-                    >
+-                      {t(chosen ? "Confirmed" : ready ? "Use this path" : "Confirm its columns first")}
+-                    </button>
+-                  </div>
++                  <button
++                    key={path.id}
++                    type="button"
++                    role="radio"
++                    aria-checked={chosen}
++                    className={`identity__path${chosen ? " identity__path--on" : ""}`}
++                    disabled={!ready || props.checking}
++                    onClick={() => props.onConfirmIdentity(path.id)}
++                  >
++                    <span className="identity__path-name">
++                      <span className="identity__path-number" aria-hidden="true">{index + 1}</span>
++                      {t(path.label)}
++                    </span>
++                    <span className="identity__path-fields">{t(path.detail)}</span>
++                    <span className="identity__path-state">
++                      {t(chosen ? "✓ Selected" : ready ? "Use this option" : "Confirm its columns first")}
++                    </span>
++                  </button>
+                 );
+               }))}
+             </div>
+@@ -240,14 +305,62 @@ export function MappingScreen(props: MappingScreenProps) {
+           {t(props.error && <p className="notice notice--error" role="alert">{t(props.error)}</p>)}
+         </section>
+ 
+-        <aside className="panel-dark">
+-          <h2>{t("This file unlocks")}</h2>
+-          <p className="panel-dark__lede">
+-            {t("Capabilities follow the columns you confirmed, not the column names themselves.")}</p>
++        {/* Guidance, not a feature inventory — US1.5a replaces the unlock
++            presentation, and what the data can support is answered properly on
++            the readiness step. */}
++        <aside className="panel-sage">
++          <h2 className="panel-sage__title">
++            <span aria-hidden="true">🌱</span>{t("Check your data")}</h2>
++          <p className="panel-sage__lede">
++            {t("Review your columns and make sure StockLess has the information it needs.")}</p>
++          <ol className="sage-steps">
++            <li>{t("Read your column names")}</li>
++            <li>{t("Match each column to a StockLess field")}</li>
++            <li>{t("Review the data preview")}</li>
++            <li>{t("Confirm your column mappings")}</li>
++          </ol>
+ 
+-          <CapabilityGroup title={t("You can do this now")} tone="on" items={capabilities.availableNow} />
+-          <CapabilityGroup title={t("Needs more information")} tone="off" items={capabilities.needsMoreInformation} />
+-          <CapabilityGroup title={t("Locked until iteration 3")} tone="locked" items={capabilities.locked} />
++          <h3 className="panel-sage__subtitle">{t("Identify your products")}</h3>
++          <p className="panel-sage__lede">
++            {t("Choose how StockLess should tell your products apart.")}</p>
++          <ol className="sage-formats">
++            {t(CORE_COLUMN_PATHS.map((path) => (
++              <li key={path.id}>
++                <b>{t(path.label)}</b>
++                <span>{t(path.hint)}</span>
++              </li>
++            )))}
++          </ol>
++
++          {t(unlocks.length > 0 && (
++          <div className="unlocks">
++            <h3 className="unlocks__title">{t("Add more, see more")}</h3>
++            <p className="unlocks__lede">{t("Confirm these columns to unlock:")}</p>
++            <ul className="unlocks__list">
++              {t(unlocks.map((group) => (
++                <li key={group.fields.join("|")}>
++                  <b>{t(group.fields.map(t).join(" + "))}</b>
++                  <span>{t(group.unlocks.slice(0, 3).map(t).join(", "))}</span>
++                </li>
++              )))}
++            </ul>
++          </div>
++        ))}
++
++        <p className="panel-sage__privacy">
++            <span className="panel-sage__lock" aria-hidden="true">
++              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
++                strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
++                <rect x="4" y="10.5" width="16" height="10" rx="2.5" />
++                <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
++                <circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none" />
++              </svg>
++            </span>
++            <span>
++              <b>{t("Your data stays on your device.")}</b>
++              {t("Your file is processed directly in your browser. Your sales data and product information are not uploaded to an AI or API service.")}
++            </span>
++          </p>
+         </aside>
+       </div>
+ 
+@@ -266,7 +379,7 @@ export function MappingScreen(props: MappingScreenProps) {
+             aria-busy={props.checking}
+           >
+             {t(props.checking && <span className="btn__spinner" aria-hidden="true" />)}
+-            {t(props.checking ? "Checking locally…" : "Run readiness check →")}
++            {t(props.checking ? "Checking locally…" : "Check my data →")}
+           </button>
+         </div>
+       </div>
+@@ -275,34 +388,3 @@ export function MappingScreen(props: MappingScreenProps) {
+ }
+ 
+ /** Renders one capability section with its engine-supplied reasons. */
+-function CapabilityGroup({
+-  title,
+-  tone,
+-  items,
+-}: {
+-  readonly title: string;
+-  readonly tone: "on" | "off" | "locked";
+-  readonly items: readonly CapabilityResult[];
+-}) {
+-  useLanguage();
+-  if (items.length === 0) return null;
+-  return (
+-    <>
+-      <p className="panel-dark__eyebrow">{t(title)}</p>
+-      {t(items.map((item) => (
+-        <div className="unlock" key={item.capability}>
+-          <span className={`unlock__tick unlock__tick--${tone}`} aria-hidden="true">
+-            {t(tone === "on" ? "✓" : tone === "locked" ? "‧" : "?")}
+-          </span>
+-          <span>
+-            {t(item.label)}
+-            {t(item.state === "limited" && <em className="unlock__state"> {t("· Limited data")}</em>)}
+-            {t(item.reasons.length > 0 && tone !== "on" && (
+-              <span className="unlock__reason">{t(item.reasons[0]?.message)}</span>
+-            ))}
+-          </span>
+-        </div>
+-      )))}
+-    </>
+-  );
+-}
 diff --git a/frontend/src/screens/UploadScreen.tsx b/frontend/src/screens/UploadScreen.tsx
-index 9aa26c6..4841c11 100644
+index 9aa26c6..0f59220 100644
 --- a/frontend/src/screens/UploadScreen.tsx
 +++ b/frontend/src/screens/UploadScreen.tsx
 @@ -40,7 +40,7 @@ const PHASE_LABEL: Readonly<Record<CsvProgress["phase"], string>> = {
@@ -139,7 +705,61 @@ index 9aa26c6..4841c11 100644
  };
  
  const SAMPLE_REFERENCE_DATE = "2026-09-03";
-@@ -194,9 +194,9 @@ export function UploadScreen({
+@@ -86,6 +86,53 @@ async function readFileBytes(
+ }
+ 
+ /** Screen 01. Accepts a retailer CSV or the bundled sample and reports failures. */
++/** What the file turns into, drawn as line icons rather than box-drawing glyphs. */
++const VALUE_CHAIN = [
++  {
++    label: "Your sales data",
++    icon: (
++      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
++        strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
++        <path d="M6 2.5h8l4 4v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-18a1 1 0 0 1 1-1Z" />
++        <path d="M14 2.5v4h4M8.5 12h7M8.5 15.5h7M8.5 19h4" />
++      </svg>
++    ),
++  },
++  {
++    label: "Demand insights",
++    icon: (
++      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
++        strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
++        <path d="M3.5 20.5h17" />
++        <rect x="5.5" y="12" width="3.6" height="6" rx="1.1" />
++        <rect x="10.2" y="7.5" width="3.6" height="10.5" rx="1.1" />
++        <rect x="14.9" y="10" width="3.6" height="8" rx="1.1" />
++      </svg>
++    ),
++  },
++  {
++    label: "Smarter restocking",
++    icon: (
++      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
++        strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
++        <path d="M12 2.8 20.5 7v10L12 21.2 3.5 17V7Z" />
++        <path d="M3.5 7 12 11.4 20.5 7M12 11.4v9.8" />
++      </svg>
++    ),
++  },
++  {
++    label: "Less waste",
++    end: true,
++    icon: (
++      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
++        strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
++        <path d="M20 4c0 8.5-4.6 13-10 13a6 6 0 0 1-6-6C4 6.5 10.5 4 20 4Z" />
++        <path d="M4.5 20.5C7 15 11 11.5 15.5 9.5" />
++      </svg>
++    ),
++  },
++] as const;
++
+ export function UploadScreen({
+   onSource,
+   onCancel,
+@@ -194,9 +241,9 @@ export function UploadScreen({
  
        <div className="s1-grid">
          <div>
@@ -151,7 +771,7 @@ index 9aa26c6..4841c11 100644
  
            <AttributeSection
              id="required-data"
-@@ -228,9 +228,11 @@ export function UploadScreen({
+@@ -228,9 +275,11 @@ export function UploadScreen({
                <>
                  <h3>{t(progress ? PHASE_LABEL[progress.phase] : "Reading the file")}</h3>
                  <p>
@@ -166,24 +786,38 @@ index 9aa26c6..4841c11 100644
                  </p>
                  <div
                    className="progress"
-@@ -265,7 +267,13 @@ export function UploadScreen({
+@@ -265,7 +314,17 @@ export function UploadScreen({
                      {t("Use sample file")}</button>
                  </div>
                  <p className="dropzone__limits">
 -                  {t(UPLOAD_REQUIREMENTS.supportedExtension)} {t("up to ")}{t(megabyteLimit)} {t("MiB ·")}{t(" ")}{t(UPLOAD_REQUIREMENTS.maxRows.toLocaleString("en"))} {t("rows ·")}{t(" ")}{t("comma, semicolon or tab")}</p>
 +                  {t(".CSV")} · {t("Up to ")}{t(megabyteLimit)}{t(" MiB")} · {t(UPLOAD_REQUIREMENTS.maxRows.toLocaleString("en"))}{t(" rows")} · {t("Comma, semicolon or tab separated")}</p>
 +                <ol className="value-chain" aria-label={t("What your file turns into")}>
-+                  <li><span className="value-chain__icon" aria-hidden="true">▤</span>{t("Sales data")}</li>
-+                  <li><span className="value-chain__icon" aria-hidden="true">▥</span>{t("Demand insights")}</li>
-+                  <li><span className="value-chain__icon" aria-hidden="true">▦</span>{t("Smarter restocking")}</li>
-+                  <li className="value-chain__end"><span className="value-chain__icon" aria-hidden="true">🌱</span>{t("Less waste")}</li>
++                  {VALUE_CHAIN.map(({ label, icon, end }) => (
++                    <li key={label} className={end ? "value-chain__end" : undefined}>
++                      <span className="value-chain__step">
++                        <span className="value-chain__icon" aria-hidden="true">{icon}</span>
++                        <span className="value-chain__label">{t(label)}</span>
++                      </span>
++                    </li>
++                  ))}
 +                </ol>
                </>
              ))}
  
-@@ -295,7 +303,7 @@ export function UploadScreen({
+@@ -293,9 +352,16 @@ export function UploadScreen({
+           ))}
+ 
            <div className="privacy">
-             <span className="privacy__tick" aria-hidden="true">✓</span>
+-            <span className="privacy__tick" aria-hidden="true">✓</span>
++            <span className="privacy__tick" aria-hidden="true">
++              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
++                strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
++                <rect x="4" y="10.5" width="16" height="10" rx="2.5" />
++                <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
++                <circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none" />
++              </svg>
++            </span>
              <p>
 -              <b>{t("Your sales figures stay in this browser.")}</b>
 +              <b>{t("Your data stays on your device.")}</b>
@@ -191,13 +825,15 @@ index 9aa26c6..4841c11 100644
              </p>
            </div>
 diff --git a/frontend/src/styles.css b/frontend/src/styles.css
-index 862cb48..f88e1dc 100644
+index 862cb48..a53964b 100644
 --- a/frontend/src/styles.css
 +++ b/frontend/src/styles.css
-@@ -5,6 +5,11 @@
+@@ -4,7 +4,12 @@
+   --teal:#167D74; --teal-deep:#11655E; --teal-tint:#E8F3F0; --mint:#8FD2C8;
    --red:#9B3939; --red-tint:#FBE8E8;
    --amber:#8B5C10; --amber-tint:#FFF4DF; --amber-strong:#D99120;
-   --page:#F7F9F8;
+-  --page:#F7F9F8;
++  --page:#FFFFFF;
 +  /* Type scale — the same tokens and values the homepage uses, so the app and
 +     the marketing site read as one product. Sizes below are set from these. */
 +  --text-page-title:36px; --text-lead:18px; --text-section-head:20px;
@@ -325,7 +961,7 @@ index 862cb48..f88e1dc 100644
  .upload-card{padding:30px;display:flex;flex-direction:column;gap:18px}
  .dropzone{min-height:294px;border-radius:18px;border:2px dashed #9BC8C1;
    background:linear-gradient(180deg,#F8FCFB 0%,#EDF7F4 100%);
-@@ -136,37 +141,37 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -136,37 +141,40 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .csv-badge{width:54px;height:64px;background:#fff;border:2px solid var(--teal);border-radius:10px;
    display:flex;align-items:flex-end;justify-content:center;padding:0 7px 10px;margin-bottom:24px}
  .csv-badge span{display:block;width:36px;padding:4px 0;background:var(--teal-tint);border-radius:5px;
@@ -341,15 +977,20 @@ index 862cb48..f88e1dc 100644
  .progress{width:220px;height:4px;border-radius:2px;background:#CFE0DC;margin-top:18px;overflow:hidden}
  .progress__fill{display:block;height:100%;background:var(--teal);transition:width .12s linear}
  
- .privacy{display:flex;gap:11px;padding:13px 15px;background:var(--ink);border-radius:12px}
- .privacy__tick{width:18px;height:18px;flex:none;border-radius:9px;background:var(--teal);color:#fff;
+-.privacy{display:flex;gap:11px;padding:13px 15px;background:var(--ink);border-radius:12px}
+-.privacy__tick{width:18px;height:18px;flex:none;border-radius:9px;background:var(--teal);color:#fff;
 -  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
-+  display:flex;align-items:center;justify-content:center;font-size:var(--text-description);font-weight:800}
++/* A reassurance, not a warning — so it reads as a soft note rather than a
++   black slab shouting at the end of the card. */
++.privacy{display:flex;align-items:flex-start;gap:13px;padding:16px 18px;
++  background:#F1F8F3;border:1px solid #D8E9DD;border-radius:16px}
++.privacy__tick{width:34px;height:34px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
++  display:flex;align-items:center;justify-content:center}
  .privacy p{margin:0}
 -.privacy b{display:block;color:#fff;font-size:13px;line-height:18.85px}
 -.privacy span{color:#EDF7F5;font-size:12px;line-height:17.5px}
-+.privacy b{display:block;color:#fff;font-size:var(--text-body);line-height:1.35}
-+.privacy span{color:#EDF7F5;font-size:var(--text-secondary);line-height:1.45}
++.privacy b{display:block;color:var(--ink);font-size:var(--text-body);line-height:1.4;margin-bottom:3px}
++.privacy span{color:var(--muted);font-size:var(--text-secondary);line-height:1.5}
  .saved-setup{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;
    border:1px solid var(--line);border-radius:12px;background:#fff}
  .saved-setup div{display:flex;flex-direction:column;gap:3px}
@@ -377,7 +1018,7 @@ index 862cb48..f88e1dc 100644
  
  /* screen 02 */
  .filebar{align-self:stretch;margin-top:21px;padding:14px 18px;background:#fff;
-@@ -174,47 +179,47 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -174,47 +182,47 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
  .filebar__left{display:flex;align-items:center;gap:12px}
  .filebar__icon{width:36px;height:36px;border-radius:10px;background:var(--teal-tint);
@@ -439,7 +1080,7 @@ index 862cb48..f88e1dc 100644
  
  @media (max-width:1240px){
    .page{padding-left:32px;padding-right:32px}
-@@ -226,9 +231,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -226,9 +234,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  @media (max-width:760px){
    .page{padding-left:20px;padding-right:20px}
    .topbar,.stepper{padding-left:20px;padding-right:20px}
@@ -452,7 +1093,7 @@ index 862cb48..f88e1dc 100644
    .identity__paths{grid-template-columns:1fr}
    .footer-row{flex-direction:column;align-items:stretch}
    .blockers{text-align:left}
-@@ -242,11 +247,11 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -242,11 +250,11 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
  .ready__left{display:flex;align-items:center;gap:14px}
  .ready__tick{width:44px;height:44px;flex:none;border-radius:13px;background:var(--teal);color:#fff;
@@ -468,7 +1109,7 @@ index 862cb48..f88e1dc 100644
  
  .issues{align-self:stretch;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
  .issues--five{grid-template-columns:repeat(5,1fr)}
-@@ -257,15 +262,15 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -257,15 +265,15 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .issue:disabled{cursor:default;opacity:.6}
  .issue--active{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
  .issue__head{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
@@ -488,7 +1129,7 @@ index 862cb48..f88e1dc 100644
  
  .panel-warn{width:310px;flex:none;padding:22px;background:var(--amber-tint);
    border:1px solid #F0D29F;border-radius:22px}
-@@ -274,21 +279,21 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -274,21 +282,21 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    display:flex;align-items:center;justify-content:center;
    font-family:var(--display);font-size:16px;font-weight:800}
  .panel-warn--calm .panel-warn__icon{background:var(--teal)}
@@ -516,7 +1157,7 @@ index 862cb48..f88e1dc 100644
  .decision-card__actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
  
  .evidence-section{align-self:stretch;margin-top:18px;padding:22px}
-@@ -306,26 +311,26 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -306,26 +314,26 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .dtable--tidy-ups th:nth-child(3),.dtable--tidy-ups th:nth-child(4){width:24%}
  .dtable--tidy-ups th:nth-child(5){width:24%}
  .trace-value{display:inline-block;max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);background:#EEF3F1;border:1px solid var(--line);border-radius:5px;padding:3px 6px}
@@ -549,7 +1190,7 @@ index 862cb48..f88e1dc 100644
  .freshness-card small{line-height:1.4}
  .freshness-card--current{border-left:4px solid var(--teal)}
  .freshness-card--limited{border-left:4px solid var(--amber-strong)}
-@@ -338,14 +343,14 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -338,14 +346,14 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .picker{align-self:stretch;display:flex;align-items:center;justify-content:space-between;
    gap:16px;margin-top:20px;flex-wrap:wrap}
  .picker__left{display:flex;align-items:center;gap:11px}
@@ -566,7 +1207,7 @@ index 862cb48..f88e1dc 100644
  .swatch-bar{width:12px;height:4px;border-radius:5px;background:var(--teal)}
  .swatch-negative{width:12px;height:4px;border-radius:5px;background:var(--red)}
  .swatch-zero{width:8px;height:8px;border-radius:50%;background:#3F7E98}
-@@ -355,25 +360,25 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -355,25 +363,25 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    position:relative;overflow:hidden;color:#fff}
  .cover::after{content:"";position:absolute;width:190px;height:190px;border-radius:95px;
    background:rgba(143,210,200,.13);right:-60px;bottom:-70px}
@@ -599,34 +1240,183 @@ index 862cb48..f88e1dc 100644
  .history-table{align-self:stretch;margin-top:12px;padding:22px}
  .dtable--weeks{min-width:900px}
  .dtable--weeks th:nth-child(1){width:18%}
-@@ -408,3 +413,30 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -408,3 +416,179 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    .picker .select{min-width:0;width:100%}
    .saved-setup{align-items:flex-start;flex-direction:column}
  }
 +
 +
 +/* ===== workspace background =====
-+   Quieter than the homepage: pinned to the viewport, artwork only in the
-+   margins, and a clearing over the centre column so cards and tables stay
-+   fully legible. Decorative only — never intercepts a click. */
++   The artwork lives in the two gutters beside the 1180px content column and
++   nowhere else, so nothing is ever drawn under a heading, card or table.
++   Below 1330px there is no gutter left, so it is dropped rather than allowed
++   behind the text. Decorative only — never intercepts a click. */
 +.ws-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-+.ws-decor svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-+.ws-decor::after{content:"";position:absolute;inset:0;
-+  background:radial-gradient(58% 64% at 50% 46%,
-+    var(--page) 0%, rgba(247,249,248,.86) 52%, rgba(247,249,248,0) 82%)}
++.ws-decor__side{position:absolute;top:0;bottom:0;width:calc((100% - 1180px) / 2);overflow:hidden}
++.ws-decor__side--left{left:0}
++.ws-decor__side--right{right:0;transform:scaleX(-1)}
++.ws-decor__side svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 +/* everything the shell renders sits above the artwork */
 +.frame > *:not(.ws-decor){position:relative;z-index:1}
-+@media(max-width:900px){
-+  /* no free margin left beside the content at this width */
++@media(max-width:1330px){
++  /* the content column now fills the width — no gutter left to draw in */
 +  .ws-decor{display:none}
 +}
 +
-+/* ===== upload screen: value chain under the drop zone ===== */
-+.value-chain{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
-+  gap:6px 4px;list-style:none;margin:16px 0 0;padding:0;
-+  font-family:var(--body);font-size:var(--text-description);font-weight:600;line-height:1.35;color:var(--muted)}
-+.value-chain li{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-+.value-chain li:not(:last-child)::after{content:"→";margin-left:4px;color:var(--border-strong)}
-+.value-chain__icon{font-size:var(--text-body);line-height:1}
-+.value-chain__end{color:var(--teal)}
++/* ===== upload screen: value chain under the drop zone =====
++   Four steps with a line icon above each label, arrows in between, aligned
++   to the icon row rather than the text so the arrows read as connectors. */
++.value-chain{display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;
++  gap:4px 2px;list-style:none;margin:22px 0 0;padding:0}
++.value-chain li{display:flex;align-items:flex-start;gap:6px}
++.value-chain__step{display:flex;flex-direction:column;align-items:center;gap:8px;
++  width:86px;text-align:center}
++.value-chain__icon{color:var(--teal);line-height:0}
++.value-chain__label{font-family:var(--body);font-size:var(--text-description);font-weight:600;
++  line-height:1.35;color:var(--muted)}
++.value-chain li:not(:last-child)::after{content:"→";margin-top:8px;font-size:var(--text-body);
++  color:var(--border-strong)}
++.value-chain__end .value-chain__label{color:var(--teal-deep);font-weight:700}
++@media(max-width:520px){
++  .value-chain li:not(:last-child)::after{display:none}
++  .value-chain__step{width:120px}
++}
 +.card-title--sprout::before{content:"🌱";margin-right:8px}
++
++/* ===== back to the homepage =====
++   A bare text link in the top bar read as body copy; this gives it a button
++   shape so it is obviously somewhere to click. The logo goes home too. */
++.topbar .workspace-home-link{display:inline-flex;align-items:center;gap:7px;margin-left:auto;
++  padding:9px 15px;border:1px solid var(--line);border-radius:999px;background:#fff;
++  font-family:var(--body);font-size:var(--text-secondary);font-weight:700;line-height:1;
++  color:var(--teal-deep);text-decoration:none;white-space:nowrap;
++  transition:background-color .15s ease,border-color .15s ease}
++.topbar .workspace-home-link:hover{background:var(--teal-tint);border-color:var(--mint);text-decoration:none}
++.topbar .workspace-home-link svg{flex:none}
++.brand{transition:opacity .15s ease}
++.brand:hover{opacity:.78}
++
++/* ===== top bar on a narrow screen =====
++   Logo, Homepage and the language switcher need about 460px; below roughly
++   560px they no longer fit on one line. Rather than letting the switcher fall
++   to the left while the button stays right, the logo takes the first row and
++   the two controls sit together, right-aligned, on the second.
++   Selectors are doubled up so this wins wherever language.css is loaded. */
++@media (max-width:560px){
++  .frame .topbar{height:auto;min-height:76px;padding-top:14px;padding-bottom:14px;
++    flex-wrap:wrap;justify-content:flex-end;row-gap:12px;column-gap:10px}
++  .frame .topbar .brand{flex:1 0 100%}
++  .frame .topbar .workspace-home-link{margin-left:0}
++}
++
++/* ===== step 2: confirmation states =====
++   A semantic system rather than green everywhere:
++   sage = confirmed, amber = needs attention, red = error. */
++.pill--confirmed{background:#EDF3EE;color:#3F7A5D;border:1px solid #D8E6DA}
++.all-set{display:flex;align-items:center;gap:9px;margin:18px 0 0;padding:12px 15px;
++  background:#EDF3EE;border:1px solid #D8E6DA;border-radius:12px;
++  font-size:var(--text-body);font-weight:700;color:#3F7A5D}
++
++/* ===== step 2: guidance panel =====
++   Was a dark teal block that read as a separate product. As a sage card it
++   belongs to the same design system as the rest of the screen. */
++.panel-sage{width:330px;flex:none;padding:24px;border-radius:22px;
++  background:#F1F8F3;border:1px solid #D8E6DA;color:var(--ink)}
++.panel-sage__title{display:flex;align-items:center;gap:9px;margin:0;
++  font-family:var(--display);font-size:var(--text-section-head);font-weight:700}
++.panel-sage__subtitle{margin:26px 0 0;font-family:var(--display);
++  font-size:var(--text-body);font-weight:700}
++.panel-sage__lede{margin:7px 0 0;font-size:var(--text-secondary);line-height:1.5;color:var(--muted)}
++
++.sage-steps,.sage-formats{list-style:none;margin:14px 0 0;padding:0;counter-reset:sage}
++.sage-steps li,.sage-formats li{counter-increment:sage;position:relative;
++  padding-left:30px;margin-bottom:11px;font-size:var(--text-secondary);line-height:1.45;color:var(--ink-2)}
++.sage-steps li::before,.sage-formats li::before{content:counter(sage);position:absolute;left:0;top:0;
++  width:20px;height:20px;border-radius:50%;background:#DCEEE2;color:#3F7A5D;
++  font-size:var(--text-label);font-weight:800;display:flex;align-items:center;justify-content:center}
++.sage-formats li b{display:block;font-size:var(--text-secondary);color:var(--ink)}
++.sage-formats li span{color:var(--muted)}
++
++.panel-sage__privacy{display:flex;align-items:flex-start;gap:11px;margin:24px 0 0;padding-top:18px;
++  border-top:1px solid #D8E6DA;font-size:var(--text-description);line-height:1.5;color:var(--muted)}
++.panel-sage__lock{width:28px;height:28px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
++  display:flex;align-items:center;justify-content:center}
++.panel-sage__privacy b{display:block;color:var(--ink);font-size:var(--text-secondary);margin-bottom:2px}
++
++/* the two identity formats are numbered choices, not a wall of text */
++.identity__path-name{display:flex;align-items:center;gap:9px}
++.identity__path-number{width:20px;height:20px;flex:none;border-radius:50%;
++  background:var(--teal-tint);color:var(--teal-deep);font-size:var(--text-label);font-weight:800;
++  display:flex;align-items:center;justify-content:center}
++
++@media (max-width:1240px){ .panel-sage{width:100%} }
++
++/* The status pill is nowrap everywhere else, which is right — but in the
++   mapping table it runs past the narrow status column, so let it wrap there. */
++.dtable .mapping-status .pill{white-space:normal;line-height:1.35;text-align:left}
++
++/* ===== field help =====
++   The attribute descriptions used to sit under every label, which made the
++   mapping table a wall of prose. They are tooltips now: the table scans, and
++   the explanation is one hover or tap away. aria-label carries the same text,
++   so it reaches screen readers whether or not the bubble is shown. */
++.field-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
++.hint{position:relative;width:18px;height:18px;flex:none;padding:0;border:0;border-radius:50%;
++  background:#E7EFEC;color:#5C7A72;font-family:var(--body);font-size:var(--text-label);font-weight:800;
++  line-height:1;cursor:help;display:inline-flex;align-items:center;justify-content:center}
++.hint:hover,.hint:focus-visible{background:var(--teal-tint);color:var(--teal-deep)}
++.hint__bubble{position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);
++  width:230px;padding:10px 12px;border-radius:10px;background:var(--ink);color:#F3FAF8;
++  font-size:var(--text-description);font-weight:400;line-height:1.45;text-align:left;
++  opacity:0;visibility:hidden;transition:opacity .13s ease;z-index:5;pointer-events:none;
++  box-shadow:0 8px 24px rgba(22,49,59,.22)}
++.hint__bubble::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
++  border:6px solid transparent;border-top-color:var(--ink)}
++.hint:hover .hint__bubble,.hint:focus-visible .hint__bubble{opacity:1;visibility:visible}
++/* near the top of the table there is no room above, so it flips below */
++.dtable tbody tr:first-child .hint__bubble{bottom:auto;top:calc(100% + 9px)}
++.dtable tbody tr:first-child .hint__bubble::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--ink)}
++@media (max-width:760px){ .hint__bubble{width:190px} }
++
++/* ===== the workflow grows =====
++   🌱 → 🌿 → 🍃 → 🌳 across the four steps. Steps not yet reached are drained
++   of colour, so the row reads as progress at a glance. Purely decorative —
++   aria-hidden, and the dot still carries the number or the tick. */
++.stepper{height:auto;min-height:96px;padding-top:12px;padding-bottom:12px}
++.step__plant{font-size:16px;line-height:1;filter:grayscale(1);opacity:.35;
++  transition:filter .2s ease,opacity .2s ease}
++.step--done .step__plant,.step--current .step__plant{filter:none;opacity:1}
++.step--current .step__plant{transform:scale(1.15)}
++.step__line{top:35px}
++@media(prefers-reduced-motion:reduce){.step__plant{transition:none}}
++@media(max-width:760px){ .step__plant{font-size:14px} }
++
++/* ===== identity choice =====
++   The card is the button. Previously a 14px button sat inside a large card,
++   so the obvious target did nothing. */
++.identity__path{display:flex;flex-direction:column;align-items:flex-start;gap:5px;width:100%;
++  font-family:var(--body);text-align:left;cursor:pointer;
++  transition:border-color .15s ease,background-color .15s ease,box-shadow .15s ease}
++.identity__path:hover:not(:disabled){border-color:var(--mint);background:#F4FAF8}
++.identity__path:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
++.identity__path:disabled{cursor:not-allowed;opacity:.62}
++.identity__path--on{box-shadow:0 0 0 3px rgba(22,125,116,.12)}
++.identity__path-fields{margin:0}
++.identity__path-state{margin-top:5px;font-size:var(--text-secondary);font-weight:700;color:var(--teal)}
++.identity__path--on .identity__path-state{color:var(--teal-deep)}
++.identity__path:disabled .identity__path-state{color:var(--muted);font-weight:600}
++
++/* ===== what more data would unlock =====
++   A light teal box inside the sage panel. Grouped by the missing column
++   rather than by capability, so it is three short rows instead of seven
++   repeating paragraphs. */
++.unlocks{margin-top:24px;padding:15px 16px;background:var(--teal-tint);
++  border:1px solid #B9DBD5;border-radius:14px}
++.unlocks__title{margin:0;font-family:var(--display);font-size:var(--text-body);
++  font-weight:700;color:var(--teal-deep)}
++.unlocks__lede{margin:4px 0 0;font-size:var(--text-description);color:var(--muted)}
++.unlocks__list{list-style:none;margin:11px 0 0;padding:0}
++.unlocks__list li{margin-bottom:9px;font-size:var(--text-description);line-height:1.45}
++.unlocks__list li:last-child{margin-bottom:0}
++.unlocks__list b{display:block;font-size:var(--text-secondary);color:var(--ink)}
++.unlocks__list span{color:var(--muted)}

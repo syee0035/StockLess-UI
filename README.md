@@ -1,138 +1,136 @@
-# 🌱 StockLess UI Prototype
+# StockLess — Step 1 (Upload) redesign + workspace background
 
-> A user-centred web interface prototype for StockLess — a decision-support system designed to help Malaysian micro and small food retailers make better inventory purchasing decisions and reduce avoidable food waste.
+Targets **`HansYap/StockLess`** (the live app behind `stockless.pages.dev`), not the Figma Make
+prototype. I checked first: the wording PDF's strings — *"What data can StockLess use?"*,
+*"Drop your CSV file here"*, *"Finishing up"*, *"Use sample file"* — all live in
+`frontend/src/screens/UploadScreen.tsx`, so that's where the changes go.
 
----
+## What's in here
 
-## 📌 About StockLess
+| File | What it is |
+| --- | --- |
+| `step1-upload-redesign.patch` | all seven file changes, 632 lines, +192 / −102 |
+| `WorkspaceDecor.tsx` | the new component on its own, if you'd rather copy it in by hand |
+| `../StockLess-Step1-Upload.html` | a static preview of the result — double-click to open |
 
-**StockLess** is a decision-support system developed to support small food retailers in making more informed inventory decisions.
+Apply it:
 
-Small retailers may rely on manual processes, past experience, or rule-of-thumb purchasing when deciding how much stock to purchase. This can result in excess inventory and avoidable food waste.
+```sh
+git checkout -b step1-upload-redesign
+git apply step1-upload-redesign.patch
+npm run dev
+```
 
-StockLess aims to help retailers move from:
+## The wording changes
 
-**Historical Sales Data → Demand Understanding → Purchase Planning → Impact Awareness**
+Everything below comes from *Homepage and Step Suggestion UI Wording.pdf*.
 
-The project is aligned with **UN Sustainable Development Goal 12.3**, which focuses on reducing food loss and waste.
+| Where | Before | After |
+| --- | --- | --- |
+| Section heading | What data can StockLess use? | 🌱 **What do you need to get started?** |
+| Intro | (listed every attribute up front) | Start with the three required attributes. Optional attributes unlock additional insights. |
+| Lede | — | Required data is enough to get started. Optional data unlocks deeper insights. |
+| Attribute 02 label | Product identifier | **Product identification** |
+| Attribute 02 desc | — | Choose one of the accepted formats to keep products and pack sizes separate. |
+| Accepted forms | (3 loosely-worded options) | 1. SKU, barcode or product code · 2. Product name + pack size |
+| File limits | (split across two lines) | .CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated |
+| Privacy headline | — | **Your data stays on your device.** |
+| Privacy body | — | Your CSV is processed directly in this browser. Your sales rows and product identifiers are not uploaded to an AI or API service. |
+| Final phase label | Finishing up | **You're one step closer to less waste.** |
+| Final phase subline | (generic progress text) | Your data is ready. Let's see what your store actually needs. |
 
----
+Plus one thing the PDF implies rather than spells out: a **value chain** under the drop zone —
+Sales data → Demand insights → Smarter restocking → 🌱 Less waste. It answers *"why am I uploading
+this?"* at the exact moment someone hesitates over the button.
 
-## 🎨 About This Repository
+The two backend strings moved too, because the UI reads them from there rather than hard-coding:
+`field-registry.ts` (`coreDescription`, `PRIVACY_NOTICE.beforeUpload`) and `capabilities.ts`
+(the product-identification label, description and accepted forms).
 
-This repository contains the **StockLess UI Prototype**.
+## The background
 
-The prototype focuses on the visual design and user experience of the StockLess interface, including the landing page, navigation, workflow presentation, food-waste context, and responsive design.
+`WorkspaceDecor.tsx` brings the homepage artwork into the app — same waves, leaves and dot grids,
+same colours sampled from your mockup (`#EDF7E9`, `#DCEFD8`, `#B8DFBE`, dots `#9CC9A0`).
 
-The current prototype is implemented as a **standalone HTML file**, making it easy to open and demonstrate without requiring a backend or database.
+Three deliberate differences from the homepage version, because this is a working screen rather
+than a marketing page:
 
----
+- **It's quieter.** Lower opacities, fewer leaves, no basket. You're meant to read the screen, not
+  look at the background.
+- **It's pinned to the viewport** (`position: fixed`), so it doesn't stretch and repeat as the
+  upload progresses and the page grows.
+- **The centre column is cleared.** A radial wash of `--page` sits over the middle at full opacity
+  and fades out at the margins, so no artwork ever passes under text — the same rule as the
+  homepage.
 
-## ✨ Key Features
+It's hidden below 900px. On a phone the content column already fills the screen, so the artwork
+would only ever sit *behind* text, which is the thing you didn't want.
 
-### 🏠 StockLess Landing Page
+It mounts as the first child of `.frame` in `AppShell.tsx`, so every screen in the workspace gets
+it — not just Step 1. One line in `styles.css` lifts every other child of `.frame` above it:
 
-The homepage introduces StockLess and communicates its purpose through a simple, sustainability-focused interface.
+```css
+.frame > *:not(.ws-decor){position:relative;z-index:1}
+```
 
-The design includes:
+## Typography — the app now uses the homepage's scale
 
-- StockLess branding
-- Clear navigation
-- Sustainability-focused visual elements
-- Fresh produce imagery
-- Clean and spacious layout
-- Responsive design
+The workspace was set a notch below the marketing site: body copy at 13px, descriptions at 11px,
+labels at 10px, against the homepage's 15 / 12 / 11. Side by side they read as two different
+products, and on the Upload screen — which is nothing *but* wording — it just read as small.
 
----
+`styles.css` now declares the homepage's type tokens and every size in the file is set from them:
 
-### 📤 Data Upload Workflow
+```css
+--text-page-title:36px; --text-lead:18px;  --text-section-head:20px;
+--text-body:15px;       --text-secondary:13px; --text-description:12px;
+--text-eyebrow:11px;    --text-label:10px;
+```
 
-The prototype introduces the first stage of the StockLess workflow:
+| Was | Now | Where you'll notice it |
+| --- | --- | --- |
+| 13px, 14px | **15px** | attribute descriptions, drop-zone copy, privacy body, card subheads |
+| 12px | **13px** | file limits, pills, step labels, session status |
+| 11px | **12px** | the value chain, accepted-format chips, fine print |
+| 10px | **11px** | uppercase micro-labels |
+| 9px | **10px** | the smallest badges |
 
-**Upload**
+Headings didn't move — 20px section heads, 18px ledes and the 36px page title already matched the
+homepage. Hard-coded pixel line-heights (`line-height:18.85px` and friends) became ratios, so they
+follow the size instead of fighting it.
 
-Retailers can begin the process by providing their sales data.
+The same pass ran over `homepage.css`, lifting its small reading copy to the same scale: benefit and
+step paragraphs, the food-waste statistics, comparison table, SDG caption, sources line and footer.
+**The miniature app demo in the hero is deliberately untouched** — it's a scaled-down screenshot, and
+enlarging its type would break both the illusion and its layout.
 
-The intended workflow supports CSV-based sales data as the starting point for demand analysis.
+### One bug fixed along the way
 
----
+`.sl-story` and `.sl-impact` are two-column grids whose children had no `min-width:0`, so the shop
+photo overflowed the page by ~12px at 1440 and the text column blew past the viewport by 135px on a
+phone. That's on the live site today, before any of these changes — the bigger statistics text just
+made it more obvious. One line fixes it:
 
-### 📊 Data Analysis
+```css
+.sl-story>*,.sl-impact>*{min-width:0}
+```
 
-The interface presents the analysis stage as part of the StockLess decision-making journey.
+All three widths (1440 / 1280 / 390) now scroll clean.
 
-The goal is to help retailers understand:
+## Two things to know before you merge
 
-- Historical sales patterns
-- Product demand
-- Data quality
-- Potential inventory issues
+**This is the team repo, not your fork.** The patch applies cleanly to `HansYap/StockLess` as of
+today, but it'll need a PR rather than a direct push.
 
----
+**I couldn't run `npm run build`** — the sandbox blocks the npm registry, so dependencies won't
+install. I syntax-checked all five changed source files with esbuild instead (all clean) and rendered both
+the preview and the homepage from the repo's own stylesheets, checking for overflow at 1440, 1280
+and 390px.
+The one thing nobody has verified is a full type-check. Run it once locally before you open the PR.
 
-### 🛒 Purchase Planning
+## Still open from the I3 plan
 
-StockLess connects demand analysis to purchasing decisions.
-
-The purchase planning stage is designed to help retailers understand:
-
-- Products that may require replenishment
-- Potential overstock
-- Potential understock
-- Recommended purchasing quantities
-
----
-
-### 🌱 Business & Environmental Impact
-
-The interface also introduces the impact dimension of StockLess.
-
-Potential indicators include:
-
-**Business Impact**
-
-- Potential cost savings
-- Reduced excess inventory
-- Improved purchasing decisions
-
-**Environmental Impact**
-
-- Food waste reduced
-- Carbon emissions reduced
-- Energy saved
-- Reduced environmental impact
-
----
-
-## 🔄 StockLess Workflow
-
-```text
-┌──────────────┐
-│     HOME     │
-│ Introduction │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│    UPLOAD    │
-│  Sales Data  │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│    ANALYSE   │
-│ Demand Data  │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│     PLAN     │
-│ Purchase Plan│
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│    IMPACT    │
-│ Business +   │
-│ Environment  │
-└──────────────┘
+- Are the I2 verdicts (*High risk / Needs review / Looks balanced / Cannot judge*) the same thing
+  as the I3 groups (*Order Needed / Check Your Order / Looks Balanced / Need More Data*), or a
+  layer above them? Step 4's wording depends on the answer.
+- Screens 2–4 (column matching, data check, results) haven't been touched yet.

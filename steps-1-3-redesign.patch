@@ -483,13 +483,13 @@ index 0000000..e6059ad
 +  );
 +}
 diff --git a/frontend/src/homepage.css b/frontend/src/homepage.css
-index cc5c2d6..aba2b05 100644
+index cc5c2d6..80ab02f 100644
 --- a/frontend/src/homepage.css
 +++ b/frontend/src/homepage.css
 @@ -1,7 +1,7 @@
  .sl-home{--sl-ink:#183842;--sl-teal:#167d74;--sl-muted:#60716f;--sl-line:#dfe7e3;background:#fff;color:var(--sl-ink);font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.6}
 -.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(32px,3.7vw,49px);font-weight:600;line-height:1.15;letter-spacing:-1.9px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1200px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:108px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:14px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:14px;font-weight:650;min-height:50px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:11px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:54px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(42px,5.5vw,72px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:24px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:28px}.sl-secondary-link{font-size:14px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:62px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:8px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:10px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:9px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:9px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:11px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:11px}.sl-warning p{font-size:10px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:8px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:9px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:11px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:10px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:9px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:11px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:9px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:9px}.sl-scenario-result>p{font-size:9px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:9px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:100px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.8;color:var(--sl-muted);margin-top:22px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:48px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:14px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:54px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:390px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:75px;padding-top:100px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story-image{width:100%;height:100%;max-height:750px;min-height:570px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:22px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:13px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:10px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:14px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:100px;border-top:1px solid var(--sl-line);padding-top:75px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:11px;color:var(--sl-muted);margin-top:45px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:13px;text-align:left}.sl-comparison th,.sl-comparison td{padding:19px 22px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:105px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:12px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:9px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:11px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:75px;align-items:center;padding-top:110px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:465px;padding:40px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:13px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:11px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;list-style:none;padding:0;margin:46px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:60px;font-weight:400;letter-spacing:-3px;color:#99aaa3;display:block;margin-bottom:25px}.sl-steps h3{font-size:17px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:70px}.sl-final-cta>div{padding:49px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:12px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:70px;padding-block:30px;font-size:12px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 13px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
-+.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(32px,3.7vw,49px);font-weight:600;line-height:1.15;letter-spacing:-1.9px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1200px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:108px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:15px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:15px;font-weight:650;min-height:52px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:12px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:54px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(42px,5.5vw,72px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:24px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:28px}.sl-secondary-link{font-size:15px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:62px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:8px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:10px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:9px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:9px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:11px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:11px}.sl-warning p{font-size:10px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:8px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:9px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:11px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:10px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:9px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:11px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:9px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:9px}.sl-scenario-result>p{font-size:9px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:9px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:100px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.8;color:var(--sl-muted);margin-top:22px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:48px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:15px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:54px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:390px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:75px;padding-top:100px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story>*,.sl-impact>*{min-width:0}.sl-story-image{width:100%;max-width:100%;height:100%;max-height:750px;min-height:570px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:22px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:15px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:12px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:15px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:100px;border-top:1px solid var(--sl-line);padding-top:75px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:13px;color:var(--sl-muted);margin-top:45px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:15px;text-align:left}.sl-comparison th,.sl-comparison td{padding:19px 22px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:105px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:13px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:9px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:13px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:75px;align-items:center;padding-top:110px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:465px;padding:40px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:15px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:13px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;list-style:none;padding:0;margin:46px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:60px;font-weight:400;letter-spacing:-3px;color:#99aaa3;display:block;margin-bottom:25px}.sl-steps h3{font-size:18px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:70px}.sl-final-cta>div{padding:49px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:13px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:70px;padding-block:30px;font-size:13px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 15px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
++.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(30px,3.1vw,42px);font-weight:600;line-height:1.18;letter-spacing:-1.5px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1420px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:15px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:15px;font-weight:650;min-height:52px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:12px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:36px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(40px,5vw,64px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:17px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:20px}.sl-secondary-link{font-size:15px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:42px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:8px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:10px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:9px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:9px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:11px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:11px}.sl-warning p{font-size:10px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:8px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:9px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:11px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:10px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:9px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:11px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:9px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:9px}.sl-scenario-result>p{font-size:9px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:9px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:66px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.75;color:var(--sl-muted);margin-top:16px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:32px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:15px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:36px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:320px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-top:66px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story>*,.sl-impact>*{min-width:0}.sl-story-image{width:100%;max-width:100%;height:100%;max-height:620px;min-height:470px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:15px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:15px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:12px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:15px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:66px;border-top:1px solid var(--sl-line);padding-top:50px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:13px;color:var(--sl-muted);margin-top:30px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:15px;text-align:left}.sl-comparison th,.sl-comparison td{padding:14px 18px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:78px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:13px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:9px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:13px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding-top:70px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:380px;padding:30px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:15px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:13px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;list-style:none;padding:0;margin:32px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:48px;font-weight:400;letter-spacing:-2.4px;color:#99aaa3;display:block;margin-bottom:16px}.sl-steps h3{font-size:18px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:50px}.sl-final-cta>div{padding:34px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:13px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:50px;padding-block:24px;font-size:13px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 15px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
  @media(min-width:1500px){.sl-home h1{font-size:76px}}
  @media(max-width:1050px){.sl-container{width:calc(100% - 48px)}.sl-preview-stage{padding-inline:25px}.sl-demo-grid{grid-template-columns:1.55fr 1fr}.sl-evidence{padding:18px}.sl-scenario{padding:18px}.sl-chart-heading{align-items:flex-start;flex-direction:column}.sl-benefits,.sl-steps{gap:23px}.sl-story,.sl-impact{gap:40px}.sl-statistics>div{grid-template-columns:120px 1fr}.sl-sdg{padding:30px;min-height:410px}.sl-sdg b{font-size:15px}.sl-final-cta>div{padding:35px}.sl-final-cta h2{font-size:34px}}
 -@media(max-width:760px){.sl-container{width:calc(100% - 36px)}.sl-nav{min-height:88px;gap:12px;flex-wrap:wrap;padding-top:18px;padding-bottom:15px}.sl-nav .brand__logo{height:35px!important}.sl-nav nav{order:3;width:100%;justify-content:center;gap:26px;font-size:12px;padding-top:7px}.sl-nav>.sl-button{font-size:12px;min-height:40px;padding:9px 12px;gap:14px}.sl-hero{padding-top:40px}.sl-home h1{font-size:clamp(37px,7.5vw,55px);letter-spacing:-2px}.sl-hero-eyebrow{font-size:9px;letter-spacing:1.2px}.sl-hero-copy{font-size:15px}.sl-mobile-break{display:block}.sl-hero-actions{gap:20px;flex-wrap:wrap;margin-top:23px}.sl-hero-actions .sl-button{font-size:13px;padding:13px 16px}.sl-preview-stage{margin-top:37px;padding-inline:10px}.sl-preview-stage:before{inset:60px 0 0;border-radius:16px}.sl-demo{border-width:4px;border-radius:13px}.sl-demo-bar{padding:10px;font-size:7px}.sl-demo-bar>span:nth-child(2){display:none}.sl-demo-grid{grid-template-columns:1fr}.sl-evidence{padding:19px}.sl-product h3{font-size:20px}.sl-warning p{font-size:12px}.sl-warning strong{font-size:12px}.sl-chart-heading{flex-direction:row}.sl-chart-heading>span{font-size:8px}.sl-chart h4{font-size:11px}.sl-demo-baseline{font-size:10px}.sl-demo-baseline b{font-size:12px}.sl-scenario{border-left:0;border-top:1px solid var(--sl-line);padding:22px}.sl-scenario h3{font-size:21px}.sl-scenario>p,.sl-scenario label{font-size:13px}.sl-scenario input{min-height:32px}.sl-text-button{font-size:13px!important;min-height:35px}.sl-scenario-result{padding:18px}.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:12px}.sl-range-ends{font-size:11px}.sl-demo-note{font-size:10px}.sl-section{padding-top:68px}.sl-home h2{font-size:34px;letter-spacing:-1.4px}.sl-section-copy{font-size:15px;margin-top:17px!important}.sl-benefits,.sl-steps{grid-template-columns:1fr 1fr;gap:28px 22px;margin-top:33px}.sl-benefits h3{font-size:16px}.sl-benefits p,.sl-steps p{font-size:13px}.sl-wide-photo{margin-top:36px!important;border-radius:13px}.sl-wide-photo img{height:250px}.sl-wide-photo figcaption{left:20px;bottom:20px;font-size:12px;right:20px}.sl-story,.sl-impact{grid-template-columns:1fr;gap:32px;padding-top:68px}.sl-story-image{height:380px;min-height:0;object-position:center 35%}.sl-statistics>div{grid-template-columns:125px 1fr}.sl-statistics dd{font-size:14px}.sl-source{font-size:11px}.sl-comparison{margin-top:65px;padding-top:55px}.sl-table-hint{display:flex;justify-content:space-between}.sl-table-hint span{display:inline}.sl-comparison table{min-width:760px}.sl-comparison th,.sl-comparison td{padding:16px}.sl-comparison-tagline{font-size:16px}.sl-impact{gap:35px}.sl-sdg{min-height:360px;max-width:500px;width:100%;margin-inline:auto}.sl-sdg svg{height:170px}.sl-sdg b{font-size:18px}.sl-impact-lede{font-size:18px}.sl-section-header{align-items:flex-start;flex-direction:column;gap:20px}.sl-steps{margin-top:32px}.sl-step-number{font-size:48px;margin-bottom:13px}.sl-steps h3{font-size:16px}.sl-final-cta{grid-template-columns:1fr;margin-top:40px}.sl-final-cta>div{padding:30px}.sl-final-cta h2{font-size:34px}.sl-final-cta img{height:250px;min-height:0}.sl-footer{flex-wrap:wrap;margin-top:45px;padding-block:25px}.sl-footer p{order:3;width:100%;font-size:12px}.sl-desktop-break{display:none}.workspace-home-link{margin-right:10px;font-size:12px}}
@@ -497,7 +497,7 @@ index cc5c2d6..aba2b05 100644
  @media(prefers-reduced-motion:no-preference){html:has(.sl-home){scroll-behavior:smooth}}
  @media(prefers-reduced-motion:reduce){.sl-button{transition:none}}
 diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
-index 86a9cd1..a3f9a6c 100644
+index 86a9cd1..575164d 100644
 --- a/frontend/src/i18n/messages.ts
 +++ b/frontend/src/i18n/messages.ts
 @@ -604,33 +604,29 @@ export const messages: Record<string, readonly [string, string]> = {
@@ -561,7 +561,7 @@ index 86a9cd1..a3f9a6c 100644
      "Semak kesediaan"
    ],
    "Plan purchases": [
-@@ -2483,5 +2479,517 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -2483,5 +2479,669 @@ export const messages: Record<string, readonly [string, string]> = {
    "Stale stock": [
      "库存数据过旧",
      "Data stok terlalu lama"
@@ -1077,6 +1077,158 @@ index 86a9cd1..a3f9a6c 100644
 +  "The stock count is getting old. It still works, but a fresher count would be better.": [
 +    "盘点开始过期。仍可使用，但重新盘点会更准确。",
 +    "Kiraan stok semakin lama. Ia masih boleh digunakan, tetapi kiraan yang lebih baharu akan lebih baik."
++  ],
++  "thing needs your attention": [
++    "项需要您处理",
++    "perkara perlukan perhatian anda"
++  ],
++  "things need your attention": [
++    "项需要您处理",
++    "perkara perlukan perhatian anda"
++  ],
++  "Here are the issues StockLess found in your file and what you can do about them.": [
++    "以下是 StockLess 在您的文件中发现的问题，以及您可以怎么处理。",
++    "Berikut ialah isu yang StockLess jumpa dalam fail anda dan apa yang boleh anda lakukan."
++  ],
++  "need fixing": [
++    "需修正",
++    "perlu dibetulkan"
++  ],
++  "need review": [
++    "需查看",
++    "perlu semakan"
++  ],
++  "row affected": [
++    "行受影响",
++    "baris terjejas"
++  ],
++  "rows affected": [
++    "行受影响",
++    "baris terjejas"
++  ],
++  "What StockLess found": [
++    "StockLess 看到的内容",
++    "Apa yang StockLess jumpa"
++  ],
++  "What to do": [
++    "该怎么做",
++    "Apa yang perlu dibuat"
++  ],
++  "Not included in totals": [
++    "未计入总数",
++    "Tidak dikira dalam jumlah"
++  ],
++  "Included in totals": [
++    "已计入总数",
++    "Dikira dalam jumlah"
++  ],
++  "Unknown product": [
++    "未知产品",
++    "Produk tidak diketahui"
++  ],
++  "Row ": [
++    "第 ",
++    "Baris "
++  ],
++  "StockLess handled ": [
++    "StockLess 已为您处理 ",
++    "StockLess menguruskan "
++  ],
++  " small issue for you": [
++    " 个小问题",
++    " isu kecil untuk anda"
++  ],
++  " small issues for you": [
++    " 个小问题",
++    " isu kecil untuk anda"
++  ],
++  "Your original file has not been changed.": [
++    "您的原始文件没有被更改。",
++    "Fail asal anda tidak diubah."
++  ],
++  "↓ Download problem list": [
++    "↓ 下载问题清单",
++    "↓ Muat turun senarai masalah"
++  ],
++  "SKU: ": [
++    "SKU：",
++    "SKU: "
++  ],
++  "Date needs checking": [
++    "日期需要检查",
++    "Tarikh perlu disemak"
++  ],
++  "Date is in the future": [
++    "日期在未来",
++    "Tarikh akan datang"
++  ],
++  "Date format needs confirming": [
++    "日期格式需要确认",
++    "Format tarikh perlu disahkan"
++  ],
++  "Expiry date needs checking": [
++    "到期日需要检查",
++    "Tarikh luput perlu disemak"
++  ],
++  "Quantity needs checking": [
++    "数量需要检查",
++    "Kuantiti perlu disemak"
++  ],
++  "Planned order needs checking": [
++    "计划订购量需要检查",
++    "Pesanan dirancang perlu disemak"
++  ],
++  "Incoming stock needs checking": [
++    "在途库存需要检查",
++    "Stok masuk perlu disemak"
++  ],
++  "Planned orders disagree": [
++    "计划订购量互相矛盾",
++    "Pesanan dirancang bercanggah"
++  ],
++  "Incoming stock disagrees": [
++    "在途库存互相矛盾",
++    "Stok masuk bercanggah"
++  ],
++  "Product information is missing": [
++    "缺少产品信息",
++    "Maklumat produk tiada"
++  ],
++  "Duplicate sale found": [
++    "发现重复的销售记录",
++    "Jualan pendua dijumpai"
++  ],
++  "Duplicate sale, counted once": [
++    "重复销售，只计一次",
++    "Jualan pendua, dikira sekali"
++  ],
++  "Stock value needs checking": [
++    "库存数值需要检查",
++    "Nilai stok perlu disemak"
++  ],
++  "Stock count is missing": [
++    "缺少库存数量",
++    "Kiraan stok tiada"
++  ],
++  "Stock count date needs checking": [
++    "盘点日期需要检查",
++    "Tarikh kiraan stok perlu disemak"
++  ],
++  "Stock count date is missing": [
++    "缺少盘点日期",
++    "Tarikh kiraan stok tiada"
++  ],
++  "Stock values disagree": [
++    "库存数值互相矛盾",
++    "Nilai stok bercanggah"
++  ],
++  "Stock count dates disagree": [
++    "盘点日期互相矛盾",
++    "Tarikh kiraan stok bercanggah"
++  ],
++  "Included in totals means the row still counts towards your demand figures — the note is a warning, not a blocker. Not included in totals means StockLess could not read the row safely, so it is left out until you correct it. Your file is never changed either way.": [
++    "「已计入总数」表示该行仍会计入您的需求数据——提示只是提醒，不会阻碍分析。「未计入总数」表示 StockLess 无法安全读取该行，因此在您修正前不计入。无论哪种情况，您的文件都不会被更改。",
++    "\"Dikira dalam jumlah\" bermaksud baris itu masih dikira dalam angka permintaan anda — notanya ialah amaran, bukan halangan. \"Tidak dikira dalam jumlah\" bermaksud StockLess tidak dapat membaca baris itu dengan selamat, jadi ia ditinggalkan sehingga anda membetulkannya. Fail anda tidak pernah diubah."
    ]
  };
 diff --git a/frontend/src/screens/HomePage.tsx b/frontend/src/screens/HomePage.tsx
@@ -1448,440 +1600,70 @@ index 5d2f91a..fe748e0 100644
 -  );
 -}
 diff --git a/frontend/src/screens/ReadinessScreen.tsx b/frontend/src/screens/ReadinessScreen.tsx
-index 3f56a34..c91f0ae 100644
+index 3f56a34..1c4979a 100644
 --- a/frontend/src/screens/ReadinessScreen.tsx
 +++ b/frontend/src/screens/ReadinessScreen.tsx
-@@ -13,8 +13,10 @@ import {
+@@ -13,8 +13,9 @@ import {
    type MappingState,
    type NormalizationEvent,
    type ParsedDataset,
 +  type ProductTimeline,
    type ReadinessSnapshot,
-   type StockFreshness,
+-  type StockFreshness,
 +  type WeeklyEvidence,
    type WeekState,
  } from "../engine.ts";
  
-@@ -60,18 +62,78 @@ const FILTER_CODES: Readonly<Record<ReadinessIssueFilter, readonly DataIssueCode
+@@ -60,66 +61,26 @@ const FILTER_CODES: Readonly<Record<ReadinessIssueFilter, readonly DataIssueCode
    ],
  });
  
-+/* Plain label and count on the card; the technical explanation moves into the
-+   tooltip, so the row of cards can be scanned without reading five paragraphs. */
- const FILTER_META: Readonly<Record<ReadinessIssueFilter, Readonly<{
-   label: string;
-   hint: string;
-+  tip: string;
-   severity: "fix" | "review";
- }>>> = Object.freeze({
+-const FILTER_META: Readonly<Record<ReadinessIssueFilter, Readonly<{
+-  label: string;
+-  hint: string;
+-  severity: "fix" | "review";
+-}>>> = Object.freeze({
 -  dates: { label: "Date issues", hint: "Invalid or unconfirmed date values", severity: "fix" },
 -  quantities: { label: "Quantity issues", hint: "Invalid or conflicting quantity values", severity: "fix" },
 -  identity: { label: "Missing identity", hint: "Rows without the chosen product identity", severity: "fix" },
 -  duplicates: { label: "Exact duplicates", hint: "Matching source rows needing a decision", severity: "review" },
 -  stock: { label: "Stock evidence", hint: "Optional stock values that limit cover", severity: "review" },
-+  dates: {
-+    label: "Date issues",
-+    hint: "Invalid or unconfirmed date values",
-+    tip: "Date validation: StockLess checks whether each sale date can be interpreted reliably. Invalid or ambiguous dates are flagged rather than silently converted.",
-+    severity: "fix",
-+  },
-+  quantities: {
-+    label: "Quantity issues",
-+    hint: "Values that are not finite numbers",
-+    tip: "Quantity validation: quantities must resolve to valid numeric values. Missing, non-numeric or invalid values are flagged.",
-+    severity: "fix",
-+  },
-+  identity: {
-+    label: "Missing product ID",
-+    hint: "Rows without the chosen product identity",
-+    tip: "Product identity: each sales row needs a reliable product identifier so sales can be grouped correctly for demand analysis.",
-+    severity: "fix",
-+  },
-+  duplicates: {
-+    label: "Duplicate rows",
-+    hint: "Repeats left out of the totals for you",
-+    tip: "Duplicate detection: StockLess finds rows whose source values all match. One copy is counted and the repeats are left out automatically — nothing is deleted, and every row stays traceable.",
-+    severity: "review",
-+  },
-+  stock: {
-+    label: "Stock data",
-+    hint: "Optional stock values that limit cover",
-+    tip: "Stock evidence: current stock and stock-count dates are optional. When available they provide additional evidence for evaluating inventory coverage and restocking decisions.",
-+    severity: "review",
-+  },
- });
- 
-+/* Same hint pattern as Step 2: the bubble is a SIBLING of the button, because a
-+   <button> will not size an absolutely positioned child from its content. */
-+/* A hidden bubble still occupies layout, so one sticking out past the right
-+   edge widens the page even before anyone hovers it. Flip every bubble that
-+   would overflow — on hover, and again whenever the layout could have moved. */
-+function place(bubble: HTMLElement) {
-+  bubble.classList.remove("hint__bubble--end");
-+  if (bubble.getBoundingClientRect().right > globalThis.innerWidth - 12) {
-+    bubble.classList.add("hint__bubble--end");
-+  }
-+}
-+
-+function placeAllBubbles() {
-+  document.querySelectorAll<HTMLElement>(".hint__bubble").forEach(place);
-+}
-+
-+function placeBubble(event: { currentTarget: HTMLElement }) {
-+  const bubble = event.currentTarget.querySelector<HTMLElement>(".hint__bubble");
-+  if (bubble) place(bubble);
-+}
-+
-+function Hint(props: { readonly text: string }) {
-+  return (
-+    <span className="hint" onPointerEnter={placeBubble} onFocus={placeBubble}>
-+      <button type="button" className="hint__btn" aria-label={t(props.text)}>
-+        <span aria-hidden="true">i</span>
-+      </button>
-+      <span className="hint__bubble" role="tooltip">{t(props.text)}</span>
-+    </span>
-+  );
-+}
-+
- const WEEK_LABEL: Readonly<Record<WeekState, string>> = Object.freeze({
-   missing: "Missing",
-   confirmed_zero_sales: "Confirmed zero",
-@@ -79,21 +141,332 @@ const WEEK_LABEL: Readonly<Record<WeekState, string>> = Object.freeze({
-   observed_demand: "Observed demand",
- });
- 
-+/* ===== charts =====================================================
-+   Palette validated with the dataviz skill's checker against a white
-+   surface (categorical, 6 slots): lightness band PASS, chroma floor PASS,
-+   worst adjacent CVD ΔE 11.7 PASS, normal-vision ΔE 19.6 PASS. Yellow and
-+   magenta sit under 3:1, so both charts that use them ship visible labels
-+   and counts in the legend — the relief the checker requires.
-+   Single-series charts take one hue and no legend; their title names them. */
-+const VIZ = Object.freeze({
-+  usable: "#0f9e8c",
-+  dates: "#eb6834",
-+  quantities: "#2a78d6",
-+  identity: "#eda100",
-+  duplicates: "#e87ba4",
-+  stock: "#4a3aa7",
-+});
-+
-+/** Sub-causes behind each headline count, so a card says why, not just how many. */
-+const SUB_CAUSES: Readonly<Record<ReadinessIssueFilter, readonly { code: DataIssueCode; label: string }[]>> =
-+  Object.freeze({
-+    dates: [
-+      { code: "INVALID_DATE", label: "Invalid format" },
-+      { code: "FUTURE_TRANSACTION_DATE", label: "Future date" },
-+      { code: "DATE_FORMAT_CONFIRMATION_REQUIRED", label: "Unconfirmed" },
-+      { code: "INVALID_EXPIRY_DATE", label: "Bad expiry" },
-+    ],
-+    quantities: [
-+      { code: "INVALID_QUANTITY", label: "Not a number" },
-+      { code: "INVALID_PLANNED_ORDER", label: "Bad order qty" },
-+      { code: "INVALID_INCOMING_STOCK", label: "Bad incoming" },
-+      { code: "CONFLICTING_PLANNED_ORDER", label: "Conflicting" },
-+    ],
-+    identity: [{ code: "MISSING_IDENTITY", label: "No product ID" }],
-+    duplicates: [
-+      { code: "DUPLICATE_CANDIDATE", label: "Matching rows" },
-+      { code: "DUPLICATE_CONFIRMED", label: "Left out" },
-+    ],
-+    stock: [
-+      { code: "MISSING_CURRENT_STOCK", label: "Stock missing" },
-+      { code: "INVALID_CURRENT_STOCK", label: "Stock invalid" },
-+      { code: "MISSING_STOCK_DATE", label: "Date missing" },
-+      { code: "CONFLICTING_CURRENT_STOCK", label: "Conflicting" },
-+    ],
-+  });
-+
-+/** Sub-cause bars inside an issue card. One series, one hue, value on the cap. */
-+function IssueBars(props: {
-+  readonly kind: ReadinessIssueFilter;
-+  readonly issues: readonly DataIssue[];
-+  readonly hue: string;
-+}) {
-+  const bars = SUB_CAUSES[props.kind].map((cause) => ({
-+    label: cause.label,
-+    value: props.issues.filter((issue) => issue.issueCode === cause.code).length,
-+  }));
-+  const peak = Math.max(1, ...bars.map((bar) => bar.value));
-+  return (
-+    <span className="minibars" aria-hidden="true">
-+      {t(bars.map((bar) => (
-+        <span className="minibars__col" key={bar.label}>
-+          <span className="minibars__value">{t(bar.value)}</span>
-+          <span className="minibars__track">
-+            <span
-+              className="minibars__fill"
-+              style={{ height: `${bar.value === 0 ? 2 : Math.round((bar.value / peak) * 100)}%`,
-+                       background: bar.value === 0 ? "var(--line)" : props.hue }}
-+            />
-+          </span>
-+          <span className="minibars__label">{t(bar.label)}</span>
-+        </span>
-+      )))}
-+    </span>
-+  );
-+}
-+
-+/** Weekly sales volume across the whole file. Single series, so no legend. */
-+function SalesOverview(props: { readonly timelines: readonly ProductTimeline[] }) {
-+  const byWeek = new Map<string, number>();
-+  for (const timeline of props.timelines) {
-+    for (const week of timeline.weeks) {
-+      if (week.state !== "observed_demand" || week.netQuantity === null) continue;
-+      byWeek.set(week.weekStart, (byWeek.get(week.weekStart) ?? 0) + week.netQuantity);
-+    }
-+  }
-+  const weeks = [...byWeek.entries()].sort(([left], [right]) => left.localeCompare(right));
-+  if (weeks.length === 0) return null;
-+  const peak = Math.max(...weeks.map(([, value]) => value));
-+  const peakWeek = weeks.find(([, value]) => value === peak)?.[0];
-+  return (
-+    <div className="chart">
-+      <div className="chart__plot" role="img"
-+        aria-label={`${t("Units sold per week")}: ${weeks.map(([w, v]) => `${w} ${v}`).join(", ")}`}>
-+        {t(weeks.map(([weekStart, value]) => (
-+          <span className="chart__col" key={weekStart} title={`${weekStart} · ${value.toLocaleString("en")}`}>
-+            {t(weekStart === peakWeek && <span className="chart__cap">{t(value.toLocaleString("en"))}</span>)}
-+            <span className="chart__bar" style={{ height: `${Math.max(2, Math.round((value / peak) * 100))}%` }} />
-+          </span>
-+        )))}
-+      </div>
-+      <div className="chart__axis">
-+        <span>{t(weeks[0][0])}</span>
-+        <span>{t(weeks[weeks.length - 1][0])}</span>
-+      </div>
-+    </div>
-+  );
-+}
-+
-+/** Part-to-whole at a glance; the legend carries every exact count and share. */
-+function QualityDonut(props: {
-+  readonly usable: number;
-+  readonly slices: readonly { key: string; label: string; value: number; hue: string }[];
-+}) {
-+  const total = props.usable + props.slices.reduce((sum, slice) => sum + slice.value, 0);
-+  const parts = [{ key: "usable", label: "Usable rows", value: props.usable, hue: VIZ.usable }, ...props.slices]
-+    .filter((part) => part.value > 0);
-+  const circumference = 2 * Math.PI * 54;
-+  let offset = 0;
-+  return (
-+    <div className="donut">
-+      <div className="donut__ring">
-+        <svg viewBox="0 0 140 140" width="140" height="140" role="img"
-+          aria-label={`${props.usable} ${t("of")} ${total} ${t("rows are usable")}`}>
-+          <circle cx="70" cy="70" r="54" fill="none" stroke="var(--line-soft)" strokeWidth="16" />
-+          {t(parts.map((part) => {
-+            const length = (part.value / total) * circumference;
-+            const dash = Math.max(0, length - 2); /* the 2px surface gap */
-+            const element = (
-+              <circle key={part.key} cx="70" cy="70" r="54" fill="none" stroke={part.hue} strokeWidth="16"
-+                strokeDasharray={`${dash} ${circumference - dash}`}
-+                strokeDashoffset={-offset} transform="rotate(-90 70 70)" />
-+            );
-+            offset += length;
-+            return element;
-+          }))}
-+        </svg>
-+        <div className="donut__centre">
-+          <b>{t(total.toLocaleString("en"))}</b>
-+          <span>{t("Total rows")}</span>
-+        </div>
-+      </div>
-+      <ul className="donut__legend">
-+        {t([{ key: "usable", label: "Usable rows", value: props.usable, hue: VIZ.usable }, ...props.slices]
-+          .map((part) => (
-+            <li key={part.key}>
-+              <span className="donut__swatch" style={{ background: part.hue }} aria-hidden="true" />
-+              <span className="donut__name">{t(part.label)}</span>
-+              <span className="donut__count">{t(part.value.toLocaleString("en"))}</span>
-+              <span className="donut__share">{t(total === 0 ? "0%" : `${Math.round((part.value / total) * 100)}%`)}</span>
-+            </li>
-+          )))}
-+      </ul>
-+    </div>
-+  );
-+}
-+
-+/* US2.3 AC8 fixes these three exactly; the fourth is for counts that cannot be
-+   judged at all. Each band is also named in words, so colour is never the only
-+   signal (AC8). The skill's chroma floor scopes to categorical series, not a
-+   status triad the spec pins — CVD separation here is 17.2 / 25.6, comfortable. */
-+const FRESH_BAND = Object.freeze([
-+  { key: "current", label: "Current", note: "0–7 days old", hue: "#167D74" },
-+  { key: "limited", label: "Getting old", note: "8–14 days old", hue: "#D99120" },
-+  { key: "unusable", label: "Too old to rely on", note: "more than 14 days old", hue: "#9B3939" },
-+  { key: "unknown", label: "Cannot judge", note: "no usable count date", hue: "#8C9A96" },
-+] as const);
-+
-+/** How many products sit in each stock-age band. Ordered bands, so the legend
-+    reads in age order and every count is written out beside its label. */
-+function FreshnessBands(props: { readonly bands: Readonly<Record<string, number>>; readonly total: number }) {
-+  if (props.total === 0) return null;
-+  return (
-+    <div className="bands">
-+      <div className="bands__bar">
-+        {t(FRESH_BAND.filter((band) => (props.bands[band.key] ?? 0) > 0).map((band) => (
-+          <span key={band.key} className="bands__seg"
-+            style={{ flexGrow: props.bands[band.key] ?? 0, background: band.hue }}
-+            title={`${t(band.label)} · ${props.bands[band.key]}`} />
-+        )))}
-+      </div>
-+      <ul className="bands__legend">
-+        {t(FRESH_BAND.map((band) => (
-+          <li key={band.key}>
-+            <span className="bands__swatch" style={{ background: band.hue }} aria-hidden="true" />
-+            <span className="bands__name">{t(band.label)}</span>
-+            <span className="bands__note">{t(band.note)}</span>
-+            <span className="bands__count">{t((props.bands[band.key] ?? 0).toLocaleString("en"))}</span>
-+          </li>
-+        )))}
-+      </ul>
-+    </div>
-+  );
-+}
-+
-+/* ===== product readiness ==========================================
-+   Step 3's job is "is my data usable", not "analyse my data", so the
-+   screen leads with products rather than charts. Each product answers the
-+   four questions in order: which product, what is wrong, how bad, what now. */
-+
-+type ReadinessGroup = "ready" | "review" | "missing";
-+type ProductSort = "age" | "name" | "group";
-+
-+interface ProductReadiness {
-+  readonly productKey: string;
-+  readonly name?: string;
-+  readonly group: ReadinessGroup;
-+  readonly reason?: string;
-+  readonly countDate?: string;
-+  readonly ageDays?: number;
-+  readonly weeks: readonly WeeklyEvidence[];
-+  readonly excludedRows: number;
-+}
-+
-+const GROUP_META: Readonly<Record<ReadinessGroup, { label: string; pill: string }>> = Object.freeze({
-+  ready: { label: "Ready", pill: "pill--confirmed" },
-+  review: { label: "Needs review", pill: "pill--amber" },
-+  missing: { label: "Missing data", pill: "pill--red" },
-+});
-+
-+/** Weekly sales for one product. Deliberately not called stock: the file
-+    carries one stock count, not a weekly stock level. */
-+function ProductSpark(props: { readonly weeks: readonly WeeklyEvidence[]; readonly labelled?: boolean }) {
-+  const weeks = props.weeks.slice(-7);
-+  const peak = Math.max(1, ...weeks.map((week) => Math.abs(week.netQuantity ?? 0)));
-+  if (weeks.length === 0) return <span className="spark spark--empty">{t("No weekly sales yet")}</span>;
-+  return (
-+    <span className={`spark${props.labelled ? " spark--labelled" : ""}`}>
-+      {t(weeks.map((week) => {
-+        const value = week.netQuantity;
-+        const missing = week.state === "missing";
-+        return (
-+          <span className="spark__col" key={week.weekStart}
-+            title={`${week.weekStart} · ${missing ? t("no data") : value}`}>
-+            {t(props.labelled && <span className="spark__value">{t(missing ? "–" : value)}</span>)}
-+            <span className={`spark__bar${missing ? " spark__bar--missing" : ""}`}
-+              style={missing ? undefined : { height: `${Math.max(8, Math.round((Math.abs(value ?? 0) / peak) * 100))}%` }} />
-+            {t(props.labelled && <span className="spark__day">{t(week.weekStart.slice(5))}</span>)}
-+          </span>
-+        );
-+      }))}
-+    </span>
-+  );
-+}
-+
-+/** One product that needs a decision, with everything that decision needs. */
-+function ProductCard(props: { readonly product: ProductReadiness; readonly onInspect: () => void }) {
-+  const p = props.product;
-+  const meta = GROUP_META[p.group];
-+  return (
-+    <article className={`pcard pcard--${p.group}`}>
-+      <header className="pcard__head">
-+        <div>
-+          <b className="pcard__name">{p.name ?? p.productKey}</b>
-+          {t(p.name && <span className="pcard__code num">{p.productKey}</span>)}
-+        </div>
-+        <span className={`pill ${meta.pill}`}>{t(meta.label)}</span>
-+      </header>
-+      <div className="pcard__facts">
-+        <div>
-+          <span className="pcard__key">{t("Last stock count")}</span>
-+          <b>{p.countDate ?? "—"}</b>
-+        </div>
-+        <div>
-+          <span className="pcard__key">{t("Stock age")}</span>
-+          <b>{t(p.ageDays === undefined ? "—" : `${p.ageDays} days`)}</b>
-+        </div>
-+      </div>
-+      <div className="pcard__trend">
-+        <span className="pcard__key">{t("Weekly sales")}</span>
-+        <ProductSpark weeks={p.weeks} labelled />
-+      </div>
-+      {t(p.reason && (
-+        <p className={`pcard__why pcard__why--${p.group}`}>
-+          <span aria-hidden="true">i</span>{t(p.reason)}
-+        </p>
-+      ))}
-+      <button type="button" className="btn btn--small btn--ghost pcard__action" onClick={props.onInspect}>
-+        {t("View details →")}
-+      </button>
-+    </article>
-+  );
-+}
-+
-+/** One column per week. A missing week is drawn as a gap, never as a zero bar. */
-+function WeekChart(props: { readonly weeks: readonly WeeklyEvidence[] }) {
-+  const peak = Math.max(1, ...props.weeks.map((week) => Math.abs(week.netQuantity ?? 0)));
-+  return (
-+    <div className="weekchart" role="img"
-+      aria-label={props.weeks.map((week) =>
-+        `${week.weekStart}: ${week.state === "missing" ? t("no data") : `${week.netQuantity ?? 0}`}`).join(", ")}>
-+      {t(props.weeks.map((week) => {
-+        const value = week.netQuantity ?? 0;
-+        const height = week.state === "observed_demand"
-+          ? Math.max(6, Math.round((Math.abs(value) / peak) * 100))
-+          : 0;
-+        return (
-+          <span className={`weekchart__col weekchart__col--${week.state}`} key={week.weekStart}
-+            title={`${week.weekStart} · ${t(WEEK_LABEL[week.state])}${week.netQuantity === null ? "" : ` · ${value}`}`}>
-+            <span className="weekchart__mark" style={height > 0 ? { height: `${height}%` } : undefined} />
-+          </span>
-+        );
-+      }))}
-+    </div>
-+  );
-+}
-+
- const TIDY_UP_LABEL: Readonly<Record<NormalizationEvent["normalizationType"], string>> = Object.freeze({
-   trim_whitespace: "Trim leading and trailing whitespace",
-   normalize_line_endings: "Normalise line endings",
-   confirmed_date_format: "Use the retailer-confirmed date format",
- });
- 
+-});
+-
+-const WEEK_LABEL: Readonly<Record<WeekState, string>> = Object.freeze({
+-  missing: "Missing",
+-  confirmed_zero_sales: "Confirmed zero",
+-  net_zero_with_activity: "Net zero + activity",
+-  observed_demand: "Observed demand",
+-});
+-
+-const TIDY_UP_LABEL: Readonly<Record<NormalizationEvent["normalizationType"], string>> = Object.freeze({
+-  trim_whitespace: "Trim leading and trailing whitespace",
+-  normalize_line_endings: "Normalise line endings",
+-  confirmed_date_format: "Use the retailer-confirmed date format",
+-});
+-
 -const TIDY_UPS_PER_PAGE = 25;
- const PROBLEMS_PER_PAGE = 25;
+-const PROBLEMS_PER_PAGE = 25;
+-
+-function issueMatches(issue: DataIssue, filter: ReadinessIssueFilter): boolean {
+-  return FILTER_CODES[filter].includes(issue.issueCode);
+-}
  
- function issueMatches(issue: DataIssue, filter: ReadinessIssueFilter): boolean {
-   return FILTER_CODES[filter].includes(issue.issueCode);
- }
- 
-+/* Codes whose humanised form would contradict the card that groups them. */
-+const ISSUE_LABEL: Readonly<Record<string, string>> = Object.freeze({
-+  MISSING_IDENTITY: "Missing product ID",
-+  DUPLICATE_CANDIDATE: "Duplicate row",
-+  DUPLICATE_CONFIRMED: "Duplicate row, left out",
-+});
-+
- function humanize(value: string): string {
+-function humanize(value: string): string {
 -  return value.toLowerCase().replace(/_/g, " ").replace(/^./, (letter) => letter.toUpperCase());
-+  return ISSUE_LABEL[value]
-+    ?? value.toLowerCase().replace(/_/g, " ").replace(/^./, (letter) => letter.toUpperCase());
- }
- 
- /** Uses the retailer-facing stock-age bands without mislabelling invalid dates as old stock. */
-@@ -109,17 +482,22 @@ function stockFreshnessLabel(freshness: StockFreshness): string {
+-}
+-
+-/** Uses the retailer-facing stock-age bands without mislabelling invalid dates as old stock. */
+-function stockFreshnessLabel(freshness: StockFreshness): string {
+-  if (freshness.state === "current") return "Current · 0–7 days old";
+-  if (freshness.state === "limited") return "Getting old · 8–14 days old";
+-  if (freshness.reasonCode === "STALE_STOCK") return "Too old to rely on · more than 14 days old";
+-  if (freshness.reasonCode === "MISSING_STOCK_DATE") return "Stock count date missing";
+-  if (freshness.reasonCode === "INVALID_STOCK_DATE") return "Stock count date invalid";
+-  if (freshness.reasonCode === "FUTURE_STOCK_DATE") return "Stock count date is in the future";
+-  return "Stock count cannot be relied on";
+-}
  
  /** Screen 03. Renders the domain engine's immutable Epic 2 evidence snapshot. */
  export function ReadinessScreen(props: ReadinessScreenProps) {
@@ -1910,7 +1692,7 @@ index 3f56a34..c91f0ae 100644
  
    const dateEvidence = useMemo(() => {
      const fields = ["transaction_date", "stock_as_of_date", "expiry_date"] as const;
-@@ -137,20 +515,121 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+@@ -137,20 +98,158 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
      });
    }, [props.dataset, props.dateConfirmations, props.mapping]);
  
@@ -1932,7 +1714,6 @@ index 3f56a34..c91f0ae 100644
 +
 +  const canContinueRows = props.snapshot.reconciliation.rowsUsed;
 +
-+  const weekSpan = timelines.reduce((widest, timeline) => Math.max(widest, timeline.summary.weeksInSpan), 0);
 +  /* The donut has to PARTITION the file: usable rows plus every excluded row,
 +     counted once. A row can carry several issues, so each excluded row is
 +     attributed to the first category that claims it, in card order. */
@@ -1944,28 +1725,25 @@ index 3f56a34..c91f0ae 100644
 +    const kind = kinds.find((candidate) => rowIssues.some((issue) => issueMatches(issue, candidate)));
 +    if (kind) excludedByKind.set(kind, (excludedByKind.get(kind) ?? 0) + 1);
 +  }
-+  /* products per stock-age band; anything without a usable count date is
-+     "cannot judge" rather than being folded into "too old" */
-+  const freshnessBands: Record<string, number> = { current: 0, limited: 0, unusable: 0, unknown: 0 };
-+  for (const stock of props.snapshot.productStock) {
-+    const state = stock.freshness.state;
-+    const band = state === "current" || state === "limited" || state === "unusable"
-+      ? (state === "unusable" && stock.freshness.reasonCode !== "STALE_STOCK" ? "unknown" : state)
-+      : "unknown";
-+    freshnessBands[band] += 1;
-+  }
 +
 +  /* One entry per product, joining its stock evidence, its weekly sales and
 +     any rows of its own that were left out. This is what the screen leads on. */
 +  const products: ProductReadiness[] = useMemo(() => {
 +    const stockByKey = new Map(props.snapshot.productStock.map((stock) => [stock.productKey, stock]));
 +    const weeksByKey = new Map(timelines.map((timeline) => [timeline.productKey, timeline.weeks]));
++    /* Identity comes from Step 2's confirmed mapping, so a product reads the
++       same here as it did there. Two products can share a name and differ only
++       by code — they stay separate, because the key is the code. */
 +    const nameByKey = new Map<string, string>();
++    const packByKey = new Map<string, string>();
 +    const excludedByKey = new Map<string, number>();
 +    for (const row of props.snapshot.rows) {
 +      const key = row.productKey;
 +      if (!key) continue;
-+      if (row.originalProductHint && !nameByKey.has(key)) nameByKey.set(key, row.originalProductHint);
++      const values = row.interpretedValues;
++      const name = values.productName ?? row.originalProductHint;
++      if (name && !nameByKey.has(key)) nameByKey.set(key, name);
++      if (values.packVariant && !packByKey.has(key)) packByKey.set(key, values.packVariant);
 +      if (row.useState === "excluded") excludedByKey.set(key, (excludedByKey.get(key) ?? 0) + 1);
 +    }
 +
@@ -1997,6 +1775,7 @@ index 3f56a34..c91f0ae 100644
 +      return {
 +        productKey,
 +        name: nameByKey.get(productKey),
++        packSize: packByKey.get(productKey),
 +        group,
 +        reason,
 +        countDate: stock?.stockAsOfDate,
@@ -2007,7 +1786,9 @@ index 3f56a34..c91f0ae 100644
 +    });
 +  }, [props.snapshot, timelines]);
 +
-+  const needsAttention = products.filter((product) => product.group !== "ready");
++  const matchesSearch = (product: ProductReadiness) => !query
++    || `${product.name ?? ""} ${product.productKey}`.toLowerCase().includes(query);
++  const needsAttention = products.filter((product) => product.group !== "ready" && matchesSearch(product));
 +  const GROUP_ORDER: Readonly<Record<ReadinessGroup, number>> = { missing: 0, review: 1, ready: 2 };
 +  const sortedAttention = [...needsAttention].sort((left, right) => {
 +    if (sort === "name") return (left.name ?? left.productKey).localeCompare(right.name ?? right.productKey);
@@ -2016,8 +1797,46 @@ index 3f56a34..c91f0ae 100644
 +       unknown age is a bigger problem than a known old one */
 +    return (right.ageDays ?? Number.MAX_SAFE_INTEGER) - (left.ageDays ?? Number.MAX_SAFE_INTEGER);
 +  });
-+  const readyProducts = products.filter((product) => product.group === "ready");
++  const readyProducts = products.filter((product) => product.group === "ready" && matchesSearch(product));
 +  const groupCount = (group: ReadinessGroup) => products.filter((product) => product.group === group).length;
++
++  /* Same issues as before, grouped by what is wrong rather than listed row by
++     row — several rows with one problem read as one problem. */
++  const problemGroups = useMemo(() => {
++    const excluded = new Set(props.snapshot.rows.filter((row) => row.useState === "excluded").map((row) => row.sourceRow));
++    const nameFor = new Map(products.map((product) => [product.productKey, product.name ?? product.productKey]));
++    const byCode = new Map<string, {
++      id: string; sourceRow: number; code?: string; displayName: string;
++      observedValue: string; correctiveAction: string; excluded: boolean;
++    }[]>();
++    for (const issue of props.snapshot.issues) {
++      const key = issue.productKey;
++      const entry = {
++        id: issue.id,
++        sourceRow: issue.sourceRow,
++        code: key,
++        displayName: (key && nameFor.get(key)) ?? issue.originalProductHint ?? "Unknown product",
++        observedValue: issue.observedValue,
++        correctiveAction: issue.correctiveAction,
++        excluded: excluded.has(issue.sourceRow),
++      };
++      byCode.set(issue.issueCode, [...(byCode.get(issue.issueCode) ?? []), entry]);
++    }
++    return [...byCode.entries()]
++      .map(([code, issues]) => ({
++        code,
++        issues,
++        label: PROBLEM_COPY[code]?.label ?? humanize(code),
++        technical: PROBLEM_COPY[code]?.technical ?? code,
++        blocking: PROBLEM_COPY[code]?.blocking ?? false,
++      }))
++      /* what stops the analysis first, then what is only worth a look */
++      .sort((left, right) => Number(right.blocking) - Number(left.blocking) || right.issues.length - left.issues.length);
++  }, [props.snapshot, products]);
++
++  const problemCount = problemGroups.length;
++  const fixCount = problemGroups.filter((group) => group.blocking).length;
++  const reviewCount = problemCount - fixCount;
 +
 +  const qualitySlices = kinds.map((kind) => ({
 +    key: kind,
@@ -2040,7 +1859,7 @@ index 3f56a34..c91f0ae 100644
  
    function download() {
      const blob = new Blob([report.csvText], { type: "text/csv;charset=utf-8" });
-@@ -165,59 +644,128 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+@@ -165,59 +264,141 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
    return (
      <>
        <p className="eyebrow">{t("Data readiness · snapshot ")}{props.snapshot.analysisDate}</p>
@@ -2153,6 +1972,15 @@ index 3f56a34..c91f0ae 100644
 +              <h2>{t(needsAttention.length)} {t(needsAttention.length === 1 ? "product needs your attention" : "products need your attention")}</h2>
 +              <p>{t("These products may have data issues or old stock. Review them before continuing.")}</p>
 +            </div>
++            <label className="attention__search">
++              <span className="sr-only">{t("Search by product name or code")}</span>
++              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
++                strokeWidth="2" strokeLinecap="round" aria-hidden="true">
++                <circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" />
++              </svg>
++              <input type="search" value={search} placeholder={t("Search by product name or code")}
++                onChange={(event) => setSearch(event.currentTarget.value)} />
++            </label>
 +            <label className="attention__sort">
 +              <span className="sr-only">{t("Sort products")}</span>
 +              <select value={sort} onChange={(event) => setSort(event.currentTarget.value as ProductSort)}>
@@ -2165,7 +1993,7 @@ index 3f56a34..c91f0ae 100644
 +          <div className="pcards">
 +            {t(sortedAttention.map((product) => (
 +              <ProductCard key={product.productKey} product={product}
-+                onInspect={() => { setSearch(product.productKey); props.onFilter(null); }} />
++                onInspect={() => setSearch(product.name ?? product.productKey)} />
 +            )))}
 +          </div>
 +        </section>
@@ -2196,7 +2024,11 @@ index 3f56a34..c91f0ae 100644
 +                  <tr key={product.productKey}>
 +                    <td>
 +                      <b>{product.name ?? product.productKey}</b>
-+                      {t(product.name && <span className="cell-detail num">{product.productKey}</span>)}
++                      {t(product.name && (
++                        <span className="cell-detail num">
++                          {product.productKey}{t(product.packSize && ` · ${product.packSize}`)}
++                        </span>
++                      ))}
 +                    </td>
 +                    <td className="num">{product.countDate ?? "—"}</td>
 +                    <td className="num">{t(product.ageDays === undefined ? "—" : `${product.ageDays} days`)}</td>
@@ -2212,7 +2044,7 @@ index 3f56a34..c91f0ae 100644
  
        {(dateEvidence.length > 0 || props.snapshot.duplicateGroups.length > 0) && (
          <section className="decision-grid" aria-label={t("Readiness decisions")}>
-@@ -248,50 +796,203 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+@@ -248,250 +429,228 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
              </article>
            ))}
  
@@ -2279,56 +2111,271 @@ index 3f56a34..c91f0ae 100644
          </section>
        )}
  
-+      <section className="card evidence-section">
-+        <div className="card__head">
-+          <div>
-+            <h2 className="card-title">
-+              {t(CAPABILITY_LABELS.weekly_history)}
-+              {" "}
-+              <Hint text="Timeline gap evidence: StockLess groups sales into weekly periods and tells apart weeks with positive sales, negative sales, no recorded sales, cancelled transactions and missing data. A missing week is never treated as a week of zero sales." />
-+            </h2>
-+            <p className="card-sub"><b>{t(CAPABILITY_LABELS.timeline_gap_evidence)}</b> {t("· Each product starts at its own first observed week and ends at its own last observed week.")}</p>
-+          </div>
-+          <span className="pill pill--grey">{t(timelines.length)} {t("products")}</span>
-+        </div>
-+        {/* four week states, so a legend is required — colour never carries
-+            identity alone, and each state also differs in shape. */}
-+        <div className="weekchart-key">
-+          <span><i style={{ background: "var(--teal)", height: "12px" }} />{t("Observed demand")}</span>
-+          <span><i style={{ background: "var(--teal-deep)", height: "3px" }} />{t("Confirmed zero")}</span>
-+          <span><i style={{ border: "1.5px solid var(--teal)", background: "#fff" }} />{t("Net zero + activity")}</span>
-+          <span><i style={{ background: "repeating-linear-gradient(45deg,#C6D6D1 0 3px,#FFFFFF 3px 6px)" }} />{t("Missing — not zero sales")}</span>
-+        </div>
-+        {timelines.length === 0 ? <p className="empty">{t("No valid demand rows are available.")}</p> : (
-+          <div className="timeline-list">
-+            {timelines.map((timeline) => (
-+              <article className="timeline-row" key={timeline.productKey}>
-+                <div className="timeline-row__summary">
-+                  <b className="num">{timeline.productKey}</b>
-+                  <span>{t(timeline.summary.observedWeekCount)} {t("observed · ")}{t(timeline.summary.weeksInSpan)} {t("in span · ")}{t(timeline.summary.missingWeekCount)} {t("missing")}</span>
-+                  <span>{timeline.summary.dateRangeStart} {t("to ")}{timeline.summary.dateRangeEnd}</span>
-+                  <span className={`pill ${timeline.recentWindow.state === "standard" ? "pill--teal" : "pill--amber"}`}>
-+                    {t(CAPABILITY_LABELS.recent_weekly_average)}: {t(humanize(timeline.recentWindow.state))}
+-      <section className="card evidence-section">
+-        <div className="card__head">
+-          <div>
+-            <h2 className="card-title">{t("Problems and tidy-ups")}</h2>
+-            <p className="card-sub">
+-              {t(props.filter ? "Problems are filtered by the selected card." : "Problems and permitted tidy-ups from this same local snapshot.")}
+-            </p>
+-          </div>
+-          <span className="pill pill--grey">
+-            {t(shown.length === 0 ? "0 problems" : `Showing ${problemStart + 1}–${problemStart + visibleProblems.length} of ${shown.length}`)}
+-          </span>
+-        </div>
+ 
+-        {visibleProblems.length === 0 ? (
+-          <p className="empty">{t("Nothing to correct in this selection.")}</p>
+-        ) : (
+-          <div className="table-scroll">
+-            <table className="dtable dtable--readiness">
+-              <thead>
+-                <tr>
+-                  <th>{t("Row")}</th>
+-                  <th>{t("Product")}</th>
+-                  <th>{t("Issue")}</th>
+-                  <th>{t("Observed value")}</th>
+-                  <th>{t("Reason and action")}</th>
+-                  <th>{t("Use")}</th>
+-                </tr>
+-              </thead>
+-              <tbody>
+-                {visibleProblems.map((issue) => {
+-                  const sourceRow = props.snapshot.rows.find((row) => row.sourceRow === issue.sourceRow);
+-                  const useState = sourceRow?.useState;
+-                  const product = issue.productKey
+-                    ?? issue.originalProductHint
+-                    ?? sourceRow?.productKey
+-                    ?? sourceRow?.originalProductHint
+-                    ?? "Unknown";
+-                  return (
+-                    <tr key={issue.id}>
+-                      <td><b>#{t(issue.sourceRow.toLocaleString("en"))}</b></td>
+-                      <td className="num">{product}</td>
+-                      <td><span className={`tag ${useState === "excluded" ? "tag--red" : "tag--amber"}`}>{t(humanize(issue.issueCode))}</span></td>
+-                      <td className="num">{issue.observedValue || "blank"}</td>
+-                      <td><b>{t(issue.reason)}</b><span className="cell-detail">{t(issue.correctiveAction)}</span></td>
+-                      <td><span className={`pill ${useState === "excluded" ? "pill--red" : "pill--amber"}`}>{t(useState === "excluded" ? "Left out" : "Used")}</span></td>
+-                    </tr>
+-                  );
+-                })}
+-              </tbody>
+-            </table>
+-          </div>
+-        )}
+-
+-        {t(shown.length > 0 && (
+-          <div className="table-pager" aria-label={t("Problem pages")}>
+-            <span>{t("Every problem is included in the download.")}</span>
+-            <div className="table-pager__actions">
+-              <button
+-                type="button"
+-                className="btn btn--small btn--ghost"
+-                disabled={currentProblemPage === 0}
+-                onClick={() => setProblemPage((page) => Math.max(0, page - 1))}
+-              >
+-                {t("← Previous")}</button>
+-              <span>{t("Page ")}{t(currentProblemPage + 1)} {t("of ")}{t(problemPageCount)}</span>
+-              <button
+-                type="button"
+-                className="btn btn--small btn--ghost"
+-                disabled={currentProblemPage >= problemPageCount - 1}
+-                onClick={() => setProblemPage((page) => Math.min(problemPageCount - 1, page + 1))}
+-              >
+-                {t("Next →")}</button>
+-            </div>
+-          </div>
+-        ))}
+-
+-        {props.snapshot.normalizations.length > 0 && (
+-          <div className="tidy-up-list">
+-            <div className="card__head">
+-              <div>
+-                <h3 className="card-title">{t("Every tidy-up")}</h3>
+-                <p className="card-sub">
+-                  {t("Each event shows its source row, exact before-and-after value, and the tidy-up.")}</p>
+-              </div>
+-              <span className="pill pill--grey">{t(props.snapshot.normalizations.length)} {t("events")}</span>
+-            </div>
+-            <div className="table-scroll">
+-              <table className="dtable dtable--tidy-ups">
+-                <thead>
+-                  <tr>
+-                    <th>{t("Row number")}</th>
+-                    <th>{t("Column")}</th>
+-                    <th>{t("What was there before")}</th>
+-                    <th>{t("What it is now")}</th>
+-                    <th>{t("Tidy-up applied")}</th>
+-                  </tr>
+-                </thead>
+-                <tbody>
+-                  {visibleTidyUps.map((event, index) => (
+-                    <tr key={`${event.sourceRow}-${event.sourceColumn}-${tidyUpStart + index}`}>
+-                      <td><b>#{t(event.sourceRow.toLocaleString("en"))}</b></td>
+-                      <td>{props.dataset.columns.find((column) => column.id === event.sourceColumn)?.header ?? event.sourceColumn}</td>
+-                      <td><code className="trace-value">{JSON.stringify(event.originalValue)}</code></td>
+-                      <td><code className="trace-value">{JSON.stringify(event.resultingValue)}</code></td>
+-                      <td>{t(TIDY_UP_LABEL[event.normalizationType])}</td>
+-                    </tr>
+-                  ))}
+-                </tbody>
+-              </table>
++      {/* "Problems to review": grouped by what is wrong, in the retailer's
++          words, with the affected products one click away. The technical code
++          stays available in the download and the tooltip. */}
++      {t(problemGroups.length > 0 && (
++        <section className="problems">
++          <div className="problems__head">
++            <div>
++              <h2>
++                {t(problemCount)}{" "}
++                {t(problemCount === 1 ? "thing needs your attention" : "things need your attention")}
++              </h2>
++              <p>
++                {t("Here are the issues StockLess found in your file and what you can do about them.")}
++                {" "}
++                <Hint text="Included in totals means the row still counts towards your demand figures — the note is a warning, not a blocker. Not included in totals means StockLess could not read the row safely, so it is left out until you correct it. Your file is never changed either way." />
++              </p>
+             </div>
+-            <div className="table-pager" aria-label={t("Tidy-up pages")}>
+-              <span>
+-                {t("Showing ")}{t(tidyUpStart + 1)}–{t(tidyUpStart + visibleTidyUps.length)} {t("of ")}{t(props.snapshot.normalizations.length)}
+-              </span>
+-              <div className="table-pager__actions">
+-                <button
+-                  type="button"
+-                  className="btn btn--small btn--ghost"
+-                  disabled={currentTidyUpPage === 0}
+-                  onClick={() => setTidyUpPage((page) => Math.max(0, page - 1))}
+-                >
+-                  {t("← Previous")}</button>
+-                <span>{t("Page ")}{t(currentTidyUpPage + 1)} {t("of ")}{t(tidyUpPageCount)}</span>
+-                <button
+-                  type="button"
+-                  className="btn btn--small btn--ghost"
+-                  disabled={currentTidyUpPage >= tidyUpPageCount - 1}
+-                  onClick={() => setTidyUpPage((page) => Math.min(tidyUpPageCount - 1, page + 1))}
+-                >
+-                  {t("Next →")}</button>
+-              </div>
++            <div className="problems__counts">
++              {t(fixCount > 0 && <span className="pill pill--red">{t(fixCount)} {t("need fixing")}</span>)}
++              {t(reviewCount > 0 && <span className="pill pill--amber">{t(reviewCount)} {t("need review")}</span>)}
+             </div>
+           </div>
+-        )}
+-      </section>
+ 
+-      <section className="card evidence-section">
+-        <div className="card__head">
+-          <div>
+-            <h2 className="card-title">{t(CAPABILITY_LABELS.weekly_history)}</h2>
+-            <p className="card-sub"><b>{t(CAPABILITY_LABELS.timeline_gap_evidence)}</b> {t("· Each product starts at its own first observed week and ends at its own last observed week.")}</p>
+-          </div>
+-          <span className="pill pill--grey">{t(timelines.length)} {t("products")}</span>
+-        </div>
+-        {timelines.length === 0 ? <p className="empty">{t("No valid demand rows are available.")}</p> : (
+-          <div className="timeline-list">
+-            {timelines.map((timeline) => (
+-              <article className="timeline-row" key={timeline.productKey}>
+-                <div className="timeline-row__summary">
+-                  <b className="num">{timeline.productKey}</b>
+-                  <span>{t(timeline.summary.observedWeekCount)} {t("observed · ")}{t(timeline.summary.weeksInSpan)} {t("in span · ")}{t(timeline.summary.missingWeekCount)} {t("missing")}</span>
+-                  <span>{timeline.summary.dateRangeStart} {t("to ")}{timeline.summary.dateRangeEnd}</span>
+-                  <span className={`pill ${timeline.recentWindow.state === "standard" ? "pill--teal" : "pill--amber"}`}>
+-                    {t(CAPABILITY_LABELS.recent_weekly_average)}: {t(humanize(timeline.recentWindow.state))}
+-                  </span>
+-                </div>
+-                <div className="week-strip" aria-label={t(`${CAPABILITY_LABELS.weekly_history} for ${timeline.productKey}`)}>
+-                  {timeline.weeks.map((week) => (
+-                    <span
+-                      className={`week-chip week-chip--${week.state}`}
+-                      title={t(`${week.weekStart}: ${WEEK_LABEL[week.state]}${week.netQuantity === null ? "" : `, net ${week.netQuantity}`}`)}
+-                      key={week.weekStart}
+-                    >
+-                      <b>{week.weekStart.slice(5)}</b>
+-                      {t(WEEK_LABEL[week.state])}
++          <div className="problems__list">
++            {t(problemGroups.map((group) => (
++              <details className={`igroup igroup--${group.blocking ? "fix" : "review"}`} key={group.code}>
++                <summary>
++                  <span className="igroup__icon" aria-hidden="true">!</span>
++                  <span className="igroup__title">
++                    <b>{t(group.label)}</b>
++                    <span className="igroup__count">
++                      {t(group.issues.length)}{" "}
++                      {t(group.issues.length === 1 ? "row affected" : "rows affected")}
+                     </span>
+-                  ))}
+-                </div>
+-              </article>
+-            ))}
 +                  </span>
-+                </div>
-+                <WeekChart weeks={timeline.weeks} />
-+                <div className="week-strip" aria-label={t(`${CAPABILITY_LABELS.weekly_history} for ${timeline.productKey}`)}>
-+                  {timeline.weeks.map((week) => (
-+                    <span
-+                      className={`week-chip week-chip--${week.state}`}
-+                      title={t(`${week.weekStart}: ${WEEK_LABEL[week.state]}${week.netQuantity === null ? "" : `, net ${week.netQuantity}`}`)}
-+                      key={week.weekStart}
-+                    >
-+                      <b>{week.weekStart.slice(5)}</b>
-+                      {t(WEEK_LABEL[week.state])}
++                  <Hint text={group.technical} />
++                </summary>
++                <ul className="igroup__rows">
++                  {t(group.issues.map((issue) => (
++                    <li key={issue.id}>
++                      <div className="igroup__who">
++                        <b>{issue.displayName}</b>
++                        <span className="num">
++                          {t(issue.code ? `${issue.code} · ` : "")}{t("Row ")}{t(issue.sourceRow.toLocaleString("en"))}
++                        </span>
++                      </div>
++                      <div className="igroup__found">
++                        <span className="igroup__key">{t("What StockLess found")}</span>
++                        <code className="trace-value">{issue.observedValue || t("blank")}</code>
++                      </div>
++                      <div className="igroup__todo">
++                        <span className="igroup__key">{t("What to do")}</span>
++                        {t(issue.correctiveAction)}
++                      </div>
++                      <span className={`pill ${issue.excluded ? "pill--red" : "pill--amber"}`}>
++                        {t(issue.excluded ? "Not included in totals" : "Included in totals")}
++                      </span>
++                    </li>
++                  )))}
++                </ul>
++              </details>
++            )))}
+           </div>
+-        )}
+-      </section>
+ 
+-      {props.snapshot.productStock.length > 0 && (
+-        <section className="card evidence-section">
+-          <div className="card__head">
++          {t(props.snapshot.normalizations.length > 0 && (
++            <details className="tidyups">
++              <summary>
++                <span className="tidyups__tick" aria-hidden="true">✓</span>
++                {t("StockLess handled ")}{t(props.snapshot.normalizations.length)}
++                {t(props.snapshot.normalizations.length === 1 ? " small issue for you" : " small issues for you")}
++              </summary>
++              <ul className="tidyups__list">
++                {t(props.snapshot.normalizations.map((event, index) => (
++                  <li key={`${event.sourceRow}-${event.sourceColumn}-${index}`}>
++                    <b>{t(TIDY_UP_LABEL[event.normalizationType])}</b>
++                    <span className="tidyups__where">
++                      {props.dataset.columns.find((column) => column.id === event.sourceColumn)?.header ?? event.sourceColumn}
++                      {t(" · ")}{t("Row ")}{t(event.sourceRow.toLocaleString("en"))}
 +                    </span>
-+                  ))}
-+                </div>
-+              </article>
-+            ))}
-+          </div>
-+        )}
-+      </section>
++                    <code className="trace-value">{JSON.stringify(event.originalValue)}</code>
++                    <span aria-hidden="true">→</span>
++                    <code className="trace-value">{JSON.stringify(event.resultingValue)}</code>
++                  </li>
++                )))}
++              </ul>
++              <p className="tidyups__note">{t("Your original file has not been changed.")}</p>
++            </details>
++          ))}
++
++          <button type="button" className="btn btn--small btn--ghost problems__download" onClick={download}>
++            {t("↓ Download problem list")}
++          </button>
++        </section>
++      ))}
++
 +        {/* Row-level evidence and the charts: the same numbers, for anyone
 +            who wants to audit them. Folded, because Step 3 asks "is my data
 +            usable", not "analyse my data". */}
@@ -2337,7 +2384,9 @@ index 3f56a34..c91f0ae 100644
 +        <div className="ready">
 +          <div className="ready__left">
 +            <span className="ready__tick" aria-hidden="true">✓</span>
-+            <div>
+             <div>
+-              <h2 className="card-title">{t(CAPABILITY_LABELS.stock_freshness)}</h2>
+-              <p className="card-sub">{t("Age is measured in calendar days at Asia/Kuala_Lumpur midnight.")}</p>
 +              <h2>
 +                {t("Exact row reconciliation")}
 +                {" "}
@@ -2353,12 +2402,25 @@ index 3f56a34..c91f0ae 100644
 +                    {t(" used rows had safe representation-only tidy-ups.")}
 +                  </>
 +                ))}</p>
-+            </div>
-+          </div>
+             </div>
+-            <span className="pill pill--grey">{t("As at ")}{props.snapshot.analysisDate}</span>
+           </div>
+-          <div className="freshness-grid">
+-            {props.snapshot.productStock.map((stock) => (
+-              <article className={`freshness-card freshness-card--${stock.freshness.state}`} key={stock.productKey}>
+-                <b className="num">{stock.productKey}</b>
+-                <span>{t("Snapshot: ")}{stock.stockAsOfDate ?? "missing"}</span>
+-                <span>{t("Age: ")}{t(stock.freshness.ageDays === undefined ? "not available" : `${stock.freshness.ageDays} days`)}</span>
+-                <strong>{t(stockFreshnessLabel(stock.freshness))}</strong>
+-                {t(!stock.usableForCover && <small>{t("Cover unavailable: ")}{t(stock.reasonCodes.map(humanize).join(" · ") || "stock evidence incomplete")}</small>)}
+-              </article>
+-            ))}
 +          <div>
 +            <div className="ready__count">{t(props.snapshot.reconciliation.rowsUsed.toLocaleString("en"))}</div>
 +            <div className="ready__unit">{t("usable rows of ")}{t(props.snapshot.reconciliation.rowsIn.toLocaleString("en"))}</div>
-+          </div>
+           </div>
+-        </section>
+-      )}
 +        </div>
 +  
 +  
@@ -2397,25 +2459,7 @@ index 3f56a34..c91f0ae 100644
 +          }))}
 +        </div>
 +  
-+        <div className="chart-row">
-+          <section className="card chart-card">
-+            <div className="card__head">
-+              <div>
-+                <h2 className="card-title">{t("Sales data overview")}</h2>
-+                <p className="card-sub">{t("Units sold per week, from the rows that passed every check.")}</p>
-+              </div>
-+            </div>
-+            <div className="chart-card__body">
-+              <SalesOverview timelines={timelines} />
-+              <dl className="statgrid">
-+                <div><dt>{t("Valid sales rows")}</dt><dd>{t(canContinueRows.toLocaleString("en"))}</dd></div>
-+                <div><dt>{t("Unique products")}</dt><dd>{t(timelines.length.toLocaleString("en"))}</dd></div>
-+                <div><dt>{t("Weeks of history")}</dt><dd>{t(weekSpan.toLocaleString("en"))}</dd></div>
-+                <div><dt>{t("Rows left out")}</dt><dd>{t(leftOut.toLocaleString("en"))}</dd></div>
-+              </dl>
-+            </div>
-+          </section>
-+  
++        <div className="chart-row chart-row--single">
 +          <section className="card chart-card">
 +            <div className="card__head">
 +              <div>
@@ -2429,279 +2473,6 @@ index 3f56a34..c91f0ae 100644
 +  
 +        </details>
 +
-+      {props.snapshot.productStock.length > 0 && (
-       <section className="card evidence-section">
-         <div className="card__head">
-           <div>
-             <h2 className="card-title">{t("Problems and tidy-ups")}</h2>
-             <p className="card-sub">
--              {t(props.filter ? "Problems are filtered by the selected card." : "Problems and permitted tidy-ups from this same local snapshot.")}
-+              {t(props.filter ? "Filtered by the card you selected." : "What to correct in your file, and what StockLess tidied up for you.")}
-             </p>
-           </div>
-           <span className="pill pill--grey">
-@@ -299,18 +1000,44 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
-           </span>
-         </div>
- 
-+        {/* US2.1 AC2 — search by product name or code, and a way back to the
-+            complete list without hunting for the active card. */}
-+        <div className="issue-search">
-+          <label className="issue-search__field">
-+            <span className="sr-only">{t("Search by product name or code")}</span>
-+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
-+              strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-+              <circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" />
-+            </svg>
-+            <input
-+              type="search"
-+              value={search}
-+              placeholder={t("Search by product name or code")}
-+              onChange={(event) => setSearch(event.currentTarget.value)}
-+            />
-+          </label>
-+          {t((props.filter !== null || query !== "") && (
-+            <button
-+              type="button"
-+              className="btn btn--small btn--ghost"
-+              onClick={() => { setSearch(""); props.onFilter(null); }}
-+            >
-+              {t("Show the complete list")}</button>
-+          ))}
-+        </div>
-+
-         {visibleProblems.length === 0 ? (
--          <p className="empty">{t("Nothing to correct in this selection.")}</p>
-+          <p className="empty">
-+            {t(query ? "No product matches that search in this selection." : "Nothing to correct in this selection.")}
-+          </p>
-         ) : (
--          <div className="table-scroll">
-+          <div className="table-scroll table-scroll--x">
-             <table className="dtable dtable--readiness">
-               <thead>
-                 <tr>
-                   <th>{t("Row")}</th>
--                  <th>{t("Product")}</th>
--                  <th>{t("Issue")}</th>
--                  <th>{t("Observed value")}</th>
--                  <th>{t("Reason and action")}</th>
-+                  <th>{t("What is wrong")}</th>
-+                  <th>{t("How to fix it")}</th>
-                   <th>{t("Use")}</th>
-                 </tr>
-               </thead>
-@@ -324,13 +1051,29 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
-                     ?? sourceRow?.originalProductHint
-                     ?? "Unknown";
-                   return (
-+                    /* Row and product share a cell, and the reason sentence moves to
-+                       hover text — it restated the issue tag beside it. Four columns
-+                       instead of six, and the action is the only prose left. */
-                     <tr key={issue.id}>
--                      <td><b>#{t(issue.sourceRow.toLocaleString("en"))}</b></td>
--                      <td className="num">{product}</td>
--                      <td><span className={`tag ${useState === "excluded" ? "tag--red" : "tag--amber"}`}>{t(humanize(issue.issueCode))}</span></td>
--                      <td className="num">{issue.observedValue || "blank"}</td>
--                      <td><b>{t(issue.reason)}</b><span className="cell-detail">{t(issue.correctiveAction)}</span></td>
--                      <td><span className={`pill ${useState === "excluded" ? "pill--red" : "pill--amber"}`}>{t(useState === "excluded" ? "Left out" : "Used")}</span></td>
-+                      <td>
-+                        <b>#{t(issue.sourceRow.toLocaleString("en"))}</b>
-+                        <span className="cell-detail num">{product}</span>
-+                      </td>
-+                      <td title={t(issue.reason)}>
-+                        <span className={`tag ${useState === "excluded" ? "tag--red" : "tag--amber"}`}>{t(humanize(issue.issueCode))}</span>
-+                        <span className="cell-detail num">{issue.observedValue || t("blank")}</span>
-+                      </td>
-+                      <td>{t(issue.correctiveAction)}</td>
-+                      <td>
-+                        <span
-+                          className={`pill ${useState === "excluded" ? "pill--red" : "pill--amber"}`}
-+                          title={t(useState === "excluded"
-+                            ? "Excluded from the totals — StockLess could not read this row safely."
-+                            : "Counted in your demand figures; the note here is a warning, not a blocker.")}
-+                        >
-+                          {t(useState === "excluded" ? "Left out" : "Used")}
-+                        </span>
-+                      </td>
-                     </tr>
-                   );
-                 })}
-@@ -339,9 +1082,19 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
-           </div>
-         )}
- 
-+        {t(visibleProblems.length > 0 && (
-+          <p className="use-key">
-+            <span className="pill pill--amber">{t("Used")}</span>
-+            {t("counts towards your demand figures.")}
-+            <span className="pill pill--red">{t("Left out")}</span>
-+            {t("is excluded from the totals until you correct it.")}
-+            <Hint text="Your file is never changed either way. A row that is left out stays listed here, with the reason, so you can fix it in your own spreadsheet and upload again." />
-+          </p>
-+        ))}
-+
-         {t(shown.length > 0 && (
-           <div className="table-pager" aria-label={t("Problem pages")}>
--            <span>{t("Every problem is included in the download.")}</span>
-+            <span>{t("All of them are in the download.")}</span>
-             <div className="table-pager__actions">
-               <button
-                 type="button"
-@@ -362,105 +1115,32 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
-           </div>
-         ))}
- 
--        {props.snapshot.normalizations.length > 0 && (
--          <div className="tidy-up-list">
--            <div className="card__head">
--              <div>
--                <h3 className="card-title">{t("Every tidy-up")}</h3>
--                <p className="card-sub">
--                  {t("Each event shows its source row, exact before-and-after value, and the tidy-up.")}</p>
--              </div>
--              <span className="pill pill--grey">{t(props.snapshot.normalizations.length)} {t("events")}</span>
--            </div>
--            <div className="table-scroll">
--              <table className="dtable dtable--tidy-ups">
--                <thead>
--                  <tr>
--                    <th>{t("Row number")}</th>
--                    <th>{t("Column")}</th>
--                    <th>{t("What was there before")}</th>
--                    <th>{t("What it is now")}</th>
--                    <th>{t("Tidy-up applied")}</th>
--                  </tr>
--                </thead>
--                <tbody>
--                  {visibleTidyUps.map((event, index) => (
--                    <tr key={`${event.sourceRow}-${event.sourceColumn}-${tidyUpStart + index}`}>
--                      <td><b>#{t(event.sourceRow.toLocaleString("en"))}</b></td>
--                      <td>{props.dataset.columns.find((column) => column.id === event.sourceColumn)?.header ?? event.sourceColumn}</td>
--                      <td><code className="trace-value">{JSON.stringify(event.originalValue)}</code></td>
--                      <td><code className="trace-value">{JSON.stringify(event.resultingValue)}</code></td>
--                      <td>{t(TIDY_UP_LABEL[event.normalizationType])}</td>
--                    </tr>
--                  ))}
--                </tbody>
--              </table>
--            </div>
--            <div className="table-pager" aria-label={t("Tidy-up pages")}>
--              <span>
--                {t("Showing ")}{t(tidyUpStart + 1)}–{t(tidyUpStart + visibleTidyUps.length)} {t("of ")}{t(props.snapshot.normalizations.length)}
--              </span>
--              <div className="table-pager__actions">
--                <button
--                  type="button"
--                  className="btn btn--small btn--ghost"
--                  disabled={currentTidyUpPage === 0}
--                  onClick={() => setTidyUpPage((page) => Math.max(0, page - 1))}
--                >
--                  {t("← Previous")}</button>
--                <span>{t("Page ")}{t(currentTidyUpPage + 1)} {t("of ")}{t(tidyUpPageCount)}</span>
--                <button
--                  type="button"
--                  className="btn btn--small btn--ghost"
--                  disabled={currentTidyUpPage >= tidyUpPageCount - 1}
--                  onClick={() => setTidyUpPage((page) => Math.min(tidyUpPageCount - 1, page + 1))}
--                >
--                  {t("Next →")}</button>
--              </div>
--            </div>
--          </div>
--        )}
--      </section>
--
--      <section className="card evidence-section">
--        <div className="card__head">
--          <div>
--            <h2 className="card-title">{t(CAPABILITY_LABELS.weekly_history)}</h2>
--            <p className="card-sub"><b>{t(CAPABILITY_LABELS.timeline_gap_evidence)}</b> {t("· Each product starts at its own first observed week and ends at its own last observed week.")}</p>
--          </div>
--          <span className="pill pill--grey">{t(timelines.length)} {t("products")}</span>
--        </div>
--        {timelines.length === 0 ? <p className="empty">{t("No valid demand rows are available.")}</p> : (
--          <div className="timeline-list">
--            {timelines.map((timeline) => (
--              <article className="timeline-row" key={timeline.productKey}>
--                <div className="timeline-row__summary">
--                  <b className="num">{timeline.productKey}</b>
--                  <span>{t(timeline.summary.observedWeekCount)} {t("observed · ")}{t(timeline.summary.weeksInSpan)} {t("in span · ")}{t(timeline.summary.missingWeekCount)} {t("missing")}</span>
--                  <span>{timeline.summary.dateRangeStart} {t("to ")}{timeline.summary.dateRangeEnd}</span>
--                  <span className={`pill ${timeline.recentWindow.state === "standard" ? "pill--teal" : "pill--amber"}`}>
--                    {t(CAPABILITY_LABELS.recent_weekly_average)}: {t(humanize(timeline.recentWindow.state))}
-+        {/* Tidy-ups are evidence, not work: nothing here needs Aina's attention,
-+            so one line each, folded away until she asks. */}
-+        {t(props.snapshot.normalizations.length > 0 && (
-+          <details className="tidyups">
-+            <summary>
-+              {t("Safe tidy-ups StockLess applied")}
-+              <span className="pill pill--grey">{t(props.snapshot.normalizations.length)}</span>
-+            </summary>
-+            <ul className="tidyups__list">
-+              {t(props.snapshot.normalizations.map((event, index) => (
-+                <li key={`${event.sourceRow}-${event.sourceColumn}-${index}`}>
-+                  <b>#{t(event.sourceRow.toLocaleString("en"))}</b>
-+                  <span className="tidyups__where">
-+                    {props.dataset.columns.find((column) => column.id === event.sourceColumn)?.header ?? event.sourceColumn}
-                   </span>
--                </div>
--                <div className="week-strip" aria-label={t(`${CAPABILITY_LABELS.weekly_history} for ${timeline.productKey}`)}>
--                  {timeline.weeks.map((week) => (
--                    <span
--                      className={`week-chip week-chip--${week.state}`}
--                      title={t(`${week.weekStart}: ${WEEK_LABEL[week.state]}${week.netQuantity === null ? "" : `, net ${week.netQuantity}`}`)}
--                      key={week.weekStart}
--                    >
--                      <b>{week.weekStart.slice(5)}</b>
--                      {t(WEEK_LABEL[week.state])}
--                    </span>
--                  ))}
--                </div>
--              </article>
--            ))}
--          </div>
--        )}
-+                  <code className="trace-value">{JSON.stringify(event.originalValue)}</code>
-+                  <span aria-hidden="true">→</span>
-+                  <code className="trace-value">{JSON.stringify(event.resultingValue)}</code>
-+                  <span className="tidyups__what">{t(TIDY_UP_LABEL[event.normalizationType])}</span>
-+                </li>
-+              )))}
-+            </ul>
-+          </details>
-+        ))}
-       </section>
- 
--      {props.snapshot.productStock.length > 0 && (
-         <section className="card evidence-section">
-           <div className="card__head">
-             <div>
-@@ -469,13 +1149,20 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
-             </div>
-             <span className="pill pill--grey">{t("As at ")}{props.snapshot.analysisDate}</span>
-           </div>
-+          <FreshnessBands bands={freshnessBands} total={props.snapshot.productStock.length} />
-           <div className="freshness-grid">
-             {props.snapshot.productStock.map((stock) => (
-               <article className={`freshness-card freshness-card--${stock.freshness.state}`} key={stock.productKey}>
-                 <b className="num">{stock.productKey}</b>
--                <span>{t("Snapshot: ")}{stock.stockAsOfDate ?? "missing"}</span>
--                <span>{t("Age: ")}{t(stock.freshness.ageDays === undefined ? "not available" : `${stock.freshness.ageDays} days`)}</span>
--                <strong>{t(stockFreshnessLabel(stock.freshness))}</strong>
-+                {/* US2.3 AC2 — the count date, how old it is and which label applies,
-+                    together on one line. */}
-+                <span className="freshness-card__line">
-+                  {stock.stockAsOfDate ?? t("no count date")}
-+                  <i aria-hidden="true">·</i>
-+                  {t(stock.freshness.ageDays === undefined ? "age not available" : `${stock.freshness.ageDays} days old`)}
-+                  <i aria-hidden="true">·</i>
-+                  <strong>{t(stockFreshnessLabel(stock.freshness))}</strong>
-+                </span>
-                 {t(!stock.usableForCover && <small>{t("Cover unavailable: ")}{t(stock.reasonCodes.map(humanize).join(" · ") || "stock evidence incomplete")}</small>)}
-               </article>
-             ))}
-@@ -485,13 +1172,7 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
  
        {t(props.forecastError && <p className="notice notice--error" role="alert">{t(props.forecastError)}</p>)}
  
@@ -2851,7 +2622,7 @@ index 9aa26c6..2f2049c 100644
              </p>
            </div>
 diff --git a/frontend/src/styles.css b/frontend/src/styles.css
-index 862cb48..61f4a07 100644
+index 862cb48..c654b79 100644
 --- a/frontend/src/styles.css
 +++ b/frontend/src/styles.css
 @@ -4,7 +4,12 @@
@@ -2877,11 +2648,11 @@ index 862cb48..61f4a07 100644
 +   "too big" on a wide monitor because a 1180px column leaves ~400px of empty
 +   gutter each side; widening it there fits more without shrinking any text. */
 +.frame{min-height:100vh;display:flex;flex-direction:column;align-items:center;background:var(--page);
-+  --shell:clamp(1180px, 88vw, 1360px)}
++  --shell:clamp(1180px, 92vw, 1420px)}
  
  /* topbar + stepper */
 -.topbar{align-self:stretch;height:76px;padding:0 64px;background:rgba(255,255,255,.94);
-+.topbar{align-self:stretch;height:62px;padding:0 40px;background:rgba(255,255,255,.94);
++.topbar{align-self:stretch;height:66px;padding:0 40px;background:rgba(255,255,255,.94);
    border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
  .brand{display:flex;align-items:center;text-decoration:none;padding:4px;margin-left:-4px;border-radius:8px}
  .brand--button{background:none;border:0;cursor:pointer}
@@ -2911,7 +2682,7 @@ index 862cb48..61f4a07 100644
  .step__button:not(:disabled):hover .step__dot{border-color:var(--teal)}
  
 -.page{width:1180px;max-width:100%;padding:44px 0 64px;display:flex;flex-direction:column;align-items:flex-start}
-+.page{width:var(--shell);max-width:100%;padding:30px 0 44px;display:flex;flex-direction:column;align-items:flex-start}
++.page{width:var(--shell);max-width:100%;padding:36px 40px 44px;display:flex;flex-direction:column;align-items:flex-start}
  
  /* type */
 -.eyebrow{font-family:var(--display);font-size:12px;font-weight:800;color:var(--teal);
@@ -2945,7 +2716,7 @@ index 862cb48..61f4a07 100644
  .btn--primary{background:var(--teal);color:#fff}
  .btn--primary:hover:not(:disabled){background:var(--teal-deep)}
  .btn--ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
-@@ -78,54 +87,61 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -78,56 +87,63 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    font-size:16px;font-weight:700;cursor:pointer}
  .btn--link:hover{color:var(--ink)}
  
@@ -2992,7 +2763,7 @@ index 862cb48..61f4a07 100644
  
  /* screen 01 */
 -.s1-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(390px,.82fr);gap:36px;align-items:start;margin-top:38px;align-self:stretch}
-+.s1-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(390px,.82fr);gap:26px;align-items:start;margin-top:26px;align-self:stretch}
++.s1-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,1fr);gap:32px;align-items:start;margin-top:26px;align-self:stretch}
  .attribute-guide__intro{margin-top:7px}
 -.attribute-section{margin-top:22px}
 +.attribute-section{margin-top:16px}
@@ -3022,10 +2793,14 @@ index 862cb48..61f4a07 100644
 +.attribute-card__features>b{flex:none;font-size:var(--text-eyebrow);line-height:1.4;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
  .attribute-card__features ul{display:flex;flex-wrap:wrap;gap:5px;list-style:none;margin:0;padding:0}
 -.attribute-card__features li{padding:3px 7px;border-radius:7px;background:#EDF6F4;color:var(--teal-deep);font-size:10px;font-weight:700;line-height:14px}
+-.upload-card{padding:30px;display:flex;flex-direction:column;gap:18px}
+-.dropzone{min-height:294px;border-radius:18px;border:2px dashed #9BC8C1;
 +.attribute-card__features li{padding:3px 7px;border-radius:7px;background:#EDF6F4;color:var(--teal-deep);font-size:var(--text-eyebrow);font-weight:700;line-height:1.4}
- .upload-card{padding:30px;display:flex;flex-direction:column;gap:18px}
- .dropzone{min-height:294px;border-radius:18px;border:2px dashed #9BC8C1;
++.upload-card{padding:20px;display:flex;flex-direction:column;gap:14px}
++.dropzone{min-height:170px;border-radius:18px;border:2px dashed #9BC8C1;
    background:linear-gradient(180deg,#F8FCFB 0%,#EDF7F4 100%);
+   display:flex;flex-direction:column;align-items:center;justify-content:center;
+   padding:32px 24px;text-align:center;transition:border-color .15s ease,background .15s ease}
 @@ -136,85 +152,88 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .csv-badge{width:54px;height:64px;background:#fff;border:2px solid var(--teal);border-radius:10px;
    display:flex;align-items:flex-end;justify-content:center;padding:0 7px 10px;margin-bottom:24px}
@@ -3033,12 +2808,13 @@ index 862cb48..61f4a07 100644
 -  font-size:10px;font-weight:800;color:var(--teal-deep);text-align:center}
 -.dropzone h3{font-family:var(--display);font-size:20px;font-weight:700;margin:0}
 -.dropzone p{font-size:14px;color:var(--muted);margin:11px 0 0}
+-.dropzone__actions{display:flex;gap:11px;margin-top:22px;flex-wrap:wrap;justify-content:center}
+-.dropzone__limits{font-size:12px;color:var(--muted);margin-top:18px}
 +  font-size:var(--text-eyebrow);font-weight:800;color:var(--teal-deep);text-align:center}
 +.dropzone h3{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
-+.dropzone p{font-size:var(--text-body);color:var(--muted);margin:11px 0 0}
- .dropzone__actions{display:flex;gap:11px;margin-top:22px;flex-wrap:wrap;justify-content:center}
--.dropzone__limits{font-size:12px;color:var(--muted);margin-top:18px}
-+.dropzone__limits{font-size:var(--text-secondary);color:var(--muted);margin-top:18px}
++.dropzone p{font-size:var(--text-body);color:var(--muted);margin:8px 0 0}
++.dropzone__actions{display:flex;gap:11px;margin-top:16px;flex-wrap:wrap;justify-content:center}
++.dropzone__limits{font-size:var(--text-secondary);color:var(--muted);margin-top:12px}
  .progress{width:220px;height:4px;border-radius:2px;background:#CFE0DC;margin-top:18px;overflow:hidden}
  .progress__fill{display:block;height:100%;background:var(--teal);transition:width .12s linear}
  
@@ -3047,9 +2823,9 @@ index 862cb48..61f4a07 100644
 -  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
 +/* A reassurance, not a warning — so it reads as a soft note rather than a
 +   black slab shouting at the end of the card. */
-+.privacy{display:flex;align-items:flex-start;gap:13px;padding:16px 18px;
++.privacy{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;
 +  background:#F1F8F3;border:1px solid #D8E9DD;border-radius:16px}
-+.privacy__tick{width:34px;height:34px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
++.privacy__tick{width:28px;height:28px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
 +  display:flex;align-items:center;justify-content:center}
  .privacy p{margin:0}
 -.privacy b{display:block;color:#fff;font-size:13px;line-height:18.85px}
@@ -3340,7 +3116,16 @@ index 862cb48..61f4a07 100644
  .history-table{align-self:stretch;margin-top:12px;padding:22px}
  .dtable--weeks{min-width:900px}
  .dtable--weeks th:nth-child(1){width:18%}
-@@ -408,3 +442,442 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -381,7 +415,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+ .dtable--weeks th:nth-child(5){width:8%}
+ .dtable--weeks th:nth-child(6){width:24%}
+ .dtable--weeks th:nth-child(7){width:14%}
+-.all-products{align-self:stretch;margin-top:12px;padding:26px 22px 12px}
++.all-products{align-self:stretch;margin-top:12px;padding:20px 18px 12px}
+ .all-products tbody tr:hover td{background:#FAFCFB}
+ .row--selected td{background:var(--teal-tint)}
+ .all-products .dtable td{vertical-align:middle}
+@@ -408,3 +442,494 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    .picker .select{min-width:0;width:100%}
    .saved-setup{align-items:flex-start;flex-direction:column}
  }
@@ -3353,6 +3138,7 @@ index 862cb48..61f4a07 100644
 +   behind the text. Decorative only — never intercepts a click. */
 +.ws-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 +.ws-decor__side{position:absolute;top:0;bottom:0;width:calc((100% - var(--shell)) / 2);overflow:hidden}
++@media (max-width:1180px){ .page{padding-left:24px;padding-right:24px} }
 +.ws-decor__side--left{left:0}
 +.ws-decor__side--right{right:0;transform:scaleX(-1)}
 +.ws-decor__side svg{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -3490,13 +3276,23 @@ index 862cb48..61f4a07 100644
 +  display:flex;align-items:center;justify-content:center;font-weight:800}
 +.attention__head h2{font-family:var(--display);font-size:17px;font-weight:700;margin:0;color:#7E2E2E}
 +.attention__head p{font-size:var(--text-description);color:var(--muted);margin:3px 0 0}
-+.attention__sort{margin-left:auto;flex:none}
++.attention__search{display:flex;align-items:center;gap:7px;margin-left:auto;flex:0 1 220px;min-width:0;
++  padding:6px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--muted)}
++.attention__search:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
++.attention__search input{flex:1;min-width:0;border:0;outline:0;background:none;
++  font-family:var(--body);font-size:var(--text-description);color:var(--ink)}
++.attention__sort{flex:none}
 +.attention__sort select{font-family:var(--body);font-size:var(--text-description);color:var(--ink-2);
 +  padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
 +
 +.pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-top:12px}
 +.pcard{display:flex;flex-direction:column;gap:10px;padding:15px;background:#fff;
 +  border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-card)}
++/* US2.3 AC8 — the freshness state is carried on the card's left edge, in the
++   colours the spec fixes. The product card IS the freshness card now. */
++.pcard--ready{border-left:4px solid #167D74}
++.pcard--review{border-left:4px solid #D99120}
++.pcard--missing{border-left:4px solid #9B3939}
 +.pcard__head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 +.pcard__name{display:block;font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
 +.pcard__code{display:block;font-size:var(--text-description);color:var(--muted);margin-top:2px}
@@ -3528,8 +3324,10 @@ index 862cb48..61f4a07 100644
 +.spark--labelled .spark__bar{background:#B9DED4}
 +.spark__bar--missing{height:7px;border:1px dashed #6E7B80;background:transparent;border-radius:3px}
 +
++/* US2.3 AC8's "current" colour: the ready group is the products whose stock
++   count is still current, so it carries the same left edge as the cards. */
 +.readylist{align-self:stretch;margin-top:16px;padding:13px 16px;background:#F1F8F5;
-+  border:1px solid #CFE3DE;border-radius:14px}
++  border:1px solid #CFE3DE;border-left:4px solid #167D74;border-radius:14px}
 +.readylist>summary{display:flex;align-items:center;gap:11px;cursor:pointer;list-style:none}
 +.readylist>summary::-webkit-details-marker{display:none}
 +.readylist__tick{width:30px;height:30px;flex:none;border-radius:50%;background:var(--teal);color:#fff;
@@ -3550,7 +3348,7 @@ index 862cb48..61f4a07 100644
 +@media (max-width:900px){
 +  .summary{grid-template-columns:1fr}
 +  .attention__head{flex-wrap:wrap}
-+  .attention__sort{margin-left:0;width:100%}
++  .attention__sort,.attention__search{margin-left:0;width:100%;flex:1 1 100%}
 +  .attention__sort select{width:100%}
 +}
 +
@@ -3584,15 +3382,54 @@ index 862cb48..61f4a07 100644
 +.footer-row--actions{justify-content:flex-end}
 +
 +
++/* ===== problems to review =====
++   Grouped by what is wrong, in the retailer's words. The technical wording
++   lives in the tooltip and the download — secondary, not gone. */
++.problems{align-self:stretch;margin-top:16px;padding:16px 18px;background:#fff;
++  border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-card)}
++.problems__head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
++.problems__head h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
++.problems__head p{font-size:var(--text-description);color:var(--muted);margin:3px 0 0}
++.problems__counts{display:flex;gap:7px;flex-wrap:wrap}
++.problems__list{display:grid;gap:9px;margin-top:13px}
++.problems__download{margin-top:13px}
++
++.igroup{border:1px solid var(--line);border-radius:12px}
++.igroup>summary{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;list-style:none;border-radius:11px}
++.igroup[open]>summary{border-radius:11px 11px 0 0}
++.igroup>summary::-webkit-details-marker{display:none}
++.igroup__icon{width:22px;height:22px;flex:none;border-radius:50%;color:#fff;font-weight:800;
++  font-size:var(--text-description);display:flex;align-items:center;justify-content:center}
++.igroup--fix{background:#FDF7F6;border-color:#F0D6D2}
++.igroup--fix .igroup__icon{background:#9B3939}
++.igroup--review{background:#FDFAF4;border-color:#EFE0C4}
++.igroup--review .igroup__icon{background:#B0801E}
++.igroup__title{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;flex:1;min-width:0}
++.igroup__title b{font-size:var(--text-body);color:var(--ink)}
++.igroup__count{font-size:var(--text-description);color:var(--muted)}
++.igroup__rows{list-style:none;margin:0;padding:0 13px 12px;display:grid;gap:9px}
++.igroup__rows li{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.4fr) auto;
++  gap:12px;align-items:start;padding:11px 13px;background:#fff;border:1px solid var(--line-soft);border-radius:10px}
++.igroup__who b{display:block;font-size:var(--text-secondary);color:var(--ink)}
++.igroup__who .num,.igroup__key{display:block;font-size:var(--text-label);color:var(--muted)}
++.igroup__key{text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
++.igroup__found,.igroup__todo{font-size:var(--text-description);color:var(--ink-2);min-width:0}
++
++/* automatic tidy-ups are not errors, so they never look like one */
++.tidyups__tick{width:22px;height:22px;flex:none;border-radius:50%;background:var(--teal);color:#fff;
++  display:flex;align-items:center;justify-content:center;font-size:var(--text-description)}
++.tidyups__note{font-size:var(--text-label);color:var(--muted);margin:9px 0 0}
++
++@media (max-width:900px){
++  .igroup__rows li{grid-template-columns:1fr}
++}
++
 +/* ===== tidy-ups =====
 +   Evidence, not work — one line each, folded away until asked for. */
-+.tidyups{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:12px}
++.tidyups{margin-top:13px;padding:11px 13px;background:#F1F8F5;border:1px solid #CFE3DE;border-radius:12px}
 +.tidyups>summary{display:flex;align-items:center;gap:9px;cursor:pointer;list-style:none;
 +  font-size:var(--text-secondary);font-weight:700;color:var(--ink-2)}
 +.tidyups>summary::-webkit-details-marker{display:none}
-+.tidyups>summary::before{content:"";width:0;height:0;flex:none;
-+  border:4px solid transparent;border-left-color:var(--muted);transition:transform .15s ease}
-+.tidyups[open]>summary::before{transform:rotate(90deg) translateX(-1px)}
 +.tidyups__list{list-style:none;margin:11px 0 0;padding:0;display:grid;gap:7px}
 +.tidyups__list li{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
 +  font-size:var(--text-description);color:var(--muted)}

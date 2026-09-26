@@ -569,6 +569,36 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .step__line{top:35px}
 @media(prefers-reduced-motion:reduce){.step__plant{transition:none}}
 @media(max-width:760px){ .step__plant{font-size:14px} }
+
+/* ===== identity choice =====
+   The card is the button. Previously a 14px button sat inside a large card,
+   so the obvious target did nothing. */
+.identity__path{display:flex;flex-direction:column;align-items:flex-start;gap:5px;width:100%;
+  font-family:var(--body);text-align:left;cursor:pointer;
+  transition:border-color .15s ease,background-color .15s ease,box-shadow .15s ease}
+.identity__path:hover:not(:disabled){border-color:var(--mint);background:#F4FAF8}
+.identity__path:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.identity__path:disabled{cursor:not-allowed;opacity:.62}
+.identity__path--on{box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.identity__path-fields{margin:0}
+.identity__path-state{margin-top:5px;font-size:var(--text-secondary);font-weight:700;color:var(--teal)}
+.identity__path--on .identity__path-state{color:var(--teal-deep)}
+.identity__path:disabled .identity__path-state{color:var(--muted);font-weight:600}
+
+/* ===== what more data would unlock =====
+   A light teal box inside the sage panel. Grouped by the missing column
+   rather than by capability, so it is three short rows instead of seven
+   repeating paragraphs. */
+.unlocks{margin-top:24px;padding:15px 16px;background:var(--teal-tint);
+  border:1px solid #B9DBD5;border-radius:14px}
+.unlocks__title{margin:0;font-family:var(--display);font-size:var(--text-body);
+  font-weight:700;color:var(--teal-deep)}
+.unlocks__lede{margin:4px 0 0;font-size:var(--text-description);color:var(--muted)}
+.unlocks__list{list-style:none;margin:11px 0 0;padding:0}
+.unlocks__list li{margin-bottom:9px;font-size:var(--text-description);line-height:1.45}
+.unlocks__list li:last-child{margin-bottom:0}
+.unlocks__list b{display:block;font-size:var(--text-secondary);color:var(--ink)}
+.unlocks__list span{color:var(--muted)}
 .language-switcher{display:inline-flex;align-items:center;gap:5px;background:#edf7ef;border:1px solid #c3e2cc;border-radius:10px;padding:6px 8px;color:#2f6c49;flex-shrink:0;line-height:1.3}
 .language-switcher select{line-height:1.4;font-family:inherit;font-size:12px;font-weight:600;color:inherit;background:transparent;border:0;padding:4px 0;cursor:pointer;max-width:120px;min-height:28px}
 .language-switcher:focus-within{outline:2px solid #167d74;outline-offset:3px}
@@ -605,7 +635,7 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
     </label>
   </header>
 
-  <nav class="stepper" aria-label="Progress"><ol class="stepper__inner"><li class="step step--current"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌱</span><span class="step__dot">1</span><span class="step__label" data-i18n="step.1">Upload</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🌿</span><span class="step__dot">2</span><span class="step__label" data-i18n="step.2">Map columns</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🍃</span><span class="step__dot">3</span><span class="step__label" data-i18n="step.3">Check readiness</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🌳</span><span class="step__dot">4</span><span class="step__label" data-i18n="step.4">Plan purchases</span></button><span class="step__line" aria-hidden="true"></span></li></ol></nav>
+  <nav class="stepper" aria-label="Progress"><ol class="stepper__inner"><li class="step step--current"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌱</span><span class="step__dot">1</span><span class="step__label" data-i18n="step.1">Upload</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🌿</span><span class="step__dot">2</span><span class="step__label" data-i18n="step.2">Map columns</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🪴</span><span class="step__dot">3</span><span class="step__label" data-i18n="step.3">Check readiness</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🌳</span><span class="step__dot">4</span><span class="step__label" data-i18n="step.4">Plan purchases</span></button><span class="step__line" aria-hidden="true"></span></li></ol></nav>
 
   <div class="page">
     <p class="eyebrow" data-i18n="s1.eyebrow">Start with what you already have</p>

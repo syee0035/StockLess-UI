@@ -1,0 +1,1857 @@
+diff --git a/public/basket.png b/public/basket.png
+new file mode 100644
+index 0000000..eaec66c
+--- /dev/null
++++ b/public/basket.png
+@@ -0,0 +1,3 @@
++version https://git-lfs.github.com/spec/v1
++oid sha256:3ed62058ebdf286ed9e6e1ad1446f75471587380741d87a6c00b97f93841a955
++size 114790
+diff --git a/shim/react-router.tsx b/shim/react-router.tsx
+new file mode 100644
+index 0000000..926df3a
+--- /dev/null
++++ b/shim/react-router.tsx
+@@ -0,0 +1,41 @@
++/* Minimal stand-in for react-router, used only by the standalone HTML build.
++   The real app keeps using react-router; this exists so the exported single
++   file can route from file:// where a history API router cannot work. */
++import React, { createContext, useContext, useEffect, useState } from 'react';
++
++type RouteDef = { path?: string; index?: boolean; Component: React.ComponentType; children?: RouteDef[] };
++const Ctx = createContext<{ path: string; go: (to: string) => void }>({ path: '/', go: () => {} });
++const OutletCtx = createContext<React.ReactNode>(null);
++
++const read = () => (location.hash.replace(/^#/, '') || '/');
++
++export function createBrowserRouter(routes: RouteDef[]) { return { routes }; }
++
++export function RouterProvider({ router }: { router: { routes: RouteDef[] } }) {
++  const [path, setPath] = useState(read);
++  useEffect(() => {
++    const on = () => setPath(read());
++    addEventListener('hashchange', on);
++    return () => removeEventListener('hashchange', on);
++  }, []);
++  const go = (to: string) => { location.hash = to; };
++
++  const root = router.routes[0];
++  const kids = root.children || [];
++  const rel = path === '/' ? '' : path.replace(/^\//, '');
++  const match = kids.find((r) => (rel === '' ? r.index : r.path === rel)) || kids.find((r) => r.index);
++  const Root = root.Component;
++  const Child = match?.Component;
++
++  return (
++    <Ctx.Provider value={{ path, go }}>
++      <OutletCtx.Provider value={Child ? <Child /> : null}>
++        <Root />
++      </OutletCtx.Provider>
++    </Ctx.Provider>
++  );
++}
++
++export function Outlet() { return <>{useContext(OutletCtx)}</>; }
++export function useLocation() { return { pathname: useContext(Ctx).path }; }
++export function useNavigate() { return useContext(Ctx).go; }
+diff --git a/src/components/Decor.tsx b/src/components/Decor.tsx
+new file mode 100644
+index 0000000..68c752c
+--- /dev/null
++++ b/src/components/Decor.tsx
+@@ -0,0 +1,77 @@
++/* Decorative background bands.
++   Waves, leaves and dot grids are inline SVG so they scale and theme with the
++   rest of the app; only the produce basket is a raster asset. Colours are
++   sampled from the StockLess background mockup. Nothing here is interactive —
++   the layer is aria-hidden and ignores pointer events — and the centre is left
++   deliberately pale so no artwork ever sits under the type. */
++
++const WAVE_PALE = '#EDF7E9';
++const WAVE_SOFT = '#DDEFD6';
++const WAVE_MID = '#DCEFD8';
++const WAVE_DEEP = '#B8DFBE';
++
++function Leaf({ x, y, s, rot, fill, op }: {
++  x: number; y: number; s: number; rot: number; fill: string; op: number;
++}) {
++  return (
++    <g transform={`translate(${x} ${y}) rotate(${rot}) scale(${s})`} opacity={op}>
++      <path d="M36 2C16 16 4 34 4 52c0 17 14 30 32 30s32-13 32-30C68 34 56 16 36 2Z" fill={fill} />
++      <path d="M36 78V12" stroke="#FFFFFF" strokeOpacity=".55" strokeWidth="2.5" strokeLinecap="round" />
++      <path d="M36 34 18 46M36 34l18 12M36 54 20 66M36 54l16 12"
++        stroke="#FFFFFF" strokeOpacity=".35" strokeWidth="2" strokeLinecap="round" />
++    </g>
++  );
++}
++
++function Dots({ x, y }: { x: number; y: number }) {
++  const c = [];
++  for (let i = 0; i < 5; i++) for (let j = 0; j < 3; j++)
++    c.push(<circle key={`${i}-${j}`} cx={i * 17} cy={j * 17} r="3" />);
++  return <g transform={`translate(${x} ${y})`} fill="#9CC9A0" opacity=".55">{c}</g>;
++}
++
++/** Background band behind the hero: waves rising from the foot, scattered
++ *  leaves at the margins, and the produce basket in the bottom-right. */
++export function HeroDecor() {
++  return (
++    <div className="sl-decor sl-decor--hero" aria-hidden="true">
++      <svg viewBox="0 0 1536 620" preserveAspectRatio="xMidYMax slice">
++        <path d="M0 0h1536v96c-320 132-520-40-880 40C380 178 220 78 0 214Z" fill={WAVE_PALE} />
++        <path d="M1536 0v250c-150-84-250-150-296-250Z" fill={WAVE_SOFT} />
++        <path d="M0 620V440c250-70 500 62 800 8 300-54 520 66 736 14v158Z" fill={WAVE_MID} />
++        <path d="M0 620V524c300-54 560 56 900 12 280-36 460 46 636 12v72Z" fill={WAVE_DEEP} />
++        <Leaf x={58} y={96} s={0.62} rot={-20} fill="#7FB27D" op={0.9} />
++        <Leaf x={138} y={52} s={0.44} rot={30} fill="#95C293" op={0.85} />
++        <Leaf x={26} y={214} s={0.4} rot={56} fill="#A8CFA2" op={0.8} />
++        <Leaf x={150} y={268} s={0.32} rot={-10} fill="#8FBC8B" op={0.75} />
++        <Leaf x={1358} y={120} s={0.46} rot={152} fill="#A6CEA4" op={0.85} />
++        <Leaf x={1452} y={262} s={0.36} rot={198} fill="#9AC698" op={0.8} />
++        <Leaf x={78} y={430} s={0.52} rot={16} fill="#8FBC8B" op={0.8} />
++        <Leaf x={196} y={492} s={0.34} rot={-28} fill="#A5CDA0" op={0.75} />
++        <Dots x={1432} y={150} />
++        <Dots x={62} y={336} />
++      </svg>
++      <img className="sl-basket" src="basket.png" alt="" />
++    </div>
++  );
++}
++
++/** Mirrored band closing the page, so the foot echoes the hero. No basket —
++ *  one is enough, and a second would read as a repeat rather than a bookend. */
++export function FooterDecor() {
++  return (
++    <div className="sl-decor sl-decor--foot" aria-hidden="true">
++      <svg viewBox="0 0 1536 460" preserveAspectRatio="xMidYMin slice">
++        <path d="M0 460h1536V364c-320-132-520 40-880-40C380 282 220 382 0 246Z" fill={WAVE_PALE} />
++        <path d="M0 460V236c250 70 500-62 800-8 300 54 520-66 736-14v246Z" fill={WAVE_MID} />
++        <path d="M0 460V344c300 54 560-56 900-12 280 36 460-46 636-12v140Z" fill={WAVE_DEEP} />
++        <Leaf x={84} y={92} s={0.5} rot={196} fill="#8FBC8B" op={0.8} />
++        <Leaf x={188} y={166} s={0.34} rot={148} fill="#A5CDA0" op={0.75} />
++        <Leaf x={1372} y={104} s={0.46} rot={-24} fill="#A6CEA4" op={0.85} />
++        <Leaf x={1462} y={196} s={0.32} rot={22} fill="#9AC698" op={0.8} />
++        <Dots x={1430} y={54} />
++        <Dots x={58} y={252} />
++      </svg>
++    </div>
++  );
++}
+diff --git a/src/components/Layout.tsx b/src/components/Layout.tsx
+index ecd0a99..d15ff18 100644
+--- a/src/components/Layout.tsx
++++ b/src/components/Layout.tsx
+@@ -15,11 +15,6 @@ export function Layout() {
+   );
+ }
+ 
+-const LANG_OPTIONS: { code: Lang; key: 'lang.en' | 'lang.ms' | 'lang.zh' }[] = [
+-  { code: 'en', key: 'lang.en' },
+-  { code: 'ms', key: 'lang.ms' },
+-  { code: 'zh', key: 'lang.zh' },
+-];
+ 
+ function LayoutInner() {
+   const [showModal, setShowModal] = useState(false);
+@@ -37,14 +32,10 @@ function LayoutInner() {
+         WebkitBackdropFilter: 'blur(12px)',
+         position: 'sticky', top: 0, zIndex: 100,
+       }}>
+-        <div style={{
++        <div className="sl-topnav" style={{
+           maxWidth: 'var(--page-max-width)',
+           margin: '0 auto',
+           padding: '0 var(--space-6)',
+-          height: '56px',
+-          display: 'flex',
+-          alignItems: 'center',
+-          gap: 'var(--space-4)',
+         }}>
+           {/* Logo */}
+           <a href="/" style={{ marginRight: 'auto', lineHeight: 0 }}>
+@@ -100,44 +91,21 @@ function LayoutInner() {
+             </div>
+           )}
+ 
+-          {/* Language switcher */}
+-          <div style={{
+-            display: 'flex',
+-            alignItems: 'center',
+-            background: 'var(--line-soft)',
+-            border: '1px solid var(--line)',
+-            borderRadius: '6px',
+-            padding: '3px',
+-            gap: '2px',
+-            flexShrink: 0,
+-          }}>
+-            {LANG_OPTIONS.map(({ code, key }) => {
+-              const active = lang === code;
+-              return (
+-                <button
+-                  key={code}
+-                  onClick={() => setLang(code)}
+-                  aria-pressed={active}
+-                  style={{
+-                    fontFamily: 'var(--font-data)',
+-                    fontSize: '11px',
+-                    fontWeight: active ? 700 : 400,
+-                    color: active ? 'var(--ink)' : 'var(--muted)',
+-                    background: active ? '#fff' : 'transparent',
+-                    border: active ? '1px solid var(--line)' : '1px solid transparent',
+-                    borderRadius: '4px',
+-                    padding: '3px 9px',
+-                    cursor: 'pointer',
+-                    transition: 'all 130ms ease',
+-                    boxShadow: active ? '0 1px 2px rgba(22,49,59,.06)' : 'none',
+-                    lineHeight: 1.4,
+-                  }}
+-                >
+-                  {t(key)}
+-                </button>
+-              );
+-            })}
+-          </div>
++          {/* Language switcher — same control as the workspace, so the two match */}
++          <label className="language-switcher">
++            <svg viewBox="0 0 36 32" width="28" height="26" aria-hidden="true">
++              <path d="M3 2h18v23H9l-6 5Z" fill="#86c7a1" />
++              <path d="M20 2h10a3 3 0 0 1 3 3v20H20Z" fill="#d6eddd" />
++              <path d="m7 20 5-13 5 13m-8-4h6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
++              <path d="M22 10h9m-5-3v3m-3 3c1 4 4 6 7 8m-1-11c-1 5-3 8-7 11" fill="none" stroke="#347452" strokeWidth="1.7" strokeLinecap="round" />
++            </svg>
++            <select aria-label={t('lang.label')} value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
++              {/* a language is always named in its own language, never translated */}
++              <option value="en" lang="en">English</option>
++              <option value="ms" lang="ms">Bahasa Melayu</option>
++              <option value="zh" lang="zh-Hans">中文</option>
++            </select>
++          </label>
+ 
+           {/* How it works */}
+           <button
+diff --git a/src/decor.css b/src/decor.css
+new file mode 100644
+index 0000000..5cdfd34
+--- /dev/null
++++ b/src/decor.css
+@@ -0,0 +1,101 @@
++/* Decorative background bands — see src/components/Decor.tsx.
++   Applied to the hero and to the foot of the page only, never behind the
++   sections in between, and always with a pale clearing over the middle so
++   headings and body copy stay fully legible. */
++
++.sl-band { position: relative; isolation: isolate; }
++.sl-band > * { position: relative; z-index: 2; }
++
++.sl-decor {
++  position: absolute;
++  left: 0;
++  right: 0;
++  z-index: 0;
++  pointer-events: none;
++  overflow: hidden;
++  background: #FCFCF9;
++}
++.sl-decor svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
++
++/* each band stretches to the section it wraps, so the artwork never
++   spills onto the section below */
++.sl-decor--hero { top: 0; bottom: 0; min-height: 420px; }
++.sl-decor--foot { top: 0; bottom: 0; }
++
++/* the clearing, plus a fade into the page colour on the open edge */
++.sl-decor--hero::after {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background:
++    radial-gradient(40% 34% at 50% 34%, rgba(252,252,249,.94) 0%, rgba(252,252,249,.72) 52%, rgba(252,252,249,0) 80%),
++    linear-gradient(to bottom, rgba(252,252,249,0) 74%, var(--page) 100%);
++}
++.sl-decor--foot::after {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background:
++    radial-gradient(46% 40% at 50% 40%, rgba(252,252,249,.92) 0%, rgba(252,252,249,.7) 54%, rgba(252,252,249,0) 82%),
++    linear-gradient(to top, rgba(252,252,249,0) 78%, var(--page) 100%);
++}
++
++/* the basket clears both the headline and the interactive card beside it */
++.sl-basket {
++  position: absolute;
++  right: 0;
++  bottom: 0;
++  width: clamp(140px, 18vw, 264px);
++  height: auto;
++  z-index: 1;
++  display: block;
++}
++
++@media (max-width: 1050px) {
++  .sl-decor--hero { min-height: 360px; }
++}
++
++@media (max-width: 760px) {
++  .sl-decor--hero { min-height: 300px; }
++  /* narrow screens leave no clear column beside the copy, so the basket is
++     dropped rather than allowed to sit under the text */
++  .sl-basket { display: none; }
++  .sl-decor--hero::after {
++    background:
++      radial-gradient(86% 46% at 50% 34%, rgba(252,252,249,.97) 0%, rgba(252,252,249,.9) 56%, rgba(252,252,249,.2) 100%),
++      linear-gradient(to bottom, rgba(252,252,249,0) 72%, var(--page) 100%);
++  }
++  .sl-decor--foot::after {
++    background:
++      radial-gradient(90% 50% at 50% 42%, rgba(252,252,249,.96) 0%, rgba(252,252,249,.88) 58%, rgba(252,252,249,.2) 100%),
++      linear-gradient(to top, rgba(252,252,249,0) 76%, var(--page) 100%);
++  }
++}
++
++/* ===== food-waste statistics row =====
++   Four fixed columns squeezed each description into one word per line at
++   common widths. Auto-fit with a sensible minimum lets it fall to two
++   columns, then one, instead of shredding the text. */
++.sl-stats {
++  display: grid;
++  grid-template-columns: repeat(4, minmax(0, 1fr));
++  gap: var(--space-6);
++}
++.sl-stat { min-width: 0; padding-left: var(--space-5); }
++.sl-stat--ruled { border-left: 1px solid var(--line); }
++
++@media (max-width: 900px) {
++  .sl-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-8); }
++  /* the rule only reads as a divider on the columns that have one beside them */
++  .sl-stat:nth-child(odd) { border-left: none; padding-left: 0; }
++}
++@media (max-width: 520px) {
++  .sl-stats { grid-template-columns: 1fr; }
++  .sl-stat { border-left: none; padding-left: 0; }
++}
++
++/* The hero and footer artwork is drawn with preserveAspectRatio="slice", so on a
++   phone its paths extend well past the viewport. The SVG clips them visually,
++   but they still widen the scrollable area — the page could be dragged ~280px
++   sideways. `clip` stops that without making a scroll container. */
++html, body { overflow-x: clip; }
+diff --git a/src/i18n/translations.ts b/src/i18n/translations.ts
+index 181c2e0..b99f08b 100644
+--- a/src/i18n/translations.ts
++++ b/src/i18n/translations.ts
+@@ -3,6 +3,7 @@ export type Lang = 'en' | 'ms' | 'zh';
+ export type TranslationKey = keyof typeof en;
+ 
+ const en = {
++  'lang.label': 'Language',
+   /* ── Navigation ── */
+   'nav.howItWorks': 'How it works',
+   'nav.close': 'Close',
+@@ -17,14 +18,14 @@ const en = {
+   'modal.heading': 'Four steps to a smarter order',
+ 
+   /* ── Steps ── */
+-  'step.1.label': 'Upload your sales file',
+-  'step.1.desc': 'CSV from your till or spreadsheet.',
+-  'step.2.label': 'Check the column matching',
+-  'step.2.desc': 'Confirm product and quantity fields.',
+-  'step.3.label': 'Review the data check',
+-  'step.3.desc': 'Spot any unusual rows before analysis.',
+-  'step.4.label': 'Read the results',
+-  'step.4.desc': 'Plain-language verdict on your order.',
++  'step.1.label': 'Upload your sales data',
++  'step.1.desc': 'Import your existing sales CSV, or try the sample data first.',
++  'step.2.label': 'Map your columns',
++  'step.2.desc': 'Tell StockLess which columns hold your sale date, product and quantity.',
++  'step.3.label': 'Check readiness',
++  'step.3.desc': 'StockLess looks for gaps, duplicates and unusual rows before any analysis.',
++  'step.4.label': 'Plan your purchases',
++  'step.4.desc': 'See the expected demand, then decide what to restock — with the reasoning shown.',
+ 
+   /* ── What you get ── */
+   'whatYouGet.eyebrow': 'What you get at the end',
+@@ -91,10 +92,13 @@ const en = {
+   'stat.2.figure': '12%',
+   'stat.2.desc': 'of that food waste came from the retail sector.',
+   'stat.3.figure': '2030',
+-  'stat.3.desc': 'the SDG 12.3 target year for halving per-capita global food waste.',
+-  'stat.4.figure': 'RM10,000',
+-  'stat.4.desc': 'saved per semester when predictive resource management cut food spoilage from 20% to 8% in a Malaysian food-service study.',
+-  'foodWaste.sources': 'Sources: UNEP Food Waste Index 2024 · SDG 12.3 · MSU Greenally research',
++  'stat.3.desc': 'the SDG 12.3 target year for halving per-capita food waste at retail and consumer levels.',
++  'stat.4.figure': '23%',
++  'stat.4.desc': 'of the value of food purchased was lost to food waste across five Malaysian hospitality and food service operations.',
++  'foodWaste.sources.label': 'Sources:',
++  'foodWaste.src.unep': 'UNEP Food Waste Index 2024',
++  'foodWaste.src.sdg': 'SDG 12.3',
++  'foodWaste.src.study': 'Papargyropoulou et al. (2019)',
+ 
+   /* ── SDG block ── */
+   'sdg.responsible': 'Responsible Consumption and Production',
+@@ -110,7 +114,7 @@ const en = {
+ 
+   /* ── Returning visitor ── */
+   'returning.eyebrow': 'Welcome back',
+-  'returning.heading': 'Good to see you, Aina.',
++  'returning.heading': 'Good to see you again.',
+   'returning.subtext': 'Pick up where you left off, or start fresh with a new file.',
+   'files.privacy': 'Kept on this computer only.',
+   'files.heading': 'Previous files',
+@@ -120,6 +124,7 @@ const en = {
+ 
+   /* ── Interactive example ── */
+   'example.chip': 'Interactive example',
++  'ex.tryIt': 'This is a working example — drag the sliders to see the purchase check update.',
+   'example.productEyebrow': 'Selected product · SKU 000101',
+   'example.chip.ready': 'Ready',
+   'example.chip.steadySeller': 'Steady seller',
+@@ -151,21 +156,111 @@ const en = {
+   'placeholder.step': 'Step {n} — placeholder',
+   'upload.title': 'Upload your sales file',
+   'upload.desc': 'This screen will let Aina choose a CSV file from her computer.',
+-  'columns.title': 'Check the column matching',
++  'columns.title': 'Map your columns',
+   'columns.desc': 'This screen will let Aina confirm which column is the product and which is the quantity sold.',
+-  'dataCheck.title': 'Review the data check',
++  'dataCheck.title': 'Check readiness',
+   'dataCheck.desc': 'This screen will flag any rows that look unusual before the analysis runs.',
+-  'results.title': 'Read the results',
++  'results.title': 'Plan your purchases',
+   'results.desc': 'This screen will show weekly sales, recent average, stock duration, demand range, and a verdict on the planned order.',
+ 
+   /* ── Get started ── */
+   'cta.getStarted': 'Get started',
++  /* ── Step 1 upload + purchase plan ── */
++  's1.eyebrow': 'Start with what you already have',
++  's1.title': 'Upload your existing sales file.',
++  's1.lede': 'Required data is enough to get started. Optional data unlocks deeper insights.',
++  's1.guide.heading': 'What do you need to get started?',
++  's1.guide.intro': 'Start with the three required attributes. Optional attributes unlock additional insights.',
++  's1.required': 'Required data',
++  's1.required.count': '3 attributes',
++  's1.attr.required': 'Required',
++  's1.attr.1.name': 'Sale date',
++  's1.attr.1.desc': 'The date each sale or return was recorded.',
++  's1.attr.2.name': 'Product identification',
++  's1.attr.2.desc': 'Choose one of the accepted formats to keep products and pack sizes separate.',
++  's1.attr.2.form1': 'SKU, barcode or product code',
++  's1.attr.2.form2': 'Product name + pack size',
++  's1.attr.3.name': 'Quantity sold',
++  's1.attr.3.desc': 'The quantity sold or returned in each record.',
++  's1.drop.title': 'Drop your CSV file here',
++  's1.drop.desc': 'Use the export from your POS, marketplace or spreadsheet.',
++  's1.drop.choose': 'Choose CSV file',
++  's1.drop.sample': 'Use sample file',
++  's1.drop.limits': '.CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated',
++  's1.chain.1': 'Sales data',
++  's1.chain.2': 'Demand insights',
++  's1.chain.3': 'Smarter restocking',
++  's1.chain.4': 'Your impact, measured',
++  's1.privacy.title': 'Your data stays on your device.',
++  's1.privacy.body': 'Your CSV is processed directly in this browser. Your sales rows and product identifiers are not uploaded to an AI or API service.',
++  's1.back': 'Back to the homepage',
++  's1.continue': 'Continue to column matching',
++  'ex.back': 'Back to products',
++  'ex.download': 'Download purchase summary',
++  'ex.eyebrow': 'Purchase plan · SKU MM0001',
++  'ex.product': 'Kopi O Kaw 2in1 · 10 sachets',
++  'ex.counted': 'Stock counted 2026-09-12',
++  'ex.age': '14 days old',
++  'ex.byStockLess': 'worked out by StockLess',
++  'ex.fromFile': 'from your file',
++  'ex.ready': 'Ready',
++  'ex.steady': 'Steady seller',
++  'ex.demand.title': 'Demand overview',
++  'ex.demand.sub': 'Past sales and expected demand. Missing weeks remain separate from recorded zero sales.',
++  'ex.demand.expected': 'Expected demand (next 4 weeks)',
++  'ex.legend.past': 'Past sales',
++  'ex.legend.expected': 'Expected demand',
++  'ex.legend.range': 'Possible range',
++  'ex.today': 'Today',
++  'ex.unitsPerWeek': 'Units per week',
++  'ex.recent': 'Recent sales data',
++  'ex.summary.title': 'Stock and plan summary',
++  'ex.summary.sub': 'Current stock, incoming stock and your planned order.',
++  'ex.summary.current': 'Current stock',
++  'ex.summary.incoming': 'Incoming stock',
++  'ex.summary.recommended': 'Recommended order',
++  'ex.summary.suggested': 'Suggested: {n}',
++  'ex.summary.total': 'Expected total (4 weeks)',
++  'ex.summary.within': 'Within expected range',
++  'ex.summary.above': 'Above expected range',
++  'ex.summary.below': 'Below expected range',
++  'ex.plan.title': 'Your purchase plan',
++  'ex.plan.sub': 'Adjust the quantity and check if it fits the expected demand.',
++  'ex.plan.suggests': 'StockLess suggests',
++  'ex.plan.use': 'Use {n}',
++  'ex.plan.planned': 'Your planned order',
++  'ex.plan.incomingHint': 'Already ordered but not arrived. Leave at 0 if none.',
++  'ex.plan.decrease': 'Decrease',
++  'ex.plan.increase': 'Increase',
++  'ex.units': 'units',
++  'ex.check.title': 'Purchase check',
++  'ex.check.balanced': 'Looks balanced',
++  'ex.check.high': 'Check your order',
++  'ex.check.low': 'Order needed',
++  'ex.check.balanced.head': 'This plan is within range.',
++  'ex.check.high.head': 'This plan is above the range.',
++  'ex.check.low.head': 'This plan is below the range.',
++  'ex.check.balanced.body': 'You would have {total} units, within the {low}–{high} four-week range, so the planned order looks about right.',
++  'ex.check.high.body': 'You would have {total} units, above the {low}–{high} four-week range. Some stock may not sell before it ages.',
++  'ex.check.low.body': 'You would have {total} units, below the {low}–{high} four-week range. You may run out before the four weeks are up.',
++  'ex.numbers': 'Where these numbers come from',
++  'ex.n.stock': 'Stock on hand',
++  'ex.n.incoming': 'Incoming stock',
++  'ex.n.planned': 'Planned order',
++  'ex.n.low': 'Demand range low',
++  'ex.n.high': 'Demand range high',
++  'ex.n.after': 'Stock after order',
++  'ex.expiry.title': 'Expiry information',
++  'ex.expiry.none': 'No expiry inside the next 4 weeks',
++  'ex.expiry.earliest': 'Earliest expiry: 2026-10-30',
++
+ } as const;
+ 
+ /* ─────────────────────────────────────────────────────────────────────────
+    Bahasa Melayu
+ ───────────────────────────────────────────────────────────────────────── */
+ const ms: Record<TranslationKey, string> = {
++  'lang.label': 'Bahasa',
+   'nav.howItWorks': 'Cara ia berfungsi',
+   'nav.close': 'Tutup',
+   'lang.en': 'EN',
+@@ -173,14 +268,14 @@ const ms: Record<TranslationKey, string> = {
+   'lang.zh': '中文',
+   'modal.eyebrow': 'Cara ia berfungsi',
+   'modal.heading': 'Empat langkah untuk pesanan yang lebih bijak',
+-  'step.1.label': 'Muat naik fail jualan anda',
+-  'step.1.desc': 'CSV dari mesin juruwang atau hamparan anda.',
+-  'step.2.label': 'Semak padanan lajur',
+-  'step.2.desc': 'Sahkan medan produk dan kuantiti.',
+-  'step.3.label': 'Semak pemeriksaan data',
+-  'step.3.desc': 'Kenal pasti baris luar biasa sebelum analisis.',
+-  'step.4.label': 'Baca keputusan',
+-  'step.4.desc': 'Keputusan dalam bahasa mudah tentang pesanan anda.',
++  'step.1.label': 'Muat naik data jualan anda',
++  'step.1.desc': 'Import fail CSV jualan sedia ada anda, atau cuba data contoh dahulu.',
++  'step.2.label': 'Padankan lajur anda',
++  'step.2.desc': 'Beritahu StockLess lajur mana yang mengandungi tarikh jualan, produk dan kuantiti anda.',
++  'step.3.label': 'Semak kesediaan',
++  'step.3.desc': 'StockLess mencari jurang, pendua dan baris luar biasa sebelum sebarang analisis.',
++  'step.4.label': 'Rancang belian anda',
++  'step.4.desc': 'Lihat permintaan dijangka, kemudian putuskan apa untuk distok semula — dengan alasannya ditunjukkan.',
+   'whatYouGet.eyebrow': 'Apa yang anda perolehi di akhirnya',
+   'whatYouGet.item.1': 'Jualan mingguan bagi produk dipilih',
+   'whatYouGet.item.2': 'Purata terkini anda (8 minggu penuh terakhir)',
+@@ -231,10 +326,13 @@ const ms: Record<TranslationKey, string> = {
+   'stat.2.figure': '12%',
+   'stat.2.desc': 'daripada pembaziran makanan itu datang dari sektor runcit.',
+   'stat.3.figure': '2030',
+-  'stat.3.desc': 'tahun sasaran SDG 12.3 untuk mengurangkan separuh pembaziran makanan global per kapita.',
+-  'stat.4.figure': 'RM10,000',
+-  'stat.4.desc': 'penjimatan per semester apabila pengurusan sumber ramalan mengurangkan pembaziran makanan dari 20% kepada 8% dalam kajian perkhidmatan makanan Malaysia.',
+-  'foodWaste.sources': 'Sumber: UNEP Food Waste Index 2024 · SDG 12.3 · Penyelidikan MSU Greenally',
++  'stat.3.desc': 'tahun sasaran SDG 12.3 untuk mengurangkan separuh pembaziran makanan per kapita di peringkat runcit dan pengguna.',
++  'stat.4.figure': '23%',
++  'stat.4.desc': 'daripada nilai makanan yang dibeli hilang akibat pembaziran makanan di lima operasi hospitaliti dan perkhidmatan makanan di Malaysia.',
++  'foodWaste.sources.label': 'Sumber:',
++  'foodWaste.src.unep': 'UNEP Food Waste Index 2024',
++  'foodWaste.src.sdg': 'SDG 12.3',
++  'foodWaste.src.study': 'Papargyropoulou et al. (2019)',
+   'sdg.responsible': 'Penggunaan dan Pengeluaran yang Bertanggungjawab',
+   'sdg.tagline': 'Matlamat bersama. Tindakan harian.',
+   'sdg.eyebrow': 'Baik untuk kedai anda. Lebih baik untuk planet.',
+@@ -244,7 +342,7 @@ const ms: Record<TranslationKey, string> = {
+   'footer.tagline': 'Penambahan stok lebih bijak. Kurang pembaziran makanan.',
+   'footer.backToTop': 'Kembali ke atas',
+   'returning.eyebrow': 'Selamat kembali',
+-  'returning.heading': 'Gembira melihat anda, Aina.',
++  'returning.heading': 'Gembira melihat anda kembali.',
+   'returning.subtext': 'Sambung dari mana anda berhenti, atau muat naik fail baharu.',
+   'files.privacy': 'Disimpan pada komputer ini sahaja.',
+   'files.heading': 'Fail terdahulu',
+@@ -252,6 +350,7 @@ const ms: Record<TranslationKey, string> = {
+   'files.delete': 'Padam',
+   'files.rows': '{n} baris',
+   'example.chip': 'Contoh interaktif',
++  'ex.tryIt': 'Ini contoh yang berfungsi — seret gelangsar untuk melihat semakan belian berubah.',
+   'example.productEyebrow': 'Produk dipilih · SKU 000101',
+   'example.chip.ready': 'Sedia',
+   'example.chip.steadySeller': 'Penjual stabil',
+@@ -281,19 +380,111 @@ const ms: Record<TranslationKey, string> = {
+   'placeholder.step': 'Langkah {n} — pemegang tempat',
+   'upload.title': 'Muat naik fail jualan anda',
+   'upload.desc': 'Skrin ini membolehkan Aina memilih fail CSV dari komputernya.',
+-  'columns.title': 'Semak padanan lajur',
++  'columns.title': 'Padankan lajur anda',
+   'columns.desc': 'Skrin ini membolehkan Aina mengesahkan lajur produk dan lajur kuantiti yang dijual.',
+-  'dataCheck.title': 'Semak pemeriksaan data',
++  'dataCheck.title': 'Semak kesediaan',
+   'dataCheck.desc': 'Skrin ini akan menandakan baris yang kelihatan luar biasa sebelum analisis dijalankan.',
+-  'results.title': 'Baca keputusan',
++  'results.title': 'Rancang belian anda',
+   'results.desc': 'Skrin ini akan menunjukkan jualan mingguan, purata terkini, tempoh stok, julat permintaan, dan keputusan tentang pesanan yang dirancang.',
+   'cta.getStarted': 'Mula sekarang',
++
++
++  /* ── Step 1 upload + purchase plan ── */
++  's1.eyebrow': 'Mulakan dengan apa yang anda sudah ada',
++  's1.title': 'Muat naik fail jualan sedia ada anda.',
++  's1.lede': 'Data yang diperlukan sudah cukup untuk bermula. Data pilihan membuka pandangan yang lebih mendalam.',
++  's1.guide.heading': 'Apa yang anda perlukan untuk bermula?',
++  's1.guide.intro': 'Mulakan dengan tiga atribut yang diperlukan. Atribut pilihan membuka pandangan tambahan.',
++  's1.required': 'Data diperlukan',
++  's1.required.count': '3 atribut',
++  's1.attr.required': 'Diperlukan',
++  's1.attr.1.name': 'Tarikh jualan',
++  's1.attr.1.desc': 'Tarikh setiap jualan atau pemulangan direkodkan.',
++  's1.attr.2.name': 'Pengenalan produk',
++  's1.attr.2.desc': 'Pilih salah satu format yang diterima supaya produk dan saiz pek kekal berasingan.',
++  's1.attr.2.form1': 'SKU, kod bar atau kod produk',
++  's1.attr.2.form2': 'Nama produk + saiz pek',
++  's1.attr.3.name': 'Kuantiti dijual',
++  's1.attr.3.desc': 'Kuantiti yang dijual atau dipulangkan dalam setiap rekod.',
++  's1.drop.title': 'Lepaskan fail CSV anda di sini',
++  's1.drop.desc': 'Guna eksport daripada POS, pasaran dalam talian atau hamparan anda.',
++  's1.drop.choose': 'Pilih fail CSV',
++  's1.drop.sample': 'Guna fail contoh',
++  's1.drop.limits': '.CSV · Sehingga 10 MiB · 100,000 baris · Dipisah koma, koma bertitik atau tab',
++  's1.chain.1': 'Data jualan',
++  's1.chain.2': 'Pandangan permintaan',
++  's1.chain.3': 'Belian lebih bijak',
++  's1.chain.4': 'Kesan anda, diukur',
++  's1.privacy.title': 'Data anda kekal pada peranti anda.',
++  's1.privacy.body': 'Fail CSV anda diproses terus dalam pelayar ini. Baris jualan dan pengenalan produk anda tidak dimuat naik ke mana-mana perkhidmatan AI atau API.',
++  's1.back': 'Kembali ke laman utama',
++  's1.continue': 'Teruskan ke padanan lajur',
++  'ex.back': 'Kembali ke produk',
++  'ex.download': 'Muat turun ringkasan belian',
++  'ex.eyebrow': 'Pelan belian · SKU MM0001',
++  'ex.product': 'Kopi O Kaw 2in1 · 10 sachet',
++  'ex.counted': 'Stok dikira 2026-09-12',
++  'ex.age': '14 hari lalu',
++  'ex.byStockLess': 'dikira oleh StockLess',
++  'ex.fromFile': 'daripada fail anda',
++  'ex.ready': 'Sedia',
++  'ex.steady': 'Penjual stabil',
++  'ex.demand.title': 'Gambaran permintaan',
++  'ex.demand.sub': 'Jualan lalu dan permintaan dijangka. Minggu yang hilang kekal berasingan daripada jualan sifar yang direkodkan.',
++  'ex.demand.expected': 'Permintaan dijangka (4 minggu akan datang)',
++  'ex.legend.past': 'Jualan lalu',
++  'ex.legend.expected': 'Permintaan dijangka',
++  'ex.legend.range': 'Julat mungkin',
++  'ex.today': 'Hari ini',
++  'ex.unitsPerWeek': 'Unit seminggu',
++  'ex.recent': 'Data jualan terkini',
++  'ex.summary.title': 'Ringkasan stok dan pelan',
++  'ex.summary.sub': 'Stok semasa, stok masuk dan pesanan yang anda rancang.',
++  'ex.summary.current': 'Stok semasa',
++  'ex.summary.incoming': 'Stok masuk',
++  'ex.summary.recommended': 'Pesanan disyorkan',
++  'ex.summary.suggested': 'Disyorkan: {n}',
++  'ex.summary.total': 'Jumlah dijangka (4 minggu)',
++  'ex.summary.within': 'Dalam julat dijangka',
++  'ex.summary.above': 'Melebihi julat dijangka',
++  'ex.summary.below': 'Kurang daripada julat dijangka',
++  'ex.plan.title': 'Pelan belian anda',
++  'ex.plan.sub': 'Laraskan kuantiti dan semak sama ada ia menepati permintaan dijangka.',
++  'ex.plan.suggests': 'StockLess mencadangkan',
++  'ex.plan.use': 'Guna {n}',
++  'ex.plan.planned': 'Pesanan yang anda rancang',
++  'ex.plan.incomingHint': 'Sudah dipesan tetapi belum tiba. Biarkan 0 jika tiada.',
++  'ex.plan.decrease': 'Kurangkan',
++  'ex.plan.increase': 'Tambah',
++  'ex.units': 'unit',
++  'ex.check.title': 'Semakan belian',
++  'ex.check.balanced': 'Nampak seimbang',
++  'ex.check.high': 'Semak pesanan anda',
++  'ex.check.low': 'Pesanan diperlukan',
++  'ex.check.balanced.head': 'Pelan ini berada dalam julat.',
++  'ex.check.high.head': 'Pelan ini melebihi julat.',
++  'ex.check.low.head': 'Pelan ini kurang daripada julat.',
++  'ex.check.balanced.body': 'Anda akan mempunyai {total} unit, dalam julat empat minggu {low}–{high}, jadi pesanan yang dirancang nampak sesuai.',
++  'ex.check.high.body': 'Anda akan mempunyai {total} unit, melebihi julat empat minggu {low}–{high}. Sebahagian stok mungkin tidak terjual sebelum ia menjadi lama.',
++  'ex.check.low.body': 'Anda akan mempunyai {total} unit, kurang daripada julat empat minggu {low}–{high}. Anda mungkin kehabisan sebelum empat minggu berakhir.',
++  'ex.numbers': 'Dari mana nombor ini datang',
++  'ex.n.stock': 'Stok di tangan',
++  'ex.n.incoming': 'Stok masuk',
++  'ex.n.planned': 'Pesanan dirancang',
++  'ex.n.low': 'Julat permintaan rendah',
++  'ex.n.high': 'Julat permintaan tinggi',
++  'ex.n.after': 'Stok selepas pesanan',
++  'ex.expiry.title': 'Maklumat luput',
++  'ex.expiry.none': 'Tiada tarikh luput dalam 4 minggu akan datang',
++  'ex.expiry.earliest': 'Luput terawal: 2026-10-30',
++
+ };
+ 
+ /* ─────────────────────────────────────────────────────────────────────────
+    Chinese (Simplified)
+ ───────────────────────────────────────────────────────────────────────── */
+ const zh: Record<TranslationKey, string> = {
++  'lang.label': '语言',
+   'nav.howItWorks': '使用方法',
+   'nav.close': '关闭',
+   'lang.en': 'EN',
+@@ -301,14 +492,14 @@ const zh: Record<TranslationKey, string> = {
+   'lang.zh': '中文',
+   'modal.eyebrow': '使用方法',
+   'modal.heading': '四步骤，更明智的订单',
+-  'step.1.label': '上传您的销售文件',
+-  'step.1.desc': '来自收银机或电子表格的 CSV 文件。',
+-  'step.2.label': '核对列对应',
+-  'step.2.desc': '确认商品列和数量列。',
+-  'step.3.label': '查看数据检查',
+-  'step.3.desc': '在分析前发现异常行。',
+-  'step.4.label': '查看结果',
+-  'step.4.desc': '用简洁语言评估您的订单。',
++  'step.1.label': '上传您的销售数据',
++  'step.1.desc': '导入您现有的销售 CSV 文件，或先试用示例数据。',
++  'step.2.label': '匹配您的列',
++  'step.2.desc': '告诉 StockLess 哪些列包含销售日期、产品和数量。',
++  'step.3.label': '检查就绪情况',
++  'step.3.desc': 'StockLess 会在分析前检查缺口、重复和异常行。',
++  'step.4.label': '规划您的采购',
++  'step.4.desc': '查看预期需求，然后决定补什么货 — 并附上推算依据。',
+   'whatYouGet.eyebrow': '最终您将获得',
+   'whatYouGet.item.1': '所选商品的每周销量',
+   'whatYouGet.item.2': '您的近期平均值（最近 8 个完整周）',
+@@ -359,10 +550,13 @@ const zh: Record<TranslationKey, string> = {
+   'stat.2.figure': '12%',
+   'stat.2.desc': '的食物垃圾来自零售行业。',
+   'stat.3.figure': '2030',
+-  'stat.3.desc': 'SDG 12.3 目标年份，致力于将全球人均食物浪费减半。',
+-  'stat.4.figure': 'RM10,000',
+-  'stat.4.desc': '马来西亚一项餐饮研究中，预测性资源管理将食物损耗从20%降至8%，每学期节省的金额。',
+-  'foodWaste.sources': '来源：UNEP食物浪费指数2024 · SDG 12.3 · MSU Greenally研究',
++  'stat.3.desc': 'SDG 12.3 目标年份：将零售与消费端的人均食物浪费减半。',
++  'stat.4.figure': '23%',
++  'stat.4.desc': '马来西亚五家餐旅与餐饮服务场所中，因食物浪费而损失的采购食材价值比例。',
++  'foodWaste.sources.label': '来源：',
++  'foodWaste.src.unep': 'UNEP 食物浪费指数 2024',
++  'foodWaste.src.sdg': 'SDG 12.3',
++  'foodWaste.src.study': 'Papargyropoulou 等人（2019）',
+   'sdg.responsible': '负责任消费和生产',
+   'sdg.tagline': '共同的目标。日常的行动。',
+   'sdg.eyebrow': '对您的店铺有益。对地球更好。',
+@@ -372,7 +566,7 @@ const zh: Record<TranslationKey, string> = {
+   'footer.tagline': '更聪明的补货。更少的食物浪费。',
+   'footer.backToTop': '返回顶部',
+   'returning.eyebrow': '欢迎回来',
+-  'returning.heading': '很高兴见到您，Aina。',
++  'returning.heading': '很高兴再次见到您。',
+   'returning.subtext': '继续之前的工作，或上传新文件重新开始。',
+   'files.privacy': '仅保存在本机。',
+   'files.heading': '历史文件',
+@@ -380,6 +574,7 @@ const zh: Record<TranslationKey, string> = {
+   'files.delete': '删除',
+   'files.rows': '{n} 行',
+   'example.chip': '交互示例',
++  'ex.tryIt': '这是一个可操作的示例 — 拖动滑块即可看到采购检查随之更新。',
+   'example.productEyebrow': '所选商品 · SKU 000101',
+   'example.chip.ready': '数据充足',
+   'example.chip.steadySeller': '稳定销售',
+@@ -409,13 +604,103 @@ const zh: Record<TranslationKey, string> = {
+   'placeholder.step': '步骤 {n} — 占位页面',
+   'upload.title': '上传您的销售文件',
+   'upload.desc': '此页面将让 Aina 从电脑中选择 CSV 文件。',
+-  'columns.title': '核对列对应',
++  'columns.title': '匹配您的列',
+   'columns.desc': '此页面将让 Aina 确认哪一列是商品，哪一列是销售数量。',
+-  'dataCheck.title': '查看数据检查',
++  'dataCheck.title': '检查就绪情况',
+   'dataCheck.desc': '此页面将在分析运行前标记任何看起来异常的行。',
+-  'results.title': '查看结果',
++  'results.title': '规划您的采购',
+   'results.desc': '此页面将显示每周销量、近期平均值、库存持续时间、需求区间以及对计划订单的判断。',
+   'cta.getStarted': '开始使用',
++
++  /* ── Step 1 upload + purchase plan ── */
++  's1.eyebrow': '从您现有的资料开始',
++  's1.title': '上传您现有的销售文件。',
++  's1.lede': '必填数据已足以开始。选填数据可带来更深入的洞察。',
++  's1.guide.heading': '开始前需要准备什么？',
++  's1.guide.intro': '先准备三项必填属性。选填属性可解锁更多洞察。',
++  's1.required': '必填数据',
++  's1.required.count': '3 项属性',
++  's1.attr.required': '必填',
++  's1.attr.1.name': '销售日期',
++  's1.attr.1.desc': '每笔销售或退货记录的日期。',
++  's1.attr.2.name': '产品识别',
++  's1.attr.2.desc': '请选择一种可接受的格式，让产品与包装规格分开记录。',
++  's1.attr.2.form1': 'SKU、条形码或产品编号',
++  's1.attr.2.form2': '产品名称 + 包装规格',
++  's1.attr.3.name': '销售数量',
++  's1.attr.3.desc': '每笔记录中售出或退回的数量。',
++  's1.drop.title': '将 CSV 文件拖到这里',
++  's1.drop.desc': '使用您的收银系统、电商平台或表格导出的文件。',
++  's1.drop.choose': '选择 CSV 文件',
++  's1.drop.sample': '使用示例文件',
++  's1.drop.limits': '.CSV · 最大 10 MiB · 100,000 行 · 逗号、分号或制表符分隔',
++  's1.chain.1': '销售数据',
++  's1.chain.2': '需求洞察',
++  's1.chain.3': '更聪明的补货',
++  's1.chain.4': '量化您的成效',
++  's1.privacy.title': '您的数据保留在您的设备上。',
++  's1.privacy.body': '您的 CSV 文件直接在此浏览器中处理。您的销售记录和产品标识不会上传到任何 AI 或 API 服务。',
++  's1.back': '返回首页',
++  's1.continue': '继续进行列匹配',
++  'ex.back': '返回产品列表',
++  'ex.download': '下载采购摘要',
++  'ex.eyebrow': '采购计划 · SKU MM0001',
++  'ex.product': 'Kopi O Kaw 二合一 · 10 包',
++  'ex.counted': '库存盘点于 2026-09-12',
++  'ex.age': '14 天前',
++  'ex.byStockLess': '由 StockLess 计算',
++  'ex.fromFile': '来自您的文件',
++  'ex.ready': '就绪',
++  'ex.steady': '稳定畅销',
++  'ex.demand.title': '需求概览',
++  'ex.demand.sub': '过往销售与预期需求。缺失的周数与记录为零的销售分开处理。',
++  'ex.demand.expected': '预期需求（未来 4 周）',
++  'ex.legend.past': '过往销售',
++  'ex.legend.expected': '预期需求',
++  'ex.legend.range': '可能范围',
++  'ex.today': '今天',
++  'ex.unitsPerWeek': '每周单位',
++  'ex.recent': '近期销售数据',
++  'ex.summary.title': '库存与计划摘要',
++  'ex.summary.sub': '当前库存、在途库存以及您计划的订购量。',
++  'ex.summary.current': '当前库存',
++  'ex.summary.incoming': '在途库存',
++  'ex.summary.recommended': '建议订购量',
++  'ex.summary.suggested': '建议：{n}',
++  'ex.summary.total': '预期总量（4 周）',
++  'ex.summary.within': '在预期范围内',
++  'ex.summary.above': '高于预期范围',
++  'ex.summary.below': '低于预期范围',
++  'ex.plan.title': '您的采购计划',
++  'ex.plan.sub': '调整数量，并查看是否符合预期需求。',
++  'ex.plan.suggests': 'StockLess 建议',
++  'ex.plan.use': '采用 {n}',
++  'ex.plan.planned': '您计划的订购量',
++  'ex.plan.incomingHint': '已下单但尚未到货。若没有则保持为 0。',
++  'ex.plan.decrease': '减少',
++  'ex.plan.increase': '增加',
++  'ex.units': '单位',
++  'ex.check.title': '采购检查',
++  'ex.check.balanced': '看起来平衡',
++  'ex.check.high': '请检查订购量',
++  'ex.check.low': '需要补货',
++  'ex.check.balanced.head': '此计划在范围之内。',
++  'ex.check.high.head': '此计划高于范围。',
++  'ex.check.low.head': '此计划低于范围。',
++  'ex.check.balanced.body': '您将拥有 {total} 个单位，处于 {low}–{high} 的四周范围内，因此计划的订购量看起来合适。',
++  'ex.check.high.body': '您将拥有 {total} 个单位，高于 {low}–{high} 的四周范围。部分库存可能在变旧之前仍未售出。',
++  'ex.check.low.body': '您将拥有 {total} 个单位，低于 {low}–{high} 的四周范围。您可能在四周结束前就已售罄。',
++  'ex.numbers': '这些数字的来源',
++  'ex.n.stock': '现有库存',
++  'ex.n.incoming': '在途库存',
++  'ex.n.planned': '计划订购量',
++  'ex.n.low': '需求范围下限',
++  'ex.n.high': '需求范围上限',
++  'ex.n.after': '订购后库存',
++  'ex.expiry.title': '有效期信息',
++  'ex.expiry.none': '未来 4 周内没有到期',
++  'ex.expiry.earliest': '最早到期：2026-10-30',
++
+ };
+ 
+ export const translations: Record<Lang, Record<TranslationKey, string>> = { en, ms, zh };
+diff --git a/src/index.css b/src/index.css
+index dd180b7..20f78a9 100755
+--- a/src/index.css
++++ b/src/index.css
+@@ -1,6 +1,7 @@
+ @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Source+Sans+3:wght@400;700&family=Inter:wght@400;500;600&family=Caveat:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap');
+ @import 'tailwindcss';
+ @import './theme.css';
++@import './decor.css';
+ 
+ *, *::before, *::after {
+   box-sizing: border-box;
+@@ -34,3 +35,143 @@ a { text-decoration: none; }
+ ::-webkit-scrollbar-track { background: transparent; }
+ ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+ * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
++
++/* ===== Step 1 (upload) layout =====
++   Guidance on the left, the drop zone on the right; one column once there is
++   no longer room for the drop zone to keep its shape. */
++.s1-layout {
++  display: grid;
++  grid-template-columns: minmax(0, 1.05fr) minmax(380px, 0.95fr);
++  gap: var(--space-10);
++  align-items: start;
++}
++@media (max-width: 980px) {
++  .s1-layout { grid-template-columns: 1fr; gap: var(--space-8); }
++}
++
++/* ===== interactive purchase-plan example =====
++   Evidence on the left, the controls and the verdict on the right. Stacks
++   once the control column can no longer hold its stepper rows. */
++.ex-grid {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
++  gap: var(--space-4);
++  align-items: start;
++}
++@media (max-width: 1040px) {
++  .ex-grid { grid-template-columns: 1fr; }
++}
++@media (max-width: 720px) {
++  .ex-weeks { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
++  .ex-summary { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
++}
++
++/* ===== sliders =====
++   A default range input renders as a hairline on macOS — easy to miss
++   entirely. These are drawn to match the mockup: a thick rounded track, a
++   teal fill up to the current value, and a thumb big enough to grab. The
++   fill comes from --sl-track, set inline from the value. */
++.sl-range {
++  -webkit-appearance: none;
++  appearance: none;
++  display: block;
++  width: 100%;
++  height: 28px;
++  margin: 0;
++  background: transparent;
++  cursor: pointer;
++}
++.sl-range::-webkit-slider-runnable-track {
++  height: 10px;
++  border-radius: 999px;
++  background: var(--sl-track, #DCE6E3);
++  border: 1px solid var(--line);
++}
++.sl-range::-webkit-slider-thumb {
++  -webkit-appearance: none;
++  appearance: none;
++  margin-top: -9px;
++  width: 26px;
++  height: 26px;
++  border-radius: 50%;
++  background: #fff;
++  border: 3px solid var(--teal);
++  box-shadow: 0 2px 6px rgba(22, 49, 59, .25);
++  cursor: grab;
++}
++.sl-range:active::-webkit-slider-thumb { cursor: grabbing; }
++.sl-range::-moz-range-track {
++  height: 10px;
++  border-radius: 999px;
++  background: #DCE6E3;
++  border: 1px solid var(--line);
++}
++.sl-range::-moz-range-progress { height: 10px; border-radius: 999px; background: var(--teal); }
++.sl-range::-moz-range-thumb {
++  width: 22px;
++  height: 22px;
++  border-radius: 50%;
++  background: #fff;
++  border: 3px solid var(--teal);
++  box-shadow: 0 2px 6px rgba(22, 49, 59, .25);
++  cursor: grab;
++}
++.sl-range:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
++
++/* ===== language switcher =====
++   The same control the workspace uses, so the prototype and the app read as
++   one product. A native select gets the phone's own picker for free. */
++.language-switcher {
++  display: inline-flex;
++  align-items: center;
++  gap: 5px;
++  background: #edf7ef;
++  border: 1px solid #c3e2cc;
++  border-radius: 10px;
++  padding: 6px 8px;
++  color: #2f6c49;
++  flex-shrink: 0;
++  line-height: 1.3;
++}
++.language-switcher select {
++  font-family: inherit;
++  font-size: 12px;
++  font-weight: 600;
++  line-height: 1.4;
++  color: inherit;
++  background: transparent;
++  border: 0;
++  padding: 4px 0;
++  cursor: pointer;
++  max-width: 120px;
++  min-height: 28px;
++}
++.language-switcher:focus-within { outline: 2px solid var(--teal); outline-offset: 3px; }
++@media (max-width: 600px) {
++  .language-switcher { padding: 4px; }
++  .language-switcher svg { width: 23px; }
++  .language-switcher select { max-width: 102px; }
++}
++
++/* ===== top bar =====
++   Four controls in one row need about 590px; a phone gives 342px, so below
++   760px the row wraps instead of running off the edge. */
++.sl-topnav {
++  height: 56px;
++  display: flex;
++  align-items: center;
++  gap: var(--space-4);
++}
++@media (max-width: 760px) {
++  .sl-topnav {
++    height: auto;
++    min-height: 56px;
++    padding-top: 10px !important;
++    padding-bottom: 10px !important;
++    flex-wrap: wrap;
++    row-gap: 10px;
++    justify-content: flex-end;
++  }
++  /* the preview toggle is a demo control — it drops to its own line first */
++  .sl-topnav > div:nth-of-type(1) { order: 3; margin-right: auto; }
++}
+diff --git a/src/pages/Home.tsx b/src/pages/Home.tsx
+index b52fbc6..217029d 100644
+--- a/src/pages/Home.tsx
++++ b/src/pages/Home.tsx
+@@ -5,6 +5,7 @@ import { HowItWorksContent } from '../components/HowItWorksModal';
+ import { usePreview } from '../PreviewContext';
+ import { Logo } from '../components/Logo';
+ import { useTranslation } from '../i18n/LanguageContext';
++import { HeroDecor, FooterDecor } from '../components/Decor';
+ 
+ interface FileRecord {
+   id: string; name: string; rows: number; uploadedAt: string;
+@@ -53,14 +54,20 @@ function StepIcon({ n }: { n: number }) {
+ function FirstTimeView({ onStart }: { onStart: () => void }) {
+   return (
+     <>
+-      <HeroSection onStart={onStart} />
++      <div className="sl-band">
++        <HeroDecor />
++        <HeroSection onStart={onStart} />
++      </div>
+       <InteractiveExample />
+       <StepsSection />
+       <WhatYouGetSection />
+       <ProduceBand />
+       <FoodWasteProblem />
+-      <SdgBlock />
+-      <PageFooter />
++      <div className="sl-band">
++        <FooterDecor />
++        <SdgBlock />
++        <PageFooter />
++      </div>
+     </>
+   );
+ }
+@@ -109,183 +116,357 @@ function HeroSection({ onStart }: { onStart: () => void }) {
+   );
+ }
+ 
+-/* ── Interactive example ──────────────────────────────────────────────────── */
++/* ── Interactive example: the purchase-plan screen ────────────────────────── */
+ 
+-const STOCK_ON_HAND = 12;
+-const DEMAND_LOW = 28;
+-const DEMAND_HIGH = 36;
+-const DEMAND_MID = Math.round((DEMAND_LOW + DEMAND_HIGH) / 2);
++const STOCK_ON_HAND = 7;
++const SUGGESTED = 10;
++const DEMAND_LOW = 7;
++const DEMAND_HIGH = 28;
++const PAST_WEEKS = [5, 7, 5, 6, 3, 5, 2, 3];
++const FORECAST = [3.5, 4, 4.5, 5];
++const CONE_LOW = [3, 2.4, 1.9, 1.75];
++const CONE_HIGH = [4, 5.2, 6.3, 7];
+ 
+ function InteractiveExample() {
+   const { t } = useTranslation();
+-  const [planned, setPlanned] = useState(20);
+-  const [incoming, setIncoming] = useState(0);
+-
+-  const estimated = Math.max(0, DEMAND_MID - STOCK_ON_HAND - incoming);
+-  const available = STOCK_ON_HAND + incoming + planned;
+-
+-  let verdictKey: 'example.verdict.overstock' | 'example.verdict.low' | 'example.verdict.balanced';
+-  let detailKey: 'example.verdict.overstock.detail' | 'example.verdict.low.detail' | 'example.verdict.balanced.detail';
+-  let verdictColor: string;
+-  let verdictBg: string;
+-  let verdictBorder: string;
+-
+-  if (available > DEMAND_HIGH) {
+-    verdictKey = 'example.verdict.overstock'; detailKey = 'example.verdict.overstock.detail';
+-    verdictColor = 'var(--amber)'; verdictBg = 'var(--amber-tint)'; verdictBorder = 'var(--amber-strong)';
+-  } else if (available < DEMAND_LOW) {
+-    verdictKey = 'example.verdict.low'; detailKey = 'example.verdict.low.detail';
+-    verdictColor = 'var(--red)'; verdictBg = 'var(--red-tint)'; verdictBorder = '#e9b4b4';
+-  } else {
+-    verdictKey = 'example.verdict.balanced'; detailKey = 'example.verdict.balanced.detail';
+-    verdictColor = 'var(--teal)'; verdictBg = 'var(--teal-tint)'; verdictBorder = 'var(--mint)';
+-  }
+-
+-  const verdictDetail = t(detailKey, { available, low: DEMAND_LOW, high: DEMAND_HIGH });
+-
+-  const pastWeeks = [5, 8, 6, 9, 7, 8, 6, 7];
+-  const chartW = 340, chartH = 80, maxVal = 14;
+-  const xStep = chartW / 12;
+-  const yPos = (v: number) => chartH - (v / maxVal) * chartH;
+-  const pastPts = pastWeeks.map((v, i) => `${i * xStep + xStep / 2},${yPos(v)}`).join(' ');
+-  const forecastPts = [7, 8, 7.5, 8].map((v, i) => `${(8 + i) * xStep + xStep / 2},${yPos(v)}`).join(' ');
+-  const dividerX = 8 * xStep;
++  const [planned, setPlanned] = useState(9);
++  const [incoming, setIncoming] = useState(2);
++
++  const total = STOCK_ON_HAND + incoming + planned;
++  const state = total > DEMAND_HIGH ? 'high' : total < DEMAND_LOW ? 'low' : 'balanced';
++
++  const TONE = {
++    balanced: { dot: 'var(--teal)', text: 'var(--teal)', bg: 'var(--teal-tint)', border: 'var(--mint)' },
++    high:     { dot: 'var(--amber-strong)', text: 'var(--amber)', bg: 'var(--amber-tint)', border: '#EBCF9F' },
++    low:      { dot: 'var(--red)', text: 'var(--red)', bg: 'var(--red-tint)', border: '#E9B4B4' },
++  }[state];
++
++  const statusLabel = t(state === 'balanced' ? 'ex.check.balanced' : state === 'high' ? 'ex.check.high' : 'ex.check.low');
++  const checkHead = t(state === 'balanced' ? 'ex.check.balanced.head' : state === 'high' ? 'ex.check.high.head' : 'ex.check.low.head');
++  const checkBody = t(
++    state === 'balanced' ? 'ex.check.balanced.body' : state === 'high' ? 'ex.check.high.body' : 'ex.check.low.body',
++    { total, low: DEMAND_LOW, high: DEMAND_HIGH },
++  );
++  const totalNote = t(state === 'balanced' ? 'ex.summary.within' : state === 'high' ? 'ex.summary.above' : 'ex.summary.below');
++
++  /* chart geometry */
++  const W = 880, H = 250, LEFT = 46, RIGHT = 860, TOP = 26, BASE = 196, MAX = 8;
++  const step = (RIGHT - LEFT) / (PAST_WEEKS.length + FORECAST.length - 1);
++  const x = (i: number) => LEFT + i * step;
++  const y = (v: number) => BASE - (v / MAX) * (BASE - TOP);
++  const pastPts = PAST_WEEKS.map((v, i) => `${x(i)},${y(v)}`).join(' ');
++  const joinX = x(PAST_WEEKS.length - 1), joinY = y(PAST_WEEKS[PAST_WEEKS.length - 1]);
++  const forePts = [`${joinX},${joinY}`, ...FORECAST.map((v, i) => `${x(PAST_WEEKS.length + i)},${y(v)}`)].join(' ');
++  const cone = [
++    `${joinX},${joinY}`,
++    ...CONE_HIGH.map((v, i) => `${x(PAST_WEEKS.length + i)},${y(v)}`),
++    ...CONE_LOW.map((v, i) => `${x(PAST_WEEKS.length + 3 - i)},${y(CONE_LOW[3 - i])}`),
++  ].join(' ');
+ 
+   return (
+-    <section style={{ maxWidth: 'var(--page-max-width)', margin: '0 auto var(--space-16)', padding: '0 var(--space-6)' }}>
+-      <div style={{ border: '3px solid var(--ink)', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(22,49,59,.12)' }}>
+-        {/* Top bar */}
+-        <div style={{ background: 'var(--ink)', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+-          <div style={{ display: 'flex', gap: '7px' }}>
+-            {['#555', '#777', '#999'].map((c, i) => (
+-              <span key={i} style={{ width: '11px', height: '11px', borderRadius: '50%', background: c }} />
+-            ))}
++    <section style={{ maxWidth: '1180px', margin: '0 auto var(--space-16)', padding: '0 var(--space-6)' }}>
++      {/* say plainly that this is a live example, not a screenshot */}
++      <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-3)', flexWrap: 'wrap', marginBottom: 'var(--space-4)' }}>
++        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'var(--teal-tint)',
++          border: '1px solid var(--mint)', borderRadius: '999px', padding: '6px 14px',
++          fontFamily: 'var(--font-body)', fontSize: 'var(--text-description)', fontWeight: 800,
++          textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--teal-deep)' }}>
++          <span aria-hidden="true" style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--teal)' }} />
++          {t('example.chip')}
++        </span>
++        <span style={{ fontSize: 'var(--text-body)', color: 'var(--muted)' }}>{t('ex.tryIt')}</span>
++      </div>
++
++      <div style={{ position: 'relative', border: '1px solid var(--line)', borderRadius: '18px', background: '#FBFDFC',
++        boxShadow: '0 20px 60px rgba(22,49,59,.10)', overflow: 'hidden' }}>
++
++        {/* ── screen header ── */}
++        <div style={{ padding: 'var(--space-6) var(--space-8) 0' }}>
++          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-4)', flexWrap: 'wrap' }}>
++            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', fontSize: 'var(--text-secondary)', fontWeight: 600, color: 'var(--ink-2)' }}>
++              <span aria-hidden="true">←</span>{t('ex.back')}
++            </span>
++            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid var(--line)', background: '#fff',
++              borderRadius: 'var(--radius-btn)', padding: '10px 16px', fontSize: 'var(--text-secondary)', fontWeight: 700, color: 'var(--ink)' }}>
++              <span aria-hidden="true">↓</span>{t('ex.download')}
++            </span>
+           </div>
+-          <span style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-description)', fontWeight: 600, color: 'var(--teal)', background: 'var(--teal-tint)', borderRadius: '20px', padding: '3px 12px' }}>
+-            {t('example.chip')}
+-          </span>
+-        </div>
+ 
+-        {/* Two-column body */}
+-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', background: '#fff' }}>
+-          {/* Left */}
+-          <div style={{ padding: 'var(--space-8)', borderRight: '1px solid var(--line)' }}>
+-            <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 'var(--space-2)' }}>
+-              {t('example.productEyebrow')}
+-            </p>
+-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.02em', color: 'var(--ink)', marginBottom: 'var(--space-3)' }}>
+-              Ikan Bilis 200g
+-            </h3>
+-            <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)' }}>
+-              {(['example.chip.ready', 'example.chip.steadySeller'] as const).map((key) => (
+-                <span key={key} style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-description)', fontWeight: 600, background: 'var(--teal-tint)', color: 'var(--teal)', border: '1px solid var(--mint)', borderRadius: '20px', padding: '3px 10px' }}>
+-                  {t(key)}
+-                </span>
+-              ))}
+-            </div>
++          <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase',
++            letterSpacing: '0.1em', color: 'var(--muted)', margin: 'var(--space-5) 0 0' }}>{t('ex.eyebrow')}</p>
++          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '26px', letterSpacing: '-0.02em',
++            color: 'var(--ink)', margin: '6px 0 0' }}>{t('ex.product')}</h3>
++          <p style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', fontSize: 'var(--text-secondary)',
++            color: 'var(--muted)', margin: '7px 0 0' }}>
++            {t('ex.counted')} <span aria-hidden="true">·</span> {t('ex.age')} <span aria-hidden="true">·</span>
++            <Provenance kind="stockless" label={t('ex.byStockLess')} />
++          </p>
++          <div style={{ display: 'flex', gap: 'var(--space-2)', margin: 'var(--space-4) 0 0' }}>
++            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--teal-tint)', color: 'var(--teal-deep)',
++              borderRadius: '999px', padding: '5px 12px', fontSize: 'var(--text-secondary)', fontWeight: 700 }}>
++              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--teal)' }} />{t('ex.ready')}
++            </span>
++            <span style={{ background: '#EDF1F0', color: '#51636A', borderRadius: '999px', padding: '5px 12px',
++              fontSize: 'var(--text-secondary)', fontWeight: 700 }}>{t('ex.steady')}</span>
++          </div>
++        </div>
+ 
+-            {/* Restock panel */}
+-            <div style={{ background: 'var(--ink)', borderRadius: 'var(--radius)', padding: 'var(--space-5)', marginBottom: 'var(--space-6)' }}>
+-              <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--mint)', marginBottom: 'var(--space-2)' }}>
+-                {t('example.restock.eyebrow')}
+-              </p>
+-              <p style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '40px', color: '#fff', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: 'var(--space-2)' }}>
+-                {estimated} <span style={{ fontSize: '18px', fontWeight: 400, color: 'var(--mint)' }}>{t('example.restock.units')}</span>
+-              </p>
+-              <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--mint)', lineHeight: 1.5, marginBottom: 'var(--space-1)' }}>
+-                {t('example.restock.desc')}
+-              </p>
+-              <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-description)', color: '#5a7a80', lineHeight: 1.4 }}>
+-                {t('example.restock.formula')}
+-              </p>
+-            </div>
++        {/* ── body ── */}
++        <div className="ex-grid" style={{ padding: 'var(--space-6) var(--space-8) var(--space-8)' }}>
++          {/* ─ left ─ */}
++          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', minWidth: 0 }}>
++            <Panel>
++              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-5)', flexWrap: 'wrap' }}>
++                <div style={{ minWidth: 0 }}>
++                  <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-section-head)', color: 'var(--ink)', margin: 0 }}>
++                    {t('ex.demand.title')}
++                  </h4>
++                  <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--muted)', margin: '6px 0 0', maxWidth: '440px', lineHeight: 1.45 }}>
++                    {t('ex.demand.sub')}
++                  </p>
++                </div>
++                <div style={{ background: 'var(--teal-tint)', border: '1px solid var(--mint)', borderRadius: 'var(--radius)',
++                  padding: 'var(--space-4) var(--space-5)' }}>
++                  <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--teal-deep)', margin: 0 }}>{t('ex.demand.expected')}</p>
++                  <p style={{ display: 'flex', alignItems: 'baseline', gap: '10px', flexWrap: 'wrap', margin: '4px 0 0' }}>
++                    <b style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', color: 'var(--teal)', letterSpacing: '-0.02em' }}>
++                      {DEMAND_LOW}–{DEMAND_HIGH} <span style={{ fontSize: '16px', fontWeight: 600 }}>{t('ex.units')}</span>
++                    </b>
++                    <span style={{ fontSize: 'var(--text-description)', fontWeight: 700, color: 'var(--teal-deep)' }}>↗ {t('ex.steady')}</span>
++                  </p>
++                </div>
++              </div>
+ 
+-            {/* Chart */}
+-            <div style={{ marginBottom: 'var(--space-5)' }}>
+-              <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 'var(--space-3)' }}>
+-                {t('example.chart.eyebrow')}
++              <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-description)', color: 'var(--muted)', margin: 'var(--space-5) 0 0' }}>
++                {t('ex.unitsPerWeek')}
+               </p>
+-              <svg viewBox={`0 0 ${chartW} ${chartH + 28}`} width="100%" style={{ display: 'block', minWidth: '280px' }}>
+-                <rect x={dividerX} y="0" width={chartW - dividerX} height={chartH} fill="rgba(143,210,200,.15)" />
+-                <line x1={dividerX} y1="0" x2={dividerX} y2={chartH} stroke="var(--teal)" strokeWidth="1" strokeDasharray="4 3" />
+-                <polyline points={pastPts} fill="none" stroke="var(--ink)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+-                <polyline points={forecastPts} fill="none" stroke="var(--teal)" strokeWidth="2" strokeDasharray="5 3" strokeLinejoin="round" strokeLinecap="round" />
+-                {[0, 4, 8, 12].map((v) => (
+-                  <text key={v} x="0" y={yPos(v) + 4} fontFamily="Inter, sans-serif" fontSize="9" fill="var(--muted)">{v}</text>
++              <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: 'block', marginTop: '4px' }} role="img" aria-label={t('ex.demand.title')}>
++                {[0, 4, 8].map((v) => (
++                  <g key={v}>
++                    <line x1={LEFT} y1={y(v)} x2={RIGHT} y2={y(v)} stroke="var(--line-soft)" strokeWidth="1" />
++                    <text x={LEFT - 12} y={y(v) + 4} textAnchor="end" fontFamily="Inter, sans-serif" fontSize="15" fill="var(--muted)">{v}</text>
++                  </g>
++                ))}
++                <polygon points={cone} fill="var(--mint)" opacity=".22" />
++                <line x1={joinX} y1={TOP - 2} x2={joinX} y2={BASE} stroke="var(--border-strong)" strokeWidth="1" strokeDasharray="4 3" />
++                <text x={joinX} y={TOP - 8} textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="15" fill="var(--muted)">{t('ex.today')}</text>
++                <polyline points={forePts} fill="none" stroke="var(--teal)" strokeWidth="2.5" strokeDasharray="7 5" strokeLinecap="round" strokeLinejoin="round" />
++                <polyline points={pastPts} fill="none" stroke="var(--ink)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
++                {PAST_WEEKS.map((v, i) => <circle key={i} cx={x(i)} cy={y(v)} r="3.5" fill="var(--ink)" />)}
++                {[...PAST_WEEKS.map((_, i) => `W${i + 1}`), ...FORECAST.map((_, i) => `F${i + 1}`)].map((label, i) => (
++                  <text key={label} x={x(i)} y={BASE + 24} textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="15"
++                    fill={i >= PAST_WEEKS.length ? 'var(--teal)' : 'var(--muted)'}>{label}</text>
+                 ))}
+-                <text x={dividerX / 2} y={chartH + 18} textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="9" fill="var(--muted)">{t('example.chart.past')}</text>
+-                <text x={dividerX + (chartW - dividerX) / 2} y={chartH + 18} textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="9" fill="var(--teal)">{t('example.chart.next')}</text>
+               </svg>
+-            </div>
+ 
+-            {/* Metrics */}
+-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
+-              {([
+-                { key: 'example.metrics.demand', value: `${DEMAND_LOW}–${DEMAND_HIGH} ${t('example.restock.units')}` },
+-                { key: 'example.metrics.stock',  value: `${STOCK_ON_HAND} ${t('example.restock.units')}` },
+-                { key: 'example.metrics.avg',    value: `7 ${t('example.restock.units')}` },
+-                { key: 'example.metrics.cover',  value: '1.7 wks' },
+-              ] as const).map(({ key, value }) => (
+-                <div key={key} style={{ background: 'var(--line-soft)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-3) var(--space-4)' }}>
+-                  <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-description)', color: 'var(--muted)', marginBottom: '2px' }}>{t(key)}</p>
+-                  <p style={{ fontFamily: 'var(--font-data)', fontWeight: 600, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>{value}</p>
+-                </div>
+-              ))}
+-            </div>
++              <div style={{ display: 'flex', gap: 'var(--space-5)', flexWrap: 'wrap', justifyContent: 'center', marginTop: 'var(--space-3)' }}>
++                <LegendItem label={t('ex.legend.past')}><span style={{ width: '22px', height: '2.5px', background: 'var(--ink)', borderRadius: '2px' }} /></LegendItem>
++                <LegendItem label={t('ex.legend.expected')}><span style={{ width: '22px', height: 0, borderTop: '2.5px dashed var(--teal)' }} /></LegendItem>
++                <LegendItem label={t('ex.legend.range')}><span style={{ width: '22px', height: '11px', background: 'var(--mint)', opacity: .35, borderRadius: '3px' }} /></LegendItem>
++              </div>
++            </Panel>
++
++            <Panel>
++              <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-body)', color: 'var(--ink)', margin: 0 }}>
++                {t('ex.recent')}
++              </h4>
++              <div className="ex-weeks" style={{ display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 'var(--space-2)', marginTop: 'var(--space-3)' }}>
++                {PAST_WEEKS.map((v, i) => (
++                  <div key={i} style={{ background: '#F4F8F7', border: '1px solid var(--line-soft)', borderRadius: 'var(--radius)',
++                    padding: 'var(--space-3) var(--space-2)', textAlign: 'center' }}>
++                    <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-description)', color: 'var(--muted)', margin: 0 }}>W{i + 1}</p>
++                    <p style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '22px', color: 'var(--ink)', margin: '4px 0 0' }}>{v}</p>
++                  </div>
++                ))}
++              </div>
++            </Panel>
++
++            <Panel>
++              <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-body)', color: 'var(--ink)', margin: 0 }}>
++                {t('ex.summary.title')}
++              </h4>
++              <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--muted)', margin: '5px 0 0' }}>{t('ex.summary.sub')}</p>
++              <div className="ex-summary" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 'var(--space-3)', marginTop: 'var(--space-4)' }}>
++                <SummaryTile label={t('ex.summary.current')} value={STOCK_ON_HAND} unit={t('ex.units')} />
++                <SummaryTile label={t('ex.summary.incoming')} value={incoming} unit={t('ex.units')} />
++                <SummaryTile label={t('ex.summary.recommended')} value={planned} unit={t('ex.units')}
++                  note={t('ex.summary.suggested', { n: SUGGESTED })} highlight />
++                <SummaryTile label={t('ex.summary.total')} value={total} unit={t('ex.units')} note={totalNote} />
++              </div>
++            </Panel>
+           </div>
+ 
+-          {/* Right: purchase controls */}
+-          <div style={{ padding: 'var(--space-8)', display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+-            <div>
+-              <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 'var(--space-2)' }}>
+-                {t('example.purchase.eyebrow')}
++          {/* ─ right ─ */}
++          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', minWidth: 0 }}>
++            <Panel>
++              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
++                <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-section-head)', color: 'var(--ink)', margin: 0 }}>
++                  {t('ex.plan.title')}
++                </h4>
++                <span style={{ background: 'var(--teal-tint)', color: 'var(--teal-deep)', borderRadius: '999px', padding: '4px 10px',
++                  fontSize: 'var(--text-description)', fontWeight: 700 }}>{t('example.chip')}</span>
++              </div>
++              <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--muted)', margin: '6px 0 0', lineHeight: 1.45 }}>{t('ex.plan.sub')}</p>
++
++              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-4)', flexWrap: 'wrap',
++                background: 'var(--teal-tint)', border: '1px solid var(--mint)', borderRadius: 'var(--radius)',
++                padding: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
++                <div>
++                  <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--teal-deep)', margin: 0 }}>{t('ex.plan.suggests')}</p>
++                  <p style={{ margin: '2px 0 0', fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '30px', color: 'var(--ink)', letterSpacing: '-0.02em' }}>
++                    {SUGGESTED} <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--muted)' }}>{t('ex.units')}</span>
++                  </p>
++                </div>
++                <button type="button" onClick={() => setPlanned(SUGGESTED)}
++                  style={{ background: 'var(--teal)', color: '#fff', border: 0, borderRadius: 'var(--radius-btn)', padding: '11px 18px',
++                    fontFamily: 'var(--font-body)', fontSize: 'var(--text-body)', fontWeight: 700, cursor: 'pointer' }}>
++                  {t('ex.plan.use', { n: SUGGESTED })}
++                </button>
++              </div>
++
++              <NumberField label={t('ex.plan.planned')} value={planned} min={0} max={100} onChange={setPlanned} unit={t('ex.units')} />
++              <NumberField label={t('ex.summary.incoming')} value={incoming} min={0} max={100} onChange={setIncoming} unit={t('ex.units')}
++                hint={t('ex.plan.incomingHint')} />
++            </Panel>
++
++            <Panel style={{ background: TONE.bg, borderColor: TONE.border }}>
++              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
++                <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-body)', color: 'var(--ink)', margin: 0 }}>
++                  {t('ex.check.title')}
++                </h4>
++                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', fontSize: 'var(--text-secondary)', fontWeight: 700, color: TONE.text }}>
++                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: TONE.dot }} />{statusLabel}
++                </span>
++              </div>
++              <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-section-head)', color: 'var(--ink)', margin: 'var(--space-3) 0 0' }}>
++                {checkHead}
+               </p>
+-              <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-section-head)', color: 'var(--ink)', lineHeight: 1.2 }}>
+-                {t('example.purchase.question')}
++              <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.5, color: 'var(--ink-2)', margin: 'var(--space-2) 0 var(--space-3)' }}>
++                {checkBody}
+               </p>
+-            </div>
+-
+-            <SliderField labelKey="example.slider.planned" value={planned} min={0} max={60} onChange={setPlanned} />
+-            <SliderField labelKey="example.slider.incoming" value={incoming} min={0} max={30} onChange={setIncoming} />
++              <Provenance kind="stockless" label={t('ex.byStockLess')} />
+ 
+-            <div style={{ border: `1px solid ${verdictBorder}`, borderRadius: 'var(--radius)', background: verdictBg, padding: 'var(--space-5)', marginTop: 'auto' }}>
+-              <p style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'var(--text-body)', color: verdictColor, marginBottom: 'var(--space-2)' }}>
+-                {t(verdictKey)}
+-              </p>
+-              <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--ink-2)', lineHeight: 1.5 }}>
+-                {verdictDetail}
++              <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-body)', color: 'var(--ink)', margin: 'var(--space-5) 0 var(--space-3)' }}>
++                {t('ex.numbers')}
+               </p>
++              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--space-2)' }}>
++                <NumberTile label={t('ex.n.stock')} value={STOCK_ON_HAND} unit={t('ex.units')} source="file" />
++                <NumberTile label={t('ex.n.incoming')} value={incoming} unit={t('ex.units')} source="file" />
++                <NumberTile label={t('ex.n.planned')} value={planned} unit={t('ex.units')} source="file" />
++                <NumberTile label={t('ex.n.low')} value={DEMAND_LOW} unit={t('ex.units')} source="stockless" />
++                <NumberTile label={t('ex.n.high')} value={DEMAND_HIGH} unit={t('ex.units')} source="stockless" />
++                <NumberTile label={t('ex.n.after')} value={total} unit={t('ex.units')} source="stockless" />
++              </div>
++            </Panel>
++
++            <div style={{ display: 'flex', gap: 'var(--space-3)', background: 'var(--amber-tint)', border: '1px solid #EBCF9F',
++              borderRadius: 'var(--radius)', padding: 'var(--space-4)' }}>
++              <span aria-hidden="true" style={{ color: 'var(--amber-strong)', fontWeight: 800 }}>!</span>
++              <div>
++                <p style={{ fontWeight: 700, fontSize: 'var(--text-body)', color: '#765A2D', margin: 0 }}>{t('ex.expiry.title')}</p>
++                <p style={{ fontSize: 'var(--text-secondary)', color: '#765A2D', margin: '3px 0 6px' }}>{t('ex.expiry.none')}</p>
++                <p style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', fontSize: 'var(--text-secondary)', color: '#765A2D', margin: 0 }}>
++                  {t('ex.expiry.earliest')} <Provenance kind="file" label={t('ex.fromFile')} />
++                </p>
++              </div>
+             </div>
+           </div>
+         </div>
+-
+-        {/* Card footer */}
+-        <div style={{ borderTop: '1px solid var(--line)', background: 'var(--line-soft)', padding: '10px var(--space-8)', textAlign: 'center' }}>
+-          <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-description)', color: 'var(--muted)' }}>
+-            {t('example.footer')}
+-          </p>
+-        </div>
+       </div>
+     </section>
+   );
+ }
+ 
+-function SliderField({ labelKey, value, min, max, onChange }: {
+-  labelKey: 'example.slider.planned' | 'example.slider.incoming';
+-  value: number; min: number; max: number; onChange: (v: number) => void;
++/* ── small parts ─────────────────────────────────────────────────────────── */
++
++function Panel({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
++  return (
++    <div style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-card)',
++      padding: 'var(--space-5)', ...style }}>
++      {children}
++    </div>
++  );
++}
++
++function LegendItem({ children, label }: { children: React.ReactNode; label: string }) {
++  return (
++    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', fontSize: 'var(--text-description)', color: 'var(--muted)' }}>
++      {children}{label}
++    </span>
++  );
++}
++
++function Provenance({ kind, label }: { kind: 'file' | 'stockless'; label: string }) {
++  const teal = kind === 'stockless';
++  return (
++    <span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: '6px', padding: '3px 7px',
++      background: teal ? 'var(--teal-tint)' : '#EDF1F0', color: teal ? 'var(--teal-deep)' : '#51636A',
++      fontSize: 'var(--text-description)', fontWeight: 600, lineHeight: 1.35 }}>{label}</span>
++  );
++}
++
++function SummaryTile({ label, value, unit, note, highlight }: {
++  label: string; value: number; unit: string; note?: string; highlight?: boolean;
++}) {
++  return (
++    <div style={{ borderRadius: 'var(--radius)', padding: 'var(--space-3) var(--space-4)',
++      background: highlight ? 'var(--teal-tint)' : '#F4F8F7',
++      border: `1px solid ${highlight ? 'var(--mint)' : 'var(--line-soft)'}` }}>
++      <p style={{ fontSize: 'var(--text-description)', color: 'var(--muted)', margin: 0 }}>{label}</p>
++      <p style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '24px', color: 'var(--ink)', letterSpacing: '-0.02em' }}>
++        {value} <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--muted)' }}>{unit}</span>
++      </p>
++      {note && <p style={{ fontSize: 'var(--text-description)', color: 'var(--muted)', margin: '4px 0 0' }}>{note}</p>}
++    </div>
++  );
++}
++
++function NumberTile({ label, value, unit, source }: { label: string; value: number; unit: string; source: 'file' | 'stockless' }) {
++  const { t } = useTranslation();
++  return (
++    <div style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: 'var(--space-3)' }}>
++      <p style={{ fontSize: 'var(--text-description)', color: 'var(--muted)', margin: 0 }}>{label}</p>
++      <p style={{ margin: '3px 0 6px', fontFamily: 'var(--font-data)', fontWeight: 600, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>
++        {value} {unit}
++      </p>
++      <Provenance kind={source} label={t(source === 'file' ? 'ex.fromFile' : 'ex.byStockLess')} />
++    </div>
++  );
++}
++
++/** Stepper buttons and a slider, both driving the same value. */
++function NumberField({ label, value, min, max, onChange, unit, hint }: {
++  label: string; value: number; min: number; max: number; onChange: (v: number) => void; unit: string; hint?: string;
+ }) {
+   const { t } = useTranslation();
++  const clamp = (v: number) => Math.min(max, Math.max(min, v));
++  const pct = ((value - min) / (max - min)) * 100;
++  const btn: React.CSSProperties = {
++    width: '34px', height: '34px', flex: 'none', border: '1px solid var(--line)', background: '#fff',
++    borderRadius: '8px', color: 'var(--ink)', fontSize: '18px', lineHeight: 1, cursor: 'pointer',
++  };
+   return (
+-    <div>
+-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--space-2)' }}>
+-        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-secondary)', color: 'var(--ink-2)' }}>{t(labelKey)}</label>
+-        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+-          <span style={{ fontFamily: 'var(--font-data)', fontWeight: 600, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>{value} {t('example.restock.units')}</span>
+-          <span style={{ fontFamily: 'var(--font-data)', fontSize: '9px', background: 'var(--line-soft)', border: '1px solid var(--line)', borderRadius: '10px', padding: '1px 6px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{t('example.slider.tag')}</span>
++    <div style={{ marginTop: 'var(--space-5)' }}>
++      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
++        <label style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>{label}</label>
++        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
++          <button type="button" style={btn} aria-label={t('ex.plan.decrease')} onClick={() => onChange(clamp(value - 1))}>−</button>
++          <input type="number" value={value} min={min} max={max} aria-label={label}
++            onChange={(e) => onChange(clamp(Number(e.target.value) || 0))}
++            style={{ width: '62px', height: '34px', textAlign: 'center', border: '1px solid var(--line)', borderRadius: '8px',
++              fontFamily: 'var(--font-data)', fontSize: 'var(--text-body)', fontWeight: 600, color: 'var(--ink)', background: '#fff' }} />
++          <button type="button" style={btn} aria-label={t('ex.plan.increase')} onClick={() => onChange(clamp(value + 1))}>+</button>
+         </span>
+       </div>
+-      <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(Number(e.target.value))}
+-        style={{ width: '100%', accentColor: 'var(--teal)', cursor: 'pointer' }} />
++      <input className="sl-range" type="range" min={min} max={max} value={value} aria-label={label}
++        onChange={(e) => onChange(Number(e.target.value))}
++        style={{ marginTop: 'var(--space-3)',
++          ['--sl-track' as string]: `linear-gradient(to right, var(--teal) ${pct}%, #DCE6E3 ${pct}%)`,
++        } as React.CSSProperties} />
++      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-description)', color: 'var(--muted)' }}>
++        <span>{min} {unit}</span><span>{max} {unit}</span>
++      </div>
++      {hint && <p style={{ fontSize: 'var(--text-description)', color: 'var(--muted)', margin: '6px 0 0' }}>{hint}</p>}
+     </div>
+   );
+ }
+@@ -334,6 +515,7 @@ function StepsSection() {
+ /* ── What you get + Privacy ──────────────────────────────────────────────── */
+ 
+ function WhatYouGetSection() {
++  const navigate = useNavigate();
+   const { t } = useTranslation();
+ 
+   return (
+@@ -377,7 +559,7 @@ function WhatYouGetSection() {
+           ))}
+         </div>
+         <div style={{ marginTop: 'var(--space-8)' }}>
+-          <BtnPrimary onClick={() => {}}>{t('cta.getStarted')}</BtnPrimary>
++          <BtnPrimary onClick={() => navigate('/upload')}>{t('cta.getStarted')}</BtnPrimary>
+         </div>
+       </Card>
+     </section>
+@@ -387,6 +569,7 @@ function WhatYouGetSection() {
+ /* ── Produce band ─────────────────────────────────────────────────────────── */
+ 
+ function ProduceBand() {
++  const navigate = useNavigate();
+   const { t } = useTranslation();
+ 
+   return (
+@@ -398,7 +581,7 @@ function ProduceBand() {
+             {t('band.heading.plain')}<span style={{ color: 'var(--amber-accent)' }}>{t('band.heading.accent')}</span>
+           </h2>
+           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+-            <BtnPrimary onClick={() => {}}>{t('band.cta')}</BtnPrimary>
++            <BtnPrimary onClick={() => navigate('/upload')}>{t('band.cta')}</BtnPrimary>
+             <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--muted)' }}>{t('band.subtext')}</p>
+           </div>
+           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
+@@ -422,6 +605,15 @@ function ProduceBand() {
+ 
+ /* ── Food waste problem ──────────────────────────────────────────────────── */
+ 
++const SOURCES = [
++  /* 1.05B tonnes and the 12% retail share */
++  { key: 'foodWaste.src.unep', href: 'https://www.unep.org/resources/publication/food-waste-index-report-2024' },
++  /* the 2030 target, worded by the UN itself */
++  { key: 'foodWaste.src.sdg', href: 'https://sdgs.un.org/goals/goal12' },
++  /* the 23% economic loss, from a peer-reviewed Malaysian study */
++  { key: 'foodWaste.src.study', href: 'https://www.mdpi.com/2071-1050/11/21/6016' },
++] as const;
++
+ function FoodWasteProblem() {
+   const { t } = useTranslation();
+ 
+@@ -452,9 +644,9 @@ function FoodWasteProblem() {
+         </p>
+       </div>
+ 
+-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', marginTop: 'var(--space-10)' }}>
++      <div className="sl-stats" style={{ marginTop: 'var(--space-10)' }}>
+         {stats.map(({ figKey, descKey }, i) => (
+-          <div key={figKey} style={{ padding: '0 var(--space-6)', borderLeft: i > 0 ? '1px solid var(--line)' : 'none' }}>
++          <div key={figKey} className={i > 0 ? 'sl-stat sl-stat--ruled' : 'sl-stat'}>
+             <p style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', letterSpacing: '-0.025em', lineHeight: 1.1, color: 'var(--ink)', marginBottom: 'var(--space-2)' }}>
+               {t(figKey)}
+             </p>
+@@ -465,8 +657,18 @@ function FoodWasteProblem() {
+         ))}
+       </div>
+ 
+-      <p style={{ marginTop: 'var(--space-5)', fontSize: 'var(--text-description)', color: 'var(--muted-2)', textAlign: 'center' }}>
+-        {t('foodWaste.sources')}
++      {/* Every figure above is someone else's published number, so each one is
++          one click from its source. Verified links, not names in plain text. */}
++      <p className="sl-sources" style={{ marginTop: 'var(--space-5)', fontSize: 'var(--text-description)', color: 'var(--muted-2)', textAlign: 'center' }}>
++        {t('foodWaste.sources.label')}{' '}
++        {SOURCES.map((source, i) => (
++          <span key={source.href}>
++            {i > 0 && <span aria-hidden="true"> · </span>}
++            <a href={source.href} target="_blank" rel="noreferrer noopener">
++              {t(source.key)}<span aria-hidden="true"> ↗</span>
++            </a>
++          </span>
++        ))}
+       </p>
+     </section>
+   );
+@@ -487,8 +689,8 @@ function SdgBlock() {
+               {t('sdg.responsible')}
+             </p>
+           </div>
+-          <svg viewBox="0 0 80 40" width="100%" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" style={{ opacity: 0.9, margin: '20px 0', display: 'block' }}>
+-            <path d="M40 20 C40 10 28 4 20 10 C12 16 12 24 20 30 C28 36 40 30 40 20 C40 10 52 4 60 10 C68 16 68 24 60 30 C52 36 40 30 40 20Z" />
++          <svg viewBox="0 0 240 120" width="100%" fill="none" stroke="#fff" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.9, margin: '20px 0', display: 'block' }}>
++            <path d="M60 26C22 26 22 94 60 94 98 94 142 26 180 26c38 0 38 68 0 68-38 0-82-68-120-68Z" />
+           </svg>
+           <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '15px', color: '#fff', lineHeight: 1.3 }}>
+             {t('sdg.tagline')}
+diff --git a/src/pages/Upload.tsx b/src/pages/Upload.tsx
+index a9a7c4d..c384948 100644
+--- a/src/pages/Upload.tsx
++++ b/src/pages/Upload.tsx
+@@ -1,17 +1,149 @@
+-import { Card } from '../components/ui';
++import { useNavigate } from 'react-router';
++import { Card, BtnPrimary, BtnSecondary } from '../components/ui';
+ import { useTranslation } from '../i18n/LanguageContext';
+ 
++/* Step 1 — the real upload screen.
++   Both the first-time and the returning call-to-action land here, so this has
++   to be the working step rather than a placeholder: what the retailer needs to
++   bring, where the file goes, and what happens to it. */
++
++const ATTRIBUTES = [
++  { n: '01', name: 's1.attr.1.name', desc: 's1.attr.1.desc', forms: [] },
++  { n: '02', name: 's1.attr.2.name', desc: 's1.attr.2.desc', forms: ['s1.attr.2.form1', 's1.attr.2.form2'] },
++  { n: '03', name: 's1.attr.3.name', desc: 's1.attr.3.desc', forms: [] },
++] as const;
++
++const CHAIN = ['s1.chain.1', 's1.chain.2', 's1.chain.3', 's1.chain.4'] as const;
++
+ export function Upload() {
+   const { t } = useTranslation();
++  const navigate = useNavigate();
++
+   return (
+-    <div style={{ maxWidth: 'var(--content-width)', margin: '0 auto', padding: 'var(--space-16) var(--space-6)' }}>
+-      <Card style={{ textAlign: 'center', padding: 'var(--space-16) var(--space-10)', border: '2px dashed var(--line)', boxShadow: 'none' }}>
+-        <p style={{ fontFamily: 'var(--font-data)', fontSize: 'var(--text-label)', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--mint)', marginBottom: 'var(--space-3)', fontWeight: 600 }}>
+-          {t('placeholder.step', { n: 1 })}
+-        </p>
+-        <h1 style={{ fontSize: 'var(--text-section-head)', color: 'var(--ink)', marginBottom: 'var(--space-3)' }}>{t('upload.title')}</h1>
+-        <p style={{ fontSize: 'var(--text-body)', color: 'var(--muted)' }}>{t('upload.desc')}</p>
+-      </Card>
++    <div style={{ maxWidth: 'var(--page-max-width)', margin: '0 auto', padding: 'var(--space-12) var(--space-6) var(--space-16)' }}>
++      <button onClick={() => navigate('/')}
++        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'none', border: 0, padding: 0,
++          fontFamily: 'var(--font-body)', fontSize: 'var(--text-secondary)', fontWeight: 600, color: 'var(--teal)', cursor: 'pointer' }}>
++        ← {t('s1.back')}
++      </button>
++
++      <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-secondary)', fontWeight: 800,
++        textTransform: 'uppercase', letterSpacing: '0.11em', color: 'var(--teal)', margin: 'var(--space-6) 0 0' }}>
++        {t('s1.eyebrow')}
++      </p>
++      <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-page-title)',
++        lineHeight: 1.1, color: 'var(--ink)', margin: 'var(--space-2) 0 0' }}>
++        {t('s1.title')}
++      </h1>
++      <p style={{ fontSize: 'var(--text-lead)', lineHeight: 1.35, color: 'var(--muted)', margin: 'var(--space-3) 0 0', maxWidth: '640px' }}>
++        {t('s1.lede')}
++      </p>
++
++      <div className="s1-layout" style={{ marginTop: 'var(--space-10)' }}>
++        {/* ── what to bring ── */}
++        <div>
++          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-section-head)', color: 'var(--ink)', margin: 0 }}>
++            <span aria-hidden="true" style={{ marginRight: '8px' }}>🌱</span>{t('s1.guide.heading')}
++          </h2>
++          <p style={{ fontSize: 'var(--text-body)', color: 'var(--muted)', margin: 'var(--space-2) 0 0' }}>
++            {t('s1.guide.intro')}
++          </p>
++
++          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-3)', margin: 'var(--space-6) 0 var(--space-3)' }}>
++            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-body)', color: 'var(--ink)', margin: 0 }}>
++              {t('s1.required')}
++            </h3>
++            <span style={{ background: '#EDF1F0', color: '#647278', borderRadius: '999px', padding: '5px 10px',
++              fontSize: 'var(--text-secondary)', fontWeight: 700 }}>{t('s1.required.count')}</span>
++          </div>
++
++          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
++            {ATTRIBUTES.map((a) => (
++              <article key={a.n} style={{ background: 'var(--card)', border: '1px solid var(--line)',
++                borderRadius: 'var(--radius-card)', padding: 'var(--space-4)', boxShadow: 'var(--shadow-card)' }}>
++                <div style={{ display: 'grid', gridTemplateColumns: '30px minmax(0,1fr) auto', alignItems: 'center', gap: 'var(--space-2)' }}>
++                  <span style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'var(--teal-tint)',
++                    display: 'flex', alignItems: 'center', justifyContent: 'center',
++                    fontFamily: 'var(--font-display)', fontSize: 'var(--text-description)', fontWeight: 800, color: 'var(--teal-deep)' }}>{a.n}</span>
++                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-body)', fontWeight: 700, lineHeight: 1.25, margin: 0, color: 'var(--ink)' }}>
++                    {t(a.name)}
++                  </h4>
++                  <span style={{ background: 'var(--teal-tint)', color: 'var(--teal-deep)', borderRadius: '7px', padding: '4px 7px',
++                    fontSize: 'var(--text-label)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
++                    {t('s1.attr.required')}
++                  </span>
++                </div>
++                <p style={{ fontSize: 'var(--text-secondary)', lineHeight: 1.45, color: 'var(--muted)', margin: '7px 0 0 38px' }}>
++                  {t(a.desc)}
++                </p>
++                {a.forms.length > 0 && (
++                  <ol style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 'var(--space-2)',
++                    listStyle: 'none', margin: '10px 0 0 38px', padding: 0 }}>
++                    {a.forms.map((f, i) => (
++                      <li key={f} style={{ position: 'relative', minHeight: '42px', padding: '9px 9px 9px 31px',
++                        border: '1px solid #C8DAD6', borderRadius: 'var(--radius)', background: '#F8FCFB',
++                        fontSize: 'var(--text-description)', lineHeight: 1.4, color: 'var(--ink-2)' }}>
++                        <span style={{ position: 'absolute', left: '9px', top: '9px', width: '16px', height: '16px', borderRadius: '50%',
++                          background: 'var(--teal)', color: '#fff', fontSize: 'var(--text-label)', fontWeight: 800,
++                          display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
++                        {t(f)}
++                      </li>
++                    ))}
++                  </ol>
++                )}
++              </article>
++            ))}
++          </div>
++        </div>
++
++        {/* ── the drop zone ── */}
++        <Card style={{ padding: 'var(--space-8)', display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
++          <div style={{ minHeight: '290px', borderRadius: '18px', border: '2px dashed #9BC8C1',
++            background: 'linear-gradient(180deg,#F8FCFB 0%,#EDF7F4 100%)',
++            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
++            padding: 'var(--space-8) var(--space-6)', textAlign: 'center' }}>
++            <div aria-hidden="true" style={{ width: '54px', height: '64px', background: '#fff', border: '2px solid var(--teal)',
++              borderRadius: 'var(--radius)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
++              padding: '0 7px 10px', marginBottom: 'var(--space-6)' }}>
++              <span style={{ display: 'block', width: '36px', padding: '4px 0', background: 'var(--teal-tint)', borderRadius: '5px',
++                fontSize: 'var(--text-eyebrow)', fontWeight: 800, color: 'var(--teal-deep)', textAlign: 'center' }}>CSV</span>
++            </div>
++            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-section-head)', fontWeight: 700, margin: 0, color: 'var(--ink)' }}>
++              {t('s1.drop.title')}
++            </h3>
++            <p style={{ fontSize: 'var(--text-body)', color: 'var(--muted)', margin: 'var(--space-3) 0 0' }}>
++              {t('s1.drop.desc')}
++            </p>
++            <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap', justifyContent: 'center', marginTop: 'var(--space-5)' }}>
++              <BtnPrimary onClick={() => navigate('/columns')}>{t('s1.drop.choose')}</BtnPrimary>
++              <BtnSecondary onClick={() => navigate('/columns')}>{t('s1.drop.sample')}</BtnSecondary>
++            </div>
++            <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--muted)', marginTop: 'var(--space-4)' }}>
++              {t('s1.drop.limits')}
++            </p>
++            <ol style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '6px 4px',
++              listStyle: 'none', margin: 'var(--space-4) 0 0', padding: 0,
++              fontSize: 'var(--text-description)', fontWeight: 600, color: 'var(--muted)' }}>
++              {CHAIN.map((key, i) => (
++                <li key={key} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap',
++                  color: i === CHAIN.length - 1 ? 'var(--teal)' : undefined }}>
++                  {t(key)}
++                  {i < CHAIN.length - 1 && <span aria-hidden="true" style={{ margin: '0 2px', color: 'var(--border-strong)' }}>→</span>}
++                </li>
++              ))}
++            </ol>
++          </div>
++
++          <div style={{ display: 'flex', gap: 'var(--space-3)', padding: 'var(--space-4)', background: 'var(--ink)', borderRadius: 'var(--radius)' }}>
++            <span aria-hidden="true" style={{ width: '20px', height: '20px', flex: 'none', borderRadius: '50%', background: 'var(--teal)',
++              color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'var(--text-description)', fontWeight: 800 }}>✓</span>
++            <p style={{ margin: 0 }}>
++              <b style={{ display: 'block', color: '#fff', fontSize: 'var(--text-body)', lineHeight: 1.35 }}>{t('s1.privacy.title')}</b>
++              <span style={{ color: '#EDF7F5', fontSize: 'var(--text-secondary)', lineHeight: 1.45 }}>{t('s1.privacy.body')}</span>
++            </p>
++          </div>
++        </Card>
++      </div>
+     </div>
+   );
+ }
+diff --git a/src/theme.css b/src/theme.css
+index d34b4fd..0deb585 100644
+--- a/src/theme.css
++++ b/src/theme.css
+@@ -51,7 +51,7 @@
+   --weight-bold:    700;
+ 
+   /* ── Typography: sizes ── */
+-  --text-hero:          52px;
++  --text-hero:          46px;
+   --text-page-title:    36px;
+   --text-lead:          18px;
+   --text-section-head:  20px;
+@@ -61,7 +61,7 @@
+   --text-label:         10px;
+   --text-eyebrow:       11px;
+   --text-hand:          22px;
+-  --text-step-num:      72px;
++  --text-step-num:      56px;
+ 
+   /* ── Spacing ── */
+   --space-1:    4px;
+@@ -70,15 +70,15 @@
+   --space-4:   16px;
+   --space-5:   20px;
+   --space-6:   24px;
+-  --space-8:   32px;
+-  --space-10:  40px;
+-  --space-12:  48px;
+-  --space-16:  64px;
+-  --space-20:  80px;
+-  --space-24:  96px;
++  --space-8:   26px;
++  --space-10:  30px;
++  --space-12:  36px;
++  --space-16:  46px;
++  --space-20:  56px;
++  --space-24:  66px;
+ 
+   /* ── Layout ── */
+-  --page-max-width: 1080px;
++  --page-max-width: min(1420px, 92vw);
+   --content-width:   760px;
+   --radius-sm:    6px;
+   --radius:      10px;

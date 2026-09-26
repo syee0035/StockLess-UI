@@ -497,52 +497,74 @@ index cc5c2d6..80ab02f 100644
  @media(prefers-reduced-motion:no-preference){html:has(.sl-home){scroll-behavior:smooth}}
  @media(prefers-reduced-motion:reduce){.sl-button{transition:none}}
 diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
-index 86a9cd1..575164d 100644
+index 86a9cd1..f89c97d 100644
 --- a/frontend/src/i18n/messages.ts
 +++ b/frontend/src/i18n/messages.ts
-@@ -604,33 +604,29 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -300,10 +300,6 @@ export const messages: Record<string, readonly [string, string]> = {
+     "可持续发展目标 12.3 的目标年份：将零售和消费环节的人均食物浪费减半。",
+     "Tahun sasaran SDG 12.3 untuk mengurangkan separuh sisa makanan global per kapita di peringkat runcit dan pengguna."
+   ],
+-  "saved per semester after predictive resource management reduced food spoilage from 20% to 8% in a Malaysian food-service implementation.": [
+-    "马来西亚一项餐饮实践通过预测式资源管理，将食物变质率从 20% 降至 8%，每学期节省的金额。",
+-    "penjimatan setiap semester dalam pelaksanaan perkhidmatan makanan di Malaysia selepas pengurusan sumber ramalan mengurangkan kerosakan makanan daripada 20% kepada 8%."
+-  ],
+   "Sources:": [
+     "来源：",
+     "Sumber:"
+@@ -312,10 +308,6 @@ export const messages: Record<string, readonly [string, string]> = {
+     "联合国环境署《2024 年食物浪费指数》↗",
+     "Indeks Sisa Makanan UNEP 2024 ↗"
+   ],
+-  "MSU Greenally research ↗": [
+-    "MSU Greenally 研究 ↗",
+-    "Kajian MSU Greenally ↗"
+-  ],
+   "Smarter restocking can help prevent waste before it happens.": [
+     "明智补货，有助于在浪费发生之前预防它。",
+     "Penambahan stok bijak membantu mencegah pembaziran sebelum berlaku."
+@@ -604,33 +596,29 @@ export const messages: Record<string, readonly [string, string]> = {
      "上传销售数据",
      "Muat naik data jualan"
    ],
 -  "Import your existing sales CSV, or explore the sample data to see how StockLess works.": [
 -    "导入现有销售 CSV，或使用示例数据了解 StockLess。",
 -    "Import CSV jualan sedia ada atau cuba data contoh untuk memahami StockLess."
+-  ],
+-  "Prepare it with StockLess": [
+-    "使用 StockLess 整理数据",
+-    "Sediakan data dengan StockLess"
 +  "Import your existing sales CSV, or try the sample data first.": [
 +    "导入您现有的销售 CSV 文件，或先试用示例数据。",
 +    "Import fail CSV jualan sedia ada anda, atau cuba data contoh dahulu."
    ],
--  "Prepare it with StockLess": [
--    "使用 StockLess 整理数据",
--    "Sediakan data dengan StockLess"
+-  "Confirm your columns and review missing values or date formats with guided checks.": [
+-    "通过引导式检查确认字段，并复核缺失值或日期格式。",
+-    "Sahkan lajur dan semak nilai hilang atau format tarikh melalui semakan berpandu."
 +  "Map your columns": [
 +    "匹配您的列",
 +    "Padankan lajur anda"
    ],
--  "Confirm your columns and review missing values or date formats with guided checks.": [
--    "通过引导式检查确认字段，并复核缺失值或日期格式。",
--    "Sahkan lajur dan semak nilai hilang atau format tarikh melalui semakan berpandu."
+-  "Understand your demand": [
+-    "了解商品需求",
+-    "Fahami permintaan anda"
 +  "Tell StockLess which columns hold your sale date, product and quantity.": [
 +    "告诉 StockLess 哪些列包含销售日期、产品和数量。",
 +    "Beritahu StockLess lajur mana yang mengandungi tarikh jualan, produk dan kuantiti anda."
    ],
--  "Understand your demand": [
--    "了解商品需求",
--    "Fahami permintaan anda"
+-  "See sales patterns, expected demand, and where your data needs more confidence.": [
+-    "查看销售模式、预计需求，以及数据仍需补充的部分。",
+-    "Lihat corak jualan, jangkaan permintaan dan bahagian data yang perlu diperkukuh."
 +  "StockLess looks for gaps, duplicates and unusual rows before any analysis.": [
 +    "StockLess 会在分析前检查缺口、重复和异常行。",
 +    "StockLess mencari jurang, pendua dan baris luar biasa sebelum sebarang analisis."
    ],
--  "See sales patterns, expected demand, and where your data needs more confidence.": [
--    "查看销售模式、预计需求，以及数据仍需补充的部分。",
--    "Lihat corak jualan, jangkaan permintaan dan bahagian data yang perlu diperkukuh."
+-  "Review your restocking plan": [
+-    "复核补货计划",
+-    "Semak pelan tambahan stok"
 +  "Plan your purchases": [
 +    "规划您的采购",
 +    "Rancang belian anda"
    ],
--  "Review your restocking plan": [
--    "复核补货计划",
--    "Semak pelan tambahan stok"
--  ],
 -  "Compare purchase scenarios to spot potential excess stock and control costs.": [
 -    "比较不同采购方案，识别潜在过量库存并控制成本。",
 -    "Bandingkan senario pembelian untuk mengenal pasti lebihan stok dan mengawal kos."
@@ -552,7 +574,7 @@ index 86a9cd1..575164d 100644
    ],
    "MAKE YOUR NEXT ORDER A SMARTER ONE": [
      "让下一次订购更明智",
-@@ -677,7 +673,7 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -677,7 +665,7 @@ export const messages: Record<string, readonly [string, string]> = {
      "Padankan lajur"
    ],
    "Check readiness": [
@@ -561,7 +583,7 @@ index 86a9cd1..575164d 100644
      "Semak kesediaan"
    ],
    "Plan purchases": [
-@@ -2483,5 +2479,669 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -2483,5 +2471,677 @@ export const messages: Record<string, readonly [string, string]> = {
    "Stale stock": [
      "库存数据过旧",
      "Data stok terlalu lama"
@@ -1229,14 +1251,33 @@ index 86a9cd1..575164d 100644
 +  "Included in totals means the row still counts towards your demand figures — the note is a warning, not a blocker. Not included in totals means StockLess could not read the row safely, so it is left out until you correct it. Your file is never changed either way.": [
 +    "「已计入总数」表示该行仍会计入您的需求数据——提示只是提醒，不会阻碍分析。「未计入总数」表示 StockLess 无法安全读取该行，因此在您修正前不计入。无论哪种情况，您的文件都不会被更改。",
 +    "\"Dikira dalam jumlah\" bermaksud baris itu masih dikira dalam angka permintaan anda — notanya ialah amaran, bukan halangan. \"Tidak dikira dalam jumlah\" bermaksud StockLess tidak dapat membaca baris itu dengan selamat, jadi ia ditinggalkan sehingga anda membetulkannya. Fail anda tidak pernah diubah."
++  ],
++  "Papargyropoulou et al. (2019) ↗": [
++    "Papargyropoulou 等人（2019） ↗",
++    "Papargyropoulou et al. (2019) ↗"
++  ],
++  "of the value of food purchased was lost to food waste across five Malaysian hospitality and food service operations.": [
++    "马来西亚五家餐旅与餐饮服务场所中，因食物浪费而损失的采购食材价值比例。",
++    "daripada nilai makanan yang dibeli hilang akibat pembaziran makanan di lima operasi hospitaliti dan perkhidmatan makanan di Malaysia."
    ]
  };
 diff --git a/frontend/src/screens/HomePage.tsx b/frontend/src/screens/HomePage.tsx
-index c889292..0b0e84f 100644
+index c889292..f87b0f9 100644
 --- a/frontend/src/screens/HomePage.tsx
 +++ b/frontend/src/screens/HomePage.tsx
-@@ -181,10 +181,10 @@ export function HomePage({ startHref = "#workspace", assetRoot = "/homepage", im
-       <section className="sl-impact sl-container" aria-labelledby="impact-title"><div className="sl-sdg" aria-label={t("Supporting Sustainable Development Goal 12: Responsible consumption and production")}><div><span>12</span><b>{t("RESPONSIBLE")}<br/>{t("CONSUMPTION")}<br/>{t("AND PRODUCTION")}</b></div><svg viewBox="0 0 360 170" fill="none" aria-hidden="true"><path d="M176 86C138 39 110 28 76 35C7 49 9 132 76 139C122 145 153 102 181 78C217 35 247 27 282 36C344 53 344 127 282 137C247 143 216 116 195 96" stroke="white" strokeWidth="18"/><path d="m185 62-10 39-32-22 M208 116l-29-25 37-16" fill="white"/></svg><span className="sl-sdg-caption">{t("A shared goal. An everyday action.")}</span></div><div><p className="sl-kicker">{t("GOOD FOR YOUR SHOP. BETTER FOR THE PLANET.")}</p><h2 id="impact-title">{t("Small decisions.")}<br />{t("Less waste.")}</h2><p className="sl-impact-lede">{t("Smarter restocking decisions can help small retailers save money while preventing food from becoming waste.")}</p><p>{t("Every restocking decision matters. StockLess uses your existing sales data to help you identify unnecessary orders and potential excess stock. Less stock sitting on shelves can mean less food going to waste.")}</p><a className="sl-sdg-link" href="https://www.unep.org/indicator-1231b" target="_blank" rel="noreferrer"><span>{t("SDG 12.3")}</span> {t("Supporting responsible consumption ")}<span aria-hidden="true">↗</span></a></div></section>
+@@ -172,19 +172,19 @@ export function HomePage({ startHref = "#workspace", assetRoot = "/homepage", im
+     <main id="home-main">
+       <section className="sl-hero sl-container" aria-labelledby="home-title"><p className="sl-kicker sl-hero-eyebrow"><span /> {t("SMALLER RESTOCKS. BIGGER POSSIBILITIES.")}</p><h1 id="home-title">{t("Less ")}<em>{t("food waste.")}</em><br />{t("Lower costs. Higher profits.")}</h1><p className="sl-hero-copy">{t("Smarter restocking for small retailers.")}<br className="sl-mobile-break" /> {t("Make the most of what you stock.")}</p><div className="sl-hero-actions"><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Start with your sales data ")}<span aria-hidden="true">↗</span></a><a className="sl-secondary-link" href="#how-to">{t("See how it works ")}<span aria-hidden="true">↓</span></a></div><div className="sl-preview-stage"><PurchasePreview /></div></section>
+ 
+-      <section className="sl-story sl-container" aria-labelledby="problem-title"><div><p className="sl-kicker">{t("THE BIGGER PICTURE")}</p><h2 id="problem-title">{t("Food waste starts")}<br />{t("with what we stock.")}</h2><p className="sl-section-copy">{t("For small retailers, every restocking decision can mean the difference between selling stock and wasting it.")}</p><dl className="sl-statistics"><div><dt>{t("1.05B ")}<span>{t("tonnes")}</span></dt><dd>{t("of food waste generated globally in 2022, including inedible parts.")}</dd></div><div><dt>12<span>%</span></dt><dd>{t("of that food waste came from the retail sector.")}</dd></div><div><dt>2030</dt><dd>{t("The SDG 12.3 target year for halving per-capita global food waste at retail and consumer levels.")}</dd></div><div><dt>{t("RM10,000")}</dt><dd>{t("saved per semester after predictive resource management reduced food spoilage from 20% to 8% in a Malaysian food-service implementation.")}</dd></div></dl><p className="sl-source">{t("Sources: ")}<a href="https://www.unep.org/resources/publication/food-waste-index-report-2024" target="_blank" rel="noreferrer">{t("UNEP Food Waste Index 2024 ↗")}</a> · <a href="https://www.unep.org/indicator-1231b" target="_blank" rel="noreferrer">{t("SDG 12.3 ↗")}</a> · <a href="https://www.msu.edu.my/research-management-centre/greenally.php" target="_blank" rel="noreferrer">{t("MSU Greenally research ↗")}</a></p><p className="sl-story-takeaway">{t("Smarter restocking can help prevent waste before it happens. ")}<span aria-hidden="true">↗</span></p></div><img className="sl-story-image" src={photo("retail-produce-2.jpg")} alt={t("Fruit and vegetables displayed on shelves in a small retail shop")} width="1147" height="860" loading="lazy"/></section>
++      <section className="sl-story sl-container" aria-labelledby="problem-title"><div><p className="sl-kicker">{t("THE BIGGER PICTURE")}</p><h2 id="problem-title">{t("Food waste starts")}<br />{t("with what we stock.")}</h2><p className="sl-section-copy">{t("For small retailers, every restocking decision can mean the difference between selling stock and wasting it.")}</p><dl className="sl-statistics"><div><dt>{t("1.05B ")}<span>{t("tonnes")}</span></dt><dd>{t("of food waste generated globally in 2022, including inedible parts.")}</dd></div><div><dt>12<span>%</span></dt><dd>{t("of that food waste came from the retail sector.")}</dd></div><div><dt>2030</dt><dd>{t("The SDG 12.3 target year for halving per-capita global food waste at retail and consumer levels.")}</dd></div><div><dt>23<span>%</span></dt><dd>{t("of the value of food purchased was lost to food waste across five Malaysian hospitality and food service operations.")}</dd></div></dl><p className="sl-source">{t("Sources: ")}<a href="https://www.unep.org/resources/publication/food-waste-index-report-2024" target="_blank" rel="noreferrer">{t("UNEP Food Waste Index 2024 ↗")}</a> · <a href="https://sdgs.un.org/goals/goal12" target="_blank" rel="noreferrer">{t("SDG 12.3 ↗")}</a> · <a href="https://www.mdpi.com/2071-1050/11/21/6016" target="_blank" rel="noreferrer">{t("Papargyropoulou et al. (2019) ↗")}</a></p><p className="sl-story-takeaway">{t("Smarter restocking can help prevent waste before it happens. ")}<span aria-hidden="true">↗</span></p></div><img className="sl-story-image" src={photo("retail-produce-2.jpg")} alt={t("Fruit and vegetables displayed on shelves in a small retail shop")} width="1147" height="860" loading="lazy"/></section>
+ 
+       <section className="sl-section sl-container" id="benefits" aria-labelledby="benefits-title"><p className="sl-kicker">{t("THE BENEFITS")}</p><h2 id="benefits-title">{t("Less food waste. Smarter restocking.")}<br /><span className="sl-muted-heading">{t("More sustainable business.")}</span></h2><p className="sl-section-copy">{t("StockLess helps you reduce excess stock and food waste by making smarter restocking decisions.")}</p><div className="sl-benefits">{t(benefits.map(([icon, title, copy]) => <article key={title}><Icon name={icon} /><h3>{t(title)}</h3><p>{t(copy)}</p></article>))}</div><figure className="sl-wide-photo"><img src={photo("food-waste.jpg")} alt={t("A large pile of discarded vegetables, showing the scale of avoidable food waste")} loading="lazy" width="1200" height="620"/><figcaption>{t("Better decisions start before food becomes waste.")}</figcaption></figure></section>
+ 
+       <section className="sl-section sl-comparison sl-container" id="specifications" aria-labelledby="comparison-title"><div className="sl-centered"><p className="sl-kicker">{t("MADE FOR YOUR EVERYDAY")}</p><h2 id="comparison-title">{t("Why StockLess?")}</h2><p className="sl-section-copy">{t("Designed for small retailers who need smarter inventory decisions")}<br className="sl-desktop-break"/> {t("without the cost and complexity of enterprise systems.")}</p></div><p className="sl-table-hint">{t("Compare features ")}<span>{t("Swipe to explore →")}</span></p><div className="sl-table-scroll" tabIndex={0} role="region" aria-label={t("Comparison of StockLess, ERP software and Excel")}><table><caption className="sl-sr-only">{t("How StockLess compares with typical ERP and spreadsheet workflows. Capabilities vary by product and setup.")}</caption><thead><tr><th scope="col">{t("What matters to your shop")}</th><th scope="col" className="sl-featured"><span className="sl-kicker">{t("PURPOSE-BUILT")}</span>{t("StockLess")}</th><th scope="col">{t("ERP software")}</th><th scope="col">{t("Excel")}</th></tr></thead><tbody>{t(comparison.map(([feature, stockless, erp, excel]) => <tr key={feature}><th scope="row">{t(feature)}</th><td className="sl-featured"><span className="sl-check" aria-hidden="true">✓</span>{t(stockless)}</td><td>{t(erp)}</td><td>{t(excel)}</td></tr>))}</tbody></table></div><p className="sl-comparison-note">{t("A guide to typical workflows. ERP and spreadsheet capabilities vary with product, configuration, and storage.")}</p><p className="sl-comparison-tagline">{t("Smarter than spreadsheets. Simpler than enterprise systems.")}</p></section>
+ 
+-      <section className="sl-impact sl-container" aria-labelledby="impact-title"><div className="sl-sdg" aria-label={t("Supporting Sustainable Development Goal 12: Responsible consumption and production")}><div><span>12</span><b>{t("RESPONSIBLE")}<br/>{t("CONSUMPTION")}<br/>{t("AND PRODUCTION")}</b></div><svg viewBox="0 0 360 170" fill="none" aria-hidden="true"><path d="M176 86C138 39 110 28 76 35C7 49 9 132 76 139C122 145 153 102 181 78C217 35 247 27 282 36C344 53 344 127 282 137C247 143 216 116 195 96" stroke="white" strokeWidth="18"/><path d="m185 62-10 39-32-22 M208 116l-29-25 37-16" fill="white"/></svg><span className="sl-sdg-caption">{t("A shared goal. An everyday action.")}</span></div><div><p className="sl-kicker">{t("GOOD FOR YOUR SHOP. BETTER FOR THE PLANET.")}</p><h2 id="impact-title">{t("Small decisions.")}<br />{t("Less waste.")}</h2><p className="sl-impact-lede">{t("Smarter restocking decisions can help small retailers save money while preventing food from becoming waste.")}</p><p>{t("Every restocking decision matters. StockLess uses your existing sales data to help you identify unnecessary orders and potential excess stock. Less stock sitting on shelves can mean less food going to waste.")}</p><a className="sl-sdg-link" href="https://www.unep.org/indicator-1231b" target="_blank" rel="noreferrer"><span>{t("SDG 12.3")}</span> {t("Supporting responsible consumption ")}<span aria-hidden="true">↗</span></a></div></section>
++      <section className="sl-impact sl-container" aria-labelledby="impact-title"><div className="sl-sdg" aria-label={t("Supporting Sustainable Development Goal 12: Responsible consumption and production")}><div><span>12</span><b>{t("RESPONSIBLE")}<br/>{t("CONSUMPTION")}<br/>{t("AND PRODUCTION")}</b></div><svg viewBox="0 0 360 170" fill="none" aria-hidden="true"><path d="M176 86C138 39 110 28 76 35C7 49 9 132 76 139C122 145 153 102 181 78C217 35 247 27 282 36C344 53 344 127 282 137C247 143 216 116 195 96" stroke="white" strokeWidth="18"/><path d="m185 62-10 39-32-22 M208 116l-29-25 37-16" fill="white"/></svg><span className="sl-sdg-caption">{t("A shared goal. An everyday action.")}</span></div><div><p className="sl-kicker">{t("GOOD FOR YOUR SHOP. BETTER FOR THE PLANET.")}</p><h2 id="impact-title">{t("Small decisions.")}<br />{t("Less waste.")}</h2><p className="sl-impact-lede">{t("Smarter restocking decisions can help small retailers save money while preventing food from becoming waste.")}</p><p>{t("Every restocking decision matters. StockLess uses your existing sales data to help you identify unnecessary orders and potential excess stock. Less stock sitting on shelves can mean less food going to waste.")}</p><a className="sl-sdg-link" href="https://sdgs.un.org/goals/goal12" target="_blank" rel="noreferrer"><span>{t("SDG 12.3")}</span> {t("Supporting responsible consumption ")}<span aria-hidden="true">↗</span></a></div></section>
  
        <section className="sl-section sl-container" id="how-to" aria-labelledby="how-title"><div className="sl-section-header"><div><p className="sl-kicker">{t("HOW IT WORKS")}</p><h2 id="how-title">{t("From data to less waste.")}</h2><p className="sl-section-copy">{t("Turn everyday sales data into smarter restocking decisions.")}</p></div><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Let’s get started ")}<span aria-hidden="true">↗</span></a></div><ol className="sl-steps">{t([
 -        ["Upload your sales data", "Import your existing sales CSV, or explore the sample data to see how StockLess works."],

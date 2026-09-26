@@ -28,17 +28,21 @@ body{background:var(--page);font-family:var(--body);color:var(--ink);-webkit-fon
 :focus,:focus-visible{outline:none}
 code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;border-radius:4px}
 
-.frame{min-height:100vh;display:flex;flex-direction:column;align-items:center;background:var(--page)}
+/* One token drives the content column and the gutter art. The pages read as
+   "too big" on a wide monitor because a 1180px column leaves ~400px of empty
+   gutter each side; widening it there fits more without shrinking any text. */
+.frame{min-height:100vh;display:flex;flex-direction:column;align-items:center;background:var(--page);
+  --shell:clamp(1180px, 88vw, 1360px)}
 
 /* topbar + stepper */
-.topbar{align-self:stretch;height:76px;padding:0 64px;background:rgba(255,255,255,.94);
+.topbar{align-self:stretch;height:62px;padding:0 40px;background:rgba(255,255,255,.94);
   border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;text-decoration:none;padding:4px;margin-left:-4px;border-radius:8px}
 .brand--button{background:none;border:0;cursor:pointer}
 .session-status{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
 .session-status__name{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   font-family:var(--data);font-size:var(--text-description);color:var(--muted)}
-.stepper{align-self:stretch;height:78px;padding:0 64px;background:#fff;
+.stepper{align-self:stretch;height:62px;padding:0 40px;background:#fff;
   border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center}
 .stepper__inner{width:790px;max-width:100%;display:flex;align-items:flex-start;list-style:none;margin:0;padding:0}
 .step{flex:1 1 0;position:relative;display:flex;flex-direction:column;align-items:center}
@@ -56,13 +60,13 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .step--done .step__line{background:var(--teal)}
 .step__button:not(:disabled):hover .step__dot{border-color:var(--teal)}
 
-.page{width:1180px;max-width:100%;padding:44px 0 64px;display:flex;flex-direction:column;align-items:flex-start}
+.page{width:var(--shell);max-width:100%;padding:30px 0 44px;display:flex;flex-direction:column;align-items:flex-start}
 
 /* type */
 .eyebrow{font-family:var(--display);font-size:var(--text-secondary);font-weight:800;color:var(--teal);
   text-transform:uppercase;letter-spacing:1.32px;margin:0}
-.title{font-family:var(--display);font-size:var(--text-page-title);font-weight:700;line-height:1.1;margin:9px 0 0}
-.lede{font-size:var(--text-lead);line-height:1.3;color:var(--muted);margin:11px 0 0;max-width:680px}
+.title{font-family:var(--display);font-size:var(--text-page-title);font-weight:700;line-height:1.1;margin:6px 0 0}
+.lede{font-size:var(--text-lead);line-height:1.3;color:var(--muted);margin:8px 0 0;max-width:680px}
 .card-title{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
 .card-sub{font-size:var(--text-body);color:var(--muted);margin:8px 0 0}
 
@@ -90,7 +94,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
   font-size:16px;font-weight:700;cursor:pointer}
 .btn--link:hover{color:var(--ink)}
 
-.card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-card)}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-card)}
 .card__head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
 
 .select{width:100%;min-width:140px;padding:8px 30px 8px 10px;background:#fff;
@@ -100,16 +104,23 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
   background-repeat:no-repeat;background-position:right 11px center}
 
 .dtable{width:100%;border-collapse:collapse;table-layout:fixed}
-.dtable th{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);
+.dtable th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);
   font-size:var(--text-description);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.55px}
-.dtable td{padding:14px 12px;border-bottom:1px solid var(--line-soft);font-size:var(--text-body);color:var(--ink-2);vertical-align:top}
+.dtable td{padding:10px 10px;border-bottom:1px solid var(--line-soft);font-size:var(--text-body);color:var(--ink-2);vertical-align:top}
 .dtable tr:last-child td{border-bottom:0}
 .dtable__label{font-weight:700}
 .dtable__hint{font-size:var(--text-description);line-height:1.45;color:var(--muted);margin-top:5px}
 .mapping-status{display:inline-flex;flex-direction:column;align-items:flex-start;gap:6px}
 .mapping-status small{color:var(--muted);white-space:nowrap}
 .num{font-family:var(--data);word-break:break-word}
-.table-scroll{margin-top:17px;overflow-x:auto}
+/* overflow-x:auto would clip the field tooltips, which sit above the row and
+   hang past the table box. The table is table-layout:fixed at 100%, so it only
+   needs to scroll once the viewport is too narrow to hold four columns. */
+.table-scroll{margin-top:17px}
+@media (max-width:900px){ .table-scroll{overflow-x:auto} }
+/* the readiness problem table has many columns and no tooltips inside it, so
+   it scrolls at any width rather than pushing the page sideways */
+.table-scroll--x{overflow-x:auto}
 
 .notice{align-self:stretch;margin-top:14px;padding:11px 14px;border-radius:4px 12px 12px 4px;
   font-size:var(--text-body);line-height:1.35}
@@ -117,9 +128,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .notice--error{background:var(--red-tint);border-left:4px solid var(--red);color:var(--red);margin-top:16px}
 
 /* screen 01 */
-.s1-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(390px,.82fr);gap:36px;align-items:start;margin-top:38px;align-self:stretch}
+.s1-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(390px,.82fr);gap:26px;align-items:start;margin-top:26px;align-self:stretch}
 .attribute-guide__intro{margin-top:7px}
-.attribute-section{margin-top:22px}
+.attribute-section{margin-top:16px}
 .attribute-section__head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
 .attribute-section__head h3{font-family:var(--display);font-size:var(--text-body);margin:0}
 .attribute-list{display:flex;flex-direction:column;gap:9px}
@@ -184,7 +195,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .alert__list{margin:8px 0 0;padding-left:18px;font-size:var(--text-secondary);line-height:1.6;color:#765A2D}
 
 /* screen 02 */
-.filebar{align-self:stretch;margin-top:21px;padding:14px 18px;background:#fff;
+.filebar{align-self:stretch;margin-top:15px;padding:11px 15px;background:#fff;
   border:1px solid var(--line);border-radius:14px;
   display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .filebar__left{display:flex;align-items:center;gap:12px}
@@ -192,7 +203,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
   display:flex;align-items:center;justify-content:center;font-size:var(--text-description);font-weight:800;color:var(--teal-deep)}
 .filebar__name{font-size:var(--text-body);font-weight:700}
 .filebar__meta{font-size:var(--text-secondary);color:var(--muted);margin-top:1px}
-.split{align-self:stretch;display:flex;align-items:flex-start;gap:22px;margin-top:13px}
+.split{align-self:stretch;display:flex;align-items:flex-start;gap:16px;margin-top:10px}
 .split__main{flex:1 1 0;min-width:0;padding:24px}
 
 .identity{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
@@ -252,26 +263,38 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 }
 
 /* ── screen 03 ──────────────────────────────────────────────────────────── */
-.ready{align-self:stretch;margin-top:22px;padding:20px 22px;background:var(--teal-tint);
+.ready{align-self:stretch;margin-top:16px;padding:15px 17px;background:var(--teal-tint);
   border:1px solid #B9DBD5;border-radius:18px;
   display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .ready__left{display:flex;align-items:center;gap:14px}
 .ready__tick{width:44px;height:44px;flex:none;border-radius:13px;background:var(--teal);color:#fff;
   display:flex;align-items:center;justify-content:center;font-size:var(--text-section-head);font-weight:800}
-.ready h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
+.ready h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0;
+  display:flex;align-items:center;gap:6px}
 .ready p{font-size:var(--text-body);color:var(--muted);margin:3px 0 0;max-width:560px}
 .ready__count{font-family:var(--display);font-size:22px;font-weight:700;text-align:right}
 .ready__unit{font-size:var(--text-secondary);color:var(--muted);text-align:right;margin-top:4px}
 
-.issues{align-self:stretch;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.issues{align-self:stretch;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
 .issues--five{grid-template-columns:repeat(5,1fr)}
-.issue{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;
+/* The card is a div with a full-bleed hit button behind its content, so the
+   ⓘ tooltip can sit on top of it without nesting one button inside another. */
+.issue{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;
   padding:16px;background:#fff;border:1px solid var(--line);border-radius:14px;
   font-family:var(--body);cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
-.issue:hover:not(:disabled){border-color:#9FB4AF}
-.issue:disabled{cursor:default;opacity:.6}
+.issue:has(.issue__hit:hover:not(:disabled)){border-color:#9FB4AF}
+.issue:has(.issue__hit:focus-visible){outline:2px solid var(--teal);outline-offset:2px}
+.issue--empty{opacity:.6}
+.issue__hit{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;
+  border:0;background:none;border-radius:inherit;cursor:pointer}
+.issue__hit:disabled{cursor:default}
+.issue__hit:focus-visible{outline:none}
+/* content sits above the hit area; only the tooltip takes the pointer back */
+.issue__head,.issue__value,.issue__hint{position:relative;pointer-events:none}
+.issue .hint{pointer-events:auto;z-index:3}
 .issue--active{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
-.issue__head{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
+.issue__head{display:flex;align-items:center;gap:6px;width:100%}
+.issue__head .pill{margin-left:auto}
 .issue__label{font-size:var(--text-secondary);font-weight:600;color:var(--muted)}
 .issue__value{font-family:var(--display);font-size:27px;font-weight:800;margin-top:6px;color:var(--ink)}
 .issue__hint{font-size:var(--text-description);color:var(--muted)}
@@ -305,8 +328,11 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .decision-card h2{font-family:var(--display);font-size:17px;margin:12px 0 0}
 .decision-card p{font-size:var(--text-secondary);line-height:1.55;color:var(--muted);margin:6px 0 0}
 .decision-card__actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+/* a duplicate group StockLess already settled: a record, not a question */
+.decision-card--settled{background:var(--teal-tint);border-color:#CFE3DE;box-shadow:none}
+.decision-card__scope{font-size:var(--text-description);color:var(--muted);margin:8px 0 0}
 
-.evidence-section{align-self:stretch;margin-top:18px;padding:22px}
+.evidence-section{align-self:stretch;margin-top:13px;padding:17px}
 .dtable--readiness{min-width:1040px}
 .dtable--readiness th:nth-child(1){width:7%}
 .dtable--readiness th:nth-child(2){width:15%}
@@ -431,7 +457,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    Below 1330px there is no gutter left, so it is dropped rather than allowed
    behind the text. Decorative only — never intercepts a click. */
 .ws-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.ws-decor__side{position:absolute;top:0;bottom:0;width:calc((100% - 1180px) / 2);overflow:hidden}
+.ws-decor__side{position:absolute;top:0;bottom:0;width:calc((100% - var(--shell)) / 2);overflow:hidden}
 .ws-decor__side--left{left:0}
 .ws-decor__side--right{right:0;transform:scaleX(-1)}
 .ws-decor__side svg{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -534,28 +560,192 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    mapping table it runs past the narrow status column, so let it wrap there. */
 .dtable .mapping-status .pill{white-space:normal;line-height:1.35;text-align:left}
 
+/* ===== stock-age bands (US2.3) =====
+   Colours are fixed by AC8: #167D74 current, #D99120 getting old,
+   #9B3939 too old. Each band is named in words too, so the colour is
+   never the only signal. */
+.bands{align-self:stretch;margin-top:14px}
+.bands__bar{display:flex;gap:2px;height:14px;border-radius:7px;overflow:hidden;background:var(--line-soft)}
+.bands__seg{min-width:4px}
+.bands__legend{list-style:none;margin:11px 0 0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:7px 18px}
+.bands__legend li{display:grid;grid-template-columns:10px auto minmax(0,1fr) auto;align-items:center;
+  gap:7px;font-size:var(--text-description)}
+.bands__swatch{width:10px;height:10px;border-radius:3px}
+.bands__name{font-weight:700;color:var(--ink-2)}
+.bands__note{color:var(--muted)}
+.bands__count{font-family:var(--data);color:var(--ink-2)}
+
+/* AC2 — count date, age and label on one line */
+.freshness-card__line{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.freshness-card__line i{font-style:normal;color:var(--line)}
+.freshness-card__line strong{font-weight:700;color:var(--ink)}
+
+/* what Used and Left out mean, said in the open rather than on hover */
+.use-key{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0 0;
+  font-size:var(--text-description);color:var(--muted)}
+
+/* the scope statement now leads the screen instead of closing it */
+.validity--top{align-self:stretch;margin-top:14px}
+.footer-row--actions{justify-content:flex-end}
+
+
+/* ===== tidy-ups =====
+   Evidence, not work — one line each, folded away until asked for. */
+.tidyups{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:12px}
+.tidyups>summary{display:flex;align-items:center;gap:9px;cursor:pointer;list-style:none;
+  font-size:var(--text-secondary);font-weight:700;color:var(--ink-2)}
+.tidyups>summary::-webkit-details-marker{display:none}
+.tidyups>summary::before{content:"";width:0;height:0;flex:none;
+  border:4px solid transparent;border-left-color:var(--muted);transition:transform .15s ease}
+.tidyups[open]>summary::before{transform:rotate(90deg) translateX(-1px)}
+.tidyups__list{list-style:none;margin:11px 0 0;padding:0;display:grid;gap:7px}
+.tidyups__list li{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:var(--text-description);color:var(--muted)}
+.tidyups__list b{font-family:var(--data);color:var(--ink-2)}
+.tidyups__where{font-weight:600;color:var(--ink-2)}
+.tidyups__what{color:var(--muted)}
+
+
+/* ===== charts =====================================================
+   Thin marks, hairline recessive axes, 4px rounded data-ends anchored to
+   the baseline, a 2px surface gap between touching fills. Text never wears
+   the data colour — the mark beside it carries identity. */
+
+/* sub-cause bars inside an issue card */
+.minibars{position:relative;display:flex;align-items:flex-end;gap:8px;width:100%;margin-top:10px;
+  padding-top:2px;pointer-events:none}
+.minibars__col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
+.minibars__value{font-family:var(--data);font-size:var(--text-label);color:var(--muted);line-height:1}
+.minibars__track{width:100%;max-width:24px;height:30px;display:flex;align-items:flex-end}
+.minibars__fill{width:100%;border-radius:4px 4px 0 0;min-height:2px}
+.minibars__label{font-size:var(--text-label);line-height:1.2;color:var(--muted);text-align:center;
+  overflow-wrap:anywhere}
+
+/* weekly sales columns */
+.chart__plot{display:flex;align-items:flex-end;gap:2px;height:140px;padding-top:18px;
+  border-bottom:1px solid var(--line)}
+.chart__col{position:relative;flex:1;min-width:0;max-width:24px;height:100%;
+  display:flex;align-items:flex-end;justify-content:center}
+.chart__bar{width:100%;background:var(--teal);border-radius:4px 4px 0 0}
+.chart__cap{position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+  font-family:var(--data);font-size:var(--text-label);color:var(--muted);white-space:nowrap}
+.chart__axis{display:flex;justify-content:space-between;margin-top:6px;
+  font-size:var(--text-label);color:var(--muted);font-family:var(--data)}
+
+.chart-row{align-self:stretch;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+  gap:10px;margin-top:13px}
+.chart-card{margin-top:0}
+.chart-card__body{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:18px;align-items:end}
+
+.statgrid{display:grid;gap:10px;margin:0}
+.statgrid div{display:flex;flex-direction:column;gap:1px}
+.statgrid dt{font-size:var(--text-label);color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.statgrid dd{margin:0;font-family:var(--display);font-size:19px;font-weight:800;color:var(--ink);line-height:1.1}
+
+/* part-to-whole; every exact count lives in the legend, not on the arc */
+.donut{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:14px}
+.donut__ring{position:relative;flex:none}
+.donut__centre{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:1px;pointer-events:none}
+.donut__centre b{font-family:var(--display);font-size:22px;font-weight:800;color:var(--ink);line-height:1}
+.donut__centre span{font-size:var(--text-label);color:var(--muted)}
+.donut__legend{flex:1;min-width:190px;list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.donut__legend li{display:grid;grid-template-columns:10px minmax(0,1fr) auto 38px;align-items:center;
+  gap:8px;font-size:var(--text-description)}
+.donut__swatch{width:10px;height:10px;border-radius:3px}
+.donut__name{color:var(--ink-2);overflow-wrap:anywhere}
+.donut__count,.donut__share{font-family:var(--data);color:var(--muted);text-align:right}
+
+/* one column per week; a missing week is a gap, never a zero-height bar */
+.weekchart{display:flex;align-items:flex-end;gap:3px;height:52px;margin-top:10px;
+  padding-bottom:5px;border-bottom:1px solid var(--line)}
+.weekchart__col{position:relative;flex:1;min-width:6px;max-width:22px;height:100%;
+  display:flex;align-items:flex-end}
+.weekchart__mark{width:100%;border-radius:4px 4px 0 0}
+.weekchart__col--observed_demand .weekchart__mark{background:var(--teal)}
+/* recorded a real zero: a solid baseline tick, so it is not mistaken for a gap */
+.weekchart__col--confirmed_zero_sales .weekchart__mark{height:3px;background:var(--teal-deep);border-radius:2px}
+/* activity that nets to zero: outlined, distinct from both zero and missing */
+.weekchart__col--net_zero_with_activity .weekchart__mark{height:9px;border:1.5px solid var(--teal);
+  background:#fff;border-radius:3px}
+/* no data at all: hatched, never a bar — "no data" is not "no sales" */
+.weekchart__col--missing .weekchart__mark{height:9px;border-radius:3px;
+  border:1px dashed #6E7B80;
+  background:repeating-linear-gradient(45deg,#C6D6D1 0 3px,#FFFFFF 3px 6px)}
+
+.weekchart-key{display:flex;flex-wrap:wrap;gap:12px;margin-top:9px;
+  font-size:var(--text-label);color:var(--muted)}
+.weekchart-key span{display:inline-flex;align-items:center;gap:5px}
+.weekchart-key i{width:12px;height:9px;border-radius:3px;display:inline-block}
+
+@media (max-width:1100px){
+  .chart-row{grid-template-columns:1fr}
+  .chart-card__body{grid-template-columns:1fr;align-items:stretch}
+  .statgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .minibars{gap:5px}
+  .minibars__label{display:none}
+}
+
+/* ===== readiness result (US2.1 AC1) =====
+   Can continue / Must fix / Next step, so the outcome is legible before the
+   table. The three cells read left to right as: what works, what does not,
+   what to do about it. */
+.verdict{align-self:stretch;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:11px}
+.verdict__cell{display:flex;flex-direction:column;gap:2px;padding:15px 17px;border-radius:14px;
+  border:1px solid var(--line);background:#fff}
+.verdict__cell--go{background:var(--teal-tint);border-color:#CFE3DE}
+.verdict__cell--fix{background:#FDF3F2;border-color:#F0D6D2}
+.verdict__label{font-size:var(--text-eyebrow);font-weight:800;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--muted)}
+.verdict__value{font-family:var(--display);font-size:27px;font-weight:800;color:var(--ink);line-height:1.1}
+.verdict__note,.verdict__next{font-size:var(--text-description);line-height:1.5;color:var(--muted);margin:0}
+.verdict__next{margin-top:5px}
+.verdict__cell--next .btn{margin-top:10px;align-self:flex-start}
+
+/* ===== find one product without reading the table (US2.1 AC2) ===== */
+.issue-search{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.issue-search__field{display:flex;align-items:center;gap:8px;flex:1 1 240px;min-width:0;
+  padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--muted)}
+.issue-search__field:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.issue-search__field input{flex:1;min-width:0;border:0;outline:0;background:none;
+  font-family:var(--body);font-size:var(--text-body);color:var(--ink)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+@media (max-width:900px){ .verdict{grid-template-columns:1fr} }
+
 /* ===== field help =====
    The attribute descriptions used to sit under every label, which made the
    mapping table a wall of prose. They are tooltips now: the table scans, and
    the explanation is one hover or tap away. aria-label carries the same text,
    so it reaches screen readers whether or not the bubble is shown. */
 .field-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.hint{position:relative;width:18px;height:18px;flex:none;padding:0;border:0;border-radius:50%;
+/* The bubble is a SIBLING of the button, not its child: a <button> will not
+   size an absolutely positioned descendant from its content, so the text
+   spilled out of the dark box. The wrapper is the positioning context. */
+.hint{position:relative;display:inline-flex;flex:none}
+.hint__btn{width:18px;height:18px;padding:0;border:0;border-radius:50%;
   background:#E7EFEC;color:#5C7A72;font-family:var(--body);font-size:var(--text-label);font-weight:800;
   line-height:1;cursor:help;display:inline-flex;align-items:center;justify-content:center}
-.hint:hover,.hint:focus-visible{background:var(--teal-tint);color:var(--teal-deep)}
-.hint__bubble{position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);
-  width:230px;padding:10px 12px;border-radius:10px;background:var(--ink);color:#F3FAF8;
+.hint__btn:hover,.hint__btn:focus-visible{background:var(--teal-tint);color:var(--teal-deep)}
+.hint__bubble{position:absolute;left:-10px;bottom:calc(100% + 9px);
+  width:260px;max-width:min(260px,calc(100vw - 48px));padding:10px 12px;border-radius:10px;background:var(--ink);color:#F3FAF8;
   font-size:var(--text-description);font-weight:400;line-height:1.45;text-align:left;
   opacity:0;visibility:hidden;transition:opacity .13s ease;z-index:5;pointer-events:none;
   box-shadow:0 8px 24px rgba(22,49,59,.22)}
-.hint__bubble::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+.hint__bubble::after{content:"";position:absolute;top:100%;left:19px;
   border:6px solid transparent;border-top-color:var(--ink)}
-.hint:hover .hint__bubble,.hint:focus-visible .hint__bubble{opacity:1;visibility:visible}
+.hint:hover .hint__bubble,.hint__btn:focus-visible ~ .hint__bubble{opacity:1;visibility:visible}
 /* near the top of the table there is no room above, so it flips below */
 .dtable tbody tr:first-child .hint__bubble{bottom:auto;top:calc(100% + 9px)}
 .dtable tbody tr:first-child .hint__bubble::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--ink)}
-@media (max-width:760px){ .hint__bubble{width:190px} }
+/* flipped when a left-anchored bubble would run off the right edge */
+.hint__bubble--end{left:auto;right:-10px}
+.hint__bubble--end::after{left:auto;right:19px}
+@media (max-width:760px){ .hint__bubble{width:210px} }
 
 /* ===== the workflow grows =====
    🌱 → 🌿 → 🍃 → 🌳 across the four steps. Steps not yet reached are drained
@@ -664,7 +854,7 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
             <button class="btn btn--ghost" data-i18n="s1.drop.sample" type="button">Use sample file</button>
           </div>
           <p class="dropzone__limits" data-i18n="s1.drop.limits">.CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated</p>
-          <ol class="value-chain"><li><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5h8l4 4v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-18a1 1 0 0 1 1-1Z"/><path d="M14 2.5v4h4M8.5 12h7M8.5 15.5h7M8.5 19h4"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.1">Your sales data</span></span></li><li><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5h17"/><rect x="5.5" y="12" width="3.6" height="6" rx="1.1"/><rect x="10.2" y="7.5" width="3.6" height="10.5" rx="1.1"/><rect x="14.9" y="10" width="3.6" height="8" rx="1.1"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.2">Demand insights</span></span></li><li><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 20.5 7v10L12 21.2 3.5 17V7Z"/><path d="M3.5 7 12 11.4 20.5 7M12 11.4v9.8"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.3">Smarter restocking</span></span></li><li class="value-chain__end"><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c0 8.5-4.6 13-10 13a6 6 0 0 1-6-6C4 6.5 10.5 4 20 4Z"/><path d="M4.5 20.5C7 15 11 11.5 15.5 9.5"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.4">Less waste</span></span></li></ol>
+          <ol class="value-chain"><li><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5h8l4 4v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-18a1 1 0 0 1 1-1Z"/><path d="M14 2.5v4h4M8.5 12h7M8.5 15.5h7M8.5 19h4"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.1">Your sales data</span></span></li><li><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5h17"/><rect x="5.5" y="12" width="3.6" height="6" rx="1.1"/><rect x="10.2" y="7.5" width="3.6" height="10.5" rx="1.1"/><rect x="14.9" y="10" width="3.6" height="8" rx="1.1"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.2">Demand insights</span></span></li><li><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 20.5 7v10L12 21.2 3.5 17V7Z"/><path d="M3.5 7 12 11.4 20.5 7M12 11.4v9.8"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.3">Smarter restocking</span></span></li><li class="value-chain__end"><span class="value-chain__step"><span class="value-chain__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c0 8.5-4.6 13-10 13a6 6 0 0 1-6-6C4 6.5 10.5 4 20 4Z"/><path d="M4.5 20.5C7 15 11 11.5 15.5 9.5"/></svg></span><span class="value-chain__label" data-i18n="s1.chain.4">Your impact, measured</span></span></li></ol>
         </div>
         <div class="privacy">
           <span class="privacy__tick" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></svg></span>
@@ -679,7 +869,7 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
    node carries data-i18n; switching language rewrites their text and the
    document language, so the right font and line-breaking rules apply. */
 (function () {
-  var T = {"en": {"s1.eyebrow": "Start with what you already have", "s1.title": "Upload your existing sales file.", "s1.lede": "Required data is enough to get started. Optional data unlocks deeper insights.", "s1.guide.heading": "What do you need to get started?", "s1.guide.intro": "Start with the three required attributes. Optional attributes unlock additional insights.", "s1.required": "Required data", "s1.required.count": "3 attributes", "s1.attr.required": "Required", "s1.attr.1.name": "Sale date", "s1.attr.1.desc": "The date each sale or return was recorded.", "s1.attr.2.name": "Product identification", "s1.attr.2.desc": "Choose one of the accepted formats to keep products and pack sizes separate.", "s1.attr.2.form1": "SKU, barcode or product code", "s1.attr.2.form2": "Product name + pack size", "s1.attr.3.name": "Quantity sold", "s1.attr.3.desc": "The quantity sold or returned in each record.", "s1.drop.title": "Drop your CSV file here", "s1.drop.desc": "Use the export from your POS, marketplace or spreadsheet.", "s1.drop.choose": "Choose CSV file", "s1.drop.sample": "Use sample file", "s1.drop.limits": ".CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated", "s1.chain.1": "Your sales data", "s1.chain.2": "Demand insights", "s1.chain.3": "Smarter restocking", "s1.chain.4": "Less waste", "s1.privacy.title": "Your data stays on your device.", "s1.privacy.body": "Your CSV is processed directly in this browser. Your sales rows and product identifiers are not uploaded to an AI or API service.", "s1.back": "Back to the homepage", "s1.continue": "Continue to column matching", "nav.homepage": "Homepage", "lang.label": "Language", "step.1": "Upload", "step.2": "Map columns", "step.3": "Check readiness", "step.4": "Plan purchases"}, "ms": {"s1.eyebrow": "Mulakan dengan apa yang anda sudah ada", "s1.title": "Muat naik fail jualan sedia ada anda.", "s1.lede": "Data yang diperlukan sudah cukup untuk bermula. Data pilihan membuka pandangan yang lebih mendalam.", "s1.guide.heading": "Apa yang anda perlukan untuk bermula?", "s1.guide.intro": "Mulakan dengan tiga atribut yang diperlukan. Atribut pilihan membuka pandangan tambahan.", "s1.required": "Data diperlukan", "s1.required.count": "3 atribut", "s1.attr.required": "Diperlukan", "s1.attr.1.name": "Tarikh jualan", "s1.attr.1.desc": "Tarikh setiap jualan atau pemulangan direkodkan.", "s1.attr.2.name": "Pengenalan produk", "s1.attr.2.desc": "Pilih salah satu format yang diterima supaya produk dan saiz pek kekal berasingan.", "s1.attr.2.form1": "SKU, kod bar atau kod produk", "s1.attr.2.form2": "Nama produk + saiz pek", "s1.attr.3.name": "Kuantiti dijual", "s1.attr.3.desc": "Kuantiti yang dijual atau dipulangkan dalam setiap rekod.", "s1.drop.title": "Lepaskan fail CSV anda di sini", "s1.drop.desc": "Guna eksport daripada POS, pasaran dalam talian atau hamparan anda.", "s1.drop.choose": "Pilih fail CSV", "s1.drop.sample": "Guna fail contoh", "s1.drop.limits": ".CSV · Sehingga 10 MiB · 100,000 baris · Dipisah koma, koma bertitik atau tab", "s1.chain.1": "Data jualan anda", "s1.chain.2": "Pandangan permintaan", "s1.chain.3": "Belian lebih bijak", "s1.chain.4": "Kurang pembaziran", "s1.privacy.title": "Data anda kekal pada peranti anda.", "s1.privacy.body": "Fail CSV anda diproses terus dalam pelayar ini. Baris jualan dan pengenalan produk anda tidak dimuat naik ke mana-mana perkhidmatan AI atau API.", "s1.back": "Kembali ke laman utama", "s1.continue": "Teruskan ke padanan lajur", "nav.homepage": "Laman utama", "lang.label": "Bahasa", "step.1": "Muat naik", "step.2": "Padan lajur", "step.3": "Semak kesediaan", "step.4": "Rancang belian"}, "zh": {"s1.eyebrow": "从您现有的资料开始", "s1.title": "上传您现有的销售文件。", "s1.lede": "必填数据已足以开始。选填数据可带来更深入的洞察。", "s1.guide.heading": "开始前需要准备什么？", "s1.guide.intro": "先准备三项必填属性。选填属性可解锁更多洞察。", "s1.required": "必填数据", "s1.required.count": "3 项属性", "s1.attr.required": "必填", "s1.attr.1.name": "销售日期", "s1.attr.1.desc": "每笔销售或退货记录的日期。", "s1.attr.2.name": "产品识别", "s1.attr.2.desc": "请选择一种可接受的格式，让产品与包装规格分开记录。", "s1.attr.2.form1": "SKU、条形码或产品编号", "s1.attr.2.form2": "产品名称 + 包装规格", "s1.attr.3.name": "销售数量", "s1.attr.3.desc": "每笔记录中售出或退回的数量。", "s1.drop.title": "将 CSV 文件拖到这里", "s1.drop.desc": "使用您的收银系统、电商平台或表格导出的文件。", "s1.drop.choose": "选择 CSV 文件", "s1.drop.sample": "使用示例文件", "s1.drop.limits": ".CSV · 最大 10 MiB · 100,000 行 · 逗号、分号或制表符分隔", "s1.chain.1": "您的销售数据", "s1.chain.2": "需求洞察", "s1.chain.3": "更聪明的补货", "s1.chain.4": "减少浪费", "s1.privacy.title": "您的数据保留在您的设备上。", "s1.privacy.body": "您的 CSV 文件直接在此浏览器中处理。您的销售记录和产品标识不会上传到任何 AI 或 API 服务。", "s1.back": "返回首页", "s1.continue": "继续进行列匹配", "nav.homepage": "首页", "lang.label": "语言", "step.1": "上传", "step.2": "匹配列", "step.3": "检查就绪", "step.4": "规划采购"}};
+  var T = {"en": {"s1.eyebrow": "Start with what you already have", "s1.title": "Upload your existing sales file.", "s1.lede": "Required data is enough to get started. Optional data unlocks deeper insights.", "s1.guide.heading": "What do you need to get started?", "s1.guide.intro": "Start with the three required attributes. Optional attributes unlock additional insights.", "s1.required": "Required data", "s1.required.count": "3 attributes", "s1.attr.required": "Required", "s1.attr.1.name": "Sale date", "s1.attr.1.desc": "The date each sale or return was recorded.", "s1.attr.2.name": "Product identification", "s1.attr.2.desc": "Choose one of the accepted formats to keep products and pack sizes separate.", "s1.attr.2.form1": "SKU, barcode or product code", "s1.attr.2.form2": "Product name + pack size", "s1.attr.3.name": "Quantity sold", "s1.attr.3.desc": "The quantity sold or returned in each record.", "s1.drop.title": "Drop your CSV file here", "s1.drop.desc": "Use the export from your POS, marketplace or spreadsheet.", "s1.drop.choose": "Choose CSV file", "s1.drop.sample": "Use sample file", "s1.drop.limits": ".CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated", "s1.chain.1": "Your sales data", "s1.chain.2": "Demand insights", "s1.chain.3": "Smarter restocking", "s1.chain.4": "Your impact, measured", "s1.privacy.title": "Your data stays on your device.", "s1.privacy.body": "Your CSV is processed directly in this browser. Your sales rows and product identifiers are not uploaded to an AI or API service.", "s1.back": "Back to the homepage", "s1.continue": "Continue to column matching", "f.cost": "Unit cost", "f.cost.d": "What you pay your supplier for one unit. Leave it out and StockLess estimates from Malaysian shelf prices.", "s2.unlock.4": "Your own cost savings and impact figures", "nav.homepage": "Homepage", "lang.label": "Language", "step.1": "Upload", "step.2": "Map columns", "step.3": "Check readiness", "step.4": "Plan purchases"}, "ms": {"s1.eyebrow": "Mulakan dengan apa yang anda sudah ada", "s1.title": "Muat naik fail jualan sedia ada anda.", "s1.lede": "Data yang diperlukan sudah cukup untuk bermula. Data pilihan membuka pandangan yang lebih mendalam.", "s1.guide.heading": "Apa yang anda perlukan untuk bermula?", "s1.guide.intro": "Mulakan dengan tiga atribut yang diperlukan. Atribut pilihan membuka pandangan tambahan.", "s1.required": "Data diperlukan", "s1.required.count": "3 atribut", "s1.attr.required": "Diperlukan", "s1.attr.1.name": "Tarikh jualan", "s1.attr.1.desc": "Tarikh setiap jualan atau pemulangan direkodkan.", "s1.attr.2.name": "Pengenalan produk", "s1.attr.2.desc": "Pilih salah satu format yang diterima supaya produk dan saiz pek kekal berasingan.", "s1.attr.2.form1": "SKU, kod bar atau kod produk", "s1.attr.2.form2": "Nama produk + saiz pek", "s1.attr.3.name": "Kuantiti dijual", "s1.attr.3.desc": "Kuantiti yang dijual atau dipulangkan dalam setiap rekod.", "s1.drop.title": "Lepaskan fail CSV anda di sini", "s1.drop.desc": "Guna eksport daripada POS, pasaran dalam talian atau hamparan anda.", "s1.drop.choose": "Pilih fail CSV", "s1.drop.sample": "Guna fail contoh", "s1.drop.limits": ".CSV · Sehingga 10 MiB · 100,000 baris · Dipisah koma, koma bertitik atau tab", "s1.chain.1": "Data jualan anda", "s1.chain.2": "Pandangan permintaan", "s1.chain.3": "Belian lebih bijak", "s1.chain.4": "Kesan anda, diukur", "s1.privacy.title": "Data anda kekal pada peranti anda.", "s1.privacy.body": "Fail CSV anda diproses terus dalam pelayar ini. Baris jualan dan pengenalan produk anda tidak dimuat naik ke mana-mana perkhidmatan AI atau API.", "s1.back": "Kembali ke laman utama", "s1.continue": "Teruskan ke padanan lajur", "f.cost": "Kos seunit", "f.cost.d": "Jumlah yang anda bayar kepada pembekal bagi satu unit. Jika tiada, StockLess menganggarkan daripada harga pasaran Malaysia.", "s2.unlock.4": "Angka penjimatan kos dan kesan anda sendiri", "nav.homepage": "Laman utama", "lang.label": "Bahasa", "step.1": "Muat naik", "step.2": "Padan lajur", "step.3": "Semak kesediaan", "step.4": "Rancang belian"}, "zh": {"s1.eyebrow": "从您现有的资料开始", "s1.title": "上传您现有的销售文件。", "s1.lede": "必填数据已足以开始。选填数据可带来更深入的洞察。", "s1.guide.heading": "开始前需要准备什么？", "s1.guide.intro": "先准备三项必填属性。选填属性可解锁更多洞察。", "s1.required": "必填数据", "s1.required.count": "3 项属性", "s1.attr.required": "必填", "s1.attr.1.name": "销售日期", "s1.attr.1.desc": "每笔销售或退货记录的日期。", "s1.attr.2.name": "产品识别", "s1.attr.2.desc": "请选择一种可接受的格式，让产品与包装规格分开记录。", "s1.attr.2.form1": "SKU、条形码或产品编号", "s1.attr.2.form2": "产品名称 + 包装规格", "s1.attr.3.name": "销售数量", "s1.attr.3.desc": "每笔记录中售出或退回的数量。", "s1.drop.title": "将 CSV 文件拖到这里", "s1.drop.desc": "使用您的收银系统、电商平台或表格导出的文件。", "s1.drop.choose": "选择 CSV 文件", "s1.drop.sample": "使用示例文件", "s1.drop.limits": ".CSV · 最大 10 MiB · 100,000 行 · 逗号、分号或制表符分隔", "s1.chain.1": "您的销售数据", "s1.chain.2": "需求洞察", "s1.chain.3": "更聪明的补货", "s1.chain.4": "量化您的成效", "s1.privacy.title": "您的数据保留在您的设备上。", "s1.privacy.body": "您的 CSV 文件直接在此浏览器中处理。您的销售记录和产品标识不会上传到任何 AI 或 API 服务。", "s1.back": "返回首页", "s1.continue": "继续进行列匹配", "f.cost": "单位成本", "f.cost.d": "您向供应商为每一单位支付的金额。若没有，StockLess 会依据马来西亚市场价格估算。", "s2.unlock.4": "属于您自己的成本节省与成效数字", "nav.homepage": "首页", "lang.label": "语言", "step.1": "上传", "step.2": "匹配列", "step.3": "检查就绪", "step.4": "规划采购"}};
   var HTML_LANG = { en: 'en', ms: 'ms', zh: 'zh-Hans' };
   var select = document.querySelector('.language-switcher select');
 

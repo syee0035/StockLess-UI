@@ -12,11 +12,20 @@
   --red:#9B3939; --red-tint:#FBE8E8;
   --amber:#8B5C10; --amber-tint:#FFF4DF; --amber-strong:#D99120;
   --page:#FFFFFF;
-  /* Type scale — the same tokens and values the homepage uses, so the app and
-     the marketing site read as one product. Sizes below are set from these. */
-  --text-page-title:36px; --text-lead:18px; --text-section-head:20px;
-  --text-body:15px; --text-secondary:13px; --text-description:12px;
-  --text-eyebrow:11px; --text-label:10px;
+  /* Type scale — I3-TYPO-01 (Iteration 3 V2), which supersedes every earlier
+     font-size requirement including US1.1 AC7's 36px page title. The same
+     tokens drive the homepage, so the app and the marketing site read as one
+     product. I3-UI AC1 forbids a smaller local override of any role, and the
+     standard sets a hard floor: no interface text below label.
+       page-title 40 Manrope 700     body        16 Source Sans 3 400
+       lead       20 Source Sans 3   secondary   15 Source Sans 3 400
+       section-head 22 Manrope 700   description 14 Source Sans 3 400
+                                     eyebrow     13 Source Sans 3 700
+                                     label       12 Source Sans 3 700
+     numeric-data inherits its role's size in Inter 600-700. */
+  --text-page-title:40px; --text-lead:20px; --text-section-head:22px;
+  --text-body:16px; --text-secondary:15px; --text-description:14px;
+  --text-eyebrow:13px; --text-label:12px;
   --shadow-card:0 10px 30px rgba(22,49,59,.05);
   --display:"Manrope",-apple-system,BlinkMacSystemFont,sans-serif;
   --body:"Source Sans 3",-apple-system,BlinkMacSystemFont,sans-serif;
@@ -596,13 +605,23 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
   display:flex;align-items:center;justify-content:center;font-weight:800}
 .attention__head h2{font-family:var(--display);font-size:17px;font-weight:700;margin:0;color:#7E2E2E}
 .attention__head p{font-size:var(--text-description);color:var(--muted);margin:3px 0 0}
-.attention__sort{margin-left:auto;flex:none}
+.attention__search{display:flex;align-items:center;gap:7px;margin-left:auto;flex:0 1 220px;min-width:0;
+  padding:6px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--muted)}
+.attention__search:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.attention__search input{flex:1;min-width:0;border:0;outline:0;background:none;
+  font-family:var(--body);font-size:var(--text-description);color:var(--ink)}
+.attention__sort{flex:none}
 .attention__sort select{font-family:var(--body);font-size:var(--text-description);color:var(--ink-2);
   padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
 
 .pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-top:12px}
 .pcard{display:flex;flex-direction:column;gap:10px;padding:15px;background:#fff;
   border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-card)}
+/* US2.3 AC8 — the freshness state is carried on the card's left edge, in the
+   colours the spec fixes. The product card IS the freshness card now. */
+.pcard--ready{border-left:4px solid #167D74}
+.pcard--review{border-left:4px solid #D99120}
+.pcard--missing{border-left:4px solid #9B3939}
 .pcard__head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .pcard__name{display:block;font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
 .pcard__code{display:block;font-size:var(--text-description);color:var(--muted);margin-top:2px}
@@ -634,8 +653,10 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .spark--labelled .spark__bar{background:#B9DED4}
 .spark__bar--missing{height:7px;border:1px dashed #6E7B80;background:transparent;border-radius:3px}
 
+/* US2.3 AC8's "current" colour: the ready group is the products whose stock
+   count is still current, so it carries the same left edge as the cards. */
 .readylist{align-self:stretch;margin-top:16px;padding:13px 16px;background:#F1F8F5;
-  border:1px solid #CFE3DE;border-radius:14px}
+  border:1px solid #CFE3DE;border-left:4px solid #167D74;border-radius:14px}
 .readylist>summary{display:flex;align-items:center;gap:11px;cursor:pointer;list-style:none}
 .readylist>summary::-webkit-details-marker{display:none}
 .readylist__tick{width:30px;height:30px;flex:none;border-radius:50%;background:var(--teal);color:#fff;
@@ -656,7 +677,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 @media (max-width:900px){
   .summary{grid-template-columns:1fr}
   .attention__head{flex-wrap:wrap}
-  .attention__sort{margin-left:0;width:100%}
+  .attention__sort,.attention__search{margin-left:0;width:100%;flex:1 1 100%}
   .attention__sort select{width:100%}
 }
 
@@ -702,8 +723,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .problems__list{display:grid;gap:9px;margin-top:13px}
 .problems__download{margin-top:13px}
 
-.igroup{border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.igroup>summary{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;list-style:none}
+.igroup{border:1px solid var(--line);border-radius:12px}
+.igroup>summary{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;list-style:none;border-radius:11px}
+.igroup[open]>summary{border-radius:11px 11px 0 0}
 .igroup>summary::-webkit-details-marker{display:none}
 .igroup__icon{width:22px;height:22px;flex:none;border-radius:50%;color:#fff;font-weight:800;
   font-size:var(--text-description);display:flex;align-items:center;justify-content:center}
@@ -927,6 +949,244 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .unlocks__list li:last-child{margin-bottom:0}
 .unlocks__list b{display:block;font-size:var(--text-secondary);color:var(--ink)}
 .unlocks__list span{color:var(--muted)}
+
+/* ===== thumb ergonomics on a phone =====
+   Everything above was sized for a mouse pointer. A finger is about 9mm
+   across, so on a touch-width screen the standalone controls grow to 44px —
+   Apple's and Material's floor — and the small text token goes up a step so
+   nothing sits at 10px in the hand.
+
+   The inline "i" dots are the deliberate exception. They live mid-sentence
+   next to a label; pushing them to 44px would either break the line box or
+   overlap the control beside them and steal its taps. They go to 28px, which
+   clears WCAG 2.5.8 Target Size (Minimum, 24x24) on its own, and the label
+   they belong to stays tappable too. */
+@media (max-width:768px){
+  /* standalone controls: full thumb target */
+  .btn--small{min-height:44px;padding:10px 16px}
+  .btn--link{min-height:44px;display:inline-flex;align-items:center;padding:1px 8px}
+  .topbar .workspace-home-link{min-height:44px;padding-top:12px;padding-bottom:12px}
+  .language-switcher select,
+  .frame .language-switcher select{min-height:44px}
+  .pcard__action{min-height:44px}
+
+  /* selects and search fields: the row height is the target */
+  .frame select,
+  .frame input[type="text"],
+  .frame input[type="search"]{min-height:44px}
+
+  /* inline help dots: 28px, still inside the line */
+  .hint__btn{width:28px;height:28px;font-size:13px}
+}
+
+/* ===== a table is not a phone layout =====
+   Step 2's mapping grid and Step 3's ready list are four and five columns
+   wide. On a 390px screen they either squeeze every column to nothing or
+   force the page sideways, and neither is readable. Below 768px each row
+   becomes its own card: the first cell is the card's title, and every other
+   cell states the column it came from, taken from its data-label.
+
+   The header row goes to screen readers only, because the labels now sit
+   inside each card and a visible header would just repeat them. */
+@media (max-width:768px){
+  .dtable--cards{display:block;min-width:0;table-layout:auto}
+
+  .dtable--cards thead{position:absolute;width:1px;height:1px;
+    overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+  .dtable--cards tbody{display:block}
+  .dtable--cards tbody tr{display:block;padding:15px 16px;margin-bottom:12px;
+    border:1px solid var(--line);border-radius:14px;background:#fff}
+  .dtable--cards tbody tr:last-child{margin-bottom:0}
+
+  /* label left, value right — the row reads as "Stock age … 12 days" */
+  .dtable--cards td{display:flex;gap:14px;align-items:baseline;
+    justify-content:space-between;text-align:right;
+    padding:9px 0;border-bottom:1px solid var(--line-soft)}
+  .dtable--cards td::before{content:attr(data-label);flex:none;text-align:left;
+    font-family:var(--body);font-size:var(--text-description);font-weight:700;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.55px}
+  .dtable--cards tbody tr td:last-child{border-bottom:0;padding-bottom:0}
+
+  /* the first cell is the heading of the card, so it keeps the full width */
+  .dtable--cards td.dtable__title{display:block;text-align:left;
+    padding:0 0 11px;border-bottom:1px solid var(--line)}
+  .dtable--cards td.dtable__title::before{content:none}
+
+  /* controls inside a card take the room the value side has */
+  .dtable--cards td .select{flex:1;min-width:0;width:100%}
+  .dtable--cards td .mapping-status{align-items:flex-end}
+  .dtable--cards td .spark{justify-content:flex-end}
+
+  /* nothing to scroll sideways any more */
+  .table-scroll:has(.dtable--cards),
+  .table-scroll--x:has(.dtable--cards){overflow-x:visible}
+}
+
+/* ===== learn more =====
+   Flashcards. Each card shows a question; activating it turns the card over
+   to the answer, and activating it again turns it back.
+
+   Still <details>/<summary> underneath, so the keyboard, the open state and
+   the screen-reader announcement stay the browser's job — the flip is only
+   what [open] looks like. That matters: a hand-rolled flip card is usually a
+   div that no keyboard can reach and no screen reader can describe.
+
+   The two faces are stacked in a grid cell rather than absolutely positioned,
+   so the card is as tall as its longest face and the answer can never be
+   clipped (I3-UI AC2). rotateY is applied only where the browser says motion
+   is welcome; otherwise the faces simply cross-fade. */
+.learn{margin-top:28px}
+.learn__title{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0;letter-spacing:-.2px}
+.learn__lede{margin:7px 0 0;font-size:var(--text-body);color:var(--muted);max-width:56ch}
+.learn__list{margin-top:14px}
+
+/* <summary> has to be a direct child of <details>, so the flip lives on the
+   <details> itself rather than on an inner wrapper. The perspective belongs
+   to the parent, since it applies to a box's children. */
+.learn__list{perspective:1400px}
+.learn__item{display:grid;border-radius:16px;background:none;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+/* Chrome renders a <details>'s content inside a UA slot, so the answer is
+   not itself the grid item there — ::details-content is. Browsers without
+   that pseudo-element place the <p> directly, so both are pinned to the same
+   cell and the card ends up as tall as its taller face either way. */
+.learn__item > *{grid-area:1/1;min-width:0}
+.learn__item::details-content{grid-area:1/1;min-width:0;
+  transform-style:preserve-3d;content-visibility:visible;block-size:auto}
+.learn__item + .learn__item{margin-top:10px}
+.learn__item[open]{transform:rotateY(180deg)}
+
+.learn__q,.learn__a{border-radius:16px;backface-visibility:hidden;
+  -webkit-backface-visibility:hidden}
+
+.learn__q{display:flex;align-items:center;gap:12px;padding:20px 18px;cursor:pointer;
+  background:var(--teal-tint);list-style:none;min-height:104px;
+  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
+.learn__q::-webkit-details-marker{display:none}
+.learn__q:hover{background:#DDEDE8}
+.learn__item:focus-within .learn__q{outline:2px solid var(--teal);outline-offset:2px}
+.learn__icon{font-size:24px;line-height:1;flex:none}
+.learn__qtext{flex:1;min-width:0}
+
+/* the corner turn: a folded page edge that says "there is a back to this" */
+.learn__chevron{flex:none;align-self:flex-end;width:16px;height:16px;
+  border-radius:3px 0 16px 0;background:linear-gradient(135deg,transparent 48%,var(--mint) 50%)}
+
+.learn__a{margin:0;padding:20px 18px;background:var(--ink);color:#EAF5F2;
+  transform:rotateY(180deg);cursor:pointer;
+  font-family:var(--body);font-size:var(--text-secondary);line-height:1.6;
+  display:flex;align-items:center}
+
+/* Without 3-D transforms the back face would sit on top of the front, so the
+   faces are faded instead and only the active one takes pointer events. */
+@media(prefers-reduced-motion:reduce){
+  .learn__item{transition:none;transform:none!important}
+  .learn__q,.learn__a{transform:none;backface-visibility:visible;transition:opacity .15s ease}
+  .learn__a{opacity:0;pointer-events:none}
+  .learn__item[open] .learn__q{opacity:0;pointer-events:none}
+  .learn__item[open] .learn__a{opacity:1;pointer-events:auto}
+}
+
+/* the homepage grid: four cards, two up */
+.learn--cards .learn__list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.learn--cards .learn__item + .learn__item{margin-top:0}
+
+@media (max-width:900px){
+  .learn--cards .learn__list{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .learn__q{padding:18px 16px;gap:11px;min-height:96px}
+  .learn__a{padding:18px 16px;font-size:var(--text-body)}
+}
+
+/* ===== impact dashboard =====
+   An impact story, not an analytics console: one figure per card, its unit
+   next to it, and the basis for it underneath in plain words. Two of the
+   three cards carry no number, so they are styled as clearly unlocked-later
+   rather than as a zero or an error — a muted fill, no big figure, and the
+   sentence that says what would fill them. */
+/* The page shell already sets the width. Capping the section at 1000px left
+   a third of a 1440 screen empty, which §5 asks us to avoid — so the cards
+   and the SDG band use the full shell and only the prose is measured. */
+.impact{max-width:none}
+.impact__title{font-family:var(--display);font-size:var(--text-page-title);
+  font-weight:700;margin:6px 0 0;letter-spacing:-.8px}
+.impact__lede{margin:10px 0 0;font-size:var(--text-lead);line-height:1.55;
+  color:var(--muted);max-width:68ch}
+
+.impact__cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.icard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;
+  box-shadow:var(--shadow-card);display:flex;flex-direction:column}
+.icard--figure{background:var(--teal-tint);border-color:#CFE4DE}
+.icard--locked{background:#F7FAF9}
+.icard__icon{font-size:22px;line-height:1}
+.icard__label{margin-top:12px;font-family:var(--display);font-size:var(--text-description);
+  font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.icard__value{margin:7px 0 0;font-family:var(--display);font-size:38px;font-weight:700;
+  line-height:1.1;letter-spacing:-1.4px;color:var(--ink)}
+.icard__unit{margin-left:7px;font-size:var(--text-body);font-weight:600;color:var(--muted)}
+/* An unlocked-later card must not shout as loudly as the card that has a
+   real number — at 18px bold it out-weighed the one figure on the page. */
+.icard__value--locked{font-size:var(--text-body);font-weight:600;color:var(--muted-2);
+  letter-spacing:0;line-height:1.4}
+.icard__caption{margin:6px 0 0;font-size:var(--text-body);font-weight:600;color:var(--ink-2)}
+.icard__basis{margin:9px 0 0;font-size:var(--text-secondary);line-height:1.55;color:var(--muted)}
+
+/* the per-product working behind the one real figure */
+.impact__lines{margin-top:24px;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.impact__lines h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0 0 4px}
+.impact__lines ul{list-style:none;margin:0;padding:0}
+.impact__lines li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.impact__lines li:last-child{border-bottom:0;padding-bottom:0}
+.impact__lname{display:flex;align-items:baseline;gap:9px;min-width:0;flex-wrap:wrap}
+.impact__lname .num{font-size:var(--text-secondary);color:var(--muted)}
+.impact__lunits{flex:none;font-family:var(--display);font-weight:700;text-align:right}
+.impact__lunits span{font-family:var(--body);font-weight:400;font-size:var(--text-secondary);
+  color:var(--muted);margin-left:6px}
+
+.impact__sdg{display:flex;gap:18px;align-items:flex-start;margin-top:24px;padding:22px;
+  border-radius:18px;background:#BD8C2B;color:#fff}
+.impact__sdg-mark{flex:none;font-family:var(--display);font-size:46px;font-weight:800;
+  line-height:1;letter-spacing:-3px}
+.impact__sdg h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0}
+.impact__sdg p{margin:8px 0 0;font-size:var(--text-body);line-height:1.6;max-width:62ch}
+.impact__sdg-link{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;
+  color:#fff;font-weight:700;font-size:var(--text-secondary);text-decoration:underline}
+
+.impact__method{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);
+  font-size:var(--text-secondary);line-height:1.6;color:var(--muted);max-width:76ch}
+.impact__actions{margin-top:20px}
+
+@media (max-width:1100px){
+  .impact__cards{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .impact__cards{grid-template-columns:1fr;gap:12px}
+  .impact__title{font-size:30px}
+  .impact__lede{font-size:var(--text-body)}
+  .icard__value{font-size:34px}
+  .impact__lines li{align-items:flex-start;flex-direction:column;gap:3px}
+  .impact__lunits{text-align:left}
+  .impact__sdg{gap:14px;padding:18px}
+  .impact__sdg-mark{font-size:38px}
+  .impact__actions .btn{width:100%}
+}
+
+/* ===== stepper on a phone =====
+   Four labels across 390px left "Check readiness" and "Plan purchases"
+   touching. The labels stay — they are how someone knows where they are —
+   but they wrap inside their own column and the columns get a gutter. */
+@media (max-width:560px){
+  .stepper__inner{gap:2px}
+  .step__label{font-size:var(--text-description);line-height:1.25;
+    text-align:center;padding-inline:3px;hyphens:auto}
+  .step__button{gap:5px}
+}
 .language-switcher{display:inline-flex;align-items:center;gap:5px;background:#edf7ef;border:1px solid #c3e2cc;border-radius:10px;padding:6px 8px;color:#2f6c49;flex-shrink:0;line-height:1.3}
 .language-switcher select{line-height:1.4;font-family:inherit;font-size:12px;font-weight:600;color:inherit;background:transparent;border:0;padding:4px 0;cursor:pointer;max-width:120px;min-height:28px}
 .language-switcher:focus-within{outline:2px solid #167d74;outline-offset:3px}
@@ -975,9 +1235,15 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
         <p class="card-sub attribute-guide__intro" data-i18n="s1.guide.intro">Start with the three required attributes. Optional attributes unlock additional insights.</p>
         <section class="attribute-section">
           <div class="attribute-section__head">
-            <h3 data-i18n="s1.required">Required data</h3><span class="pill pill--grey" data-i18n="s1.required.count">3 attributes</span>
+            <h3 data-i18n="s1.required">Required data</h3><span class="pill pill--grey">3 <span data-i18n="attributes">attributes</span></span>
           </div>
-          <div class="attribute-list"><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">01</span><h4 data-i18n="s1.attr.1.name">Sale date</h4><span class="attribute-mark attribute-mark--required" data-i18n="s1.attr.required">Required</span></div><p data-i18n="s1.attr.1.desc">The date each sale or return was recorded.</p></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">02</span><h4 data-i18n="s1.attr.2.name">Product identification</h4><span class="attribute-mark attribute-mark--required" data-i18n="s1.attr.required">Required</span></div><p data-i18n="s1.attr.2.desc">Choose one of the accepted formats to keep products and pack sizes separate.</p><ol class="accepted-forms"><li data-i18n="s1.attr.2.form1">SKU, barcode or product code</li><li data-i18n="s1.attr.2.form2">Product name + pack size</li></ol></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">03</span><h4 data-i18n="s1.attr.3.name">Quantity sold</h4><span class="attribute-mark attribute-mark--required" data-i18n="s1.attr.required">Required</span></div><p data-i18n="s1.attr.3.desc">The quantity sold or returned in each record.</p></article></div>
+          <div class="attribute-list"><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">01</span><h4 data-i18n="Sale date">Sale date</h4><span class="attribute-mark attribute-mark--required" data-i18n="Required">Required</span></div><p data-i18n="The date each sale or return was recorded.">The date each sale or return was recorded.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Weekly product history">Weekly product history</li><li data-i18n="Timeline gap evidence">Timeline gap evidence</li><li data-i18n="Recent weekly average">Recent weekly average</li><li data-i18n="Descriptive weeks of cover">Descriptive weeks of cover</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">02</span><h4 data-i18n="Product identification">Product identification</h4><span class="attribute-mark attribute-mark--required" data-i18n="Required">Required</span></div><p data-i18n="Choose one of the accepted formats to keep products and pack sizes separate.">Choose one of the accepted formats to keep products and pack sizes separate.</p><ol class="accepted-forms"><li data-i18n="SKU, barcode or product code">SKU, barcode or product code</li><li data-i18n="Product name + pack size">Product name + pack size</li></ol><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Weekly product history">Weekly product history</li><li data-i18n="Timeline gap evidence">Timeline gap evidence</li><li data-i18n="Recent weekly average">Recent weekly average</li><li data-i18n="Stock freshness">Stock freshness</li><li data-i18n="Descriptive weeks of cover">Descriptive weeks of cover</li><li data-i18n="Purchase audit">Purchase audit</li><li data-i18n="Expiry-aware note">Expiry-aware note</li><li data-i18n="Supplier scenario">Supplier scenario</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">03</span><h4 data-i18n="Quantity sold">Quantity sold</h4><span class="attribute-mark attribute-mark--required" data-i18n="Required">Required</span></div><p data-i18n="The quantity sold or returned in each record.">The quantity sold or returned in each record.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Weekly product history">Weekly product history</li><li data-i18n="Timeline gap evidence">Timeline gap evidence</li><li data-i18n="Recent weekly average">Recent weekly average</li><li data-i18n="Descriptive weeks of cover">Descriptive weeks of cover</li></ul></div></article></div>
+        </section>
+        <section class="attribute-section attribute-section--optional">
+          <div class="attribute-section__head">
+            <h3 data-i18n="Optional data">Optional data</h3><span class="pill pill--grey">7 <span data-i18n="attributes">attributes</span></span>
+          </div>
+          <div class="attribute-list"><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">04</span><h4 data-i18n="Stock on hand">Stock on hand</h4><span class="attribute-mark attribute-mark--optional" data-i18n="Optional">Optional</span></div><p data-i18n="Your latest counted quantity for each product.">Your latest counted quantity for each product.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Stock freshness">Stock freshness</li><li data-i18n="Descriptive weeks of cover">Descriptive weeks of cover</li><li data-i18n="Purchase audit">Purchase audit</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">05</span><h4 data-i18n="Stock count date">Stock count date</h4><span class="attribute-mark attribute-mark--optional" data-i18n="Optional">Optional</span></div><p data-i18n="The date that stock count was taken.">The date that stock count was taken.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Stock freshness">Stock freshness</li><li data-i18n="Descriptive weeks of cover">Descriptive weeks of cover</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">06</span><h4 data-i18n="Planned orders">Planned orders</h4><span class="attribute-mark attribute-mark--optional" data-i18n="Optional">Optional</span></div><p data-i18n="Quantities you are considering ordering.">Quantities you are considering ordering.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Purchase audit">Purchase audit</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">07</span><h4 data-i18n="Incoming stock">Incoming stock</h4><span class="attribute-mark attribute-mark--optional" data-i18n="Optional">Optional</span></div><p data-i18n="Quantities already ordered and expected to arrive.">Quantities already ordered and expected to arrive.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Purchase audit">Purchase audit</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">08</span><h4 data-i18n="Expiry dates">Expiry dates</h4><span class="attribute-mark attribute-mark--optional" data-i18n="Optional">Optional</span></div><p data-i18n="Expiry dates and affected quantities for product batches.">Expiry dates and affected quantities for product batches.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Expiry-aware note">Expiry-aware note</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">09</span><h4 data-i18n="Supplier details">Supplier details</h4><span class="attribute-mark attribute-mark--optional" data-i18n="Optional">Optional</span></div><p data-i18n="Supplier identity, delivery time and ordering pack information.">Supplier identity, delivery time and ordering pack information.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Supplier scenario">Supplier scenario</li></ul></div></article><article class="attribute-card"><div class="attribute-card__head"><span class="attribute-card__number">10</span><h4 data-i18n="Unit cost">Unit cost</h4><span class="attribute-mark attribute-mark--optional" data-i18n="Optional">Optional</span></div><p data-i18n="What you pay for one unit, so the money figures are yours.">What you pay for one unit, so the money figures are yours.</p><div class="attribute-card__features"><b data-i18n="Unlocks">Unlocks</b><ul><li data-i18n="Cost and impact">Cost and impact</li></ul></div></article></div>
         </section>
       </div>
 
@@ -1006,7 +1272,7 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
    node carries data-i18n; switching language rewrites their text and the
    document language, so the right font and line-breaking rules apply. */
 (function () {
-  var T = {"en": {"s1.eyebrow": "Start with what you already have", "s1.title": "Upload your existing sales file.", "s1.lede": "Required data is enough to get started. Optional data unlocks deeper insights.", "s1.guide.heading": "What do you need to get started?", "s1.guide.intro": "Start with the three required attributes. Optional attributes unlock additional insights.", "s1.required": "Required data", "s1.required.count": "3 attributes", "s1.attr.required": "Required", "s1.attr.1.name": "Sale date", "s1.attr.1.desc": "The date each sale or return was recorded.", "s1.attr.2.name": "Product identification", "s1.attr.2.desc": "Choose one of the accepted formats to keep products and pack sizes separate.", "s1.attr.2.form1": "SKU, barcode or product code", "s1.attr.2.form2": "Product name + pack size", "s1.attr.3.name": "Quantity sold", "s1.attr.3.desc": "The quantity sold or returned in each record.", "s1.drop.title": "Drop your CSV file here", "s1.drop.desc": "Use the export from your POS, marketplace or spreadsheet.", "s1.drop.choose": "Choose CSV file", "s1.drop.sample": "Use sample file", "s1.drop.limits": ".CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated", "s1.chain.1": "Your sales data", "s1.chain.2": "Demand insights", "s1.chain.3": "Smarter restocking", "s1.chain.4": "Your impact, measured", "s1.privacy.title": "Your data stays on your device.", "s1.privacy.body": "Your CSV is processed directly in this browser. Your sales rows and product identifiers are not uploaded to an AI or API service.", "s1.back": "Back to the homepage", "s1.continue": "Continue to column matching", "f.cost": "Unit cost", "f.cost.d": "What you pay your supplier for one unit. Leave it out and StockLess estimates from Malaysian shelf prices.", "s2.unlock.4": "Your own cost savings and impact figures", "nav.homepage": "Homepage", "lang.label": "Language", "step.1": "Upload", "step.2": "Map columns", "step.3": "Check readiness", "step.4": "Plan purchases"}, "ms": {"s1.eyebrow": "Mulakan dengan apa yang anda sudah ada", "s1.title": "Muat naik fail jualan sedia ada anda.", "s1.lede": "Data yang diperlukan sudah cukup untuk bermula. Data pilihan membuka pandangan yang lebih mendalam.", "s1.guide.heading": "Apa yang anda perlukan untuk bermula?", "s1.guide.intro": "Mulakan dengan tiga atribut yang diperlukan. Atribut pilihan membuka pandangan tambahan.", "s1.required": "Data diperlukan", "s1.required.count": "3 atribut", "s1.attr.required": "Diperlukan", "s1.attr.1.name": "Tarikh jualan", "s1.attr.1.desc": "Tarikh setiap jualan atau pemulangan direkodkan.", "s1.attr.2.name": "Pengenalan produk", "s1.attr.2.desc": "Pilih salah satu format yang diterima supaya produk dan saiz pek kekal berasingan.", "s1.attr.2.form1": "SKU, kod bar atau kod produk", "s1.attr.2.form2": "Nama produk + saiz pek", "s1.attr.3.name": "Kuantiti dijual", "s1.attr.3.desc": "Kuantiti yang dijual atau dipulangkan dalam setiap rekod.", "s1.drop.title": "Lepaskan fail CSV anda di sini", "s1.drop.desc": "Guna eksport daripada POS, pasaran dalam talian atau hamparan anda.", "s1.drop.choose": "Pilih fail CSV", "s1.drop.sample": "Guna fail contoh", "s1.drop.limits": ".CSV · Sehingga 10 MiB · 100,000 baris · Dipisah koma, koma bertitik atau tab", "s1.chain.1": "Data jualan anda", "s1.chain.2": "Pandangan permintaan", "s1.chain.3": "Belian lebih bijak", "s1.chain.4": "Kesan anda, diukur", "s1.privacy.title": "Data anda kekal pada peranti anda.", "s1.privacy.body": "Fail CSV anda diproses terus dalam pelayar ini. Baris jualan dan pengenalan produk anda tidak dimuat naik ke mana-mana perkhidmatan AI atau API.", "s1.back": "Kembali ke laman utama", "s1.continue": "Teruskan ke padanan lajur", "f.cost": "Kos seunit", "f.cost.d": "Jumlah yang anda bayar kepada pembekal bagi satu unit. Jika tiada, StockLess menganggarkan daripada harga pasaran Malaysia.", "s2.unlock.4": "Angka penjimatan kos dan kesan anda sendiri", "nav.homepage": "Laman utama", "lang.label": "Bahasa", "step.1": "Muat naik", "step.2": "Padan lajur", "step.3": "Semak kesediaan", "step.4": "Rancang belian"}, "zh": {"s1.eyebrow": "从您现有的资料开始", "s1.title": "上传您现有的销售文件。", "s1.lede": "必填数据已足以开始。选填数据可带来更深入的洞察。", "s1.guide.heading": "开始前需要准备什么？", "s1.guide.intro": "先准备三项必填属性。选填属性可解锁更多洞察。", "s1.required": "必填数据", "s1.required.count": "3 项属性", "s1.attr.required": "必填", "s1.attr.1.name": "销售日期", "s1.attr.1.desc": "每笔销售或退货记录的日期。", "s1.attr.2.name": "产品识别", "s1.attr.2.desc": "请选择一种可接受的格式，让产品与包装规格分开记录。", "s1.attr.2.form1": "SKU、条形码或产品编号", "s1.attr.2.form2": "产品名称 + 包装规格", "s1.attr.3.name": "销售数量", "s1.attr.3.desc": "每笔记录中售出或退回的数量。", "s1.drop.title": "将 CSV 文件拖到这里", "s1.drop.desc": "使用您的收银系统、电商平台或表格导出的文件。", "s1.drop.choose": "选择 CSV 文件", "s1.drop.sample": "使用示例文件", "s1.drop.limits": ".CSV · 最大 10 MiB · 100,000 行 · 逗号、分号或制表符分隔", "s1.chain.1": "您的销售数据", "s1.chain.2": "需求洞察", "s1.chain.3": "更聪明的补货", "s1.chain.4": "量化您的成效", "s1.privacy.title": "您的数据保留在您的设备上。", "s1.privacy.body": "您的 CSV 文件直接在此浏览器中处理。您的销售记录和产品标识不会上传到任何 AI 或 API 服务。", "s1.back": "返回首页", "s1.continue": "继续进行列匹配", "f.cost": "单位成本", "f.cost.d": "您向供应商为每一单位支付的金额。若没有，StockLess 会依据马来西亚市场价格估算。", "s2.unlock.4": "属于您自己的成本节省与成效数字", "nav.homepage": "首页", "lang.label": "语言", "step.1": "上传", "step.2": "匹配列", "step.3": "检查就绪", "step.4": "规划采购"}};
+  var T = {"en": {"s1.eyebrow": "Start with what you already have", "s1.title": "Upload your existing sales file.", "s1.lede": "Required data is enough to get started. Optional data unlocks deeper insights.", "s1.guide.heading": "What do you need to get started?", "s1.guide.intro": "Start with the three required attributes. Optional attributes unlock additional insights.", "s1.required": "Required data", "s1.required.count": "3 attributes", "s1.attr.required": "Required", "s1.attr.1.name": "Sale date", "s1.attr.1.desc": "The date each sale or return was recorded.", "s1.attr.2.name": "Product identification", "s1.attr.2.desc": "Choose one of the accepted formats to keep products and pack sizes separate.", "s1.attr.2.form1": "SKU, barcode or product code", "s1.attr.2.form2": "Product name + pack size", "s1.attr.3.name": "Quantity sold", "s1.attr.3.desc": "The quantity sold or returned in each record.", "s1.drop.title": "Drop your CSV file here", "s1.drop.desc": "Use the export from your POS, marketplace or spreadsheet.", "s1.drop.choose": "Choose CSV file", "s1.drop.sample": "Use sample file", "s1.drop.limits": ".CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated", "s1.chain.1": "Your sales data", "s1.chain.2": "Demand insights", "s1.chain.3": "Smarter restocking", "s1.chain.4": "Your impact, measured", "s1.privacy.title": "Your data stays on your device.", "s1.privacy.body": "Your CSV is processed directly in this browser. Your sales rows and product identifiers are not uploaded to an AI or API service.", "s1.back": "Back to the homepage", "s1.continue": "Continue to column matching", "f.cost": "Unit cost", "f.cost.d": "What you pay your supplier for one unit. Leave it out and StockLess estimates from Malaysian shelf prices.", "s2.unlock.4": "Your own cost savings and impact figures", "nav.homepage": "Homepage", "lang.label": "Language", "step.1": "Upload", "step.2": "Map columns", "step.3": "Check readiness", "step.4": "Plan purchases", "Unlocks": "Unlocks", "Weekly product history": "Weekly product history", "Timeline gap evidence": "Timeline gap evidence", "Recent weekly average": "Recent weekly average", "Descriptive weeks of cover": "Descriptive weeks of cover", "Sale date": "Sale date", "Required": "Required", "The date each sale or return was recorded.": "The date each sale or return was recorded.", "SKU, barcode or product code": "SKU, barcode or product code", "Product name + pack size": "Product name + pack size", "Stock freshness": "Stock freshness", "Purchase audit": "Purchase audit", "Expiry-aware note": "Expiry-aware note", "Supplier scenario": "Supplier scenario", "Product identification": "Product identification", "Choose one of the accepted formats to keep products and pack sizes separate.": "Choose one of the accepted formats to keep products and pack sizes separate.", "Quantity sold": "Quantity sold", "The quantity sold or returned in each record.": "The quantity sold or returned in each record.", "Stock on hand": "Stock on hand", "Optional": "Optional", "Your latest counted quantity for each product.": "Your latest counted quantity for each product.", "Stock count date": "Stock count date", "The date that stock count was taken.": "The date that stock count was taken.", "Planned orders": "Planned orders", "Quantities you are considering ordering.": "Quantities you are considering ordering.", "Incoming stock": "Incoming stock", "Quantities already ordered and expected to arrive.": "Quantities already ordered and expected to arrive.", "Expiry dates": "Expiry dates", "Expiry dates and affected quantities for product batches.": "Expiry dates and affected quantities for product batches.", "Supplier details": "Supplier details", "Supplier identity, delivery time and ordering pack information.": "Supplier identity, delivery time and ordering pack information.", "Cost and impact": "Cost and impact", "Unit cost": "Unit cost", "What you pay for one unit, so the money figures are yours.": "What you pay for one unit, so the money figures are yours.", "attributes": "attributes", "Optional data": "Optional data"}, "ms": {"s1.eyebrow": "Mulakan dengan apa yang anda sudah ada", "s1.title": "Muat naik fail jualan sedia ada anda.", "s1.lede": "Data yang diperlukan sudah cukup untuk bermula. Data pilihan membuka pandangan yang lebih mendalam.", "s1.guide.heading": "Apa yang anda perlukan untuk bermula?", "s1.guide.intro": "Mulakan dengan tiga atribut yang diperlukan. Atribut pilihan membuka pandangan tambahan.", "s1.required": "Data diperlukan", "s1.required.count": "3 atribut", "s1.attr.required": "Diperlukan", "s1.attr.1.name": "Tarikh jualan", "s1.attr.1.desc": "Tarikh setiap jualan atau pemulangan direkodkan.", "s1.attr.2.name": "Pengenalan produk", "s1.attr.2.desc": "Pilih salah satu format yang diterima supaya produk dan saiz pek kekal berasingan.", "s1.attr.2.form1": "SKU, kod bar atau kod produk", "s1.attr.2.form2": "Nama produk + saiz pek", "s1.attr.3.name": "Kuantiti dijual", "s1.attr.3.desc": "Kuantiti yang dijual atau dipulangkan dalam setiap rekod.", "s1.drop.title": "Lepaskan fail CSV anda di sini", "s1.drop.desc": "Guna eksport daripada POS, pasaran dalam talian atau hamparan anda.", "s1.drop.choose": "Pilih fail CSV", "s1.drop.sample": "Guna fail contoh", "s1.drop.limits": ".CSV · Sehingga 10 MiB · 100,000 baris · Dipisah koma, koma bertitik atau tab", "s1.chain.1": "Data jualan anda", "s1.chain.2": "Pandangan permintaan", "s1.chain.3": "Belian lebih bijak", "s1.chain.4": "Kesan anda, diukur", "s1.privacy.title": "Data anda kekal pada peranti anda.", "s1.privacy.body": "Fail CSV anda diproses terus dalam pelayar ini. Baris jualan dan pengenalan produk anda tidak dimuat naik ke mana-mana perkhidmatan AI atau API.", "s1.back": "Kembali ke laman utama", "s1.continue": "Teruskan ke padanan lajur", "f.cost": "Kos seunit", "f.cost.d": "Jumlah yang anda bayar kepada pembekal bagi satu unit. Jika tiada, StockLess menganggarkan daripada harga pasaran Malaysia.", "s2.unlock.4": "Angka penjimatan kos dan kesan anda sendiri", "nav.homepage": "Laman utama", "lang.label": "Bahasa", "step.1": "Muat naik", "step.2": "Padan lajur", "step.3": "Semak kesediaan", "step.4": "Rancang belian", "Unlocks": "Membolehkan", "Weekly product history": "Sejarah mingguan produk", "Timeline gap evidence": "Data jurang garis masa", "Recent weekly average": "Purata mingguan terkini", "Descriptive weeks of cover": "Tempoh bekalan stok deskriptif", "Sale date": "Tarikh jualan", "Required": "Wajib", "The date each sale or return was recorded.": "Tarikh setiap jualan atau pulangan direkodkan.", "SKU, barcode or product code": "SKU, kod bar atau kod produk", "Product name + pack size": "Nama produk + saiz pek", "Stock freshness": "Kemutakhiran data stok", "Purchase audit": "Audit pembelian", "Expiry-aware note": "Nota tarikh luput", "Supplier scenario": "Senario pembekal", "Product identification": "Pengenalan produk", "Choose one of the accepted formats to keep products and pack sizes separate.": "Pilih salah satu format yang diterima supaya produk dan saiz pek kekal berasingan.", "Quantity sold": "Kuantiti dijual", "The quantity sold or returned in each record.": "Kuantiti dijual atau dipulangkan dalam setiap rekod.", "Stock on hand": "Stok semasa", "Optional": "Pilihan", "Your latest counted quantity for each product.": "Kiraan kuantiti terkini bagi setiap produk.", "Stock count date": "Tarikh kiraan stok", "The date that stock count was taken.": "Tarikh kiraan stok dibuat.", "Planned orders": "Pesanan dirancang", "Quantities you are considering ordering.": "Kuantiti yang anda bercadang untuk pesan.", "Incoming stock": "Stok akan tiba", "Quantities already ordered and expected to arrive.": "Kuantiti telah dipesan dan dijangka tiba.", "Expiry dates": "Tarikh luput", "Expiry dates and affected quantities for product batches.": "Tarikh luput dan kuantiti terlibat bagi kelompok produk.", "Supplier details": "Maklumat pembekal", "Supplier identity, delivery time and ordering pack information.": "Pengenalan pembekal, masa penghantaran dan maklumat pek pesanan.", "Cost and impact": "Kos dan kesan", "Unit cost": "Kos seunit", "What you pay for one unit, so the money figures are yours.": "Kos anda bagi satu unit, supaya angka wang itu milik anda sendiri.", "attributes": "atribut", "Optional data": "Data pilihan"}, "zh": {"s1.eyebrow": "从您现有的资料开始", "s1.title": "上传您现有的销售文件。", "s1.lede": "必填数据已足以开始。选填数据可带来更深入的洞察。", "s1.guide.heading": "开始前需要准备什么？", "s1.guide.intro": "先准备三项必填属性。选填属性可解锁更多洞察。", "s1.required": "必填数据", "s1.required.count": "3 项属性", "s1.attr.required": "必填", "s1.attr.1.name": "销售日期", "s1.attr.1.desc": "每笔销售或退货记录的日期。", "s1.attr.2.name": "产品识别", "s1.attr.2.desc": "请选择一种可接受的格式，让产品与包装规格分开记录。", "s1.attr.2.form1": "SKU、条形码或产品编号", "s1.attr.2.form2": "产品名称 + 包装规格", "s1.attr.3.name": "销售数量", "s1.attr.3.desc": "每笔记录中售出或退回的数量。", "s1.drop.title": "将 CSV 文件拖到这里", "s1.drop.desc": "使用您的收银系统、电商平台或表格导出的文件。", "s1.drop.choose": "选择 CSV 文件", "s1.drop.sample": "使用示例文件", "s1.drop.limits": ".CSV · 最大 10 MiB · 100,000 行 · 逗号、分号或制表符分隔", "s1.chain.1": "您的销售数据", "s1.chain.2": "需求洞察", "s1.chain.3": "更聪明的补货", "s1.chain.4": "量化您的成效", "s1.privacy.title": "您的数据保留在您的设备上。", "s1.privacy.body": "您的 CSV 文件直接在此浏览器中处理。您的销售记录和产品标识不会上传到任何 AI 或 API 服务。", "s1.back": "返回首页", "s1.continue": "继续进行列匹配", "f.cost": "单位成本", "f.cost.d": "您向供应商为每一单位支付的金额。若没有，StockLess 会依据马来西亚市场价格估算。", "s2.unlock.4": "属于您自己的成本节省与成效数字", "nav.homepage": "首页", "lang.label": "语言", "step.1": "上传", "step.2": "匹配列", "step.3": "检查就绪", "step.4": "规划采购", "Unlocks": "支持功能", "Weekly product history": "商品每周销售历史", "Timeline gap evidence": "时间线缺失检查", "Recent weekly average": "近期周均销量", "Descriptive weeks of cover": "库存可售周数", "Sale date": "销售日期", "Required": "必填", "The date each sale or return was recorded.": "每笔销售或退货的记录日期。", "SKU, barcode or product code": "SKU、条形码或产品编号", "Product name + pack size": "产品名称 + 包装规格", "Stock freshness": "库存数据时效", "Purchase audit": "采购审核", "Expiry-aware note": "保质期提示", "Supplier scenario": "供应商方案", "Product identification": "产品识别", "Choose one of the accepted formats to keep products and pack sizes separate.": "请选择一种可接受的格式，让产品与包装规格分开记录。", "Quantity sold": "销售数量", "The quantity sold or returned in each record.": "每条记录中的销售或退货数量。", "Stock on hand": "现有库存", "Optional": "可选", "Your latest counted quantity for each product.": "每件商品最近一次盘点的数量。", "Stock count date": "库存盘点日期", "The date that stock count was taken.": "进行库存盘点的日期。", "Planned orders": "计划订购量", "Quantities you are considering ordering.": "您正在考虑订购的数量。", "Incoming stock": "在途库存", "Quantities already ordered and expected to arrive.": "已订购并预计到货的数量。", "Expiry dates": "到期日期", "Expiry dates and affected quantities for product batches.": "商品批次的到期日期及涉及数量。", "Supplier details": "供应商信息", "Supplier identity, delivery time and ordering pack information.": "供应商标识、交货时间及订购包装信息。", "Cost and impact": "成本与成效", "Unit cost": "单位成本", "What you pay for one unit, so the money figures are yours.": "您每一单位的进货成本，让金额数字出自您自己的数据。", "attributes": "个属性", "Optional data": "可选数据"}};
   var HTML_LANG = { en: 'en', ms: 'ms', zh: 'zh-Hans' };
   var select = document.querySelector('.language-switcher select');
 

@@ -11,11 +11,20 @@
   --red:#9B3939; --red-tint:#FBE8E8;
   --amber:#8B5C10; --amber-tint:#FFF4DF; --amber-strong:#D99120;
   --page:#FFFFFF;
-  /* Type scale — the same tokens and values the homepage uses, so the app and
-     the marketing site read as one product. Sizes below are set from these. */
-  --text-page-title:36px; --text-lead:18px; --text-section-head:20px;
-  --text-body:15px; --text-secondary:13px; --text-description:12px;
-  --text-eyebrow:11px; --text-label:10px;
+  /* Type scale — I3-TYPO-01 (Iteration 3 V2), which supersedes every earlier
+     font-size requirement including US1.1 AC7's 36px page title. The same
+     tokens drive the homepage, so the app and the marketing site read as one
+     product. I3-UI AC1 forbids a smaller local override of any role, and the
+     standard sets a hard floor: no interface text below label.
+       page-title 40 Manrope 700     body        16 Source Sans 3 400
+       lead       20 Source Sans 3   secondary   15 Source Sans 3 400
+       section-head 22 Manrope 700   description 14 Source Sans 3 400
+                                     eyebrow     13 Source Sans 3 700
+                                     label       12 Source Sans 3 700
+     numeric-data inherits its role's size in Inter 600-700. */
+  --text-page-title:40px; --text-lead:20px; --text-section-head:22px;
+  --text-body:16px; --text-secondary:15px; --text-description:14px;
+  --text-eyebrow:13px; --text-label:12px;
   --shadow-card:0 10px 30px rgba(22,49,59,.05);
   --display:"Manrope",-apple-system,BlinkMacSystemFont,sans-serif;
   --body:"Source Sans 3",-apple-system,BlinkMacSystemFont,sans-serif;
@@ -939,6 +948,244 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .unlocks__list li:last-child{margin-bottom:0}
 .unlocks__list b{display:block;font-size:var(--text-secondary);color:var(--ink)}
 .unlocks__list span{color:var(--muted)}
+
+/* ===== thumb ergonomics on a phone =====
+   Everything above was sized for a mouse pointer. A finger is about 9mm
+   across, so on a touch-width screen the standalone controls grow to 44px —
+   Apple's and Material's floor — and the small text token goes up a step so
+   nothing sits at 10px in the hand.
+
+   The inline "i" dots are the deliberate exception. They live mid-sentence
+   next to a label; pushing them to 44px would either break the line box or
+   overlap the control beside them and steal its taps. They go to 28px, which
+   clears WCAG 2.5.8 Target Size (Minimum, 24x24) on its own, and the label
+   they belong to stays tappable too. */
+@media (max-width:768px){
+  /* standalone controls: full thumb target */
+  .btn--small{min-height:44px;padding:10px 16px}
+  .btn--link{min-height:44px;display:inline-flex;align-items:center;padding:1px 8px}
+  .topbar .workspace-home-link{min-height:44px;padding-top:12px;padding-bottom:12px}
+  .language-switcher select,
+  .frame .language-switcher select{min-height:44px}
+  .pcard__action{min-height:44px}
+
+  /* selects and search fields: the row height is the target */
+  .frame select,
+  .frame input[type="text"],
+  .frame input[type="search"]{min-height:44px}
+
+  /* inline help dots: 28px, still inside the line */
+  .hint__btn{width:28px;height:28px;font-size:13px}
+}
+
+/* ===== a table is not a phone layout =====
+   Step 2's mapping grid and Step 3's ready list are four and five columns
+   wide. On a 390px screen they either squeeze every column to nothing or
+   force the page sideways, and neither is readable. Below 768px each row
+   becomes its own card: the first cell is the card's title, and every other
+   cell states the column it came from, taken from its data-label.
+
+   The header row goes to screen readers only, because the labels now sit
+   inside each card and a visible header would just repeat them. */
+@media (max-width:768px){
+  .dtable--cards{display:block;min-width:0;table-layout:auto}
+
+  .dtable--cards thead{position:absolute;width:1px;height:1px;
+    overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+  .dtable--cards tbody{display:block}
+  .dtable--cards tbody tr{display:block;padding:15px 16px;margin-bottom:12px;
+    border:1px solid var(--line);border-radius:14px;background:#fff}
+  .dtable--cards tbody tr:last-child{margin-bottom:0}
+
+  /* label left, value right — the row reads as "Stock age … 12 days" */
+  .dtable--cards td{display:flex;gap:14px;align-items:baseline;
+    justify-content:space-between;text-align:right;
+    padding:9px 0;border-bottom:1px solid var(--line-soft)}
+  .dtable--cards td::before{content:attr(data-label);flex:none;text-align:left;
+    font-family:var(--body);font-size:var(--text-description);font-weight:700;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.55px}
+  .dtable--cards tbody tr td:last-child{border-bottom:0;padding-bottom:0}
+
+  /* the first cell is the heading of the card, so it keeps the full width */
+  .dtable--cards td.dtable__title{display:block;text-align:left;
+    padding:0 0 11px;border-bottom:1px solid var(--line)}
+  .dtable--cards td.dtable__title::before{content:none}
+
+  /* controls inside a card take the room the value side has */
+  .dtable--cards td .select{flex:1;min-width:0;width:100%}
+  .dtable--cards td .mapping-status{align-items:flex-end}
+  .dtable--cards td .spark{justify-content:flex-end}
+
+  /* nothing to scroll sideways any more */
+  .table-scroll:has(.dtable--cards),
+  .table-scroll--x:has(.dtable--cards){overflow-x:visible}
+}
+
+/* ===== learn more =====
+   Flashcards. Each card shows a question; activating it turns the card over
+   to the answer, and activating it again turns it back.
+
+   Still <details>/<summary> underneath, so the keyboard, the open state and
+   the screen-reader announcement stay the browser's job — the flip is only
+   what [open] looks like. That matters: a hand-rolled flip card is usually a
+   div that no keyboard can reach and no screen reader can describe.
+
+   The two faces are stacked in a grid cell rather than absolutely positioned,
+   so the card is as tall as its longest face and the answer can never be
+   clipped (I3-UI AC2). rotateY is applied only where the browser says motion
+   is welcome; otherwise the faces simply cross-fade. */
+.learn{margin-top:28px}
+.learn__title{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0;letter-spacing:-.2px}
+.learn__lede{margin:7px 0 0;font-size:var(--text-body);color:var(--muted);max-width:56ch}
+.learn__list{margin-top:14px}
+
+/* <summary> has to be a direct child of <details>, so the flip lives on the
+   <details> itself rather than on an inner wrapper. The perspective belongs
+   to the parent, since it applies to a box's children. */
+.learn__list{perspective:1400px}
+.learn__item{display:grid;border-radius:16px;background:none;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+/* Chrome renders a <details>'s content inside a UA slot, so the answer is
+   not itself the grid item there — ::details-content is. Browsers without
+   that pseudo-element place the <p> directly, so both are pinned to the same
+   cell and the card ends up as tall as its taller face either way. */
+.learn__item > *{grid-area:1/1;min-width:0}
+.learn__item::details-content{grid-area:1/1;min-width:0;
+  transform-style:preserve-3d;content-visibility:visible;block-size:auto}
+.learn__item + .learn__item{margin-top:10px}
+.learn__item[open]{transform:rotateY(180deg)}
+
+.learn__q,.learn__a{border-radius:16px;backface-visibility:hidden;
+  -webkit-backface-visibility:hidden}
+
+.learn__q{display:flex;align-items:center;gap:12px;padding:20px 18px;cursor:pointer;
+  background:var(--teal-tint);list-style:none;min-height:104px;
+  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
+.learn__q::-webkit-details-marker{display:none}
+.learn__q:hover{background:#DDEDE8}
+.learn__item:focus-within .learn__q{outline:2px solid var(--teal);outline-offset:2px}
+.learn__icon{font-size:24px;line-height:1;flex:none}
+.learn__qtext{flex:1;min-width:0}
+
+/* the corner turn: a folded page edge that says "there is a back to this" */
+.learn__chevron{flex:none;align-self:flex-end;width:16px;height:16px;
+  border-radius:3px 0 16px 0;background:linear-gradient(135deg,transparent 48%,var(--mint) 50%)}
+
+.learn__a{margin:0;padding:20px 18px;background:var(--ink);color:#EAF5F2;
+  transform:rotateY(180deg);cursor:pointer;
+  font-family:var(--body);font-size:var(--text-secondary);line-height:1.6;
+  display:flex;align-items:center}
+
+/* Without 3-D transforms the back face would sit on top of the front, so the
+   faces are faded instead and only the active one takes pointer events. */
+@media(prefers-reduced-motion:reduce){
+  .learn__item{transition:none;transform:none!important}
+  .learn__q,.learn__a{transform:none;backface-visibility:visible;transition:opacity .15s ease}
+  .learn__a{opacity:0;pointer-events:none}
+  .learn__item[open] .learn__q{opacity:0;pointer-events:none}
+  .learn__item[open] .learn__a{opacity:1;pointer-events:auto}
+}
+
+/* the homepage grid: four cards, two up */
+.learn--cards .learn__list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.learn--cards .learn__item + .learn__item{margin-top:0}
+
+@media (max-width:900px){
+  .learn--cards .learn__list{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .learn__q{padding:18px 16px;gap:11px;min-height:96px}
+  .learn__a{padding:18px 16px;font-size:var(--text-body)}
+}
+
+/* ===== impact dashboard =====
+   An impact story, not an analytics console: one figure per card, its unit
+   next to it, and the basis for it underneath in plain words. Two of the
+   three cards carry no number, so they are styled as clearly unlocked-later
+   rather than as a zero or an error — a muted fill, no big figure, and the
+   sentence that says what would fill them. */
+/* The page shell already sets the width. Capping the section at 1000px left
+   a third of a 1440 screen empty, which §5 asks us to avoid — so the cards
+   and the SDG band use the full shell and only the prose is measured. */
+.impact{max-width:none}
+.impact__title{font-family:var(--display);font-size:var(--text-page-title);
+  font-weight:700;margin:6px 0 0;letter-spacing:-.8px}
+.impact__lede{margin:10px 0 0;font-size:var(--text-lead);line-height:1.55;
+  color:var(--muted);max-width:68ch}
+
+.impact__cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.icard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;
+  box-shadow:var(--shadow-card);display:flex;flex-direction:column}
+.icard--figure{background:var(--teal-tint);border-color:#CFE4DE}
+.icard--locked{background:#F7FAF9}
+.icard__icon{font-size:22px;line-height:1}
+.icard__label{margin-top:12px;font-family:var(--display);font-size:var(--text-description);
+  font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.icard__value{margin:7px 0 0;font-family:var(--display);font-size:38px;font-weight:700;
+  line-height:1.1;letter-spacing:-1.4px;color:var(--ink)}
+.icard__unit{margin-left:7px;font-size:var(--text-body);font-weight:600;color:var(--muted)}
+/* An unlocked-later card must not shout as loudly as the card that has a
+   real number — at 18px bold it out-weighed the one figure on the page. */
+.icard__value--locked{font-size:var(--text-body);font-weight:600;color:var(--muted-2);
+  letter-spacing:0;line-height:1.4}
+.icard__caption{margin:6px 0 0;font-size:var(--text-body);font-weight:600;color:var(--ink-2)}
+.icard__basis{margin:9px 0 0;font-size:var(--text-secondary);line-height:1.55;color:var(--muted)}
+
+/* the per-product working behind the one real figure */
+.impact__lines{margin-top:24px;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.impact__lines h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0 0 4px}
+.impact__lines ul{list-style:none;margin:0;padding:0}
+.impact__lines li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.impact__lines li:last-child{border-bottom:0;padding-bottom:0}
+.impact__lname{display:flex;align-items:baseline;gap:9px;min-width:0;flex-wrap:wrap}
+.impact__lname .num{font-size:var(--text-secondary);color:var(--muted)}
+.impact__lunits{flex:none;font-family:var(--display);font-weight:700;text-align:right}
+.impact__lunits span{font-family:var(--body);font-weight:400;font-size:var(--text-secondary);
+  color:var(--muted);margin-left:6px}
+
+.impact__sdg{display:flex;gap:18px;align-items:flex-start;margin-top:24px;padding:22px;
+  border-radius:18px;background:#BD8C2B;color:#fff}
+.impact__sdg-mark{flex:none;font-family:var(--display);font-size:46px;font-weight:800;
+  line-height:1;letter-spacing:-3px}
+.impact__sdg h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0}
+.impact__sdg p{margin:8px 0 0;font-size:var(--text-body);line-height:1.6;max-width:62ch}
+.impact__sdg-link{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;
+  color:#fff;font-weight:700;font-size:var(--text-secondary);text-decoration:underline}
+
+.impact__method{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);
+  font-size:var(--text-secondary);line-height:1.6;color:var(--muted);max-width:76ch}
+.impact__actions{margin-top:20px}
+
+@media (max-width:1100px){
+  .impact__cards{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .impact__cards{grid-template-columns:1fr;gap:12px}
+  .impact__title{font-size:30px}
+  .impact__lede{font-size:var(--text-body)}
+  .icard__value{font-size:34px}
+  .impact__lines li{align-items:flex-start;flex-direction:column;gap:3px}
+  .impact__lunits{text-align:left}
+  .impact__sdg{gap:14px;padding:18px}
+  .impact__sdg-mark{font-size:38px}
+  .impact__actions .btn{width:100%}
+}
+
+/* ===== stepper on a phone =====
+   Four labels across 390px left "Check readiness" and "Plan purchases"
+   touching. The labels stay — they are how someone knows where they are —
+   but they wrap inside their own column and the columns get a gutter. */
+@media (max-width:560px){
+  .stepper__inner{gap:2px}
+  .step__label{font-size:var(--text-description);line-height:1.25;
+    text-align:center;padding-inline:3px;hyphens:auto}
+  .step__button{gap:5px}
+}
 .language-switcher{display:inline-flex;align-items:center;gap:5px;background:#edf7ef;border:1px solid #c3e2cc;border-radius:10px;padding:6px 8px;color:#2f6c49;flex-shrink:0;line-height:1.3}
 .language-switcher select{line-height:1.4;font-family:inherit;font-size:12px;font-weight:600;color:inherit;background:transparent;border:0;padding:4px 0;cursor:pointer;max-width:120px;min-height:28px}
 .language-switcher:focus-within{outline:2px solid #167d74;outline-offset:3px}
@@ -984,7 +1231,7 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
     <div class="summary"><div class="summary__verdict"><span class="summary__tick" aria-hidden="true">&#10003;</span><div><h2 data-i18n="s3.sum.head">Your data is mostly ready</h2><p>7 <span data-i18n="s3.sum.checked">products checked</span></p></div></div><ul class="summary__groups"><li class="summary__group summary__group--ready"><b>4</b><span class="summary__name" data-i18n="s3.g1">Ready</span><span class="summary__note" data-i18n="s3.g1n">Complete data, no major issues</span></li><li class="summary__group summary__group--review"><b>2</b><span class="summary__name" data-i18n="s3.g2">Need review</span><span class="summary__note" data-i18n="s3.g2n">Usable, but the stock count is ageing</span></li><li class="summary__group summary__group--missing"><b>1</b><span class="summary__name" data-i18n="s3.g3">Missing data</span><span class="summary__note" data-i18n="s3.g3n">Something StockLess could not read</span></li></ul></div>
     <p class="nextstep"><b data-i18n="s3.next">Next step:</b> <span data-i18n="s3.next.note">Continue with the usable rows, or download the problem list and correct your file first.</span></p>
     <section class="attention"><div class="attention__head"><span class="attention__icon" aria-hidden="true">!</span><div><h2>3 <span data-i18n="s3.att">products need your attention</span></h2><p data-i18n="s3.att.sub">These products may have data issues or old stock. Review them before continuing.</p></div><label class="attention__search"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input type="search" data-ph="s3.search" placeholder="Search by product name or code"></label><label class="attention__sort"><select><option data-i18n="s3.sortAge">Sort by: stock age (oldest)</option><option data-i18n="s3.sortName">Sort by: product name</option><option data-i18n="s3.sortGroup">Sort by: issue type</option></select></label></div><div class="pcards"><article class="pcard pcard--review"><header class="pcard__head"><div><b class="pcard__name">Kopi O Kaw 2in1</b><span class="pcard__code"><span class="num">SKU: MM0001</span> &middot; <span class="num">10 sachets</span></span></div><span class="pill pill--amber" data-i18n="s3.needsReview">Needs review</span></header><div class="pcard__facts"><div><span class="pcard__key" data-i18n="s3.lastCount">Last stock count</span><b>12 Sep 2026</b></div><div><span class="pcard__key" data-i18n="s3.age">Stock age</span><b>8 days</b></div></div><div class="pcard__trend"><span class="pcard__key" data-i18n="s3.weekly">Weekly sales</span><span class="spark spark--labelled"><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:50%"></span><span class="spark__day">09-01</span></span><span class="spark__col" title="1"><span class="spark__value">1</span><span class="spark__bar" style="height:25%"></span><span class="spark__day">09-08</span></span><span class="spark__col" title="3"><span class="spark__value">3</span><span class="spark__bar" style="height:75%"></span><span class="spark__day">09-15</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:50%"></span><span class="spark__day">09-22</span></span><span class="spark__col" title="4"><span class="spark__value">4</span><span class="spark__bar" style="height:100%"></span><span class="spark__day">09-29</span></span><span class="spark__col" title="3"><span class="spark__value">3</span><span class="spark__bar" style="height:75%"></span><span class="spark__day">10-06</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:50%"></span><span class="spark__day">10-13</span></span></span></div><p class="pcard__why pcard__why--review"><span aria-hidden="true">i</span><span data-i18n="s3.why1">The stock count is getting old. It still works, but a fresher count would be better.</span></p><button type="button" class="btn btn--small btn--ghost pcard__action"><span data-i18n="s3.view">View details →</span></button></article><article class="pcard pcard--review"><header class="pcard__head"><div><b class="pcard__name">Milo 3in1</b><span class="pcard__code"><span class="num">SKU: MM0014</span> &middot; <span class="num">20 sachets</span></span></div><span class="pill pill--amber" data-i18n="s3.needsReview">Needs review</span></header><div class="pcard__facts"><div><span class="pcard__key" data-i18n="s3.lastCount">Last stock count</span><b>9 Sep 2026</b></div><div><span class="pcard__key" data-i18n="s3.age">Stock age</span><b>11 days</b></div></div><div class="pcard__trend"><span class="pcard__key" data-i18n="s3.weekly">Weekly sales</span><span class="spark spark--labelled"><span class="spark__col" title="3"><span class="spark__value">3</span><span class="spark__bar" style="height:75%"></span><span class="spark__day">09-01</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:50%"></span><span class="spark__day">09-08</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:50%"></span><span class="spark__day">09-15</span></span><span class="spark__col" title="4"><span class="spark__value">4</span><span class="spark__bar" style="height:100%"></span><span class="spark__day">09-22</span></span><span class="spark__col" title="3"><span class="spark__value">3</span><span class="spark__bar" style="height:75%"></span><span class="spark__day">09-29</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:50%"></span><span class="spark__day">10-06</span></span><span class="spark__col" title="1"><span class="spark__value">1</span><span class="spark__bar" style="height:25%"></span><span class="spark__day">10-13</span></span></span></div><p class="pcard__why pcard__why--review"><span aria-hidden="true">i</span><span data-i18n="s3.why2">The stock count is more than 14 days old, so it is too old to rely on.</span></p><button type="button" class="btn btn--small btn--ghost pcard__action"><span data-i18n="s3.view">View details →</span></button></article><article class="pcard pcard--missing"><header class="pcard__head"><div><b class="pcard__name">Milo 3in1</b><span class="pcard__code"><span class="num">SKU: MM0027</span> &middot; <span class="num">20 sachets</span></span></div><span class="pill pill--red" data-i18n="s3.g3">Missing data</span></header><div class="pcard__facts"><div><span class="pcard__key" data-i18n="s3.lastCount">Last stock count</span><b>—</b></div><div><span class="pcard__key" data-i18n="s3.age">Stock age</span><b>—</b></div></div><div class="pcard__trend"><span class="pcard__key" data-i18n="s3.weekly">Weekly sales</span><span class="spark spark--labelled"><span class="spark__col" title="1"><span class="spark__value">1</span><span class="spark__bar" style="height:33%"></span><span class="spark__day">09-01</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:67%"></span><span class="spark__day">09-08</span></span><span class="spark__col" title="1"><span class="spark__value">1</span><span class="spark__bar" style="height:33%"></span><span class="spark__day">09-15</span></span><span class="spark__col" title="3"><span class="spark__value">3</span><span class="spark__bar" style="height:100%"></span><span class="spark__day">09-22</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:67%"></span><span class="spark__day">09-29</span></span><span class="spark__col" title="2"><span class="spark__value">2</span><span class="spark__bar" style="height:67%"></span><span class="spark__day">10-06</span></span><span class="spark__col" title="1"><span class="spark__value">1</span><span class="spark__bar" style="height:33%"></span><span class="spark__day">10-13</span></span></span></div><p class="pcard__why pcard__why--missing"><span aria-hidden="true">i</span><span data-i18n="s3.why3">No stock count date, so StockLess cannot say how long this stock will last.</span></p><button type="button" class="btn btn--small btn--ghost pcard__action"><span data-i18n="s3.view">View details →</span></button></article></div></section>
-    <details class="readylist" open><summary><span class="readylist__tick" aria-hidden="true">&#10003;</span><span><b>4 <span data-i18n="s3.ready">products are ready</span></b><span class="readylist__note" data-i18n="s3.ready.sub">Complete data and no major issues.</span></span></summary><div class="table-scroll table-scroll--x"><table class="dtable dtable--ready"><thead><tr><th data-i18n="s3.th.product">Product</th><th data-i18n="s3.lastCount">Last stock count</th><th data-i18n="s3.age">Stock age</th><th data-i18n="s3.weekly">Weekly sales</th><th data-i18n="s3.th.status">Status</th></tr></thead><tbody><tr><td><b>Kopi O Kaw 2in1</b><span class="cell-detail num">MM0002 &middot; 20 sachets</span></td><td class="num">22 Sep 2026</td><td class="num">4 days</td><td><span class="spark"><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:75%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:25%"></span></span><span class="spark__col" title="4"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:75%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span></span></td><td><span class="pill pill--confirmed">Ready</span></td></tr><tr><td><b>Teh Tarik 3in1</b><span class="cell-detail num">MM0008 &middot; 15 sachets</span></td><td class="num">21 Sep 2026</td><td class="num">5 days</td><td><span class="spark"><span class="spark__col" title="1"><span class="spark__bar" style="height:25%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:75%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:25%"></span></span><span class="spark__col" title="4"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span></span></td><td><span class="pill pill--confirmed">Ready</span></td></tr><tr><td><b>Nescafe Original</b><span class="cell-detail num">MM0019 &middot; 10 sachets</span></td><td class="num">23 Sep 2026</td><td class="num">3 days</td><td><span class="spark"><span class="spark__col" title="4"><span class="spark__bar" style="height:80%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:40%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:60%"></span></span><span class="spark__col" title="5"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:60%"></span></span><span class="spark__col" title="4"><span class="spark__bar" style="height:80%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:40%"></span></span></span></td><td><span class="pill pill--confirmed">Ready</span></td></tr><tr><td><b>Horlicks 3in1</b><span class="cell-detail num">MM0031 &middot; 20 sachets</span></td><td class="num">20 Sep 2026</td><td class="num">6 days</td><td><span class="spark"><span class="spark__col" title="1"><span class="spark__bar" style="height:33%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:67%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:33%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:67%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:33%"></span></span></span></td><td><span class="pill pill--confirmed">Ready</span></td></tr></tbody></table></div></details>
+    <details class="readylist" open><summary><span class="readylist__tick" aria-hidden="true">&#10003;</span><span><b>4 <span data-i18n="s3.ready">products are ready</span></b><span class="readylist__note" data-i18n="s3.ready.sub">Complete data and no major issues.</span></span></summary><div class="table-scroll table-scroll--x"><table class="dtable dtable--ready dtable--cards"><thead><tr><th data-i18n="s3.th.product">Product</th><th data-i18n="s3.lastCount">Last stock count</th><th data-i18n="s3.age">Stock age</th><th data-i18n="s3.weekly">Weekly sales</th><th data-i18n="s3.th.status">Status</th></tr></thead><tbody><tr><td class="dtable__title"><b>Kopi O Kaw 2in1</b><span class="cell-detail num">MM0002 &middot; 20 sachets</span></td><td class="num" data-i18n-label="s3.lastCount" data-label="Last stock count">22 Sep 2026</td><td class="num" data-i18n-label="s3.age" data-label="Stock age">4 days</td><td data-i18n-label="s3.weekly" data-label="Weekly sales"><span class="spark"><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:75%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:25%"></span></span><span class="spark__col" title="4"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:75%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span></span></td><td data-i18n-label="s3.th.status" data-label="Status"><span class="pill pill--confirmed">Ready</span></td></tr><tr><td class="dtable__title"><b>Teh Tarik 3in1</b><span class="cell-detail num">MM0008 &middot; 15 sachets</span></td><td class="num" data-i18n-label="s3.lastCount" data-label="Last stock count">21 Sep 2026</td><td class="num" data-i18n-label="s3.age" data-label="Stock age">5 days</td><td data-i18n-label="s3.weekly" data-label="Weekly sales"><span class="spark"><span class="spark__col" title="1"><span class="spark__bar" style="height:25%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:75%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:25%"></span></span><span class="spark__col" title="4"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:50%"></span></span></span></td><td data-i18n-label="s3.th.status" data-label="Status"><span class="pill pill--confirmed">Ready</span></td></tr><tr><td class="dtable__title"><b>Nescafe Original</b><span class="cell-detail num">MM0019 &middot; 10 sachets</span></td><td class="num" data-i18n-label="s3.lastCount" data-label="Last stock count">23 Sep 2026</td><td class="num" data-i18n-label="s3.age" data-label="Stock age">3 days</td><td data-i18n-label="s3.weekly" data-label="Weekly sales"><span class="spark"><span class="spark__col" title="4"><span class="spark__bar" style="height:80%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:40%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:60%"></span></span><span class="spark__col" title="5"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:60%"></span></span><span class="spark__col" title="4"><span class="spark__bar" style="height:80%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:40%"></span></span></span></td><td data-i18n-label="s3.th.status" data-label="Status"><span class="pill pill--confirmed">Ready</span></td></tr><tr><td class="dtable__title"><b>Horlicks 3in1</b><span class="cell-detail num">MM0031 &middot; 20 sachets</span></td><td class="num" data-i18n-label="s3.lastCount" data-label="Last stock count">20 Sep 2026</td><td class="num" data-i18n-label="s3.age" data-label="Stock age">6 days</td><td data-i18n-label="s3.weekly" data-label="Weekly sales"><span class="spark"><span class="spark__col" title="1"><span class="spark__bar" style="height:33%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:67%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:33%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="2"><span class="spark__bar" style="height:67%"></span></span><span class="spark__col" title="3"><span class="spark__bar" style="height:100%"></span></span><span class="spark__col" title="1"><span class="spark__bar" style="height:33%"></span></span></span></td><td data-i18n-label="s3.th.status" data-label="Status"><span class="pill pill--confirmed">Ready</span></td></tr></tbody></table></div></details>
 
     
 
@@ -1060,6 +1307,11 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var v = dict[el.getAttribute('data-i18n')];
       if (v) el.textContent = v;
+    });
+    /* the phone card layout reads its column name from data-label */
+    document.querySelectorAll('[data-i18n-label]').forEach(function (el) {
+      var v = dict[el.getAttribute('data-i18n-label')];
+      if (v) el.setAttribute('data-label', v);
     });
     var dup = document.querySelector('[data-dup]');
     if (dup) dup.textContent = (DUP[lang] || DUP.en).replace('{0}', '1,208').replace('{1}', '1');

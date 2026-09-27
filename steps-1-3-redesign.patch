@@ -542,11 +542,120 @@ index 0000000..e6059ad
 +  );
 +}
 diff --git a/frontend/src/homepage-purchase-preview.css b/frontend/src/homepage-purchase-preview.css
-index ce8e0ba..0171ef2 100644
+index ce8e0ba..bb329c3 100644
 --- a/frontend/src/homepage-purchase-preview.css
 +++ b/frontend/src/homepage-purchase-preview.css
-@@ -226,3 +226,29 @@
-     font-size: 10px;
+@@ -11,7 +11,7 @@
+   border-radius: 30px;
+   color: #536965;
+   background: #eef2f1;
+-  font-size: 9px;
++  font-size: 12px;
+   white-space: nowrap;
+ }
+ 
+@@ -41,20 +41,20 @@
+ .sl-home .sl-preview-estimate strong small {
+   margin-left: 4px;
+   color: #d8e4e1;
+-  font-size: 11px;
++  font-size: 12px;
+   font-weight: 500;
+ }
+ 
+ .sl-home .sl-preview-estimate p {
+   color: #d8e4e1;
+-  font-size: 10px;
++  font-size: 12px;
+   line-height: 1.55;
+   text-align: right;
+ }
+ 
+ .sl-home .sl-preview-estimate p span {
+   color: #9fcac3;
+-  font-size: 8px;
++  font-size: 12px;
+ }
+ 
+ .sl-home .sl-preview-metrics {
+@@ -64,7 +64,7 @@
+   padding-top: 12px;
+   border-top: 1px solid var(--sl-line);
+   color: var(--sl-muted);
+-  font-size: 8px;
++  font-size: 12px;
+ }
+ 
+ .sl-home .sl-preview-metrics span {
+@@ -75,7 +75,7 @@
+   display: block;
+   margin-top: 4px;
+   color: var(--sl-ink);
+-  font-size: 11px;
++  font-size: 12px;
+ }
+ 
+ .sl-home .sl-preview-slider {
+@@ -94,7 +94,7 @@
+ .sl-home .sl-preview-slider-head label {
+   margin: 0;
+   color: var(--sl-ink);
+-  font-size: 10px;
++  font-size: 12px;
+   font-weight: 650;
+ }
+ 
+@@ -107,7 +107,7 @@
+ .sl-home .sl-preview-slider-head output small {
+   margin-left: 3px;
+   color: var(--sl-muted);
+-  font-size: 10px;
++  font-size: 12px;
+   font-weight: 400;
+ }
+ 
+@@ -118,7 +118,7 @@
+   border-radius: 5px;
+   color: #8a5c0a;
+   background: #fff4df;
+-  font-size: 8px;
++  font-size: 12px;
+   font-weight: 700;
+ }
+ 
+@@ -157,7 +157,7 @@
+   align-items: center;
+   justify-content: space-between;
+   gap: 8px;
+-  font-size: 8px;
++  font-size: 12px;
+   font-weight: 700;
+   text-transform: uppercase;
+   letter-spacing: .7px;
+@@ -184,7 +184,7 @@
+   display: block;
+   margin-top: 5px;
+   color: inherit;
+-  font-size: 9px;
++  font-size: 12px;
+   line-height: 1.5;
+ }
+ 
+@@ -207,7 +207,7 @@
+   }
+ 
+   .sl-home .sl-preview-estimate p {
+-    font-size: 11px;
++    font-size: 12px;
+     text-align: left;
+   }
+ 
+@@ -223,6 +223,32 @@
+   .sl-home .sl-preview-verdict > div,
+   .sl-home .sl-preview-verdict p,
+   .sl-home .sl-preview-verdict small {
+-    font-size: 10px;
++    font-size: 12px;
    }
  }
 +
@@ -559,8 +668,8 @@ index ce8e0ba..0171ef2 100644
 +.sl-home .sl-preview-estimate p span,
 +.sl-home .sl-preview-verdict > div,
 +.sl-home .sl-preview-verdict p,
-+.sl-home .sl-preview-verdict small { font-size: 10px; }
-+.sl-home .sl-preview-metrics { font-size: 10px; }
++.sl-home .sl-preview-verdict small { font-size: 12px; }
++.sl-home .sl-preview-metrics { font-size: 12px; }
 +.sl-home .sl-preview-metrics b { font-size: 12px; }
 +
 +@media (max-width: 760px) {
@@ -569,24 +678,24 @@ index ce8e0ba..0171ef2 100644
 +  .sl-home .sl-preview-source,
 +  .sl-home .sl-preview-verdict > div,
 +  .sl-home .sl-preview-verdict p,
-+  .sl-home .sl-preview-verdict small { font-size: 11px; }
-+  .sl-home .sl-preview-metrics { font-size: 11px; }
++  .sl-home .sl-preview-verdict small { font-size: 12px; }
++  .sl-home .sl-preview-metrics { font-size: 12px; }
 +  .sl-home .sl-preview-metrics b { font-size: 13px; }
 +
 +  .sl-home .sl-preview-slider input { min-height: 44px; }
 +}
 diff --git a/frontend/src/homepage.css b/frontend/src/homepage.css
-index cc5c2d6..c32718b 100644
+index cc5c2d6..cd1f1ed 100644
 --- a/frontend/src/homepage.css
 +++ b/frontend/src/homepage.css
-@@ -1,7 +1,79 @@
+@@ -1,7 +1,78 @@
  .sl-home{--sl-ink:#183842;--sl-teal:#167d74;--sl-muted:#60716f;--sl-line:#dfe7e3;background:#fff;color:var(--sl-ink);font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.6}
 -.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(32px,3.7vw,49px);font-weight:600;line-height:1.15;letter-spacing:-1.9px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1200px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:108px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:14px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:14px;font-weight:650;min-height:50px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:11px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:54px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(42px,5.5vw,72px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:24px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:28px}.sl-secondary-link{font-size:14px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:62px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:8px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:10px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:9px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:9px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:11px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:11px}.sl-warning p{font-size:10px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:8px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:9px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:11px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:10px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:9px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:11px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:9px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:9px}.sl-scenario-result>p{font-size:9px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:9px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:100px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.8;color:var(--sl-muted);margin-top:22px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:48px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:14px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:54px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:390px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:75px;padding-top:100px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story-image{width:100%;height:100%;max-height:750px;min-height:570px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:22px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:13px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:10px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:14px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:100px;border-top:1px solid var(--sl-line);padding-top:75px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:11px;color:var(--sl-muted);margin-top:45px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:13px;text-align:left}.sl-comparison th,.sl-comparison td{padding:19px 22px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:105px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:12px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:9px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:11px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:75px;align-items:center;padding-top:110px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:465px;padding:40px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:13px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:11px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;list-style:none;padding:0;margin:46px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:60px;font-weight:400;letter-spacing:-3px;color:#99aaa3;display:block;margin-bottom:25px}.sl-steps h3{font-size:17px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:70px}.sl-final-cta>div{padding:49px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:12px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:70px;padding-block:30px;font-size:12px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 13px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
-+.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(30px,3.1vw,42px);font-weight:600;line-height:1.18;letter-spacing:-1.5px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1420px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:15px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:15px;font-weight:650;min-height:52px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:12px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:36px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(40px,5vw,64px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:17px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:20px}.sl-secondary-link{font-size:15px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:42px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:8px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:10px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:9px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:9px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:11px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:11px}.sl-warning p{font-size:10px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:8px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:9px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:11px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:10px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:9px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:11px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:9px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:9px}.sl-scenario-result>p{font-size:9px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:9px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:66px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.75;color:var(--sl-muted);margin-top:16px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:32px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:15px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:36px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:320px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-top:66px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story>*,.sl-impact>*{min-width:0}.sl-story-image{width:100%;max-width:100%;height:100%;max-height:620px;min-height:470px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:15px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:15px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:12px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:15px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:66px;border-top:1px solid var(--sl-line);padding-top:50px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:13px;color:var(--sl-muted);margin-top:30px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:15px;text-align:left}.sl-comparison th,.sl-comparison td{padding:14px 18px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:78px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:13px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:9px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:13px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding-top:70px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:380px;padding:30px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:15px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:13px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;list-style:none;padding:0;margin:32px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:48px;font-weight:400;letter-spacing:-2.4px;color:#99aaa3;display:block;margin-bottom:16px}.sl-steps h3{font-size:18px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:50px}.sl-final-cta>div{padding:34px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:13px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:50px;padding-block:24px;font-size:13px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 15px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
++.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(30px,3.1vw,42px);font-weight:600;line-height:1.18;letter-spacing:-1.5px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1420px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:15px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:15px;font-weight:650;min-height:52px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:12px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:36px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(40px,5vw,64px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:17px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:20px}.sl-secondary-link{font-size:15px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:42px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:12px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:12px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:12px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:12px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:12px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:12px}.sl-warning p{font-size:12px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:12px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:12px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:12px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:12px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:12px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:12px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:12px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:12px}.sl-scenario-result>p{font-size:12px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:12px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:66px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.75;color:var(--sl-muted);margin-top:16px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:32px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:15px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:36px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:320px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-top:66px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story>*,.sl-impact>*{min-width:0}.sl-story-image{width:100%;max-width:100%;height:100%;max-height:620px;min-height:470px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:15px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:15px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:12px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:15px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:66px;border-top:1px solid var(--sl-line);padding-top:50px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:13px;color:var(--sl-muted);margin-top:30px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:15px;text-align:left}.sl-comparison th,.sl-comparison td{padding:14px 18px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:78px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:13px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:12px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:13px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding-top:70px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:380px;padding:30px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:15px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:13px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;list-style:none;padding:0;margin:32px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:48px;font-weight:400;letter-spacing:-2.4px;color:#99aaa3;display:block;margin-bottom:16px}.sl-steps h3{font-size:18px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:50px}.sl-final-cta>div{padding:34px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:13px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:50px;padding-block:24px;font-size:13px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 15px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
  @media(min-width:1500px){.sl-home h1{font-size:76px}}
  @media(max-width:1050px){.sl-container{width:calc(100% - 48px)}.sl-preview-stage{padding-inline:25px}.sl-demo-grid{grid-template-columns:1.55fr 1fr}.sl-evidence{padding:18px}.sl-scenario{padding:18px}.sl-chart-heading{align-items:flex-start;flex-direction:column}.sl-benefits,.sl-steps{gap:23px}.sl-story,.sl-impact{gap:40px}.sl-statistics>div{grid-template-columns:120px 1fr}.sl-sdg{padding:30px;min-height:410px}.sl-sdg b{font-size:15px}.sl-final-cta>div{padding:35px}.sl-final-cta h2{font-size:34px}}
 -@media(max-width:760px){.sl-container{width:calc(100% - 36px)}.sl-nav{min-height:88px;gap:12px;flex-wrap:wrap;padding-top:18px;padding-bottom:15px}.sl-nav .brand__logo{height:35px!important}.sl-nav nav{order:3;width:100%;justify-content:center;gap:26px;font-size:12px;padding-top:7px}.sl-nav>.sl-button{font-size:12px;min-height:40px;padding:9px 12px;gap:14px}.sl-hero{padding-top:40px}.sl-home h1{font-size:clamp(37px,7.5vw,55px);letter-spacing:-2px}.sl-hero-eyebrow{font-size:9px;letter-spacing:1.2px}.sl-hero-copy{font-size:15px}.sl-mobile-break{display:block}.sl-hero-actions{gap:20px;flex-wrap:wrap;margin-top:23px}.sl-hero-actions .sl-button{font-size:13px;padding:13px 16px}.sl-preview-stage{margin-top:37px;padding-inline:10px}.sl-preview-stage:before{inset:60px 0 0;border-radius:16px}.sl-demo{border-width:4px;border-radius:13px}.sl-demo-bar{padding:10px;font-size:7px}.sl-demo-bar>span:nth-child(2){display:none}.sl-demo-grid{grid-template-columns:1fr}.sl-evidence{padding:19px}.sl-product h3{font-size:20px}.sl-warning p{font-size:12px}.sl-warning strong{font-size:12px}.sl-chart-heading{flex-direction:row}.sl-chart-heading>span{font-size:8px}.sl-chart h4{font-size:11px}.sl-demo-baseline{font-size:10px}.sl-demo-baseline b{font-size:12px}.sl-scenario{border-left:0;border-top:1px solid var(--sl-line);padding:22px}.sl-scenario h3{font-size:21px}.sl-scenario>p,.sl-scenario label{font-size:13px}.sl-scenario input{min-height:32px}.sl-text-button{font-size:13px!important;min-height:35px}.sl-scenario-result{padding:18px}.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:12px}.sl-range-ends{font-size:11px}.sl-demo-note{font-size:10px}.sl-section{padding-top:68px}.sl-home h2{font-size:34px;letter-spacing:-1.4px}.sl-section-copy{font-size:15px;margin-top:17px!important}.sl-benefits,.sl-steps{grid-template-columns:1fr 1fr;gap:28px 22px;margin-top:33px}.sl-benefits h3{font-size:16px}.sl-benefits p,.sl-steps p{font-size:13px}.sl-wide-photo{margin-top:36px!important;border-radius:13px}.sl-wide-photo img{height:250px}.sl-wide-photo figcaption{left:20px;bottom:20px;font-size:12px;right:20px}.sl-story,.sl-impact{grid-template-columns:1fr;gap:32px;padding-top:68px}.sl-story-image{height:380px;min-height:0;object-position:center 35%}.sl-statistics>div{grid-template-columns:125px 1fr}.sl-statistics dd{font-size:14px}.sl-source{font-size:11px}.sl-comparison{margin-top:65px;padding-top:55px}.sl-table-hint{display:flex;justify-content:space-between}.sl-table-hint span{display:inline}.sl-comparison table{min-width:760px}.sl-comparison th,.sl-comparison td{padding:16px}.sl-comparison-tagline{font-size:16px}.sl-impact{gap:35px}.sl-sdg{min-height:360px;max-width:500px;width:100%;margin-inline:auto}.sl-sdg svg{height:170px}.sl-sdg b{font-size:18px}.sl-impact-lede{font-size:18px}.sl-section-header{align-items:flex-start;flex-direction:column;gap:20px}.sl-steps{margin-top:32px}.sl-step-number{font-size:48px;margin-bottom:13px}.sl-steps h3{font-size:16px}.sl-final-cta{grid-template-columns:1fr;margin-top:40px}.sl-final-cta>div{padding:30px}.sl-final-cta h2{font-size:34px}.sl-final-cta img{height:250px;min-height:0}.sl-footer{flex-wrap:wrap;margin-top:45px;padding-block:25px}.sl-footer p{order:3;width:100%;font-size:12px}.sl-desktop-break{display:none}.workspace-home-link{margin-right:10px;font-size:12px}}
-+@media(max-width:760px){.sl-container{width:calc(100% - 36px)}.sl-nav{min-height:88px;gap:12px;flex-wrap:wrap;padding-top:18px;padding-bottom:15px}.sl-nav .brand__logo{height:35px!important}.sl-nav nav{order:3;width:100%;justify-content:center;gap:26px;font-size:13px;padding-top:7px}.sl-nav>.sl-button{font-size:12px;min-height:40px;padding:9px 12px;gap:14px}.sl-hero{padding-top:40px}.sl-home h1{font-size:clamp(37px,7.5vw,55px);letter-spacing:-2px}.sl-hero-eyebrow{font-size:9px;letter-spacing:1.2px}.sl-hero-copy{font-size:15px}.sl-mobile-break{display:block}.sl-hero-actions{gap:20px;flex-wrap:wrap;margin-top:23px}.sl-hero-actions .sl-button{font-size:14px;padding:13px 16px}.sl-preview-stage{margin-top:37px;padding-inline:10px}.sl-preview-stage:before{inset:60px 0 0;border-radius:16px}.sl-demo{border-width:4px;border-radius:13px}.sl-demo-bar{padding:10px;font-size:7px}.sl-demo-bar>span:nth-child(2){display:none}.sl-demo-grid{grid-template-columns:1fr}.sl-evidence{padding:19px}.sl-product h3{font-size:20px}.sl-warning p{font-size:12px}.sl-warning strong{font-size:12px}.sl-chart-heading{flex-direction:row}.sl-chart-heading>span{font-size:8px}.sl-chart h4{font-size:11px}.sl-demo-baseline{font-size:10px}.sl-demo-baseline b{font-size:12px}.sl-scenario{border-left:0;border-top:1px solid var(--sl-line);padding:22px}.sl-scenario h3{font-size:21px}.sl-scenario>p,.sl-scenario label{font-size:13px}.sl-scenario input{min-height:32px}.sl-text-button{font-size:13px!important;min-height:35px}.sl-scenario-result{padding:18px}.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:12px}.sl-range-ends{font-size:11px}.sl-demo-note{font-size:10px}.sl-section{padding-top:68px}.sl-home h2{font-size:34px;letter-spacing:-1.4px}.sl-section-copy{font-size:16px;margin-top:17px!important}.sl-benefits,.sl-steps{grid-template-columns:1fr 1fr;gap:28px 22px;margin-top:33px}.sl-benefits h3{font-size:16px}.sl-benefits p,.sl-steps p{font-size:15px}.sl-wide-photo{margin-top:36px!important;border-radius:13px}.sl-wide-photo img{height:250px}.sl-wide-photo figcaption{left:20px;bottom:20px;font-size:12px;right:20px}.sl-story,.sl-impact{grid-template-columns:1fr;gap:32px;padding-top:68px}.sl-story-image{height:380px;min-height:0;object-position:center 35%}.sl-statistics>div{grid-template-columns:125px 1fr}.sl-statistics dd{font-size:15px}.sl-source{font-size:12px}.sl-comparison{margin-top:65px;padding-top:55px}.sl-table-hint{display:flex;justify-content:space-between}.sl-table-hint span{display:inline}.sl-comparison table{min-width:760px}.sl-comparison th,.sl-comparison td{padding:16px}.sl-comparison-tagline{font-size:16px}.sl-impact{gap:35px}.sl-sdg{min-height:360px;max-width:500px;width:100%;margin-inline:auto}.sl-sdg svg{height:170px}.sl-sdg b{font-size:18px}.sl-impact-lede{font-size:18px}.sl-section-header{align-items:flex-start;flex-direction:column;gap:20px}.sl-steps{margin-top:32px}.sl-step-number{font-size:48px;margin-bottom:13px}.sl-steps h3{font-size:16px}.sl-final-cta{grid-template-columns:1fr;margin-top:40px}.sl-final-cta>div{padding:30px}.sl-final-cta h2{font-size:34px}.sl-final-cta img{height:250px;min-height:0}.sl-footer{flex-wrap:wrap;margin-top:45px;padding-block:25px}.sl-footer p{order:3;width:100%;font-size:13px}.sl-desktop-break{display:none}.workspace-home-link{margin-right:10px;font-size:13px}}
++@media(max-width:760px){.sl-container{width:calc(100% - 36px)}.sl-nav{min-height:88px;gap:12px;flex-wrap:wrap;padding-top:18px;padding-bottom:15px}.sl-nav .brand__logo{height:35px!important}.sl-nav nav{order:3;width:100%;justify-content:center;gap:26px;font-size:13px;padding-top:7px}.sl-nav>.sl-button{font-size:12px;min-height:40px;padding:9px 12px;gap:14px}.sl-hero{padding-top:40px}.sl-home h1{font-size:clamp(37px,7.5vw,55px);letter-spacing:-2px}.sl-hero-eyebrow{font-size:12px;letter-spacing:1.2px}.sl-hero-copy{font-size:15px}.sl-mobile-break{display:block}.sl-hero-actions{gap:20px;flex-wrap:wrap;margin-top:23px}.sl-hero-actions .sl-button{font-size:14px;padding:13px 16px}.sl-preview-stage{margin-top:37px;padding-inline:10px}.sl-preview-stage:before{inset:60px 0 0;border-radius:16px}.sl-demo{border-width:4px;border-radius:13px}.sl-demo-bar{padding:10px;font-size:12px}.sl-demo-bar>span:nth-child(2){display:none}.sl-demo-grid{grid-template-columns:1fr}.sl-evidence{padding:19px}.sl-product h3{font-size:20px}.sl-warning p{font-size:12px}.sl-warning strong{font-size:12px}.sl-chart-heading{flex-direction:row}.sl-chart-heading>span{font-size:12px}.sl-chart h4{font-size:12px}.sl-demo-baseline{font-size:12px}.sl-demo-baseline b{font-size:12px}.sl-scenario{border-left:0;border-top:1px solid var(--sl-line);padding:22px}.sl-scenario h3{font-size:21px}.sl-scenario>p,.sl-scenario label{font-size:13px}.sl-scenario input{min-height:32px}.sl-text-button{font-size:13px!important;min-height:35px}.sl-scenario-result{padding:18px}.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:12px}.sl-range-ends{font-size:12px}.sl-demo-note{font-size:12px}.sl-section{padding-top:68px}.sl-home h2{font-size:34px;letter-spacing:-1.4px}.sl-section-copy{font-size:16px;margin-top:17px!important}.sl-benefits,.sl-steps{grid-template-columns:1fr 1fr;gap:28px 22px;margin-top:33px}.sl-benefits h3{font-size:16px}.sl-benefits p,.sl-steps p{font-size:15px}.sl-wide-photo{margin-top:36px!important;border-radius:13px}.sl-wide-photo img{height:250px}.sl-wide-photo figcaption{left:20px;bottom:20px;font-size:12px;right:20px}.sl-story,.sl-impact{grid-template-columns:1fr;gap:32px;padding-top:68px}.sl-story-image{height:380px;min-height:0;object-position:center 35%}.sl-statistics>div{grid-template-columns:125px 1fr}.sl-statistics dd{font-size:15px}.sl-source{font-size:12px}.sl-comparison{margin-top:65px;padding-top:55px}.sl-table-hint{display:flex;justify-content:space-between}.sl-table-hint span{display:inline}.sl-comparison table{min-width:760px}.sl-comparison th,.sl-comparison td{padding:16px}.sl-comparison-tagline{font-size:16px}.sl-impact{gap:35px}.sl-sdg{min-height:360px;max-width:500px;width:100%;margin-inline:auto}.sl-sdg svg{height:170px}.sl-sdg b{font-size:18px}.sl-impact-lede{font-size:18px}.sl-section-header{align-items:flex-start;flex-direction:column;gap:20px}.sl-steps{margin-top:32px}.sl-step-number{font-size:48px;margin-bottom:13px}.sl-steps h3{font-size:16px}.sl-final-cta{grid-template-columns:1fr;margin-top:40px}.sl-final-cta>div{padding:30px}.sl-final-cta h2{font-size:34px}.sl-final-cta img{height:250px;min-height:0}.sl-footer{flex-wrap:wrap;margin-top:45px;padding-block:25px}.sl-footer p{order:3;width:100%;font-size:13px}.sl-desktop-break{display:none}.workspace-home-link{margin-right:10px;font-size:13px}}
  @media(prefers-reduced-motion:no-preference){html:has(.sl-home){scroll-behavior:smooth}}
  @media(prefers-reduced-motion:reduce){.sl-button{transition:none}}
 +
@@ -595,29 +704,29 @@ index cc5c2d6..c32718b 100644
 +   down to 7-9px chasing that illusion. It is not a screenshot: the slider
 +   moves and the numbers recalculate, so people actually read it. Nothing on
 +   the page now renders below 10px, and on a phone the floor is 11px. */
-+.sl-demo-bar{font-size:10px}
-+.sl-window-dots{font-size:10px}
-+.sl-demo .sl-kicker{font-size:10px}
-+.sl-risk{font-size:10px}
-+.sl-chart-heading>span{font-size:10px}
-+.sl-demo-baseline{font-size:10px}
-+.sl-range-ends{font-size:10px}
-+.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:10px}
-+.sl-demo-note{font-size:10px}
-+.sl-comparison thead .sl-kicker{font-size:10px}
-+.sl-preview-pattern,.sl-preview-source{font-size:10px}
++.sl-demo-bar{font-size:12px}
++.sl-window-dots{font-size:12px}
++.sl-demo .sl-kicker{font-size:12px}
++.sl-risk{font-size:12px}
++.sl-chart-heading>span{font-size:12px}
++.sl-demo-baseline{font-size:12px}
++.sl-range-ends{font-size:12px}
++.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:12px}
++.sl-demo-note{font-size:12px}
++.sl-comparison thead .sl-kicker{font-size:12px}
++.sl-preview-pattern,.sl-preview-source{font-size:12px}
 +
 +/* ===== thumb ergonomics on a phone =====
 +   Same rule as the app: standalone controls reach 44px. The source citations
 +   stay inline in their sentence - WCAG 2.5.8 exempts a link inside a block of
 +   text, and boxing them out would break the paragraph. */
 +@media(max-width:760px){
-+  .sl-demo-bar{font-size:11px}
++  .sl-demo-bar{font-size:12px}
 +  .sl-window-dots,.sl-demo .sl-kicker,.sl-risk,.sl-chart-heading>span,
 +  .sl-demo-baseline,.sl-range-ends,.sl-demo-note,
 +  .sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p,
-+  .sl-preview-pattern,.sl-preview-source{font-size:11px}
-+  .sl-hero-eyebrow{font-size:11px}
++  .sl-preview-pattern,.sl-preview-source{font-size:12px}
++  .sl-hero-eyebrow{font-size:12px}
 +
 +  .sl-nav nav a{display:inline-flex;align-items:center;min-height:44px}
 +  .sl-secondary-link{display:inline-flex;align-items:center;min-height:44px}
@@ -628,20 +737,18 @@ index cc5c2d6..c32718b 100644
 +}
 +
 +/* ===== learn more on the homepage =====
-+   Same component as the app (.learn in styles.css), stepped up to the
-+   homepage's larger type. The heading uses the page's h2 rule rather than
-+   the app's section-head token so it sits level with "Why StockLess?" above
-+   it, and the cards stay deliberately smaller than the reference video's —
-+   this page already carries a lot. */
++   Same flashcards as the app (.learn in styles.css), stepped up to the
++   homepage's larger type. The cards stay deliberately smaller than the
++   reference video's — this page already carries a lot. */
 +.sl-home .learn{margin-top:0}
 +.sl-home .learn__title{font-size:clamp(30px,3.1vw,42px);font-weight:600;
 +  line-height:1.18;letter-spacing:-1.5px;margin-top:18px}
 +.sl-home .learn__lede{font-size:17px;line-height:1.75;color:var(--sl-muted);
 +  margin-top:16px!important;max-width:750px}
 +.sl-home .learn__list{margin-top:30px;gap:14px}
-+.sl-home .learn__q{font-size:17px;padding:17px 19px;gap:13px}
-+.sl-home .learn__icon{font-size:20px}
-+.sl-home .learn__a{font-size:15px;line-height:1.75;padding:0 19px 18px 51px}
++.sl-home .learn__q{font-size:17px;padding:22px 20px;gap:14px;min-height:116px}
++.sl-home .learn__icon{font-size:26px}
++.sl-home .learn__a{font-size:15px;line-height:1.7;padding:22px 20px}
 +
 +/* "Still have questions?" is itself a <details>, so the extra questions
 +   open in place — no second page, no JavaScript. */
@@ -657,12 +764,13 @@ index cc5c2d6..c32718b 100644
 +@media(max-width:760px){
 +  .sl-home .learn__title{font-size:34px;letter-spacing:-1.4px}
 +  .sl-home .learn__lede{font-size:16px}
-+  .sl-home .learn__q{font-size:16px;padding:15px 16px}
-+  .sl-home .learn__a{font-size:15px;padding:0 16px 16px 16px}
++  .sl-home .learn__q{font-size:16px;padding:18px 16px;min-height:104px}
++  .sl-home .learn__a{font-size:15px;padding:18px 16px}
 +  .sl-home .learn__all-q{align-items:flex-start;flex-direction:column;gap:6px}
 +}
++}
 diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
-index 86a9cd1..9c35a06 100644
+index 86a9cd1..bbbc6f5 100644
 --- a/frontend/src/i18n/messages.ts
 +++ b/frontend/src/i18n/messages.ts
 @@ -300,10 +300,6 @@ export const messages: Record<string, readonly [string, string]> = {
@@ -748,7 +856,7 @@ index 86a9cd1..9c35a06 100644
      "Semak kesediaan"
    ],
    "Plan purchases": [
-@@ -2483,5 +2471,881 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -2483,5 +2471,1217 @@ export const messages: Record<string, readonly [string, string]> = {
    "Stale stock": [
      "库存数据过旧",
      "Data stok terlalu lama"
@@ -1628,8 +1736,1278 @@ index 86a9cd1..9c35a06 100644
 +  "Across {0} of {1} products StockLess could judge.": [
 +    "在 StockLess 能够判断的 {1} 件商品中，有 {0} 件。",
 +    "Merentasi {0} daripada {1} produk yang StockLess dapat nilai."
++  ],
++  "Prepare it with StockLess": [
++    "用 StockLess 整理数据",
++    "Sediakannya dengan StockLess"
++  ],
++  "Understand your demand": [
++    "了解您的需求",
++    "Fahami permintaan anda"
++  ],
++  "Review your restocking plan": [
++    "检视您的补货计划",
++    "Semak pelan penambahan stok anda"
++  ],
++  "StockLess looks for gaps, duplicates and unusual rows, then works out the demand your history supports.": [
++    "StockLess 会检查缺漏、重复和异常记录，再根据您的历史数据推算可支持的需求。",
++    "StockLess mencari jurang, pendua dan baris luar biasa, kemudian mengira permintaan yang disokong oleh sejarah anda."
++  ],
++  "Product identification": [
++    "产品识别",
++    "Pengenalan produk"
++  ],
++  "Choose one of the accepted formats to keep products and pack sizes separate.": [
++    "请选择一种可接受的格式，让产品与包装规格分开记录。",
++    "Pilih salah satu format yang diterima supaya produk dan saiz pek kekal berasingan."
++  ],
++  "SKU, barcode or product code": [
++    "SKU、条形码或产品编号",
++    "SKU, kod bar atau kod produk"
++  ],
++  "Product name + pack size": [
++    "产品名称 + 包装规格",
++    "Nama produk + saiz pek"
++  ],
++  "Filter by what each product needs": [
++    "按每件商品需要的处理方式筛选",
++    "Tapis mengikut tindakan yang diperlukan setiap produk"
++  ],
++  "Order needed": [
++    "需要下单",
++    "Perlu pesanan"
++  ],
++  "No order entered yet, or below expected demand": [
++    "尚未输入订购量，或低于预期需求",
++    "Belum ada kuantiti dimasukkan, atau di bawah permintaan dijangka"
++  ],
++  "Check your order": [
++    "检查订购量",
++    "Semak pesanan anda"
++  ],
++  "More than even the busiest expected month": [
++    "超过预期最旺的一个月",
++    "Melebihi bulan tersibuk yang dijangka"
++  ],
++  "Within expected demand": [
++    "在预期需求范围内",
++    "Dalam permintaan yang dijangka"
++  ],
++  "Need more data": [
++    "需要更多数据",
++    "Perlu lebih banyak data"
++  ],
++  "StockLess could not judge these yet": [
++    "StockLess 暂时无法判断这些商品",
++    "StockLess belum dapat menilai produk ini"
++  ],
++  "Check": [
++    "检查结果",
++    "Semakan"
++  ],
++  "In stock": [
++    "现有库存",
++    "Dalam stok"
++  ],
++  "Your order": [
++    "您的订购量",
++    "Pesanan anda"
++  ],
++  "No range yet": [
++    "尚无预估区间",
++    "Belum ada julat"
++  ],
++  "next 4 weeks": [
++    "未来 4 周",
++    "4 minggu akan datang"
++  ],
++  "Suggested ": [
++    "建议 ",
++    "Dicadangkan "
++  ],
++  "Key: ": [
++    "图例：",
++    "Petunjuk: "
++  ],
++  "Showing ": [
++    "显示 ",
++    "Menunjukkan "
++  ],
++  "of ": [
++    "／共 ",
++    "daripada "
++  ],
++  "Purchase details": [
++    "采购详情",
++    "Butiran pembelian"
++  ],
++  "Product ": [
++    "第 ",
++    "Produk "
++  ],
++  "Previous product": [
++    "上一件商品",
++    "Produk sebelumnya"
++  ],
++  "Next product": [
++    "下一件商品",
++    "Produk seterusnya"
++  ],
++  "Next product →": [
++    "下一件商品 →",
++    "Produk seterusnya →"
++  ],
++  "SKU ": [
++    "SKU ",
++    "SKU "
++  ],
++  "Stock counted ": [
++    "盘点日期 ",
++    "Stok dikira "
++  ],
++  "days ago": [
++    "天前",
++    "hari lalu"
++  ],
++  "StockLess suggests": [
++    "StockLess 建议",
++    "StockLess mencadangkan"
++  ],
++  "Use ": [
++    "采用 ",
++    "Guna "
++  ],
++  "Leave it empty until you have decided.": [
++    "在您决定之前可以留空。",
++    "Biarkan kosong sehingga anda membuat keputusan."
++  ],
++  "Already ordered but not arrived. Not entered is treated as 0.": [
++    "已下单但尚未到货。留空视为 0。",
++    "Sudah dipesan tetapi belum tiba. Tidak dimasukkan dikira sebagai 0."
++  ],
++  "Decrease planned order": [
++    "减少计划订购量",
++    "Kurangkan pesanan dirancang"
++  ],
++  "Increase planned order": [
++    "增加计划订购量",
++    "Tambah pesanan dirancang"
++  ],
++  "Decrease incoming stock": [
++    "减少在途库存",
++    "Kurangkan stok dalam perjalanan"
++  ],
++  "Increase incoming stock": [
++    "增加在途库存",
++    "Tambah stok dalam perjalanan"
++  ],
++  "in stock": [
++    "现有库存",
++    "dalam stok"
++  ],
++  "incoming": [
++    "在途",
++    "dalam perjalanan"
++  ],
++  "order": [
++    "订购",
++    "pesanan"
++  ],
++  "low": [
++    "下限",
++    "rendah"
++  ],
++  "high": [
++    "上限",
++    "atas"
++  ],
++  "Incoming": [
++    "在途库存",
++    "Dalam perjalanan"
++  ],
++  "Expiry": [
++    "有效期",
++    "Tarikh luput"
++  ],
++  "Sales evidence": [
++    "销售依据",
++    "Bukti jualan"
++  ],
++  "Sells per week": [
++    "每周销量",
++    "Jualan seminggu"
++  ],
++  "Current stock lasts": [
++    "现有库存可支撑",
++    "Stok semasa bertahan"
++  ],
++  "weeks": [
++    "周",
++    "minggu"
++  ],
++  "Weekly sales and expected demand": [
++    "每周销量与预期需求",
++    "Jualan mingguan dan permintaan dijangka"
++  ],
++  "How StockLess got ": [
++    "StockLess 如何算出 ",
++    "Bagaimana StockLess mendapat "
++  ],
++  "Stays on this device": [
++    "只保存在本机",
++    "Kekal pada peranti ini"
++  ],
++  "How to plan an order": [
++    "如何规划一次订购",
++    "Cara merancang pesanan"
++  ],
++  "From sales data to your next order": [
++    "从销售数据到下一次订购",
++    "Daripada data jualan kepada pesanan anda seterusnya"
++  ],
++  "Select a product below, then follow these three steps.": [
++    "请在下方选择一件商品，然后按这三个步骤操作。",
++    "Pilih produk di bawah, kemudian ikut tiga langkah ini."
++  ],
++  "Review demand": [
++    "查看需求",
++    "Semak permintaan"
++  ],
++  "See past sales and the four-week range.": [
++    "查看过往销量与四周区间。",
++    "Lihat jualan lalu dan julat empat minggu."
++  ],
++  "Enter your quantities": [
++    "输入您的数量",
++    "Masukkan kuantiti anda"
++  ],
++  "Add your planned order and incoming stock.": [
++    "加入您的计划订购量与在途库存。",
++    "Tambah pesanan dirancang dan stok dalam perjalanan anda."
++  ],
++  "Check before ordering": [
++    "下单前先检查",
++    "Semak sebelum memesan"
++  ],
++  "Compare the plan with expected demand.": [
++    "将计划与预期需求作比较。",
++    "Bandingkan pelan dengan permintaan yang dijangka."
++  ],
++  "Your next purchase, at a glance": [
++    "下一次采购一览",
++    "Pembelian anda seterusnya, sekilas pandang"
++  ],
++  "Can plan": [
++    "可以规划",
++    "Boleh dirancang"
++  ],
++  "Usable demand and stock evidence": [
++    "具备可用的需求与库存依据",
++    "Bukti permintaan dan stok yang boleh digunakan"
++  ],
++  "Open a product to see the next action": [
++    "打开商品查看下一步操作",
++    "Buka produk untuk melihat tindakan seterusnya"
++  ],
++  "Plans entered": [
++    "已输入计划",
++    "Pelan dimasukkan"
++  ],
++  "Included in the product totals": [
++    "已计入商品合计",
++    "Termasuk dalam jumlah produk"
++  ],
++  "What will this plan cost?": [
++    "这个计划会花多少钱？",
++    "Berapakah kos pelan ini?"
++  ],
++  "Money insights · design preview": [
++    "金额洞察 · 设计预览",
++    "Wawasan kewangan · pratonton reka bentuk"
++  ],
++  "Open dashboard example →": [
++    "打开面板示例 →",
++    "Buka contoh papan pemuka →"
++  ],
++  "Planned purchase spending": [
++    "计划采购支出",
++    "Perbelanjaan pembelian dirancang"
++  ],
++  "Incoming stock cost": [
++    "在途库存成本",
++    "Kos stok dalam perjalanan"
++  ],
++  "Potential excess-stock cost": [
++    "潜在过量库存成本",
++    "Kos potensi lebihan stok"
++  ],
++  "Purchase cost and currency required": [
++    "需要采购成本与币别",
++    "Memerlukan kos pembelian dan mata wang"
++  ],
++  "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.": [
++    "此文件尚未连接任何财务结果。示例使用另一组虚构数据，不会改动您的采购计划。",
++    "Fail ini belum mempunyai keputusan kewangan yang disambungkan. Contoh ini menggunakan data rekaan yang berasingan dan tidak pernah mengubah pelan pembelian anda."
++  ],
++  "Next step: ": [
++    "下一步：",
++    "Langkah seterusnya: "
++  ],
++  "Open a product, review the estimate, and enter the quantity you intend to order.": [
++    "打开一件商品，查看估算，再输入您打算订购的数量。",
++    "Buka produk, semak anggaran, dan masukkan kuantiti yang anda ingin pesan."
++  ],
++  "Start with these products": [
++    "先从这些商品开始",
++    "Mulakan dengan produk ini"
++  ],
++  "Purchase concerns appear first. Each suggestion uses your current inputs.": [
++    "有采购疑虑的商品会排在前面。每项建议都依据您当前的输入。",
++    "Kebimbangan pembelian muncul dahulu. Setiap cadangan menggunakan input semasa anda."
++  ],
++  "Review and plan →": [
++    "查看并规划 →",
++    "Semak dan rancang →"
++  ],
++  "See what is needed →": [
++    "查看还缺什么 →",
++    "Lihat apa yang diperlukan →"
    ]
  };
+diff --git a/frontend/src/purchase-plan/DataLabel.tsx b/frontend/src/purchase-plan/DataLabel.tsx
+new file mode 100644
+index 0000000..ffb264b
+--- /dev/null
++++ b/frontend/src/purchase-plan/DataLabel.tsx
+@@ -0,0 +1,20 @@
++import { t, useLanguage } from "../i18n/index.ts";
++import type { PurchaseProduct } from "./model.ts";
++
++/**
++ * How much StockLess trusts the evidence behind a product: Ready, Limited, or
++ * it cannot judge at all. Kept separate from the purchase check, which says
++ * what to do about the order.
++ */
++export function DataLabel({ product }: { product: PurchaseProduct }) {
++  useLanguage();
++  const label = product.issue ? "Evidence mismatch" : product.demand?.label;
++  return (
++    <span
++      className={`pill pill--${label === "Ready" ? "ready" : label === "Limited" ? "limited" : "cannot"}`}
++      title={t(product.issue || product.demand?.labelReason?.message)}
++    >
++      {t(label)}
++    </span>
++  );
++}
+diff --git a/frontend/src/purchase-plan/DemandChart.tsx b/frontend/src/purchase-plan/DemandChart.tsx
+index 8a75327..e229ce9 100644
+--- a/frontend/src/purchase-plan/DemandChart.tsx
++++ b/frontend/src/purchase-plan/DemandChart.tsx
+@@ -72,7 +72,7 @@ export function DemandChart({
+             x={left}
+             y="11"
+             fill="#66767D"
+-            fontSize="9"
++            fontSize="13"
+           >
+             {t("Units per week")}</text>
+           {t([0, 0.5, 1].map((r) => (
+@@ -89,7 +89,7 @@ export function DemandChart({
+                 y={y(max * r) + 4}
+                 textAnchor="end"
+                 fill="#66767D"
+-                fontSize="10"
++                fontSize="13"
+               >
+                 {t(Math.round(max * r))}
+               </text>
+@@ -114,7 +114,7 @@ export function DemandChart({
+             y={top + 10}
+             textAnchor="end"
+             fill="#66767D"
+-            fontSize="9"
++            fontSize="13"
+           >
+             {t("Today")}</text>
+           <path
+@@ -191,7 +191,7 @@ export function DemandChart({
+                     y={bottom + 17}
+                     textAnchor="middle"
+                     fill="#66767D"
+-                    fontSize="9"
++                    fontSize="13"
+                   >
+                     {t("Missing")}</text>
+                 </g>
+@@ -214,7 +214,7 @@ export function DemandChart({
+                 y="222"
+                 textAnchor="middle"
+                 fill="#66767D"
+-                fontSize="9"
++                fontSize="13"
+               >
+                 {t("W")}{t(i + 1)}
+                 <title>
+@@ -230,7 +230,7 @@ export function DemandChart({
+               y="222"
+               textAnchor="middle"
+               fill="#66767D"
+-              fontSize="9"
++              fontSize="13"
+             >
+               {t("F")}{t(i)}
+             </text>
+diff --git a/frontend/src/purchase-plan/ProductPurchaseDialog.tsx b/frontend/src/purchase-plan/ProductPurchaseDialog.tsx
+deleted file mode 100644
+index 834f990..0000000
+--- a/frontend/src/purchase-plan/ProductPurchaseDialog.tsx
++++ /dev/null
+@@ -1,485 +0,0 @@
+-import { t, useLanguage } from "../i18n/index.ts";
+-import { useEffect, useRef } from "react";
+-import {
+-  applyPurchaseQuantityEdit,
+-  type ProductPurchaseInputs,
+-  type ProductPurchasePlan,
+-  type PurchaseAuditResult,
+-  type PurchaseFigureSource,
+-} from "../engine.ts";
+-import type { PurchaseProduct } from "./model.ts";
+-import { SourceTag, numberText, oneDecimalText } from "./SourceTag.tsx";
+-import { DemandChart } from "./DemandChart.tsx";
+-
+-export function DataLabel({ product }: { product: PurchaseProduct }) {
+-  useLanguage();
+-  const label = product.issue ? "Evidence mismatch" : product.demand?.label;
+-  return (
+-    <span
+-      className={`pill pill--${label === "Ready" ? "ready" : label === "Limited" ? "limited" : "cannot"}`}
+-      title={t(product.issue || product.demand?.labelReason?.message)}
+-    >
+-      {t(label)}
+-    </span>
+-  );
+-}
+-
+-function Metric({
+-  label,
+-  value,
+-  source,
+-}: {
+-  label: string;
+-  value: string;
+-  source?: PurchaseFigureSource;
+-}) {
+-  useLanguage();
+-  return (
+-    <div className="evidence-metric">
+-      <span>{t(label)}</span>
+-      <strong>{t(value)}</strong>
+-      {t(source && <SourceTag source={source} />)}
+-    </div>
+-  );
+-}
+-
+-function purchaseValue(inputs: ProductPurchaseInputs, field: keyof ProductPurchaseInputs): number {
+-  return inputs[field].state === "value" ? inputs[field].value : 0;
+-}
+-
+-/** Keeps the sliders useful for both small examples and larger retailer quantities. */
+-function purchaseSliderMaximum(
+-  product: PurchaseProduct,
+-  plan: ProductPurchasePlan | undefined,
+-  inputs: ProductPurchaseInputs,
+-): number {
+-  const rangeHigh = product.demand?.range?.high ?? 0;
+-  const stockOnHand = product.stock?.currentStock ?? 0;
+-  const estimate = plan?.estimatedRestock.state === "available"
+-    ? plan.estimatedRestock.quantity.value
+-    : 0;
+-  const largest = Math.max(
+-    rangeHigh,
+-    stockOnHand,
+-    estimate,
+-    purchaseValue(inputs, "plannedOrder"),
+-    purchaseValue(inputs, "incomingStock"),
+-  );
+-  const target = Math.max(100, largest * 2);
+-  if (target >= 999_999) return 999_999;
+-  const magnitude = 10 ** Math.floor(Math.log10(target));
+-  const interval = Math.max(10, magnitude / 2);
+-  return Math.ceil(target / interval) * interval;
+-}
+-
+-function PurchaseVerdict({ audit }: { audit?: PurchaseAuditResult }) {
+-  useLanguage();
+-  if (!audit)
+-    return (
+-      <section className="verdict verdict--none" aria-label={t("Purchase check")}>
+-        <strong>{t("Purchase check")}</strong>
+-        <p>{t("Refresh the evidence before checking a purchase.")}</p>
+-      </section>
+-    );
+-  if (audit.state === "not_planned")
+-    return (
+-      <section className="verdict verdict--none" aria-label={t("Purchase check")}>
+-        <div className="verdict-label">
+-          <strong>{t("Purchase check")}</strong>
+-          <span className="pill pill--neutral">{t("No plan entered")}</span>
+-        </div>
+-        <h3>{t("Enter a planned order when you are ready.")}</h3>
+-        <p>
+-          {t("StockLess will check it immediately. You can leave this product alone without answering anything.")}</p>
+-      </section>
+-    );
+-  if (audit.state === "cannot_judge")
+-    return (
+-      <section
+-        className="verdict verdict--cannot"
+-        aria-label={t("Purchase check")}
+-        aria-live="polite"
+-      >
+-        <div className="verdict-label">
+-          <strong>{t("Purchase check")}</strong>
+-          <span className="pill pill--cannot">{t(audit.label)}</span>
+-        </div>
+-        <h3>{t("StockLess cannot judge this purchase.")}</h3>
+-        <p>{t(audit.reason)}.</p>
+-        <p className="verdict-action">
+-          {t("What you can do: ")}{t(audit.correctiveAction)}
+-        </p>
+-      </section>
+-    );
+-  const tone =
+-    audit.verdict === "Overstock risk"
+-      ? "high"
+-      : audit.verdict === "Needs review"
+-        ? "review"
+-        : "balanced";
+-  const titles = {
+-    high: "This plan looks too high.",
+-    review: "This plan looks too low.",
+-    balanced: "This plan is within range.",
+-  };
+-  const labels = {
+-    stockOnHand: "Stock on hand",
+-    incomingStock: "Incoming stock",
+-    plannedOrder: "Planned order",
+-    demandLow: "Demand range low",
+-    demandHigh: "Demand range high",
+-    availableAfterOrder: "Stock after order",
+-  };
+-  return (
+-    <section
+-      className={`verdict verdict--${tone}`}
+-      aria-label={t("Purchase check")}
+-      aria-live="polite"
+-    >
+-      <div className="verdict-label">
+-        <strong>{t("Purchase check")}</strong>
+-        <span className={`pill pill--${tone}`}>
+-          {t(audit.verdict)}
+-        </span>
+-      </div>
+-      <h3>{t(titles[tone])}</h3>
+-      <p>
+-        {t(audit.reasonSentence)} <SourceTag source="worked out by StockLess" />
+-      </p>
+-      {t(audit.gettingOld && <p className="verdict-action">{t("Getting old")}</p>)}
+-      <div className="figure-grid">
+-        {t((Object.keys(labels) as (keyof typeof labels)[]).map((key) => (
+-          <div className="figure" key={key}>
+-            <span className="figure-label">{t(labels[key])}</span>
+-            <strong>{t(numberText(audit.figures[key].value))} {t("units")}</strong>
+-            <SourceTag source={audit.figures[key].source} />
+-          </div>
+-        )))}
+-      </div>
+-    </section>
+-  );
+-}
+-
+-export function ProductPurchaseDialog({
+-  product,
+-  plan,
+-  inputs,
+-  analysisDate,
+-  onChange,
+-  onClose,
+-}: {
+-  product: PurchaseProduct;
+-  plan?: ProductPurchasePlan;
+-  inputs: ProductPurchaseInputs;
+-  analysisDate: string;
+-  onChange: (inputs: ProductPurchaseInputs) => void;
+-  onClose: () => void;
+-}) {
+-  useLanguage();
+-  const ref = useRef<HTMLDialogElement>(null);
+-  const sliderMaximum = useRef(purchaseSliderMaximum(product, plan, inputs)).current;
+-  useEffect(() => {
+-    const dialog = ref.current!;
+-    const previousFocus =
+-      document.activeElement instanceof HTMLElement
+-        ? document.activeElement
+-        : null;
+-    const overflow = document.body.style.overflow;
+-    dialog.showModal();
+-    document.body.style.overflow = "hidden";
+-    return () => {
+-      dialog.close();
+-      document.body.style.overflow = overflow;
+-      previousFocus?.focus();
+-    };
+-  }, []);
+-  const update = (field: keyof ProductPurchaseInputs, raw: string) => {
+-    const result = applyPurchaseQuantityEdit(inputs[field], raw);
+-    if (result.accepted) onChange({ ...inputs, [field]: result.field });
+-  };
+-  const range =
+-    !product.issue && product.demand?.label !== "Cannot assess"
+-      ? product.demand?.range
+-      : undefined;
+-  const pattern = range && product.demand?.pattern;
+-  const restock = plan?.estimatedRestock;
+-  const cannotJudge = plan?.audit.state === "cannot_judge";
+-  const stock = product.stock;
+-  const evidence = product.evidence;
+-  const reason = product.issue || product.demand?.labelReason?.message;
+-  return (
+-    <dialog
+-      ref={ref}
+-      aria-labelledby="purchase-dialog-title"
+-      onCancel={(event) => {
+-        event.preventDefault();
+-        onClose();
+-      }}
+-      onClick={(event) => {
+-        if (event.target === event.currentTarget) {
+-          const rect = event.currentTarget.getBoundingClientRect();
+-          if (
+-            event.clientX < rect.left ||
+-            event.clientX > rect.right ||
+-            event.clientY < rect.top ||
+-            event.clientY > rect.bottom
+-          )
+-            onClose();
+-        }
+-      }}
+-    >
+-      <header className="dialog-head">
+-        <div>
+-          <p className="eyebrow">
+-            {t("Purchase plan · SKU ")}{product.sku || "Not available"}
+-          </p>
+-          <h2 id="purchase-dialog-title">{product.name}</h2>
+-          <p>
+-            {t("Stock counted ")}{stock?.stockAsOfDate || "date unavailable"}{t(" ")}
+-            {stock?.stockAsOfDate && <SourceTag source="from your file" />}
+-            {t(stock?.freshness.ageDays !== undefined && (
+-              <>
+-                {t(" ")}
+-                · {t(stock.freshness.ageDays)} {t("days old")}{t(" ")}
+-                <SourceTag source="worked out by StockLess" />
+-              </>
+-            ))}
+-          </p>
+-          <div className="dialog-badges">
+-            <DataLabel product={product} />
+-            {t(stock?.freshness.state === "limited" && (
+-              <span className="pill pill--limited">{t("Getting old")}</span>
+-            ))}
+-          </div>
+-        </div>
+-        <button
+-          className="icon-btn"
+-          type="button"
+-          aria-label={t("Close purchase plan")}
+-          onClick={onClose}
+-          autoFocus
+-        >
+-          ×
+-        </button>
+-      </header>
+-      <div className="dialog-layout">
+-        <div className="dialog-column">
+-          <section className="estimate-hero">
+-            <p className="eyebrow">{t("Estimated restock")}</p>
+-            {t(restock?.state === "available" && !cannotJudge ? (
+-              <>
+-                <div className="estimate-number">
+-                  {t(numberText(restock.quantity.value))}
+-                  <span>{t("units")}</span>
+-                </div>
+-                <p className="estimate-copy">
+-                  {t("A practical starting quantity for this product's next four weeks.")}</p>
+-                <div className="estimate-method">
+-                  {t("Midpoint of demand range − stock on hand − incoming stock")}<br />
+-                  <SourceTag source={restock.quantity.source} />
+-                </div>
+-              </>
+-            ) : (
+-              <>
+-                <div className="estimate-number estimate-unavailable">
+-                  {t("No reliable estimate")}</div>
+-                {t(!cannotJudge && (
+-                  <p className="estimate-copy">
+-                    {t(restock?.state === "unavailable" ? restock.reason : reason)}
+-                  </p>
+-                ))}
+-              </>
+-            ))}
+-          </section>
+-          <section className="panel">
+-            <div className="evidence-top">
+-              <div>
+-                <p className="eyebrow">{t("Demand evidence")}</p>
+-                <h3 className="panel-title">{t("Past sales and expected demand")}</h3>
+-                <p className="panel-sub">
+-                  {t("Missing weeks remain separate from recorded zero sales.")}</p>
+-              </div>
+-              <div className="range-callout">
+-                <span>{t(range ? "Expected demand" : "Demand range")}</span>
+-                <strong>
+-                  {t(range
+-                    ? `${numberText(range.low)}–${numberText(range.high)} units`
+-                    : "No range")}
+-                </strong>
+-                {t(pattern && <span className="pill pill--neutral range-pattern">{t(pattern)}</span>)}
+-                {t(range ? (
+-                  <>
+-                    <span>{t("total for the next 4 weeks")}</span>
+-                    <SourceTag source="worked out by StockLess" />
+-                  </>
+-                ) : (
+-                  <span>{t(reason)}</span>
+-                ))}
+-              </div>
+-            </div>
+-            {range && (
+-              <>
+-                <DemandChart
+-                  weeks={
+-                    evidence?.timeline.weeks.filter(
+-                      (week) => week.weekEnd < analysisDate,
+-                    ).slice(-8) ?? []
+-                  }
+-                  range={range}
+-                  name={product.name}
+-                />
+-                <p className="basis">
+-                  {t("Range based on ")}{t(range.basedOnWeekCount)} {t("weeks, from")}{t(" ")}
+-                  {t(range.firstWeekUsed)} {t("to ")}{t(range.lastWeekUsed)}.
+-                  {t(" ")}
+-                  <SourceTag source="worked out by StockLess" />
+-                </p>
+-                {t(reason && <p className="evidence-warning">{t(reason)}</p>)}
+-              </>
+-            )}
+-            <div className="evidence-metrics">
+-              <Metric
+-                label="Current stock"
+-                value={
+-                  stock?.currentStock === undefined
+-                    ? "Not available"
+-                    : `${numberText(stock.currentStock)} units`
+-                }
+-                source={
+-                  stock?.currentStock === undefined
+-                    ? undefined
+-                    : "from your file"
+-                }
+-              />
+-              <Metric
+-                label="Stock-count date"
+-                value={stock?.stockAsOfDate || "Not available"}
+-                source={stock?.stockAsOfDate ? "from your file" : undefined}
+-              />
+-              <Metric
+-                label="Recent weekly average"
+-                value={
+-                  !range || evidence?.recentAverage.value === undefined
+-                    ? "Not available"
+-                    : `${numberText(evidence.recentAverage.value)} units`
+-                }
+-                source={
+-                  range && evidence?.recentAverage.value !== undefined
+-                    ? "worked out by StockLess"
+-                    : undefined
+-                }
+-              />
+-              <Metric
+-                label="Current weeks of cover"
+-                value={
+-                  !range || evidence?.cover.value === undefined
+-                    ? "Cannot calculate"
+-                    : `${oneDecimalText(evidence.cover.value)} weeks`
+-                }
+-                source={
+-                  range && evidence?.cover.value !== undefined
+-                    ? "worked out by StockLess"
+-                    : undefined
+-                }
+-              />
+-            </div>
+-          </section>
+-        </div>
+-        <aside className="dialog-column">
+-          <section className="panel">
+-            <p className="eyebrow">{t("Your purchase")}</p>
+-            <h3 className="panel-title">{t("What are you planning to order?")}</h3>
+-            <p className="panel-sub">
+-              {t("Both fields are optional. The purchase check updates as soon as a valid figure changes.")}</p>
+-            <div className="form-grid">
+-              {t((["plannedOrder", "incomingStock"] as const).map((field) => {
+-                const input = inputs[field];
+-                const entered = input.state === "value";
+-                const value = input.state === "value" ? input.value : 0;
+-                const label = field === "plannedOrder" ? "Planned order" : "Incoming stock";
+-                return (
+-                  <div className="quantity-slider" key={field}>
+-                    <div className="quantity-slider__head">
+-                      <label htmlFor={`purchase-${field}`}>{t(label)}</label>
+-                      <output
+-                        htmlFor={`purchase-${field}`}
+-                        className={entered ? undefined : "quantity-slider__empty"}
+-                        aria-live="polite"
+-                      >
+-                        {t(entered ? (
+-                          <>{t(numberText(value))}<small> {t("units")}</small></>
+-                        ) : (
+-                          "Not entered"
+-                        ))}
+-                      </output>
+-                    </div>
+-                    {t(input.state === "value" && <SourceTag source={input.source} />)}
+-                    <input
+-                      className="quantity-slider__input"
+-                      id={`purchase-${field}`}
+-                      type="range"
+-                      min="0"
+-                      max={sliderMaximum}
+-                      step="1"
+-                      value={value}
+-                      aria-valuetext={t(entered ? `${numberText(value)} units` : "Not entered")}
+-                      aria-describedby={`purchase-${field}-help`}
+-                      onChange={(event) => update(field, event.currentTarget.value)}
+-                    />
+-                    <div className="quantity-slider__ends" aria-hidden="true">
+-                      <span>{t("0 units")}</span>
+-                      <span>{t(numberText(sliderMaximum))} {t("units")}</span>
+-                    </div>
+-                    <div className="quantity-slider__footer">
+-                      <small id={`purchase-${field}-help`}>
+-                        {t(field === "incomingStock"
+-                          ? "Not entered is treated as 0."
+-                          : "Move the slider to check the plan instantly.")}
+-                      </small>
+-                      {t(entered && (
+-                        <button
+-                          type="button"
+-                          className="quantity-slider__clear"
+-                          onClick={() => update(field, "")}
+-                          aria-label={t(`Clear ${label.toLowerCase()}`)}
+-                        >
+-                          {t("Clear")}</button>
+-                      ))}
+-                    </div>
+-                  </div>
+-                );
+-              }))}
+-            </div>
+-            <p className="visit-note">
+-              {t("Figures you enter are marked “input by you” and last for this visit only.")}</p>
+-          </section>
+-          <PurchaseVerdict audit={plan?.audit} />
+-          <div className="expiry">
+-            <span aria-hidden="true">◷</span>
+-            <div>
+-              <strong>{t("Expiry information")}</strong>
+-              <br />
+-              <span>
+-                {t(plan?.expiry.message ?? "Expiry not checked — evidence mismatch for this product")}
+-              </span>
+-              {plan?.expiry &&
+-                "earliestDate" in plan.expiry && (
+-                  <>
+-                    <br />
+-                    <SourceTag source="worked out by StockLess" />
+-                    <br />
+-                    {t("Earliest expiry: ")}{plan.expiry.earliestDate}{t(" ")}
+-                    <SourceTag source="from your file" />
+-                  </>
+-                )}
+-            </div>
+-          </div>
+-        </aside>
+-      </div>
+-      <footer className="dialog-footer">
+-        <button className="btn btn--ghost" type="button" onClick={onClose}>
+-          {t("Done")}</button>
+-      </footer>
+-    </dialog>
+-  );
+-}
+diff --git a/frontend/src/purchase-plan/PurchasePanel.tsx b/frontend/src/purchase-plan/PurchasePanel.tsx
+new file mode 100644
+index 0000000..f134f28
+--- /dev/null
++++ b/frontend/src/purchase-plan/PurchasePanel.tsx
+@@ -0,0 +1,353 @@
++import { useState } from "react";
++import { t, useLanguage } from "../i18n/index.ts";
++import {
++  applyPurchaseQuantityEdit,
++  type ProductPurchaseInputs,
++  type ProductPurchasePlan,
++  type PurchaseQuantityField,
++} from "../engine.ts";
++import type { PurchaseProduct } from "./model.ts";
++import { DataLabel } from "./DataLabel.tsx";
++import { DemandChart } from "./DemandChart.tsx";
++import { SourceTag, numberText, oneDecimalText } from "./SourceTag.tsx";
++
++/**
++ * The purchase detail panel.
++ *
++ * It used to be a modal. A modal is the wrong shape here: choosing an order
++ * quantity is a comparison, and the moment the list is covered the retailer
++ * cannot see what else is waiting. The panel sits beside the list on a wide
++ * screen and below it on a narrow one, and the list stays readable either way.
++ *
++ * Order matters and is fixed by US5.3 AC1: the action comes before the
++ * explanation. Suggestion, then the quantities, then the check, then the
++ * evidence, then the arithmetic behind it.
++ */
++
++/** US5.1 AC2 — a cleared field is "Not entered"; a typed zero is a real 0. */
++function quantityText(field: PurchaseQuantityField): string | null {
++  return field.state === "value" ? numberText(field.value) : null;
++}
++
++function Stepper({
++  id,
++  label,
++  hint,
++  field,
++  maximum,
++  onEdit,
++}: {
++  readonly id: string;
++  readonly label: string;
++  readonly hint: string;
++  readonly field: PurchaseQuantityField;
++  readonly maximum: number;
++  readonly onEdit: (raw: string) => string | undefined;
++}) {
++  useLanguage();
++  const [error, setError] = useState<string | undefined>();
++  const entered = field.state === "value";
++  const value = entered ? field.value : 0;
++  const shown = quantityText(field);
++
++  const apply = (raw: string) => setError(onEdit(raw));
++
++  return (
++    <div className="pp-field">
++      <div className="pp-field__head">
++        <label htmlFor={id}>{t(label)}</label>
++        {/* US5.1 AC2: zero reads as 0, a cleared field reads as Not entered */}
++        <output htmlFor={id} aria-live="polite"
++          className={entered ? "pp-field__value" : "pp-field__value pp-field__value--empty"}>
++          {t(entered ? <>{shown}<small> {t("units")}</small></> : "Not entered")}
++        </output>
++      </div>
++
++      <div className="pp-stepper">
++        <button type="button" className="pp-stepper__btn"
++          aria-label={t(`Decrease ${label.toLowerCase()}`)}
++          onClick={() => apply(String(Math.max(0, value - 1)))}>−</button>
++        <input id={id} className="pp-stepper__input num" type="text" inputMode="numeric"
++          value={shown ?? ""} placeholder="—"
++          aria-describedby={`${id}-help`}
++          aria-invalid={error ? true : undefined}
++          onChange={(event) => apply(event.currentTarget.value)} />
++        <button type="button" className="pp-stepper__btn"
++          aria-label={t(`Increase ${label.toLowerCase()}`)}
++          onClick={() => apply(String(Math.min(maximum, value + 1)))}>+</button>
++      </div>
++
++      <input className="pp-field__range" type="range" min="0" max={maximum} step="1"
++        value={value} aria-label={t(label)}
++        aria-valuetext={t(entered ? `${shown} units` : "Not entered")}
++        onChange={(event) => apply(event.currentTarget.value)} />
++
++      <div className="pp-field__foot">
++        {/* US5.1 AC3 — the field says what is wrong and nothing is recalculated */}
++        <small id={`${id}-help`} className={error ? "pp-field__error" : undefined} role={error ? "alert" : undefined}>
++          {t(error ?? hint)}
++        </small>
++        {t(entered && (
++          <button type="button" className="pp-field__clear" onClick={() => apply("")}>
++            {t("Clear")}</button>
++        ))}
++      </div>
++      {t(entered && <SourceTag source={field.source} />)}
++    </div>
++  );
++}
++
++/** The stacked bar: what you hold, what is coming, what you would order. */
++function PurchaseBar({ plan }: { readonly plan: ProductPurchasePlan }) {
++  useLanguage();
++  if (plan.audit.state !== "verdict") return null;
++  const f = plan.audit.figures;
++  const total = f.availableAfterOrder.value;
++  const scale = Math.max(f.demandHigh.value, total) * 1.15 || 1;
++  const pc = (v: number) => `${(v / scale) * 100}%`;
++  return (
++    <>
++      <div className="pp-bar" role="img"
++        aria-label={t(`${numberText(total)} units against expected demand ${numberText(f.demandLow.value)} to ${numberText(f.demandHigh.value)}`)}>
++        <span className="pp-bar__band"
++          style={{ left: pc(f.demandLow.value), width: pc(f.demandHigh.value - f.demandLow.value) }} />
++        <span className="pp-bar__seg pp-bar__seg--stock" style={{ left: 0, width: pc(f.stockOnHand.value) }} />
++        <span className="pp-bar__seg pp-bar__seg--incoming"
++          style={{ left: pc(f.stockOnHand.value), width: pc(f.incomingStock.value) }} />
++        <span className="pp-bar__seg pp-bar__seg--order"
++          style={{ left: pc(f.stockOnHand.value + f.incomingStock.value), width: pc(f.plannedOrder.value) }} />
++      </div>
++      <div className="pp-bar__axis num" aria-hidden="true">
++        <span style={{ left: pc(f.demandLow.value) }}>{t(numberText(f.demandLow.value))} {t("low")}</span>
++        <span style={{ left: pc(f.demandHigh.value) }}>{t(numberText(f.demandHigh.value))} {t("high")}</span>
++      </div>
++      <ul className="pp-bar__key">
++        <li><i className="pp-bar__seg--stock" />{t("In stock")}</li>
++        <li><i className="pp-bar__seg--incoming" />{t("Incoming")}</li>
++        <li><i className="pp-bar__seg--order" />{t("Your order")}</li>
++        <li><i className="pp-bar__band" />{t("Expected demand")}</li>
++      </ul>
++    </>
++  );
++}
++
++export function PurchasePanel({
++  product,
++  plan,
++  inputs,
++  analysisDate,
++  position,
++  count,
++  onChange,
++  onStep,
++}: {
++  readonly product: PurchaseProduct;
++  readonly plan?: ProductPurchasePlan;
++  readonly inputs: ProductPurchaseInputs;
++  readonly analysisDate: string;
++  readonly position: number;
++  readonly count: number;
++  readonly onChange: (inputs: ProductPurchaseInputs) => void;
++  readonly onStep: (delta: number) => void;
++}) {
++  useLanguage();
++
++  const edit = (f: keyof ProductPurchaseInputs) => (raw: string) => {
++    const result = applyPurchaseQuantityEdit(inputs[f], raw);
++    if (!result.accepted) return result.message;
++    onChange({ ...inputs, [f]: result.field });
++    return undefined;
++  };
++
++  const range = !product.issue && product.demand?.label !== "Cannot assess"
++    ? product.demand?.range : undefined;
++  const restock = plan?.estimatedRestock;
++  const cannotJudge = plan?.audit.state === "cannot_judge";
++  const assessable = restock?.state === "available" && !cannotJudge && range;
++  const suggested = restock?.state === "available" ? restock.quantity.value : undefined;
++  const usingSuggestion = suggested !== undefined
++    && inputs.plannedOrder.state === "value" && inputs.plannedOrder.value === suggested;
++  const stock = product.stock;
++  const evidence = product.evidence;
++  const reason = product.issue || product.demand?.labelReason?.message;
++
++  const sliderMax = Math.max(
++    20,
++    (range?.high ?? 0) * 2,
++    (inputs.plannedOrder.state === "value" ? inputs.plannedOrder.value : 0) + 10,
++  );
++
++  return (
++    <aside className="pp-panel" aria-label={t("Purchase details")}>
++      <div className="pp-nav">
++        <span>{t("Product ")}{t(position)} {t("of ")}{t(count)}</span>
++        <span className="pp-nav__buttons">
++          <button type="button" onClick={() => onStep(-1)} aria-label={t("Previous product")}>‹</button>
++          <button type="button" onClick={() => onStep(1)} aria-label={t("Next product")}>›</button>
++        </span>
++      </div>
++
++      <div className="pp-head">
++        <h2>{product.name}</h2>
++        <p className="pp-head__sub">
++          {t("SKU ")}{product.sku || t("Not available")}
++          {t(stock?.stockAsOfDate && (
++            <>
++              {" · "}{t("Stock counted ")}{stock.stockAsOfDate} <SourceTag source="from your file" />
++              {/* US5.8 AC2 — days held, never presented as time until expiry */}
++              {t(stock.freshness.ageDays !== undefined
++                && <> · {t(stock.freshness.ageDays)} {t("days ago")}</>)}
++            </>
++          ))}
++        </p>
++        <div className="pp-head__tags">
++          <DataLabel product={product} />
++          {t(stock?.freshness.state === "limited" && (
++            <span className="pill pill--amber">{t("Getting old")}</span>
++          ))}
++          {t(range && product.demand?.pattern && (
++            <span className="pill pill--grey">{t(product.demand.pattern)}</span>
++          ))}
++        </div>
++      </div>
++
++      {/* ===== US5.3 AC1: the action, before any explanation ===== */}
++      <section className="pp-block">
++        <h3>{t("What are you planning to order?")}</h3>
++
++        {t(assessable && suggested !== undefined ? (
++          <div className="pp-suggest">
++            <div>
++              <span className="pp-suggest__k">{t("StockLess suggests")}</span>
++              {/* US5.6 AC1 — one quantity, its unit, and the planning period */}
++              <span className="pp-suggest__v num">{t(numberText(suggested))}<small> {t("units")}</small></span>
++              <span className="pp-suggest__k">{t("for the next 4 weeks")}</span>
++            </div>
++            {t(usingSuggestion ? (
++              <span className="pill pill--confirmed">{t("Using suggestion")}</span>
++            ) : (
++              <button type="button" className="btn btn--primary btn--small"
++                onClick={() => edit("plannedOrder")(String(suggested))}>
++                {t("Use ")}{t(numberText(suggested))}</button>
++            ))}
++          </div>
++        ) : (
++          /* US5.4 AC1 — name the missing evidence and the next action */
++          <div className="pp-blocked">
++            <b>{t("No suggestion yet")}</b>
++            <p>{t(cannotJudge && plan?.audit.state === "cannot_judge"
++              ? plan.audit.reason
++              : restock?.state === "unavailable" ? restock.reason : reason)}</p>
++            {t(cannotJudge && plan?.audit.state === "cannot_judge" && plan.audit.correctiveAction && (
++              <p className="pp-blocked__next">
++                <b>{t("Next: ")}</b>{t(plan.audit.correctiveAction)}
++              </p>
++            ))}
++          </div>
++        ))}
++
++        <Stepper id="pp-order" label="Planned order"
++          hint="Leave it empty until you have decided."
++          field={inputs.plannedOrder} maximum={sliderMax} onEdit={edit("plannedOrder")} />
++        <Stepper id="pp-incoming" label="Incoming stock"
++          hint="Already ordered but not arrived. Not entered is treated as 0."
++          field={inputs.incomingStock} maximum={sliderMax} onEdit={edit("incomingStock")} />
++      </section>
++
++      {t(plan?.audit.state === "verdict" && (
++        <section className="pp-block">
++          <h3>{t("Purchase check")}</h3>
++          <p className="pp-eq num">
++            <span>{t(numberText(plan.audit.figures.stockOnHand.value))} {t("in stock")}</span>
++            {" + "}<span>{t(numberText(plan.audit.figures.incomingStock.value))} {t("incoming")}</span>
++            {" + "}<span>{t(numberText(plan.audit.figures.plannedOrder.value))} {t("order")}</span>
++            {" = "}<b>{t(numberText(plan.audit.figures.availableAfterOrder.value))} {t("units")}</b>
++          </p>
++          <PurchaseBar plan={plan} />
++          <div className={`pp-verdict pp-verdict--${plan.audit.verdict === "Looks balanced" ? "ok"
++            : plan.audit.verdict === "Overstock risk" ? "over" : "under"}`}>
++            <b>{t(plan.audit.verdict)}</b>
++            <span>{t(plan.audit.reasonSentence)}</span>
++          </div>
++        </section>
++      ))}
++
++      {/* US5.5 — expiry, including the "not checked" case (AC3) */}
++      {t(plan?.expiry && (
++        <section className="pp-block">
++          <div className={`pp-expiry${plan.expiry.state === "expires_within_four_weeks" ? " pp-expiry--risk" : ""}`}>
++            <span className="pp-expiry__mark" aria-hidden="true">
++              {plan.expiry.state === "expires_within_four_weeks" ? "!" : "✓"}
++            </span>
++            <div>
++              <b>{t("Expiry")}</b>
++              <p>{t(plan.expiry.message)}</p>
++              {t("earliestDate" in plan.expiry && plan.expiry.earliestDate && (
++                <p className="pp-expiry__date">
++                  {t("Earliest expiry: ")}{plan.expiry.earliestDate} <SourceTag source="from your file" />
++                </p>
++              ))}
++            </div>
++          </div>
++        </section>
++      ))}
++
++      {t(range && (
++        <section className="pp-block">
++          <h3>{t("Sales evidence")}</h3>
++          <DemandChart
++            weeks={evidence?.timeline.weeks.filter((w) => w.weekEnd < analysisDate).slice(-8) ?? []}
++            range={range}
++            name={product.name}
++          />
++          <div className="pp-stats">
++            <div className="pp-stat">
++              <span>{t("Sells per week")}</span>
++              <b className="num">{t(evidence?.recentAverage.value === undefined
++                ? "Not available"
++                : `${numberText(evidence.recentAverage.value)} units`)}</b>
++            </div>
++            <div className="pp-stat">
++              <span>{t("Current stock lasts")}</span>
++              <b className="num">{t(evidence?.cover.value === undefined
++                ? "Cannot calculate"
++                : `${oneDecimalText(evidence.cover.value)} weeks`)}</b>
++            </div>
++          </div>
++          <p className="pp-basis">
++            {t("Range based on ")}{t(range.basedOnWeekCount)} {t("weeks, from ")}
++            {range.firstWeekUsed} {t("to ")}{range.lastWeekUsed}. <SourceTag source="worked out by StockLess" />
++          </p>
++          {t(reason && <p className="pp-basis pp-basis--warn">{t(reason)}</p>)}
++        </section>
++      ))}
++
++      {/* US5.3 AC2 — the numbers behind the recommendation, on demand */}
++      {t(assessable && suggested !== undefined && restock?.state === "available" && (
++        <section className="pp-block">
++          <details className="pp-why">
++            <summary>{t("How StockLess got ")}{t(numberText(suggested))} {t("units")}</summary>
++            <ul>
++              <li>{t("Middle of expected demand: ")}<b className="num">{t(numberText(restock.midpointTarget.value))}</b></li>
++              <li>{t("Stock on hand: ")}<b className="num">−{t(numberText(stock?.currentStock ?? 0))}</b> <SourceTag source="from your file" /></li>
++              <li>{t("Incoming stock: ")}<b className="num">−{t(numberText(
++                inputs.incomingStock.state === "value" ? inputs.incomingStock.value : 0)) }</b></li>
++              <li>{t("Planned order you entered: ")}<b className="num">{t(quantityText(inputs.plannedOrder) ?? t("Not entered"))}</b></li>
++              <li>{t("Expiry adjustment: ")}<b>{t(plan?.expiry.message ?? "Expiry not checked")}</b></li>
++            </ul>
++            <p>
++              {t("Demand comes from ")}{t(range?.basedOnWeekCount ?? 0)} {t("weeks of sales, ")}
++              {range?.firstWeekUsed} {t("to ")}{range?.lastWeekUsed}.
++            </p>
++          </details>
++        </section>
++      ))}
++
++      <div className="pp-foot">
++        <span className="pp-foot__note">{t("Stays on this device")}</span>
++        <button type="button" className="btn btn--primary btn--small" onClick={() => onStep(1)}>
++          {t("Next product →")}</button>
++      </div>
++    </aside>
++  );
++}
 diff --git a/frontend/src/purchase-plan/impact.ts b/frontend/src/purchase-plan/impact.ts
 new file mode 100644
 index 0000000..ba1ab55
@@ -1723,10 +3101,464 @@ index 0000000..ba1ab55
 +    weight: { state: "needs", evidence: "unit_weight" },
 +  };
 +}
+diff --git a/frontend/src/purchase-plan/purchase-plan.css b/frontend/src/purchase-plan/purchase-plan.css
+index 3653223..ce51673 100644
+--- a/frontend/src/purchase-plan/purchase-plan.css
++++ b/frontend/src/purchase-plan/purchase-plan.css
+@@ -49,7 +49,7 @@
+     .purchase-plan .steps { width:min(790px,100%); margin:0 auto; padding:0; display:grid; grid-template-columns:repeat(4,1fr); list-style:none; }
+     .purchase-plan .steps li { position:relative; display:grid; justify-items:center; gap:6px; color:var(--muted-2); font-size:12px; font-weight:700; }
+     .purchase-plan .steps li:not(:last-child)::after { content:""; position:absolute; z-index:0; top:16px; left:calc(50% + 20px); width:calc(100% - 40px); height:2px; background:var(--teal); }
+-    .purchase-plan .step-dot { z-index:1; display:grid; place-items:center; width:34px; height:34px; border:1px solid var(--teal); border-radius:50%; color:#fff; background:var(--teal); font-family:var(--data); font-size:11px; }
++    .purchase-plan .step-dot { z-index:1; display:grid; place-items:center; width:34px; height:34px; border:1px solid var(--teal); border-radius:50%; color:#fff; background:var(--teal); font-family:var(--data); font-size:var(--text-label); }
+     .purchase-plan .steps .current { color:var(--ink); }
+     .purchase-plan .steps .current .step-dot { border:2px solid var(--teal); color:var(--teal-deep); background:#fff; }
+ 
+@@ -112,7 +112,7 @@
+ 
+     .purchase-plan .table-scroll { overflow-x:auto; border-top:1px solid var(--line-soft); }
+     .purchase-plan table { width:100%; min-width:900px; border-collapse:collapse; table-layout:fixed; }
+-    .purchase-plan th { padding:11px 12px; color:var(--muted); background:#FAFCFB; font-size:11px; font-weight:700; letter-spacing:.55px; text-align:left; text-transform:uppercase; }
++    .purchase-plan th { padding:11px 12px; color:var(--muted); background:#FAFCFB; font-size:var(--text-label); font-weight:700; letter-spacing:.55px; text-align:left; text-transform:uppercase; }
+     .purchase-plan td { padding:14px 12px; vertical-align:middle; border-top:1px solid var(--line-soft); color:var(--ink-2); }
+     .purchase-plan tbody tr { transition:background-color .15s; }
+     .purchase-plan tbody tr.clickable-row { cursor:pointer; }
+@@ -120,14 +120,14 @@
+     .purchase-plan tbody tr.selected td:first-child { box-shadow:inset 3px 0 var(--teal); }
+     .purchase-plan .product-button { display:block; width:100%; padding:2px 0; border:0; color:var(--ink); background:transparent; font-weight:700; text-align:left; }
+     .purchase-plan .product-button:hover { color:var(--teal-deep); text-decoration:underline; }
+-    .purchase-plan .product-button small { display:block; margin-top:4px; color:var(--muted); font-family:var(--data); font-size:10px; font-weight:600; text-decoration:none; }
++    .purchase-plan .product-button small { display:block; margin-top:4px; color:var(--muted); font-family:var(--data); font-size:var(--text-label); font-weight:600; text-decoration:none; }
+     .purchase-plan .range { color:var(--ink); font-family:var(--data); font-weight:700; }
+     .purchase-plan .range-pattern { margin-left:8px; font-family:var(--body); vertical-align:middle; }
+     .purchase-plan .range-callout .range-pattern { margin:6px 0 0; font-size:12px; }
+-    .purchase-plan .range small, .purchase-plan .estimate small { display:block; margin-top:4px; color:var(--muted); font-family:var(--body); font-size:11px; font-weight:600; }
++    .purchase-plan .range small, .purchase-plan .estimate small { display:block; margin-top:4px; color:var(--muted); font-family:var(--body); font-size:var(--text-label); font-weight:600; }
+     .purchase-plan .estimate { color:var(--teal-deep); font-family:var(--display); font-size:17px; font-weight:800; }
+     .purchase-plan .estimate--none { color:var(--muted); font-size:13px; }
+-    .purchase-plan .input-source { display:block; margin-top:4px; color:var(--muted); font-size:10px; }
++    .purchase-plan .input-source { display:block; margin-top:4px; color:var(--muted); font-size:var(--text-label); }
+     .purchase-plan .row-action { width:38px; height:38px; display:grid; place-items:center; border:1px solid var(--border-strong); border-radius:9px; color:var(--teal-deep); background:#fff; font-size:20px; }
+     .purchase-plan .empty-row { padding:30px; color:var(--muted); text-align:center; }
+     .purchase-plan .list-footer { padding:16px 26px; display:flex; align-items:center; justify-content:space-between; gap:20px; border-top:1px solid var(--line-soft); color:var(--muted); font-size:12px; }
+@@ -136,7 +136,7 @@
+     .purchase-plan dialog::backdrop { background:rgba(16,38,46,.58); backdrop-filter:blur(3px); }
+     .purchase-plan .dialog-head { position:sticky; z-index:5; top:0; padding:22px 24px; display:flex; align-items:flex-start; justify-content:space-between; gap:20px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.97); }
+     .purchase-plan .dialog-head h2 { margin:2px 0 4px; color:var(--ink); font-family:var(--display); font-size:25px; letter-spacing:-.03em; }
+-    .purchase-plan .dialog-head p { margin:0; color:var(--muted); font-family:var(--data); font-size:11px; }
++    .purchase-plan .dialog-head p { margin:0; color:var(--muted); font-family:var(--data); font-size:var(--text-label); }
+     .purchase-plan .dialog-badges { margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; }
+     .purchase-plan .dialog-layout { padding:24px; display:grid; grid-template-columns:minmax(0,1.45fr) minmax(330px,.8fr); gap:22px; background:var(--page); }
+     .purchase-plan .dialog-column { min-width:0; display:grid; align-content:start; gap:18px; }
+@@ -150,16 +150,16 @@
+     .purchase-plan .estimate-number { position:relative; z-index:1; margin:10px 0 8px; font-family:var(--display); font-size:52px; font-weight:800; line-height:1; }
+     .purchase-plan .estimate-number span { margin-left:6px; color:#D8E4E1; font-size:16px; font-weight:600; }
+     .purchase-plan .estimate-copy { position:relative; z-index:1; margin:0; max-width:430px; color:#D8E4E1; line-height:1.5; }
+-    .purchase-plan .estimate-method { position:relative; z-index:1; margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,.16); color:#EAF2F0; font-family:var(--data); font-size:11px; line-height:1.55; }
++    .purchase-plan .estimate-method { position:relative; z-index:1; margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,.16); color:#EAF2F0; font-family:var(--data); font-size:var(--text-label); line-height:1.55; }
+     .purchase-plan .estimate-unavailable { font-size:30px; line-height:1.15; }
+ 
+     .purchase-plan .evidence-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+     .purchase-plan .range-callout { min-width:180px; padding:13px 15px; border:1px solid #C8E0DA; border-radius:14px; color:var(--teal-deep); background:var(--teal-tint); }
+-    .purchase-plan .range-callout span { display:block; font-size:11px; font-weight:700; }
++    .purchase-plan .range-callout span { display:block; font-size:var(--text-label); font-weight:700; }
+     .purchase-plan .range-callout strong { display:block; margin:4px 0 1px; font-family:var(--display); font-size:25px; letter-spacing:-.03em; }
+     .purchase-plan .chart-wrap { margin-top:18px; }
+     .purchase-plan .chart-wrap svg { display:block; width:100%; height:auto; }
+-    .purchase-plan .chart-legend { margin-top:10px; display:flex; flex-wrap:wrap; gap:12px 18px; color:var(--muted); font-size:11px; }
++    .purchase-plan .chart-legend { margin-top:10px; display:flex; flex-wrap:wrap; gap:12px 18px; color:var(--muted); font-size:var(--text-label); }
+     .purchase-plan .legend-line { display:inline-block; width:20px; height:3px; margin-right:6px; vertical-align:middle; border-radius:3px; background:var(--ink); }
+     .purchase-plan .legend-forecast { display:inline-block; width:20px; height:9px; margin-right:6px; vertical-align:middle; border:1px solid rgba(22,125,116,.28); border-radius:3px; background:rgba(22,125,116,.17); }
+     .purchase-plan .legend-dot { display:inline-block; width:8px; height:8px; margin-right:6px; border-radius:50%; vertical-align:middle; background:var(--amber-strong); }
+@@ -167,7 +167,7 @@
+     .purchase-plan .evidence-warning { margin:14px 0 0; padding:11px 13px; border-left:4px solid var(--amber-strong); color:var(--amber); background:var(--amber-tint); font-size:12px; }
+     .purchase-plan .evidence-metrics { margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+     .purchase-plan .evidence-metric { padding:12px 14px; border:1px solid var(--line-soft); border-left:3px solid var(--teal); border-radius:10px; background:#FAFCFB; }
+-    .purchase-plan .evidence-metric span { display:block; color:var(--muted); font-size:11px; }
++    .purchase-plan .evidence-metric span { display:block; color:var(--muted); font-size:var(--text-label); }
+     .purchase-plan .evidence-metric strong { display:block; margin-top:4px; color:var(--ink); font-family:var(--data); font-size:16px; }
+ 
+     .purchase-plan .form-grid { margin-top:18px; display:grid; grid-template-columns:1fr; gap:20px; }
+@@ -180,16 +180,16 @@
+     .purchase-plan .quantity-slider__head .quantity-slider__empty { color:var(--muted); font-family:var(--body); font-size:13px; font-weight:600; }
+     .purchase-plan .quantity-slider>.source-tag { margin-top:8px; }
+     .purchase-plan .quantity-slider__input { display:block; width:100%; min-height:28px; margin:10px 0 3px; accent-color:var(--teal); cursor:pointer; }
+-    .purchase-plan .quantity-slider__ends { display:flex; align-items:center; justify-content:space-between; color:var(--muted); font-size:10px; }
++    .purchase-plan .quantity-slider__ends { display:flex; align-items:center; justify-content:space-between; color:var(--muted); font-size:var(--text-label); }
+     .purchase-plan .quantity-slider__footer { min-height:24px; margin-top:7px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+-    .purchase-plan .quantity-slider__footer small { color:var(--muted); font-size:10px; }
+-    .purchase-plan .quantity-slider__clear { padding:2px 0; border:0; border-bottom:1px solid #8DBBB2; color:var(--teal-deep); background:transparent; font-size:11px; font-weight:700; cursor:pointer; }
++    .purchase-plan .quantity-slider__footer small { color:var(--muted); font-size:var(--text-label); }
++    .purchase-plan .quantity-slider__clear { padding:2px 0; border:0; border-bottom:1px solid #8DBBB2; color:var(--teal-deep); background:transparent; font-size:var(--text-label); font-weight:700; cursor:pointer; }
+     .purchase-plan .quantity-slider__clear:hover { color:var(--teal); }
+-    .purchase-plan .source-tag { display:inline-flex; align-items:center; min-height:22px; padding:3px 7px; border-radius:7px; font-size:10px; font-weight:700; white-space:nowrap; }
++    .purchase-plan .source-tag { display:inline-flex; align-items:center; min-height:22px; padding:3px 7px; border-radius:7px; font-size:var(--text-label); font-weight:700; white-space:nowrap; }
+     .purchase-plan .source--file { color:#315F73; background:#EDF4F8; }
+     .purchase-plan .source--input { color:var(--amber); background:var(--amber-tint); }
+     .purchase-plan .source--worked { color:var(--teal-deep); background:var(--teal-tint); }
+-    .purchase-plan .visit-note { margin:12px 0 0; color:var(--muted); font-size:11px; }
++    .purchase-plan .visit-note { margin:12px 0 0; color:var(--muted); font-size:var(--text-label); }
+ 
+     .purchase-plan .verdict { padding:18px; border:1px solid var(--line); border-radius:16px; }
+     .purchase-plan .verdict--high { border-color:#E0AFAF; background:var(--red-tint); }
+@@ -204,7 +204,7 @@
+ 
+     .purchase-plan .figure-grid { margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+     .purchase-plan .figure { padding:12px; border:1px solid var(--line-soft); border-radius:12px; background:#fff; }
+-    .purchase-plan .figure-label { display:block; color:var(--muted); font-size:11px; }
++    .purchase-plan .figure-label { display:block; color:var(--muted); font-size:var(--text-label); }
+     .purchase-plan .figure strong { display:block; margin:4px 0 7px; color:var(--ink); font-family:var(--data); font-size:16px; }
+     .purchase-plan .expiry { display:flex; align-items:flex-start; gap:10px; padding:13px; border-radius:13px; color:var(--amber); background:var(--amber-tint); }
+     .purchase-plan .expiry strong { color:var(--ink); }
+@@ -221,7 +221,7 @@
+       .purchase-plan .topbar { height:auto; min-height:70px; padding:14px 20px; }
+       .purchase-plan .session { display:none; }
+       .purchase-plan .stepper { height:72px; padding:0 20px; }
+-      .purchase-plan .steps li span:last-child { font-size:10px; }
++      .purchase-plan .steps li span:last-child { font-size:var(--text-label); }
+       .purchase-plan .steps li:not(:last-child)::after { left:calc(50% + 18px); width:calc(100% - 36px); }
+       .purchase-plan .step-dot { width:32px; height:32px; }
+       .purchase-plan .page { width:calc(100% - 40px); padding:32px 0 44px; }
+@@ -264,3 +264,326 @@
+ @media(max-width:760px) {
+   .page:has(> .purchase-plan) { padding-top:32px;padding-bottom:44px; }
+ }
++
++/* ===== Step 4, rebuilt to the purchase-plan design =====
++   The layout and interaction come from the reference design; the colours,
++   the page shell and every size come from this product — StockLess teal and
++   ink, and the I3-TYPO-01 roles, not the reference's own palette or its 14px
++   scale.
++
++   The detail used to be a modal. Choosing an order quantity is a comparison,
++   and a modal hides the list you are comparing against, so the detail is now
++   a panel beside the list — and below it once there is no room for two. */
++.pp-layout{display:grid;grid-template-columns:minmax(0,1fr) 430px;
++  gap:18px;align-items:start;margin-top:16px}
++
++/* ----- the action groups (US8.2 AC1) ----- */
++.pp-groups{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
++.pp-group{flex:1 1 170px;text-align:left;cursor:pointer;
++  display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline;
++  padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;
++  font-family:var(--body);color:var(--ink);
++  transition:border-color .15s ease,background-color .15s ease}
++.pp-group:hover{border-color:var(--border-strong)}
++.pp-group b{grid-row:1;font-family:var(--display);font-size:var(--text-section-head);
++  font-weight:800;line-height:1}
++.pp-group span{grid-row:1;font-size:var(--text-body);font-weight:700}
++.pp-group small{grid-column:2;grid-row:2;font-size:var(--text-description);
++  color:var(--muted);line-height:1.4}
++.pp-group--on{border-color:var(--teal);background:var(--teal-tint)}
++.pp-group--on b{color:var(--teal-deep)}
++/* the group's colour is the same one the check uses in the table */
++.pp-group--order_needed b{color:var(--amber-strong)}
++.pp-group--check_order b{color:var(--red)}
++.pp-group--balanced b{color:var(--teal)}
++.pp-group--need_data b{color:var(--muted-2)}
++
++/* ----- the provenance key, spelled out once above the table ----- */
++.pp-key{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0;
++  padding:11px 16px;border-top:1px solid var(--line-soft);
++  font-size:var(--text-description);color:var(--muted)}
++
++/* ----- the list ----- */
++.pp-table .product-button{font-size:var(--text-body)}
++.pp-table .range{display:block;font-weight:600}
++.pp-table .range small{display:block;font-weight:400;font-size:var(--text-description);color:var(--muted)}
++.pp-table .range--none{color:var(--muted);font-weight:400}
++.pp-suggested{display:block;font-size:var(--text-description);color:var(--muted);margin-top:2px}
++.pp-check{display:inline-flex;align-items:center;gap:7px;font-size:var(--text-secondary);font-weight:700}
++.pp-check::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
++.pp-check--order_needed{color:var(--amber)}
++.pp-check--check_order{color:var(--red)}
++.pp-check--balanced{color:var(--teal-deep)}
++.pp-check--need_data{color:var(--muted)}
++
++/* ----- the detail panel ----- */
++.pp-panel{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;
++  background:#fff;border:1px solid var(--line);border-radius:16px;
++  box-shadow:var(--shadow-card);display:flex;flex-direction:column}
++.pp-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;
++  padding:11px 18px;border-bottom:1px solid var(--line);
++  font-size:var(--text-description);color:var(--muted)}
++.pp-nav__buttons{display:flex;gap:7px}
++.pp-nav button{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;
++  background:#fff;cursor:pointer;color:var(--ink);font-size:var(--text-body);line-height:1}
++.pp-nav button:hover{border-color:var(--border-strong);background:var(--teal-tint)}
++
++.pp-head{padding:18px}
++.pp-head h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
++.pp-head__sub{margin:6px 0 0;font-size:var(--text-description);color:var(--muted);line-height:1.6}
++.pp-head__tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
++
++.pp-block{padding:18px;border-top:1px solid var(--line)}
++.pp-block h3{font-family:var(--display);font-size:var(--text-section-head);
++  font-weight:700;margin:0 0 12px}
++
++/* the suggestion, first — US5.3 AC1 puts the action before the explanation */
++.pp-suggest{display:flex;align-items:center;justify-content:space-between;gap:14px;
++  padding:14px 16px;border-radius:12px;background:var(--teal-tint)}
++.pp-suggest__k{display:block;font-size:var(--text-description);color:var(--muted)}
++.pp-suggest__v{display:block;font-family:var(--display);font-size:30px;font-weight:800;
++  line-height:1.15;color:var(--teal-deep)}
++.pp-suggest__v small{font-size:var(--text-body);font-weight:700}
++
++.pp-blocked{padding:14px 16px;border-radius:12px;background:var(--amber-tint);color:var(--amber)}
++.pp-blocked b{font-family:var(--display);display:block;font-size:var(--text-body)}
++.pp-blocked p{margin:5px 0 0;font-size:var(--text-secondary);line-height:1.55;color:#6C561F}
++.pp-blocked__next{color:var(--amber)}
++
++/* quantity fields: a stepper for a precise number, a slider to explore */
++.pp-field{margin-top:16px}
++.pp-field__head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
++.pp-field__head label{font-size:var(--text-body);font-weight:700}
++.pp-field__value{font-family:var(--data);font-size:var(--text-body);font-weight:700}
++.pp-field__value--empty{font-family:var(--body);font-weight:400;color:var(--muted)}
++.pp-stepper{display:flex;align-items:stretch;width:150px;margin-top:8px;
++  border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
++.pp-stepper__btn{width:42px;border:0;background:var(--teal-tint);color:var(--teal-deep);
++  font-size:var(--text-lead);font-weight:700;cursor:pointer;line-height:1}
++.pp-stepper__btn:hover{background:var(--mint)}
++.pp-stepper__input{flex:1;min-width:0;border:0;text-align:center;padding:9px 4px;
++  font-family:var(--data);font-size:var(--text-body);color:var(--ink);background:transparent}
++.pp-stepper__input::placeholder{font-family:var(--body);font-size:var(--text-description);color:var(--muted-2)}
++.pp-field__range{display:block;width:100%;margin:10px 0 0;accent-color:var(--teal);cursor:pointer}
++.pp-field__foot{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:4px}
++.pp-field__foot small{font-size:var(--text-description);color:var(--muted);line-height:1.45}
++.pp-field__error{color:var(--red);font-weight:700}
++.pp-field__clear{border:0;background:none;padding:0;cursor:pointer;
++  color:var(--teal-deep);font-family:var(--body);font-size:var(--text-description);
++  font-weight:700;text-decoration:underline}
++
++/* the purchase check */
++.pp-eq{margin:0 0 12px;font-size:var(--text-secondary);line-height:1.6;color:var(--ink-2)}
++.pp-eq b{font-family:var(--display)}
++.pp-bar{position:relative;height:30px;border-radius:8px;background:var(--line-soft);overflow:hidden}
++.pp-bar__band{position:absolute;top:0;bottom:0;background:rgba(22,125,116,.14);
++  border-left:2px dashed var(--teal);border-right:2px dashed var(--teal)}
++.pp-bar__seg{position:absolute;top:8px;bottom:8px;transition:width .2s ease,left .2s ease}
++.pp-bar__seg--stock{background:#9FB3AE}
++.pp-bar__seg--incoming{background:var(--mint)}
++.pp-bar__seg--order{background:var(--teal)}
++.pp-bar__axis{position:relative;height:20px;margin-top:5px;
++  font-size:var(--text-description);color:var(--muted)}
++.pp-bar__axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
++.pp-bar__key{display:flex;gap:14px;flex-wrap:wrap;list-style:none;margin:8px 0 0;padding:0;
++  font-size:var(--text-description);color:var(--muted)}
++.pp-bar__key li{display:flex;align-items:center;gap:6px}
++.pp-bar__key i{width:12px;height:12px;border-radius:3px;display:inline-block}
++/* the legend swatch is a static copy of the band, not a positioned one */
++.pp-bar__key i.pp-bar__band{position:static;top:auto;bottom:auto;
++  border:1px dashed var(--teal);border-radius:3px}
++
++.pp-verdict{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:var(--text-secondary);line-height:1.55}
++.pp-verdict b{display:block;font-family:var(--display);font-size:var(--text-body)}
++.pp-verdict--ok{background:var(--teal-tint);color:#1C5049}
++.pp-verdict--under{background:var(--amber-tint);color:var(--amber)}
++.pp-verdict--over{background:var(--red-tint);color:var(--red)}
++
++.pp-expiry{display:flex;gap:12px;align-items:flex-start;
++  padding:12px 14px;border-radius:12px;background:var(--line-soft)}
++.pp-expiry--risk{background:var(--amber-tint)}
++.pp-expiry__mark{flex:none;width:24px;height:24px;border-radius:50%;
++  display:grid;place-items:center;background:var(--teal);color:#fff;
++  font-family:var(--display);font-weight:800;font-size:var(--text-description)}
++.pp-expiry--risk .pp-expiry__mark{background:var(--amber-strong)}
++.pp-expiry b{font-family:var(--display);font-size:var(--text-body)}
++.pp-expiry p{margin:4px 0 0;font-size:var(--text-secondary);line-height:1.55;color:var(--ink-2)}
++.pp-expiry__date{color:var(--muted)}
++
++.pp-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
++.pp-stat{padding:10px 12px;border-radius:10px;background:var(--line-soft)}
++.pp-stat span{display:block;font-size:var(--text-description);color:var(--muted)}
++.pp-stat b{display:block;margin-top:3px;font-size:var(--text-body);font-weight:700}
++.pp-basis{margin:10px 0 0;font-size:var(--text-description);color:var(--muted);line-height:1.5}
++.pp-basis--warn{color:var(--amber)}
++
++.pp-why summary{cursor:pointer;font-family:var(--display);font-size:var(--text-body);font-weight:700}
++.pp-why ul{margin:10px 0 0;padding-left:18px;font-size:var(--text-secondary);line-height:1.7}
++.pp-why p{margin:9px 0 0;font-size:var(--text-description);color:var(--muted);line-height:1.5}
++
++.pp-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
++  flex-wrap:wrap;position:sticky;bottom:0;margin-top:auto;
++  padding:12px 18px;border-top:1px solid var(--line);background:#fff}
++.pp-foot__note{font-size:var(--text-description);color:var(--muted)}
++
++/* Below 1180px two columns no longer fit, so the panel moves under the list
++   and stops being sticky — a sticky panel in a single column would sit over
++   the rows it is meant to explain. */
++@media (max-width:1180px){
++  .pp-layout{grid-template-columns:1fr}
++  .pp-panel{position:static;max-height:none}
++}
++@media (max-width:768px){
++  .pp-groups{gap:8px}
++  .pp-group{flex:1 1 100%}
++  .pp-stats{grid-template-columns:1fr}
++  .pp-foot .btn{width:100%}
++}
++
++
++/* The old five-column table carried a 900px floor. The rebuilt list sits
++   beside a 430px panel, so on a 1440 screen it has about 800px — the floor
++   made it scroll sideways and clipped the Check column. Five columns of this
++   content fit comfortably without one; the columns are weighted instead,
++   because the product name needs the room and the numbers do not. */
++.purchase-plan .pp-table{min-width:0}
++.pp-table th:nth-child(1),.pp-table td:nth-child(1){width:30%}
++.pp-table th:nth-child(2),.pp-table td:nth-child(2){width:23%}
++.pp-table th:nth-child(3),.pp-table td:nth-child(3){width:12%}
++.pp-table th:nth-child(4),.pp-table td:nth-child(4){width:17%}
++.pp-table th:nth-child(5),.pp-table td:nth-child(5){width:18%}
++.pp-table td,.pp-table th{padding-left:12px;padding-right:12px}
++.pp-table .product-button small{display:block;white-space:normal}
++
++/* below the two-column breakpoint the table has the full width again */
++@media (max-width:1180px){
++  .pp-table th:nth-child(1),.pp-table td:nth-child(1){width:34%}
++}
++/* on a phone it is cards, so the weights stop applying */
++@media (max-width:768px){
++  .pp-table th,.pp-table td{width:auto!important}
++}
++
++
++/* Phone: the range input reports a 1px box (the track is drawn by the
++   pseudo-element, not the input), and the panel's prev/next buttons were
++   34px. Both become full thumb targets. */
++@media (max-width:768px){
++  .pp-field__range{min-height:44px}
++  /* the checkbox is 1px by design — the switch label is the real target */
++  .purchase-plan .switch{min-height:44px}
++  .pp-nav button{width:44px;height:44px}
++  .pp-stepper{width:100%}
++  .pp-stepper__btn{width:52px}
++}
++
++
++/* In the phone card layout the value side is narrow, and "Suggested 15" was
++   breaking mid-word. The order and its suggestion stack instead, and neither
++   wraps inside itself. */
++@media (max-width:768px){
++  .pp-table td[data-label]{align-items:flex-start}
++  .pp-table td .num,.pp-suggested,.pp-check{white-space:nowrap}
++  .pp-table td[data-label] > .num{display:block}
++  .pp-suggested{margin-top:3px}
++}
++
++/* ===== the sections above the list =====
++   Carried over from the live Step 4, restyled to the tokens. */
++
++/* how to plan an order — a disclosure, closed by default */
++.pp-how{margin-top:16px;border:1px solid var(--line);border-radius:14px;background:var(--teal-tint)}
++.pp-how > summary{padding:13px 18px;cursor:pointer;list-style:none;min-height:44px;
++  display:flex;align-items:center;gap:8px;
++  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
++.pp-how > summary::-webkit-details-marker{display:none}
++.pp-how > summary::before{content:"▸";color:var(--teal-deep);transition:transform .15s ease}
++.pp-how[open] > summary::before{transform:rotate(90deg)}
++.pp-how__body{padding:0 18px 18px}
++.pp-how__head{display:flex;gap:14px;align-items:flex-start}
++.pp-how__mark{font-size:24px;line-height:1;flex:none;
++  width:42px;height:42px;border-radius:12px;background:#fff;display:grid;place-items:center}
++.pp-how__head h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
++.pp-how__head p{margin:4px 0 0;font-size:var(--text-secondary);color:var(--muted)}
++.pp-how__steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
++  list-style:none;margin:16px 0 0;padding:16px 0 0;border-top:1px solid #CFE4DE}
++.pp-how__steps li{display:flex;gap:11px;align-items:flex-start}
++.pp-how__n{flex:none;width:24px;height:24px;border-radius:50%;background:#fff;
++  color:var(--teal-deep);display:grid;place-items:center;
++  font-family:var(--display);font-size:var(--text-description);font-weight:800}
++.pp-how__steps b{display:block;font-size:var(--text-body)}
++.pp-how__steps span{display:block;margin-top:3px;font-size:var(--text-secondary);
++  color:var(--muted);line-height:1.5}
++
++/* at a glance */
++.pp-glance{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;
++  margin-top:14px;padding:16px 18px;border-radius:14px;background:var(--teal-tint)}
++.pp-glance__head{display:flex;gap:14px;align-items:center;min-width:0}
++.pp-glance__mark{font-size:24px;line-height:1;flex:none;
++  width:42px;height:42px;border-radius:12px;background:#fff;display:grid;place-items:center}
++.pp-glance h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
++.pp-glance__head p{margin:3px 0 0;font-size:var(--text-secondary);color:var(--muted)}
++.pp-glance__tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;flex:1 1 520px}
++.pp-tile{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;align-items:baseline;
++  padding:11px 14px;border-radius:12px;background:#fff;border:1px solid var(--line)}
++/* the number sits beside both lines, not on the same row as one of them —
++   without an explicit row the sub-line was landing next to the label */
++.pp-tile b{grid-column:1;grid-row:1/3;align-self:center;
++  font-family:var(--display);font-size:26px;font-weight:800;line-height:1;color:var(--teal-deep)}
++.pp-tile span{grid-column:2;grid-row:1;font-size:var(--text-body);font-weight:700}
++.pp-tile small{grid-column:2;grid-row:2;font-size:var(--text-description);
++  color:var(--muted);line-height:1.4}
++.pp-tile--warn{background:var(--red-tint);border-color:#F0D0CC}
++.pp-tile--warn b{color:var(--red)}
++
++/* money */
++.pp-money{margin-top:14px;padding:18px;border-radius:14px;background:var(--teal-tint)}
++.pp-money__head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
++.pp-money h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
++.pp-money__head p{margin:3px 0 0;font-size:var(--text-secondary);color:var(--muted)}
++.pp-money__tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
++.pp-cost{padding:14px 16px;border-radius:12px;background:#fff;border:1px solid var(--line)}
++.pp-cost span{display:block;font-size:var(--text-body);color:var(--ink-2)}
++.pp-cost b{display:block;margin:10px 0;font-family:var(--display);font-size:26px;
++  font-weight:800;line-height:1;color:var(--teal-deep)}
++.pp-cost small{display:block;font-size:var(--text-description);color:var(--muted);line-height:1.4}
++.pp-money__note{margin:12px 0 0;font-size:var(--text-description);color:var(--muted);line-height:1.5}
++
++.pp-next{margin:16px 0 0;font-size:var(--text-body);line-height:1.6}
++
++/* start with these products */
++.pp-priority{margin-top:20px}
++.pp-priority h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
++.pp-priority__sub{margin:4px 0 0;font-size:var(--text-secondary);color:var(--muted)}
++.pp-priority__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
++.pp-card{display:flex;flex-direction:column;gap:10px;padding:16px;
++  background:#fff;border:1px solid var(--line);border-radius:14px;
++  border-left:4px solid var(--muted-2)}
++.pp-card--check_order{border-left-color:var(--red)}
++.pp-card--need_data{border-left-color:var(--muted-2)}
++.pp-card--order_needed{border-left-color:var(--amber-strong)}
++.pp-card--balanced{border-left-color:var(--teal)}
++.pp-card__head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
++.pp-card__head b{display:block;font-size:var(--text-body)}
++.pp-card__head small{display:block;margin-top:2px;font-size:var(--text-description);color:var(--muted)}
++.pp-card__verdict{padding:12px 14px;border-radius:10px;background:var(--teal-tint)}
++.pp-card__verdict span{display:block;font-size:var(--text-description);color:var(--muted)}
++.pp-card__verdict b{display:block;margin-top:3px;font-family:var(--display);
++  font-size:var(--text-lead);font-weight:700;line-height:1.25}
++.pp-card__verdict--none{background:var(--red-tint)}
++.pp-card__verdict--none b{color:var(--red)}
++.pp-card__why{margin:0;font-size:var(--text-secondary);color:var(--muted);line-height:1.55}
++.pp-card__expiry{margin:0;padding:8px 12px;border-radius:9px;
++  background:var(--amber-tint);color:var(--amber);
++  font-size:var(--text-description);line-height:1.45}
++.pp-card__action{margin-top:auto;justify-content:center}
++
++@media (max-width:1100px){
++  .pp-how__steps,.pp-money__tiles,.pp-priority__cards{grid-template-columns:1fr 1fr}
++  .pp-glance__tiles{grid-template-columns:1fr 1fr}
++}
++@media (max-width:768px){
++  .pp-how__steps,.pp-money__tiles,.pp-priority__cards,.pp-glance__tiles{grid-template-columns:1fr}
++  .pp-glance{gap:14px}
++  .pp-money__head .btn{width:100%}
++}
 diff --git a/frontend/src/screens/HomePage.tsx b/frontend/src/screens/HomePage.tsx
-index c889292..66855ef 100644
+index c889292..eeff522 100644
 --- a/frontend/src/screens/HomePage.tsx
 +++ b/frontend/src/screens/HomePage.tsx
+@@ -117,7 +117,7 @@ function PurchasePreview() {
+             </div>
+             <svg viewBox="0 0 600 190" role="img" aria-label={t("Illustrative weekly sales history followed by a shaded four-week demand range.")}>
+               <g stroke="#e7eeeb" strokeWidth="1"><path d="M35 25H580 M35 65H580 M35 105H580 M35 145H580" /></g>
+-              <g fill="#71827d" fontSize="11"><text x="12" y="29">12</text><text x="18" y="69">8</text><text x="18" y="109">4</text><text x="18" y="149">0</text><text x="35" y="176">{t("Past 8 weeks")}</text><text x="429" y="176">{t("Next 4 weeks")}</text></g>
++              <g fill="#71827d" fontSize="13"><text x="12" y="29">12</text><text x="18" y="69">8</text><text x="18" y="109">4</text><text x="18" y="149">0</text><text x="35" y="176">{t("Past 8 weeks")}</text><text x="429" y="176">{t("Next 4 weeks")}</text></g>
+               <path d="M35 119 80 77 125 102 170 43 215 94 260 66 305 119 350 79 395 53 430 88" fill="none" stroke="#254854" strokeWidth="2.7" strokeLinejoin="round" />
+               <path d="M430 62 465 49 502 58 540 44 580 32V110L540 96 502 107 465 99 430 114Z" fill="#cde6e0" />
+               <path d="M430 88 465 77 502 83 540 70 580 68" fill="none" stroke="#167d74" strokeWidth="2" strokeDasharray="5 5" />
 @@ -172,20 +172,101 @@ export function HomePage({ startHref = "#workspace", assetRoot = "/homepage", im
      <main id="home-main">
        <section className="sl-hero sl-container" aria-labelledby="home-title"><p className="sl-kicker sl-hero-eyebrow"><span /> {t("SMALLER RESTOCKS. BIGGER POSSIBILITIES.")}</p><h1 id="home-title">{t("Less ")}<em>{t("food waste.")}</em><br />{t("Lower costs. Higher profits.")}</h1><p className="sl-hero-copy">{t("Smarter restocking for small retailers.")}<br className="sl-mobile-break" /> {t("Make the most of what you stock.")}</p><div className="sl-hero-actions"><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Start with your sales data ")}<span aria-hidden="true">↗</span></a><a className="sl-secondary-link" href="#how-to">{t("See how it works ")}<span aria-hidden="true">↓</span></a></div><div className="sl-preview-stage"><PurchasePreview /></div></section>
@@ -1748,9 +3580,9 @@ index c889292..66855ef 100644
 -        ["Review your restocking plan", "Compare purchase scenarios to spot potential excess stock and control costs."],
 -      ].map(([title, copy], i) => <li key={title}><span className="sl-step-number">0{t(i + 1)}</span><h3>{t(title)}</h3><p>{t(copy)}</p></li>))}</ol><div className="sl-final-cta"><div><p className="sl-kicker">{t("MAKE YOUR NEXT ORDER A SMARTER ONE")}</p><h2>{t("A little less stock.")}<br />{t("A lot more possibility.")}</h2><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Open StockLess ")}<span aria-hidden="true">↗</span></a><p>{t("Use your own CSV or start with a sample.")}</p></div><img src={photo("retail-produce-2.jpg")} alt={t("Fresh produce ready for customers in a small shop")} loading="lazy" width="1147" height="860"/></div></section>
 +        ["Upload your sales data", "Import your existing sales CSV, or try the sample data first."],
-+        ["Map your columns", "Tell StockLess which columns hold your sale date, product and quantity."],
-+        ["Check readiness", "StockLess looks for gaps, duplicates and unusual rows before any analysis."],
-+        ["Plan your purchases", "See the expected demand, then decide what to restock — with the reasoning shown."],
++        ["Prepare it with StockLess", "Tell StockLess which columns hold your sale date, product and quantity."],
++        ["Understand your demand", "StockLess looks for gaps, duplicates and unusual rows, then works out the demand your history supports."],
++        ["Review your restocking plan", "See the expected demand, then decide what to restock — with the reasoning shown."],
 +      ].map(([title, copy], i) => <li key={title}><span className="sl-step-number">0{t(i + 1)}</span><h3>{t(title)}</h3><p>{t(copy)}</p></li>))}</ol></section>
 +
 +      {/* ===== learn more =====
@@ -2355,19 +4187,48 @@ index 5d2f91a..e3c0b25 100644
 -  );
 -}
 diff --git a/frontend/src/screens/PurchasePlanScreen.tsx b/frontend/src/screens/PurchasePlanScreen.tsx
-index 6e50c10..c6ac14c 100644
+index 6e50c10..2294a12 100644
 --- a/frontend/src/screens/PurchasePlanScreen.tsx
 +++ b/frontend/src/screens/PurchasePlanScreen.tsx
-@@ -19,6 +19,8 @@ import {
-   ProductPurchaseDialog,
- } from "../purchase-plan/ProductPurchaseDialog.tsx";
+@@ -14,11 +14,11 @@ import {
+   type PurchaseEvaluator,
+   type PurchaseProduct,
+ } from "../purchase-plan/model.ts";
+-import {
+-  DataLabel,
+-  ProductPurchaseDialog,
+-} from "../purchase-plan/ProductPurchaseDialog.tsx";
++import { DataLabel } from "../purchase-plan/DataLabel.tsx";
++import { PurchasePanel } from "../purchase-plan/PurchasePanel.tsx";
  import { SourceTag, numberText } from "../purchase-plan/SourceTag.tsx";
 +import { summarizeImpact } from "../purchase-plan/impact.ts";
 +import { ImpactScreen } from "./ImpactScreen.tsx";
  import {
    purchasePlanFilename,
    serializePurchasePlanCsv,
-@@ -60,6 +62,10 @@ export function PurchasePlanScreen({
+@@ -37,6 +37,21 @@ interface Props {
+   expiryByProduct?: Readonly<Record<string, ExpiryCheckInput | undefined>>;
+ }
+ 
++/** The four groups US8.2 AC1 names, in the order it names them. */
++type ActionGroup = "order_needed" | "check_order" | "balanced" | "need_data";
++const GROUP_LABEL: Readonly<Record<ActionGroup, string>> = {
++  order_needed: "Order needed",
++  check_order: "Check your order",
++  balanced: "Looks balanced",
++  need_data: "Need more data",
++};
++const GROUP_REASON: Readonly<Record<ActionGroup, string>> = {
++  order_needed: "No order entered yet, or below expected demand",
++  check_order: "More than even the busiest expected month",
++  balanced: "Within expected demand",
++  need_data: "StockLess could not judge these yet",
++};
++
+ interface PlanCacheEntry {
+   readonly product: PurchaseProduct;
+   readonly inputs: ProductPurchaseInputs;
+@@ -60,6 +75,11 @@ export function PurchasePlanScreen({
    useLanguage();
    const [query, setQuery] = useState("");
    const [orderingOnly, setOrderingOnly] = useState(false);
@@ -2375,10 +4236,11 @@ index 6e50c10..c6ac14c 100644
 +  // US4.3 AC3 fixes the workflow at four, so it is a view of Step 4 rather
 +  // than another node in the stepper.
 +  const [showImpact, setShowImpact] = useState(false);
++  const [group, setGroup] = useState<ActionGroup | "all">("all");
    const products = useMemo(
      () => joinPurchaseEvidence(snapshot, forecast),
      [snapshot, forecast],
-@@ -111,6 +117,11 @@ export function PurchasePlanScreen({
+@@ -111,23 +131,68 @@ export function PurchasePlanScreen({
    );
    const inputsFor = (product: (typeof products)[number]) =>
      drafts[product.key] ?? product.fileInputs;
@@ -2390,7 +4252,78 @@ index 6e50c10..c6ac14c 100644
    const hasPlans = products.some(
      (product) => inputsFor(product).plannedOrder.state === "value",
    );
-@@ -176,6 +187,15 @@ export function PurchasePlanScreen({
+-  const visible = products.filter(
+-    (product) =>
+-      `${product.name} ${product.sku ?? ""}`
+-        .toLowerCase()
+-        .includes(query.trim().toLowerCase()) &&
+-      (!orderingOnly ||
+-        !hasPlans ||
+-        inputsFor(product).plannedOrder.state === "value"),
+-  );
+-  const selected = products.find((product) => product.key === selectedKey);
+-  const counts = (label: string) =>
+-    products.filter(
+-      (product) => !product.issue && product.demand?.label === label,
+-    ).length;
++  /**
++   * US8.2 AC1 groups products by the action they need, not by how good their
++   * data is. "Need more data" is itself an action — go and fix the file — so
++   * the four groups cover every product exactly once.
++   */
++  const groupOf = (product: (typeof products)[number]): ActionGroup => {
++    const plan = plans.get(product.key);
++    if (!plan || plan.audit.state === "cannot_judge" || product.issue) return "need_data";
++    if (plan.audit.state === "not_planned") return "order_needed";
++    if (plan.audit.verdict === "Looks balanced") return "balanced";
++    if (plan.audit.verdict === "Overstock risk") return "check_order";
++    return "order_needed";
++  };
++  const groupCounts = useMemo(() => {
++    const counts: Record<ActionGroup, number> = {
++      order_needed: 0, check_order: 0, balanced: 0, need_data: 0,
++    };
++    for (const product of products) counts[groupOf(product)] += 1;
++    return counts;
++  }, [products, plans]);
++
++  const canPlanCount = products.filter((product) => {
++    const plan = plans.get(product.key);
++    return plan?.estimatedRestock.state === "available" && plan.audit.state !== "cannot_judge";
++  }).length;
++  const plansEnteredCount = products.filter(
++    (product) => inputsFor(product).plannedOrder.state === "value",
++  ).length;
++
++  /** Concerns first, then anything that still needs a decision. */
++  const PRIORITY: readonly ActionGroup[] = ["check_order", "need_data", "order_needed", "balanced"];
++  const priority = [...products]
++    .sort((a, b) => PRIORITY.indexOf(groupOf(a)) - PRIORITY.indexOf(groupOf(b)))
++    .slice(0, 3);
++
++  const visible = products.filter((product) => {
++    if (group !== "all" && groupOf(product) !== group) return false;
++    // US8.2 AC4 — "only products I am ordering" means a positive quantity
++    if (orderingOnly) {
++      const planned = inputsFor(product).plannedOrder;
++      if (planned.state !== "value" || planned.value <= 0) return false;
++    }
++    return `${product.name} ${product.sku ?? ""}`
++      .toLowerCase()
++      .includes(query.trim().toLowerCase());
++  });
++  const selected = products.find((product) => product.key === selectedKey)
++    ?? visible[0] ?? products[0];
++  const selectedIndex = visible.findIndex((p) => p.key === selected?.key);
++  const stepSelection = (delta: number) => {
++    if (!visible.length) return;
++    const from = selectedIndex < 0 ? 0 : selectedIndex;
++    onSelect(visible[(from + delta + visible.length) % visible.length].key);
++  };
+   const mismatchCount = products.filter((product) => product.issue).length;
+   function download() {
+     const rows = [
+@@ -176,6 +241,15 @@ export function PurchasePlanScreen({
      link.click();
      setTimeout(() => URL.revokeObjectURL(url), 0);
    }
@@ -2406,7 +4339,358 @@ index 6e50c10..c6ac14c 100644
    return (
      <main className="purchase-plan">
        <section className="heading-row">
-@@ -409,6 +429,12 @@ export function PurchasePlanScreen({
+@@ -205,20 +279,159 @@ export function PurchasePlanScreen({
+         <span>
+           <strong>{t("Your figures stay local.")}</strong> {t("Typed order quantities last for this visit only and are not sent to a supplier.")}</span>
+       </p>
+-      <section className="summary" aria-label={t("Purchase planning instructions")}>
+-        <article className="summary-main">
+-          <p className="eyebrow">{t("Instructions")}</p>
+-          <h2>{t("Select a product to plan its next order.")}</h2>
+-          <p>
+-            {t("Click any row below to review its forecast, enter incoming stock and planned order, and receive a purchase check.")}</p>
+-        </article>
++      {/* How the step works. A disclosure rather than a fixed block: it is
++          what a first-time user needs and a returning one has read. */}
++      <details className="pp-how">
++        <summary>{t("How to plan an order")}</summary>
++        <div className="pp-how__body">
++          <div className="pp-how__head">
++            <span className="pp-how__mark" aria-hidden="true">🌳</span>
++            <div>
++              <h2>{t("From sales data to your next order")}</h2>
++              <p>{t("Select a product below, then follow these three steps.")}</p>
++            </div>
++          </div>
++          <ol className="pp-how__steps">
++            {t([
++              ["Review demand", "See past sales and the four-week range."],
++              ["Enter your quantities", "Add your planned order and incoming stock."],
++              ["Check before ordering", "Compare the plan with expected demand."],
++            ].map(([title, copy], i) => (
++              <li key={title}>
++                <span className="pp-how__n" aria-hidden="true">{t(i + 1)}</span>
++                <div><b>{t(title)}</b><span>{t(copy)}</span></div>
++              </li>
++            )))}
++          </ol>
++        </div>
++      </details>
++
++      {/* What this file can actually support, before any filtering. Separate
++          from the group chips below: this says how much of the file is usable
++          and how far you have got; they say what to do next. */}
++      <section className="pp-glance" aria-label={t("Your next purchase, at a glance")}>
++        <div className="pp-glance__head">
++          <span className="pp-glance__mark" aria-hidden="true">🌳</span>
++          <div>
++            <h2>{t("Your next purchase, at a glance")}</h2>
++            <p>{t(products.length)} {t("products")} · {t("for the next 4 weeks")}</p>
++          </div>
++        </div>
++        <div className="pp-glance__tiles">
++          <div className="pp-tile">
++            <b className="num">{t(canPlanCount)}</b>
++            <span>{t("Can plan")}</span>
++            <small>{t("Usable demand and stock evidence")}</small>
++          </div>
++          <div className="pp-tile pp-tile--warn">
++            <b className="num">{t(groupCounts.need_data)}</b>
++            <span>{t("Need more data")}</span>
++            <small>{t("Open a product to see the next action")}</small>
++          </div>
++          <div className="pp-tile">
++            <b className="num">{t(plansEnteredCount)}</b>
++            <span>{t("Plans entered")}</span>
++            <small>{t("Included in the product totals")}</small>
++          </div>
++        </div>
+       </section>
+-      <div className="readiness-counts" aria-label={t("Product data labels")}>
+-        <strong>{t("All ")}{t(products.length)} {t("products")}</strong>
+-        {t(["Ready", "Limited", "Cannot assess"].map((label) => (
+-          <span key={label}>
+-            <b>{t(counts(label))}</b> {t(label)}
+-          </span>
++
++      {/* The money view. Every figure is blank until a unit cost exists —
++          showing 0 would read as "this costs nothing", which is a different
++          claim from "we cannot work this out yet". */}
++      <section className="pp-money" aria-labelledby="pp-money-title">
++        <div className="pp-money__head">
++          <div>
++            <h2 id="pp-money-title">{t("What will this plan cost?")}</h2>
++            <p>{t("Money insights · design preview")}</p>
++          </div>
++          <button type="button" className="btn btn--ghost btn--small"
++            onClick={() => setShowImpact(true)}>
++            {t("Open dashboard example →")}</button>
++        </div>
++        <div className="pp-money__tiles">
++          {t([
++            "Planned purchase spending",
++            "Incoming stock cost",
++            "Potential excess-stock cost",
++          ].map((label) => (
++            <div className="pp-cost" key={label}>
++              <span>{t(label)}</span>
++              <b aria-label={t("Not available")}>—</b>
++              <small>{t("Purchase cost and currency required")}</small>
++            </div>
++          )))}
++        </div>
++        <p className="pp-money__note">
++          {t("This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.")}</p>
++      </section>
++
++      <p className="pp-next">
++        <b>{t("Next step: ")}</b>
++        {t("Open a product, review the estimate, and enter the quantity you intend to order.")}</p>
++
++      {/* US8.2 — the products needing attention, before the full list */}
++      {t(priority.length > 0 && (
++        <section className="pp-priority" aria-labelledby="pp-priority-title">
++          <h2 id="pp-priority-title">{t("Start with these products")}</h2>
++          <p className="pp-priority__sub">
++            {t("Purchase concerns appear first. Each suggestion uses your current inputs.")}</p>
++          <div className="pp-priority__cards">
++            {priority.map((product) => {
++              const plan = plans.get(product.key);
++              const g = groupOf(product);
++              const restock = plan?.estimatedRestock;
++              const assessable = restock?.state === "available" && plan?.audit.state !== "cannot_judge";
++              const headline = plan?.audit.state === "verdict"
++                ? plan.audit.verdict
++                : restock?.state === "available" ? `${numberText(restock.quantity.value)} units`
++                : "No reliable estimate";
++              const why = plan?.audit.state === "verdict" ? plan.audit.reasonSentence
++                : plan?.audit.state === "cannot_judge" ? plan.audit.reason
++                : restock?.state === "unavailable" ? restock.reason
++                : product.issue || product.demand?.labelReason?.message;
++              return (
++                <article className={`pp-card pp-card--${g}`} key={product.key}>
++                  <div className="pp-card__head">
++                    <div>
++                      <b>{product.name}</b>
++                      <small className="num">{t("SKU ")}{product.sku || t("Not available")}</small>
++                    </div>
++                    <DataLabel product={product} />
++                  </div>
++                  <div className={`pp-card__verdict pp-card__verdict--${assessable ? "ok" : "none"}`}>
++                    <span>{t(plan?.audit.state === "verdict" ? "Purchase check" : "Estimated restock")}</span>
++                    <b>{t(headline)}</b>
++                  </div>
++                  {t(why && <p className="pp-card__why">{t(why)}</p>)}
++                  {t(plan?.expiry.state === "expires_within_four_weeks" && (
++                    <p className="pp-card__expiry">{t(plan.expiry.message)}</p>
++                  ))}
++                  <button type="button" className="btn btn--ghost btn--small pp-card__action"
++                    onClick={() => onSelect(product.key)}>
++                    {t(assessable ? "Review and plan →" : "See what is needed →")}</button>
++                </article>
++              );
++            })}
++          </div>
++        </section>
++      ))}
++      {/* US8.2 AC1 — grouped by the action each product needs, with its
++          count and the reason it is in that group. Selecting one filters. */}
++      <div className="pp-groups" role="group" aria-label={t("Filter by what each product needs")}>
++        <button type="button" className={`pp-group${group === "all" ? " pp-group--on" : ""}`}
++          aria-pressed={group === "all"} onClick={() => setGroup("all")}>
++          <b className="num">{t(products.length)}</b>
++          <span>{t("All products")}</span>
++        </button>
++        {t((Object.keys(GROUP_LABEL) as ActionGroup[]).map((key) => (
++          <button key={key} type="button"
++            className={`pp-group pp-group--${key}${group === key ? " pp-group--on" : ""}`}
++            aria-pressed={group === key} onClick={() => setGroup(key)}>
++            <b className="num">{t(groupCounts[key])}</b>
++            <span>{t(GROUP_LABEL[key])}</span>
++            <small>{t(GROUP_REASON[key])}</small>
++          </button>
+         )))}
+       </div>
+       {t(mismatchCount > 0 && (
+@@ -226,6 +439,7 @@ export function PurchasePlanScreen({
+           {t("Evidence mismatch affects ")}{t(mismatchCount)}{t(" ")}
+           {t(mismatchCount === 1 ? "product" : "products")}{t(". These products remain listed but cannot be evaluated. Return to readiness and refresh the forecast.")}</p>
+       ))}
++      <div className="pp-layout">
+       <section className="card list-card">
+         <div className="card-head">
+           <div>
+@@ -282,108 +496,82 @@ export function PurchasePlanScreen({
+           <p className="expiry-note">
+             {t("Expiry not checked — your file has no expiry dates")}</p>
+         ))}
+-        <div className="table-scroll">
+-          <table>
+-            <colgroup>
+-              {t(["29%", "17%", "22%", "26%", "6%"].map((width) => (
+-                <col key={width} style={{ width }} />
+-              )))}
+-            </colgroup>
++        <p className="pp-key">
++          {t("Key: ")}
++          <SourceTag source="from your file" />
++          <SourceTag source="worked out by StockLess" />
++          <SourceTag source="input by you" />
++        </p>
++        <div className="table-scroll table-scroll--x">
++          <table className="dtable dtable--cards pp-table">
+             <thead>
+               <tr>
+                 <th scope="col">{t("Product")}</th>
+-                <th scope="col">{t("Data label")}</th>
+-                <th scope="col">{t("4-week demand")}</th>
+-                <th scope="col">{t("Estimated restock")}</th>
+-                <th scope="col">
+-                  <span className="visually-hidden">{t("Open action")}</span>
+-                </th>
++                <th scope="col">{t("Expected demand")}</th>
++                <th scope="col">{t("In stock")}</th>
++                <th scope="col">{t("Your order")}</th>
++                <th scope="col">{t("Check")}</th>
+               </tr>
+             </thead>
+             <tbody>
+               {visible.map((product) => {
+-                const restock = plans.get(product.key)?.estimatedRestock;
++                const plan = plans.get(product.key);
++                const input = inputsFor(product);
++                const restock = plan?.estimatedRestock;
+                 const range =
+                   !product.issue && product.demand?.label !== "Cannot assess"
+                     ? product.demand?.range
+                     : undefined;
++                const g = groupOf(product);
+                 return (
+                   <tr
+                     key={product.key}
+-                    className={`clickable-row${selectedKey === product.key ? " selected" : ""}`}
++                    className={`clickable-row${selected?.key === product.key ? " selected" : ""}`}
+                     onClick={() => onSelect(product.key)}
+                   >
+-                    <td>
+-                      <button
+-                        className="product-button"
+-                        type="button"
+-                        onClick={(event) => {
+-                          event.stopPropagation();
+-                          onSelect(product.key);
+-                        }}
+-                      >
++                    <td className="dtable__title">
++                      <button className="product-button" type="button"
++                        onClick={(event) => { event.stopPropagation(); onSelect(product.key); }}>
+                         {product.name}
+-                        <small>{t("SKU ")}{product.sku || "Not available"}</small>
++                        <small className="num">{t("SKU ")}{product.sku || t("Not available")}</small>
+                       </button>
+                     </td>
+-                    <td>
+-                      <DataLabel product={product} />
+-                      {t((product.issue || product.demand?.labelReason) && (
+-                        <small className="input-source">
+-                          {t(product.issue ||
+-                            product.demand?.labelReason?.message)}
+-                        </small>
++                    <td data-label={t("Expected demand")}>
++                      {t(range ? (
++                        <span className="range num">
++                          {t(`${numberText(range.low)}–${numberText(range.high)} units`)}
++                          <small>{t("next 4 weeks")}</small>
++                        </span>
++                      ) : (
++                        <span className="range range--none">{t("No range yet")}</span>
+                       ))}
+                     </td>
+-                    <td>
+-                      <span className="range">
+-                        {t(range
+-                          ? `${numberText(range.low)}–${numberText(range.high)} units`
+-                          : "No range")}
+-                        {t(range && product.demand?.pattern && (
+-                          <span className="pill pill--neutral range-pattern">
+-                            {t(product.demand.pattern)}
+-                          </span>
+-                        ))}
+-                        <small>
+-                          {t(range
+-                            ? "for the next 4 weeks"
+-                            : product.issue ||
+-                              product.demand?.labelReason?.message)}
+-                        </small>
+-                        {t(range && (
+-                          <SourceTag source="worked out by StockLess" />
+-                        ))}
+-                      </span>
++                    <td className="num" data-label={t("In stock")}>
++                      {t(product.stock?.currentStock === undefined
++                        ? "—"
++                        : numberText(product.stock.currentStock))}
+                     </td>
+-                    <td>
+-                      <span
+-                        className={`estimate${restock?.state !== "available" ? " estimate--none" : ""}`}
+-                      >
+-                        {t(restock?.state === "available"
+-                          ? `${numberText(restock.quantity.value)} units`
+-                          : "No estimate")}
+-                        <small>
+-                          {t(restock?.state === "available" ? (
+-                            <SourceTag source={restock.quantity.source} />
+-                          ) : (
+-                            "Evidence not usable"
+-                          ))}
+-                        </small>
++                    <td data-label={t("Your order")}>
++                      <span className="num">
++                        {t(input.plannedOrder.state === "value"
++                          ? numberText(input.plannedOrder.value)
++                          : "Not entered")}
+                       </span>
++                      {t(restock?.state === "available" && (
++                        <small className="pp-suggested num">
++                          {t("Suggested ")}{t(numberText(restock.quantity.value))}
++                        </small>
++                      ))}
+                     </td>
+-                    <td>
+-                      <button
+-                        className="row-action"
+-                        type="button"
+-                        aria-label={t(`Open purchase plan for ${product.name}, SKU ${product.sku || product.key}`)}
+-                        onClick={(event) => {
+-                          event.stopPropagation();
+-                          onSelect(product.key);
+-                        }}
+-                      >
+-                        ›
+-                      </button>
++                    {/* the check IS the status: a product StockLess cannot judge
++                        says so here, rather than in a column of its own */}
++                    <td data-label={t("Check")}>
++                      <span className={`pp-check pp-check--${g}`}>{t(GROUP_LABEL[g])}</span>
++                      {t(g === "need_data" && (
++                        <small className="input-source">
++                          {t(product.issue || product.demand?.labelReason?.message)}
++                        </small>
++                      ))}
+                     </td>
+                   </tr>
+                 );
+@@ -392,7 +580,7 @@ export function PurchasePlanScreen({
+                 <tr>
+                   <td colSpan={5} className="empty-row">
+                     {t(products.length
+-                      ? "No products match"
++                      ? "No products match. Try another group or clear the search."
+                       : "No products are available. Return to readiness to review your data.")}
+                   </td>
+                 </tr>
+@@ -409,19 +597,28 @@ export function PurchasePlanScreen({
              onClick={onBack}
            >
              {t("← Back to readiness")}</button>
@@ -2418,7 +4702,27 @@ index 6e50c10..c6ac14c 100644
 +            {t("See your impact →")}</button>
          </div>
        </section>
-       {selected && (
+-      {selected && (
+-        <ProductPurchaseDialog
++      {t(selected && (
++        <PurchasePanel
+           key={selected.key}
+           product={selected}
+           plan={plans.get(selected.key)}
+           inputs={inputsFor(selected)}
+           analysisDate={snapshot.analysisDate}
++          position={selectedIndex >= 0 ? selectedIndex + 1 : 0}
++          count={visible.length}
+           onChange={(inputs) => onDraftChange(selected.key, inputs)}
+-          onClose={() => onSelect(null)}
++          onStep={stepSelection}
+         />
+-      )}
++      ))}
++      </div>
+     </main>
+   );
+ }
 diff --git a/frontend/src/screens/ReadinessScreen.tsx b/frontend/src/screens/ReadinessScreen.tsx
 index 3f56a34..8978bb5 100644
 --- a/frontend/src/screens/ReadinessScreen.tsx
@@ -3444,24 +5748,33 @@ index 9aa26c6..2f2049c 100644
              </p>
            </div>
 diff --git a/frontend/src/styles.css b/frontend/src/styles.css
-index 862cb48..d09e2bf 100644
+index 862cb48..842f9d8 100644
 --- a/frontend/src/styles.css
 +++ b/frontend/src/styles.css
-@@ -4,7 +4,12 @@
+@@ -4,7 +4,21 @@
    --teal:#167D74; --teal-deep:#11655E; --teal-tint:#E8F3F0; --mint:#8FD2C8;
    --red:#9B3939; --red-tint:#FBE8E8;
    --amber:#8B5C10; --amber-tint:#FFF4DF; --amber-strong:#D99120;
 -  --page:#F7F9F8;
 +  --page:#FFFFFF;
-+  /* Type scale — the same tokens and values the homepage uses, so the app and
-+     the marketing site read as one product. Sizes below are set from these. */
-+  --text-page-title:36px; --text-lead:18px; --text-section-head:20px;
-+  --text-body:15px; --text-secondary:13px; --text-description:12px;
-+  --text-eyebrow:11px; --text-label:10px;
++  /* Type scale — I3-TYPO-01 (Iteration 3 V2), which supersedes every earlier
++     font-size requirement including US1.1 AC7's 36px page title. The same
++     tokens drive the homepage, so the app and the marketing site read as one
++     product. I3-UI AC1 forbids a smaller local override of any role, and the
++     standard sets a hard floor: no interface text below label.
++       page-title 40 Manrope 700     body        16 Source Sans 3 400
++       lead       20 Source Sans 3   secondary   15 Source Sans 3 400
++       section-head 22 Manrope 700   description 14 Source Sans 3 400
++                                     eyebrow     13 Source Sans 3 700
++                                     label       12 Source Sans 3 700
++     numeric-data inherits its role's size in Inter 600-700. */
++  --text-page-title:40px; --text-lead:20px; --text-section-head:22px;
++  --text-body:16px; --text-secondary:15px; --text-description:14px;
++  --text-eyebrow:13px; --text-label:12px;
    --shadow-card:0 10px 30px rgba(22,49,59,.05);
    --display:"Manrope",-apple-system,BlinkMacSystemFont,sans-serif;
    --body:"Source Sans 3",-apple-system,BlinkMacSystemFont,sans-serif;
-@@ -16,17 +21,21 @@ body{background:var(--page);font-family:var(--body);color:var(--ink);-webkit-fon
+@@ -16,17 +30,21 @@ body{background:var(--page);font-family:var(--body);color:var(--ink);-webkit-fon
  :focus,:focus-visible{outline:none}
  code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;border-radius:4px}
  
@@ -3487,7 +5800,7 @@ index 862cb48..d09e2bf 100644
    border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center}
  .stepper__inner{width:790px;max-width:100%;display:flex;align-items:flex-start;list-style:none;margin:0;padding:0}
  .step{flex:1 1 0;position:relative;display:flex;flex-direction:column;align-items:center}
-@@ -34,9 +43,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -34,9 +52,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    padding:0;font-family:inherit;cursor:pointer}
  .step__button:disabled{cursor:default}
  .step__dot{width:30px;height:30px;border-radius:15px;background:#fff;border:2px solid var(--border-strong);
@@ -3499,7 +5812,7 @@ index 862cb48..d09e2bf 100644
  .step__line{position:absolute;top:14px;left:calc(50% + 19px);width:calc(100% - 38px);height:2px;background:var(--line)}
  .step:last-child .step__line{display:none}
  .step--done .step__dot,.step--current .step__dot{background:var(--teal);border-color:var(--teal);color:#fff}
-@@ -44,28 +53,28 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -44,28 +62,28 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .step--done .step__line{background:var(--teal)}
  .step__button:not(:disabled):hover .step__dot{border-color:var(--teal)}
  
@@ -3538,7 +5851,7 @@ index 862cb48..d09e2bf 100644
  .btn--primary{background:var(--teal);color:#fff}
  .btn--primary:hover:not(:disabled){background:var(--teal-deep)}
  .btn--ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
-@@ -78,56 +87,63 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -78,56 +96,63 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    font-size:16px;font-weight:700;cursor:pointer}
  .btn--link:hover{color:var(--ink)}
  
@@ -3623,7 +5936,7 @@ index 862cb48..d09e2bf 100644
    background:linear-gradient(180deg,#F8FCFB 0%,#EDF7F4 100%);
    display:flex;flex-direction:column;align-items:center;justify-content:center;
    padding:32px 24px;text-align:center;transition:border-color .15s ease,background .15s ease}
-@@ -136,85 +152,88 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -136,85 +161,88 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .csv-badge{width:54px;height:64px;background:#fff;border:2px solid var(--teal);border-radius:10px;
    display:flex;align-items:flex-end;justify-content:center;padding:0 7px 10px;margin-bottom:24px}
  .csv-badge span{display:block;width:36px;padding:4px 0;background:var(--teal-tint);border-radius:5px;
@@ -3745,7 +6058,7 @@ index 862cb48..d09e2bf 100644
  
  @media (max-width:1240px){
    .page{padding-left:32px;padding-right:32px}
-@@ -226,9 +245,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -226,9 +254,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  @media (max-width:760px){
    .page{padding-left:20px;padding-right:20px}
    .topbar,.stepper{padding-left:20px;padding-right:20px}
@@ -3758,7 +6071,7 @@ index 862cb48..d09e2bf 100644
    .identity__paths{grid-template-columns:1fr}
    .footer-row{flex-direction:column;align-items:stretch}
    .blockers{text-align:left}
-@@ -237,35 +256,47 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -237,35 +265,47 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  }
  
  /* ── screen 03 ──────────────────────────────────────────────────────────── */
@@ -3820,7 +6133,7 @@ index 862cb48..d09e2bf 100644
  
  .panel-warn{width:310px;flex:none;padding:22px;background:var(--amber-tint);
    border:1px solid #F0D29F;border-radius:22px}
-@@ -274,24 +305,27 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -274,24 +314,27 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    display:flex;align-items:center;justify-content:center;
    font-family:var(--display);font-size:16px;font-weight:800}
  .panel-warn--calm .panel-warn__icon{background:var(--teal)}
@@ -3855,7 +6168,7 @@ index 862cb48..d09e2bf 100644
  .dtable--readiness{min-width:1040px}
  .dtable--readiness th:nth-child(1){width:7%}
  .dtable--readiness th:nth-child(2){width:15%}
-@@ -306,26 +340,26 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -306,26 +349,26 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .dtable--tidy-ups th:nth-child(3),.dtable--tidy-ups th:nth-child(4){width:24%}
  .dtable--tidy-ups th:nth-child(5){width:24%}
  .trace-value{display:inline-block;max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);background:#EEF3F1;border:1px solid var(--line);border-radius:5px;padding:3px 6px}
@@ -3888,7 +6201,7 @@ index 862cb48..d09e2bf 100644
  .freshness-card small{line-height:1.4}
  .freshness-card--current{border-left:4px solid var(--teal)}
  .freshness-card--limited{border-left:4px solid var(--amber-strong)}
-@@ -338,14 +372,14 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -338,14 +381,14 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .picker{align-self:stretch;display:flex;align-items:center;justify-content:space-between;
    gap:16px;margin-top:20px;flex-wrap:wrap}
  .picker__left{display:flex;align-items:center;gap:11px}
@@ -3905,7 +6218,7 @@ index 862cb48..d09e2bf 100644
  .swatch-bar{width:12px;height:4px;border-radius:5px;background:var(--teal)}
  .swatch-negative{width:12px;height:4px;border-radius:5px;background:var(--red)}
  .swatch-zero{width:8px;height:8px;border-radius:50%;background:#3F7E98}
-@@ -355,25 +389,25 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -355,25 +398,25 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    position:relative;overflow:hidden;color:#fff}
  .cover::after{content:"";position:absolute;width:190px;height:190px;border-radius:95px;
    background:rgba(143,210,200,.13);right:-60px;bottom:-70px}
@@ -3938,7 +6251,7 @@ index 862cb48..d09e2bf 100644
  .history-table{align-self:stretch;margin-top:12px;padding:22px}
  .dtable--weeks{min-width:900px}
  .dtable--weeks th:nth-child(1){width:18%}
-@@ -381,7 +415,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -381,7 +424,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .dtable--weeks th:nth-child(5){width:8%}
  .dtable--weeks th:nth-child(6){width:24%}
  .dtable--weeks th:nth-child(7){width:14%}
@@ -3947,7 +6260,7 @@ index 862cb48..d09e2bf 100644
  .all-products tbody tr:hover td{background:#FAFCFB}
  .row--selected td{background:var(--teal-tint)}
  .all-products .dtable td{vertical-align:middle}
-@@ -408,3 +442,709 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -408,3 +451,738 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    .picker .select{min-width:0;width:100%}
    .saved-setup{align-items:flex-start;flex-direction:column}
  }
@@ -4455,8 +6768,6 @@ index 862cb48..d09e2bf 100644
 +   clears WCAG 2.5.8 Target Size (Minimum, 24x24) on its own, and the label
 +   they belong to stays tappable too. */
 +@media (max-width:768px){
-+  :root{--text-label:11px}
-+
 +  /* standalone controls: full thumb target */
 +  .btn--small{min-height:44px;padding:10px 16px}
 +  .btn--link{min-height:44px;display:inline-flex;align-items:center;padding:1px 8px}
@@ -4519,56 +6830,87 @@ index 862cb48..d09e2bf 100644
 +}
 +
 +/* ===== learn more =====
-+   Borrowed from the reference video's status bands rather than its layout: a
-+   soft tinted row with no hard border, the question on the left behind a
-+   decorative icon, a chevron on the right. Built on <details>/<summary>, so
-+   the keyboard, the expanded state and the screen-reader announcement are the
-+   browser's job rather than ours.
++   Flashcards. Each card shows a question; activating it turns it over to the
++   answer, and activating it again turns it back.
 +
-+   Two shapes off one component. "rows" is the compact contextual list that
-+   sits under a step; "cards" is the 2x2 grid the homepage uses. */
++   Still <details>/<summary>, so the keyboard, the open state and the screen
++   reader announcement stay the browser's job.
++
++   The first attempt rotated the whole card in 3-D, and that quietly broke it.
++   Two reasons, both worth remembering:
++     - Forcing the content to render while closed left the invisible back face
++       lying on top of the question, swallowing every click and covering the
++       page beneath it.
++     - A <summary> that has been rotated away from the viewer with
++       backface-visibility:hidden stops hit-testing, so once a card did flip
++       there was nothing left to click to flip it back.
++   So the summary never moves. It stays flat, on top, and full size — it is
++   always the click target, whichever face is showing. Only the answer swings
++   in, and it takes no pointer events, so a click anywhere on the card always
++   reaches the summary. */
 +.learn{margin-top:28px}
 +.learn__title{font-family:var(--display);font-size:var(--text-section-head);
 +  font-weight:700;margin:0;letter-spacing:-.2px}
 +.learn__lede{margin:7px 0 0;font-size:var(--text-body);color:var(--muted);max-width:56ch}
-+.learn__list{margin-top:14px}
++.learn__list{margin-top:14px;perspective:1200px}
 +
-+.learn__item{background:var(--teal-tint);border-radius:14px;overflow:hidden}
-+.learn__item + .learn__item{margin-top:8px}
++/* both faces share one grid cell, so the card is as tall as the taller of
++   them and an answer can never be clipped (I3-UI AC2). Chrome puts the
++   content in a UA slot, so ::details-content is pinned to the cell too. */
++.learn__item{display:grid;border-radius:16px;background:var(--teal-tint)}
++.learn__item > *{grid-area:1/1;min-width:0}
++.learn__item::details-content{grid-area:1/1;min-width:0}
++.learn__item + .learn__item{margin-top:10px}
 +
-+.learn__q{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;
++.learn__q{display:flex;align-items:center;gap:12px;padding:20px 18px;cursor:pointer;
++  border-radius:16px;list-style:none;min-height:104px;position:relative;z-index:2;
++  background:var(--teal-tint);
 +  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink);
-+  list-style:none;min-height:44px}
++  transition:background-color .2s ease}
 +.learn__q::-webkit-details-marker{display:none}
 +.learn__q:hover{background:#DDEDE8}
-+.learn__item:focus-within .learn__q{outline:2px solid var(--teal);outline-offset:-2px}
-+.learn__icon{font-size:17px;line-height:1;flex:none}
++.learn__item:focus-within{outline:2px solid var(--teal);outline-offset:2px}
++
++/* Open: the question's own contents fade out and its panel goes clear, so the
++   answer shows through — but the summary itself is still there, still on top
++   and still clickable. */
++.learn__icon,.learn__qtext,.learn__chevron{transition:opacity .18s ease}
++.learn__item[open] .learn__q{background:transparent}
++.learn__item[open] .learn__q:hover{background:rgba(255,255,255,.06)}
++.learn__item[open] .learn__icon,
++.learn__item[open] .learn__qtext,
++.learn__item[open] .learn__chevron{opacity:0}
++
++.learn__icon{font-size:24px;line-height:1;flex:none}
 +.learn__qtext{flex:1;min-width:0}
++/* a folded page corner, to say there is a back to this */
++.learn__chevron{flex:none;align-self:flex-end;width:16px;height:16px;
++  border-radius:3px 0 16px 0;background:linear-gradient(135deg,transparent 48%,var(--mint) 50%)}
 +
-+/* the chevron is drawn, not typed, so it can rotate when the row opens */
-+.learn__chevron{flex:none;width:9px;height:9px;margin-right:3px;
-+  border-right:2px solid var(--teal-deep);border-bottom:2px solid var(--teal-deep);
-+  transform:rotate(45deg) translate(-2px,-2px);transition:transform .16s ease}
-+.learn__item[open] .learn__chevron{transform:rotate(-135deg) translate(-3px,-3px)}
++.learn__a{margin:0;padding:20px 18px;border-radius:16px;
++  background:var(--ink);color:#EAF5F2;
++  font-family:var(--body);font-size:var(--text-secondary);line-height:1.6;
++  display:flex;align-items:center;
++  pointer-events:none;                 /* every click belongs to the summary */
++  transform:rotateY(-92deg);opacity:0;transform-origin:left center;
++  transition:transform .34s cubic-bezier(.2,.7,.3,1),opacity .2s ease}
++.learn__item[open] .learn__a{transform:none;opacity:1}
 +
-+.learn__a{margin:0;padding:0 15px 15px 43px;font-size:var(--text-secondary);
-+  line-height:1.6;color:var(--ink-2);max-width:62ch}
-+
-+@media(prefers-reduced-motion:reduce){.learn__chevron{transition:none}}
++@media(prefers-reduced-motion:reduce){
++  .learn__a{transform:none;transition:opacity .15s ease}
++  .learn__icon,.learn__qtext,.learn__chevron,.learn__q{transition:none}
++}
 +
 +/* the homepage grid: four cards, two up */
-+.learn--cards .learn__list{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
++.learn--cards .learn__list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 +.learn--cards .learn__item + .learn__item{margin-top:0}
-+.learn--cards .learn__q{padding:15px 17px}
-+.learn--cards .learn__a{padding:0 17px 16px 45px}
 +
 +@media (max-width:900px){
 +  .learn--cards .learn__list{grid-template-columns:1fr}
 +}
 +@media (max-width:768px){
-+  .learn__q{padding:14px;gap:10px}
-+  .learn__a{padding-left:15px;font-size:var(--text-body)}
-+  .learn--cards .learn__a{padding-left:17px}
++  .learn__q{padding:18px 16px;gap:11px;min-height:96px}
++  .learn__a{padding:18px 16px;font-size:var(--text-body)}
 +}
 +
 +/* ===== impact dashboard =====

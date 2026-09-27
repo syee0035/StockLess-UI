@@ -11,11 +11,20 @@
   --red:#9B3939; --red-tint:#FBE8E8;
   --amber:#8B5C10; --amber-tint:#FFF4DF; --amber-strong:#D99120;
   --page:#FFFFFF;
-  /* Type scale — the same tokens and values the homepage uses, so the app and
-     the marketing site read as one product. Sizes below are set from these. */
-  --text-page-title:36px; --text-lead:18px; --text-section-head:20px;
-  --text-body:15px; --text-secondary:13px; --text-description:12px;
-  --text-eyebrow:11px; --text-label:10px;
+  /* Type scale — I3-TYPO-01 (Iteration 3 V2), which supersedes every earlier
+     font-size requirement including US1.1 AC7's 36px page title. The same
+     tokens drive the homepage, so the app and the marketing site read as one
+     product. I3-UI AC1 forbids a smaller local override of any role, and the
+     standard sets a hard floor: no interface text below label.
+       page-title 40 Manrope 700     body        16 Source Sans 3 400
+       lead       20 Source Sans 3   secondary   15 Source Sans 3 400
+       section-head 22 Manrope 700   description 14 Source Sans 3 400
+                                     eyebrow     13 Source Sans 3 700
+                                     label       12 Source Sans 3 700
+     numeric-data inherits its role's size in Inter 600-700. */
+  --text-page-title:40px; --text-lead:20px; --text-section-head:22px;
+  --text-body:16px; --text-secondary:15px; --text-description:14px;
+  --text-eyebrow:13px; --text-label:12px;
   --shadow-card:0 10px 30px rgba(22,49,59,.05);
   --display:"Manrope",-apple-system,BlinkMacSystemFont,sans-serif;
   --body:"Source Sans 3",-apple-system,BlinkMacSystemFont,sans-serif;
@@ -149,7 +158,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .attribute-card__features ul{display:flex;flex-wrap:wrap;gap:5px;list-style:none;margin:0;padding:0}
 .attribute-card__features li{padding:3px 7px;border-radius:7px;background:#EDF6F4;color:var(--teal-deep);font-size:var(--text-eyebrow);font-weight:700;line-height:1.4}
 .upload-card{padding:20px;display:flex;flex-direction:column;gap:14px}
-.dropzone{min-height:196px;border-radius:18px;border:2px dashed #9BC8C1;
+.dropzone{min-height:170px;border-radius:18px;border:2px dashed #9BC8C1;
   background:linear-gradient(180deg,#F8FCFB 0%,#EDF7F4 100%);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:32px 24px;text-align:center;transition:border-color .15s ease,background .15s ease}
@@ -168,9 +177,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 
 /* A reassurance, not a warning — so it reads as a soft note rather than a
    black slab shouting at the end of the card. */
-.privacy{display:flex;align-items:flex-start;gap:13px;padding:16px 18px;
+.privacy{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;
   background:#F1F8F3;border:1px solid #D8E9DD;border-radius:16px}
-.privacy__tick{width:34px;height:34px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
+.privacy__tick{width:28px;height:28px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
   display:flex;align-items:center;justify-content:center}
 .privacy p{margin:0}
 .privacy b{display:block;color:var(--ink);font-size:var(--text-body);line-height:1.4;margin-bottom:3px}
@@ -595,13 +604,23 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
   display:flex;align-items:center;justify-content:center;font-weight:800}
 .attention__head h2{font-family:var(--display);font-size:17px;font-weight:700;margin:0;color:#7E2E2E}
 .attention__head p{font-size:var(--text-description);color:var(--muted);margin:3px 0 0}
-.attention__sort{margin-left:auto;flex:none}
+.attention__search{display:flex;align-items:center;gap:7px;margin-left:auto;flex:0 1 220px;min-width:0;
+  padding:6px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--muted)}
+.attention__search:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.attention__search input{flex:1;min-width:0;border:0;outline:0;background:none;
+  font-family:var(--body);font-size:var(--text-description);color:var(--ink)}
+.attention__sort{flex:none}
 .attention__sort select{font-family:var(--body);font-size:var(--text-description);color:var(--ink-2);
   padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
 
 .pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-top:12px}
 .pcard{display:flex;flex-direction:column;gap:10px;padding:15px;background:#fff;
   border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-card)}
+/* US2.3 AC8 — the freshness state is carried on the card's left edge, in the
+   colours the spec fixes. The product card IS the freshness card now. */
+.pcard--ready{border-left:4px solid #167D74}
+.pcard--review{border-left:4px solid #D99120}
+.pcard--missing{border-left:4px solid #9B3939}
 .pcard__head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .pcard__name{display:block;font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
 .pcard__code{display:block;font-size:var(--text-description);color:var(--muted);margin-top:2px}
@@ -633,8 +652,10 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .spark--labelled .spark__bar{background:#B9DED4}
 .spark__bar--missing{height:7px;border:1px dashed #6E7B80;background:transparent;border-radius:3px}
 
+/* US2.3 AC8's "current" colour: the ready group is the products whose stock
+   count is still current, so it carries the same left edge as the cards. */
 .readylist{align-self:stretch;margin-top:16px;padding:13px 16px;background:#F1F8F5;
-  border:1px solid #CFE3DE;border-radius:14px}
+  border:1px solid #CFE3DE;border-left:4px solid #167D74;border-radius:14px}
 .readylist>summary{display:flex;align-items:center;gap:11px;cursor:pointer;list-style:none}
 .readylist>summary::-webkit-details-marker{display:none}
 .readylist__tick{width:30px;height:30px;flex:none;border-radius:50%;background:var(--teal);color:#fff;
@@ -655,7 +676,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 @media (max-width:900px){
   .summary{grid-template-columns:1fr}
   .attention__head{flex-wrap:wrap}
-  .attention__sort{margin-left:0;width:100%}
+  .attention__sort,.attention__search{margin-left:0;width:100%;flex:1 1 100%}
   .attention__sort select{width:100%}
 }
 
@@ -701,8 +722,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .problems__list{display:grid;gap:9px;margin-top:13px}
 .problems__download{margin-top:13px}
 
-.igroup{border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.igroup>summary{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;list-style:none}
+.igroup{border:1px solid var(--line);border-radius:12px}
+.igroup>summary{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;list-style:none;border-radius:11px}
+.igroup[open]>summary{border-radius:11px 11px 0 0}
 .igroup>summary::-webkit-details-marker{display:none}
 .igroup__icon{width:22px;height:22px;flex:none;border-radius:50%;color:#fff;font-weight:800;
   font-size:var(--text-description);display:flex;align-items:center;justify-content:center}
@@ -926,6 +948,244 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 .unlocks__list li:last-child{margin-bottom:0}
 .unlocks__list b{display:block;font-size:var(--text-secondary);color:var(--ink)}
 .unlocks__list span{color:var(--muted)}
+
+/* ===== thumb ergonomics on a phone =====
+   Everything above was sized for a mouse pointer. A finger is about 9mm
+   across, so on a touch-width screen the standalone controls grow to 44px —
+   Apple's and Material's floor — and the small text token goes up a step so
+   nothing sits at 10px in the hand.
+
+   The inline "i" dots are the deliberate exception. They live mid-sentence
+   next to a label; pushing them to 44px would either break the line box or
+   overlap the control beside them and steal its taps. They go to 28px, which
+   clears WCAG 2.5.8 Target Size (Minimum, 24x24) on its own, and the label
+   they belong to stays tappable too. */
+@media (max-width:768px){
+  /* standalone controls: full thumb target */
+  .btn--small{min-height:44px;padding:10px 16px}
+  .btn--link{min-height:44px;display:inline-flex;align-items:center;padding:1px 8px}
+  .topbar .workspace-home-link{min-height:44px;padding-top:12px;padding-bottom:12px}
+  .language-switcher select,
+  .frame .language-switcher select{min-height:44px}
+  .pcard__action{min-height:44px}
+
+  /* selects and search fields: the row height is the target */
+  .frame select,
+  .frame input[type="text"],
+  .frame input[type="search"]{min-height:44px}
+
+  /* inline help dots: 28px, still inside the line */
+  .hint__btn{width:28px;height:28px;font-size:13px}
+}
+
+/* ===== a table is not a phone layout =====
+   Step 2's mapping grid and Step 3's ready list are four and five columns
+   wide. On a 390px screen they either squeeze every column to nothing or
+   force the page sideways, and neither is readable. Below 768px each row
+   becomes its own card: the first cell is the card's title, and every other
+   cell states the column it came from, taken from its data-label.
+
+   The header row goes to screen readers only, because the labels now sit
+   inside each card and a visible header would just repeat them. */
+@media (max-width:768px){
+  .dtable--cards{display:block;min-width:0;table-layout:auto}
+
+  .dtable--cards thead{position:absolute;width:1px;height:1px;
+    overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+  .dtable--cards tbody{display:block}
+  .dtable--cards tbody tr{display:block;padding:15px 16px;margin-bottom:12px;
+    border:1px solid var(--line);border-radius:14px;background:#fff}
+  .dtable--cards tbody tr:last-child{margin-bottom:0}
+
+  /* label left, value right — the row reads as "Stock age … 12 days" */
+  .dtable--cards td{display:flex;gap:14px;align-items:baseline;
+    justify-content:space-between;text-align:right;
+    padding:9px 0;border-bottom:1px solid var(--line-soft)}
+  .dtable--cards td::before{content:attr(data-label);flex:none;text-align:left;
+    font-family:var(--body);font-size:var(--text-description);font-weight:700;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.55px}
+  .dtable--cards tbody tr td:last-child{border-bottom:0;padding-bottom:0}
+
+  /* the first cell is the heading of the card, so it keeps the full width */
+  .dtable--cards td.dtable__title{display:block;text-align:left;
+    padding:0 0 11px;border-bottom:1px solid var(--line)}
+  .dtable--cards td.dtable__title::before{content:none}
+
+  /* controls inside a card take the room the value side has */
+  .dtable--cards td .select{flex:1;min-width:0;width:100%}
+  .dtable--cards td .mapping-status{align-items:flex-end}
+  .dtable--cards td .spark{justify-content:flex-end}
+
+  /* nothing to scroll sideways any more */
+  .table-scroll:has(.dtable--cards),
+  .table-scroll--x:has(.dtable--cards){overflow-x:visible}
+}
+
+/* ===== learn more =====
+   Flashcards. Each card shows a question; activating it turns the card over
+   to the answer, and activating it again turns it back.
+
+   Still <details>/<summary> underneath, so the keyboard, the open state and
+   the screen-reader announcement stay the browser's job — the flip is only
+   what [open] looks like. That matters: a hand-rolled flip card is usually a
+   div that no keyboard can reach and no screen reader can describe.
+
+   The two faces are stacked in a grid cell rather than absolutely positioned,
+   so the card is as tall as its longest face and the answer can never be
+   clipped (I3-UI AC2). rotateY is applied only where the browser says motion
+   is welcome; otherwise the faces simply cross-fade. */
+.learn{margin-top:28px}
+.learn__title{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0;letter-spacing:-.2px}
+.learn__lede{margin:7px 0 0;font-size:var(--text-body);color:var(--muted);max-width:56ch}
+.learn__list{margin-top:14px}
+
+/* <summary> has to be a direct child of <details>, so the flip lives on the
+   <details> itself rather than on an inner wrapper. The perspective belongs
+   to the parent, since it applies to a box's children. */
+.learn__list{perspective:1400px}
+.learn__item{display:grid;border-radius:16px;background:none;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+/* Chrome renders a <details>'s content inside a UA slot, so the answer is
+   not itself the grid item there — ::details-content is. Browsers without
+   that pseudo-element place the <p> directly, so both are pinned to the same
+   cell and the card ends up as tall as its taller face either way. */
+.learn__item > *{grid-area:1/1;min-width:0}
+.learn__item::details-content{grid-area:1/1;min-width:0;
+  transform-style:preserve-3d;content-visibility:visible;block-size:auto}
+.learn__item + .learn__item{margin-top:10px}
+.learn__item[open]{transform:rotateY(180deg)}
+
+.learn__q,.learn__a{border-radius:16px;backface-visibility:hidden;
+  -webkit-backface-visibility:hidden}
+
+.learn__q{display:flex;align-items:center;gap:12px;padding:20px 18px;cursor:pointer;
+  background:var(--teal-tint);list-style:none;min-height:104px;
+  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
+.learn__q::-webkit-details-marker{display:none}
+.learn__q:hover{background:#DDEDE8}
+.learn__item:focus-within .learn__q{outline:2px solid var(--teal);outline-offset:2px}
+.learn__icon{font-size:24px;line-height:1;flex:none}
+.learn__qtext{flex:1;min-width:0}
+
+/* the corner turn: a folded page edge that says "there is a back to this" */
+.learn__chevron{flex:none;align-self:flex-end;width:16px;height:16px;
+  border-radius:3px 0 16px 0;background:linear-gradient(135deg,transparent 48%,var(--mint) 50%)}
+
+.learn__a{margin:0;padding:20px 18px;background:var(--ink);color:#EAF5F2;
+  transform:rotateY(180deg);cursor:pointer;
+  font-family:var(--body);font-size:var(--text-secondary);line-height:1.6;
+  display:flex;align-items:center}
+
+/* Without 3-D transforms the back face would sit on top of the front, so the
+   faces are faded instead and only the active one takes pointer events. */
+@media(prefers-reduced-motion:reduce){
+  .learn__item{transition:none;transform:none!important}
+  .learn__q,.learn__a{transform:none;backface-visibility:visible;transition:opacity .15s ease}
+  .learn__a{opacity:0;pointer-events:none}
+  .learn__item[open] .learn__q{opacity:0;pointer-events:none}
+  .learn__item[open] .learn__a{opacity:1;pointer-events:auto}
+}
+
+/* the homepage grid: four cards, two up */
+.learn--cards .learn__list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.learn--cards .learn__item + .learn__item{margin-top:0}
+
+@media (max-width:900px){
+  .learn--cards .learn__list{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .learn__q{padding:18px 16px;gap:11px;min-height:96px}
+  .learn__a{padding:18px 16px;font-size:var(--text-body)}
+}
+
+/* ===== impact dashboard =====
+   An impact story, not an analytics console: one figure per card, its unit
+   next to it, and the basis for it underneath in plain words. Two of the
+   three cards carry no number, so they are styled as clearly unlocked-later
+   rather than as a zero or an error — a muted fill, no big figure, and the
+   sentence that says what would fill them. */
+/* The page shell already sets the width. Capping the section at 1000px left
+   a third of a 1440 screen empty, which §5 asks us to avoid — so the cards
+   and the SDG band use the full shell and only the prose is measured. */
+.impact{max-width:none}
+.impact__title{font-family:var(--display);font-size:var(--text-page-title);
+  font-weight:700;margin:6px 0 0;letter-spacing:-.8px}
+.impact__lede{margin:10px 0 0;font-size:var(--text-lead);line-height:1.55;
+  color:var(--muted);max-width:68ch}
+
+.impact__cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.icard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;
+  box-shadow:var(--shadow-card);display:flex;flex-direction:column}
+.icard--figure{background:var(--teal-tint);border-color:#CFE4DE}
+.icard--locked{background:#F7FAF9}
+.icard__icon{font-size:22px;line-height:1}
+.icard__label{margin-top:12px;font-family:var(--display);font-size:var(--text-description);
+  font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.icard__value{margin:7px 0 0;font-family:var(--display);font-size:38px;font-weight:700;
+  line-height:1.1;letter-spacing:-1.4px;color:var(--ink)}
+.icard__unit{margin-left:7px;font-size:var(--text-body);font-weight:600;color:var(--muted)}
+/* An unlocked-later card must not shout as loudly as the card that has a
+   real number — at 18px bold it out-weighed the one figure on the page. */
+.icard__value--locked{font-size:var(--text-body);font-weight:600;color:var(--muted-2);
+  letter-spacing:0;line-height:1.4}
+.icard__caption{margin:6px 0 0;font-size:var(--text-body);font-weight:600;color:var(--ink-2)}
+.icard__basis{margin:9px 0 0;font-size:var(--text-secondary);line-height:1.55;color:var(--muted)}
+
+/* the per-product working behind the one real figure */
+.impact__lines{margin-top:24px;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.impact__lines h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0 0 4px}
+.impact__lines ul{list-style:none;margin:0;padding:0}
+.impact__lines li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.impact__lines li:last-child{border-bottom:0;padding-bottom:0}
+.impact__lname{display:flex;align-items:baseline;gap:9px;min-width:0;flex-wrap:wrap}
+.impact__lname .num{font-size:var(--text-secondary);color:var(--muted)}
+.impact__lunits{flex:none;font-family:var(--display);font-weight:700;text-align:right}
+.impact__lunits span{font-family:var(--body);font-weight:400;font-size:var(--text-secondary);
+  color:var(--muted);margin-left:6px}
+
+.impact__sdg{display:flex;gap:18px;align-items:flex-start;margin-top:24px;padding:22px;
+  border-radius:18px;background:#BD8C2B;color:#fff}
+.impact__sdg-mark{flex:none;font-family:var(--display);font-size:46px;font-weight:800;
+  line-height:1;letter-spacing:-3px}
+.impact__sdg h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0}
+.impact__sdg p{margin:8px 0 0;font-size:var(--text-body);line-height:1.6;max-width:62ch}
+.impact__sdg-link{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;
+  color:#fff;font-weight:700;font-size:var(--text-secondary);text-decoration:underline}
+
+.impact__method{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);
+  font-size:var(--text-secondary);line-height:1.6;color:var(--muted);max-width:76ch}
+.impact__actions{margin-top:20px}
+
+@media (max-width:1100px){
+  .impact__cards{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .impact__cards{grid-template-columns:1fr;gap:12px}
+  .impact__title{font-size:30px}
+  .impact__lede{font-size:var(--text-body)}
+  .icard__value{font-size:34px}
+  .impact__lines li{align-items:flex-start;flex-direction:column;gap:3px}
+  .impact__lunits{text-align:left}
+  .impact__sdg{gap:14px;padding:18px}
+  .impact__sdg-mark{font-size:38px}
+  .impact__actions .btn{width:100%}
+}
+
+/* ===== stepper on a phone =====
+   Four labels across 390px left "Check readiness" and "Plan purchases"
+   touching. The labels stay — they are how someone knows where they are —
+   but they wrap inside their own column and the columns get a gutter. */
+@media (max-width:560px){
+  .stepper__inner{gap:2px}
+  .step__label{font-size:var(--text-description);line-height:1.25;
+    text-align:center;padding-inline:3px;hyphens:auto}
+  .step__button{gap:5px}
+}
 .language-switcher{display:inline-flex;align-items:center;gap:5px;background:#edf7ef;border:1px solid #c3e2cc;border-radius:10px;padding:6px 8px;color:#2f6c49;flex-shrink:0;line-height:1.3}
 .language-switcher select{line-height:1.4;font-family:inherit;font-size:12px;font-weight:600;color:inherit;background:transparent;border:0;padding:4px 0;cursor:pointer;max-width:120px;min-height:28px}
 .language-switcher:focus-within{outline:2px solid #167d74;outline-offset:3px}
@@ -991,9 +1251,9 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
           <button class="btn btn--primary" data-i18n="s2.bulk.btn" type="button">Confirm all and continue →</button>
         </div>
 
-        <div class="table-scroll"><table class="dtable">
+        <div class="table-scroll"><table class="dtable dtable--cards">
           <thead><tr><th data-i18n="s2.th.field" style="width:28%">StockLess field</th><th data-i18n="s2.th.column" style="width:27%">Your column</th><th data-i18n="s2.th.preview" style="width:22%">Preview</th><th data-i18n="s2.th.status" style="width:23%">Status</th></tr></thead>
-          <tbody><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.saleDate">Sale date</b><span class="hint"><button type="button" class="hint__btn" aria-label="When did each sale or return happen?"><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.saleDate.d" role="tooltip">When did each sale or return happen?</span></span><span class="req" data-i18n="s2.required">REQUIRED</span></span></td><td><select class="select"><option>Not in this file</option><option selected>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num">2 Feb 2026 · 4 Feb 2026 · 6 Feb 2026</td><td><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.code">Product code, SKU or barcode</b><span class="hint"><button type="button" class="hint__btn" aria-label="A code that is unique to each product, so two products are never mixed up."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.code.d" role="tooltip">A code that is unique to each product, so two products are never mixed up.</span></span></span></td><td><select class="select"><option>Not in this file</option><option>Transaction Date</option><option selected>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num">MM0001 · MM0014 · MM0027</td><td><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.name">Product name</b><span class="hint"><button type="button" class="hint__btn" aria-label="The name you use for the product."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.name.d" role="tooltip">The name you use for the product.</span></span></span></td><td><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option selected>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num">Kopi O Kaw 2in1 · Milo 3in1</td><td><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.pack">Pack size</b><span class="hint"><button type="button" class="hint__btn" aria-label="The pack size, so a 10-pack is never counted as the same thing as a 20-pack."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.pack.d" role="tooltip">The pack size, so a 10-pack is never counted as the same thing as a 20-pack.</span></span></span></td><td><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option selected>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num">10 sachets · 20 sachets</td><td><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.qty">Quantity sold</b><span class="hint"><button type="button" class="hint__btn" aria-label="How many units were sold or returned."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.qty.d" role="tooltip">How many units were sold or returned.</span></span><span class="req" data-i18n="s2.required">REQUIRED</span></span></td><td><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option selected>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num">2 · 1 · 3</td><td><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.stock">Stock on hand</b><span class="hint"><button type="button" class="hint__btn" aria-label="How much you have on the shelf right now."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.stock.d" role="tooltip">How much you have on the shelf right now.</span></span></span></td><td><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option selected>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num">7 · 12 · 4</td><td><div class="mapping-status"><span class="pill pill--amber" data-i18n="s2.please">Please confirm</span><button class="btn btn--small btn--ghost" data-i18n="s2.confirm" type="button">Confirm</button></div></td></tr><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.countDate">Stock count date</b><span class="hint"><button type="button" class="hint__btn" aria-label="When was your current stock counted?"><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.countDate.d" role="tooltip">When was your current stock counted?</span></span></span></td><td><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option selected>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num">12 Sep 2026</td><td><div class="mapping-status"><span class="pill pill--amber" data-i18n="s2.please">Please confirm</span><button class="btn btn--small btn--ghost" data-i18n="s2.confirm" type="button">Confirm</button></div></td></tr><tr><td><span class="field-head"><b class="dtable__label" data-i18n="f.cost">Unit cost</b><span class="hint"><button type="button" class="hint__btn" aria-label="What you pay your supplier for one unit. Leave it out and StockLess estimates from Malaysian shelf prices."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.cost.d" role="tooltip">What you pay your supplier for one unit. Leave it out and StockLess estimates from Malaysian shelf prices.</span></span></span></td><td><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option selected>Unit Cost</option></select></td><td class="num">RM 1.20 · RM 2.45</td><td><div class="mapping-status"><span class="pill pill--amber" data-i18n="s2.please">Please confirm</span><button class="btn btn--small btn--ghost" data-i18n="s2.confirm" type="button">Confirm</button></div></td></tr></tbody></table></div>
+          <tbody><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.saleDate">Sale date</b><span class="hint"><button type="button" class="hint__btn" aria-label="When did each sale or return happen?"><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.saleDate.d" role="tooltip">When did each sale or return happen?</span></span><span class="req" data-i18n="s2.required">REQUIRED</span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option selected>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">2 Feb 2026 · 4 Feb 2026 · 6 Feb 2026</td><td data-i18n-label="s2.th.status" data-label="Status"><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.code">Product code, SKU or barcode</b><span class="hint"><button type="button" class="hint__btn" aria-label="A code that is unique to each product, so two products are never mixed up."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.code.d" role="tooltip">A code that is unique to each product, so two products are never mixed up.</span></span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option>Transaction Date</option><option selected>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">MM0001 · MM0014 · MM0027</td><td data-i18n-label="s2.th.status" data-label="Status"><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.name">Product name</b><span class="hint"><button type="button" class="hint__btn" aria-label="The name you use for the product."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.name.d" role="tooltip">The name you use for the product.</span></span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option selected>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">Kopi O Kaw 2in1 · Milo 3in1</td><td data-i18n-label="s2.th.status" data-label="Status"><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.pack">Pack size</b><span class="hint"><button type="button" class="hint__btn" aria-label="The pack size, so a 10-pack is never counted as the same thing as a 20-pack."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.pack.d" role="tooltip">The pack size, so a 10-pack is never counted as the same thing as a 20-pack.</span></span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option selected>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">10 sachets · 20 sachets</td><td data-i18n-label="s2.th.status" data-label="Status"><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.qty">Quantity sold</b><span class="hint"><button type="button" class="hint__btn" aria-label="How many units were sold or returned."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.qty.d" role="tooltip">How many units were sold or returned.</span></span><span class="req" data-i18n="s2.required">REQUIRED</span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option selected>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">2 · 1 · 3</td><td data-i18n-label="s2.th.status" data-label="Status"><span class="pill pill--confirmed" data-i18n="s2.confirmedChip">✓ Confirmed</span></td></tr><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.stock">Stock on hand</b><span class="hint"><button type="button" class="hint__btn" aria-label="How much you have on the shelf right now."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.stock.d" role="tooltip">How much you have on the shelf right now.</span></span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option selected>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">7 · 12 · 4</td><td data-i18n-label="s2.th.status" data-label="Status"><div class="mapping-status"><span class="pill pill--amber" data-i18n="s2.please">Please confirm</span><button class="btn btn--small btn--ghost" data-i18n="s2.confirm" type="button">Confirm</button></div></td></tr><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.countDate">Stock count date</b><span class="hint"><button type="button" class="hint__btn" aria-label="When was your current stock counted?"><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.countDate.d" role="tooltip">When was your current stock counted?</span></span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option selected>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">12 Sep 2026</td><td data-i18n-label="s2.th.status" data-label="Status"><div class="mapping-status"><span class="pill pill--amber" data-i18n="s2.please">Please confirm</span><button class="btn btn--small btn--ghost" data-i18n="s2.confirm" type="button">Confirm</button></div></td></tr><tr><td class="dtable__title"><span class="field-head"><b class="dtable__label" data-i18n="f.cost">Unit cost</b><span class="hint"><button type="button" class="hint__btn" aria-label="What you pay your supplier for one unit. Leave it out and StockLess estimates from Malaysian shelf prices."><span aria-hidden="true">?</span></button><span class="hint__bubble" data-i18n="f.cost.d" role="tooltip">What you pay your supplier for one unit. Leave it out and StockLess estimates from Malaysian shelf prices.</span></span></span></td><td data-i18n-label="s2.th.column" data-label="Your column"><select class="select"><option>Not in this file</option><option>Transaction Date</option><option>Product Code</option><option>Product Name</option><option>Pack Variant</option><option>Quantity Sold</option><option>Current Stock</option><option>Stock Count Date</option><option>Planned Order</option><option>Incoming Stock</option><option>Expiry Date</option><option selected>Unit Cost</option></select></td><td class="num" data-i18n-label="s2.th.preview" data-label="Preview">RM 1.20 · RM 2.45</td><td data-i18n-label="s2.th.status" data-label="Status"><div class="mapping-status"><span class="pill pill--amber" data-i18n="s2.please">Please confirm</span><button class="btn btn--small btn--ghost" data-i18n="s2.confirm" type="button">Confirm</button></div></td></tr></tbody></table></div>
 
         <div class="identity">
           <h3 class="identity__title" data-i18n="s2.identity.title">How should StockLess identify your products?</h3>
@@ -1062,6 +1322,11 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var v = dict[el.getAttribute('data-i18n')];
       if (v) el.textContent = v;
+    });
+    /* the phone card layout reads its column name from data-label */
+    document.querySelectorAll('[data-i18n-label]').forEach(function (el) {
+      var v = dict[el.getAttribute('data-i18n-label')];
+      if (v) el.setAttribute('data-label', v);
     });
     /* the tooltip text is the accessible name too */
     document.querySelectorAll('.hint').forEach(function (wrap) {

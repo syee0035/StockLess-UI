@@ -415,6 +415,65 @@ index 5e36885..337d60a 100644
                    <span className="step__dot">{t(done ? "✓" : step.id)}</span>
                    <span className="step__label">{t(step.label)}</span>
                  </button>
+diff --git a/frontend/src/components/LearnMore.tsx b/frontend/src/components/LearnMore.tsx
+new file mode 100644
+index 0000000..8ea4068
+--- /dev/null
++++ b/frontend/src/components/LearnMore.tsx
+@@ -0,0 +1,53 @@
++import type { ReactNode } from "react";
++import { t } from "../i18n/index.ts";
++
++export interface LearnMoreItem {
++  /** A plain emoji, decorative only — the question carries the meaning. */
++  readonly icon: string;
++  readonly question: string;
++  readonly answer: string;
++}
++
++/**
++ * A short, plain-language help block.
++ *
++ * Built on <details>/<summary> rather than a hand-rolled accordion: the
++ * browser gives keyboard operation, the expanded/collapsed state and screen
++ * reader announcements for free, and the answers stay in the page for search
++ * and for printing. The icons are aria-hidden — a question that only made
++ * sense next to its emoji would fail anyone who cannot see it.
++ */
++export function LearnMore({
++  title,
++  lede,
++  items,
++  variant = "rows",
++  footer,
++}: {
++  readonly title: string;
++  readonly lede?: string;
++  readonly items: readonly LearnMoreItem[];
++  /** "rows" is the compact contextual list; "cards" is the 2x2 homepage grid. */
++  readonly variant?: "rows" | "cards";
++  readonly footer?: ReactNode;
++}) {
++  return (
++    <section className={`learn learn--${variant}`} aria-labelledby={`learn-${variant}`}>
++      <h2 className="learn__title" id={`learn-${variant}`}>{t(title)}</h2>
++      {t(lede && <p className="learn__lede">{t(lede)}</p>)}
++      <div className="learn__list">
++        {items.map((item) => (
++          <details className="learn__item" key={item.question}>
++            <summary className="learn__q">
++              <span className="learn__icon" aria-hidden="true">{item.icon}</span>
++              <span className="learn__qtext">{t(item.question)}</span>
++              <span className="learn__chevron" aria-hidden="true" />
++            </summary>
++            <p className="learn__a">{t(item.answer)}</p>
++          </details>
++        ))}
++      </div>
++      {footer}
++    </section>
++  );
++}
 diff --git a/frontend/src/components/WorkspaceDecor.tsx b/frontend/src/components/WorkspaceDecor.tsx
 new file mode 100644
 index 0000000..e6059ad
@@ -482,11 +541,45 @@ index 0000000..e6059ad
 +    </div>
 +  );
 +}
+diff --git a/frontend/src/homepage-purchase-preview.css b/frontend/src/homepage-purchase-preview.css
+index ce8e0ba..0171ef2 100644
+--- a/frontend/src/homepage-purchase-preview.css
++++ b/frontend/src/homepage-purchase-preview.css
+@@ -226,3 +226,29 @@
+     font-size: 10px;
+   }
+ }
++
++/* ===== readable floor, and a slider you can actually drag =====
++   This panel had drifted to 8-9px chasing the "miniature app" look. It is
++   live UI, not a screenshot, so nothing here goes below 10px now - and on a
++   phone the floor is 11px and the slider gets a 44px thumb lane. */
++.sl-home .sl-preview-pattern,
++.sl-home .sl-preview-source,
++.sl-home .sl-preview-estimate p span,
++.sl-home .sl-preview-verdict > div,
++.sl-home .sl-preview-verdict p,
++.sl-home .sl-preview-verdict small { font-size: 10px; }
++.sl-home .sl-preview-metrics { font-size: 10px; }
++.sl-home .sl-preview-metrics b { font-size: 12px; }
++
++@media (max-width: 760px) {
++  .sl-home .sl-preview-pattern,
++  .sl-home .sl-preview-estimate p span,
++  .sl-home .sl-preview-source,
++  .sl-home .sl-preview-verdict > div,
++  .sl-home .sl-preview-verdict p,
++  .sl-home .sl-preview-verdict small { font-size: 11px; }
++  .sl-home .sl-preview-metrics { font-size: 11px; }
++  .sl-home .sl-preview-metrics b { font-size: 13px; }
++
++  .sl-home .sl-preview-slider input { min-height: 44px; }
++}
 diff --git a/frontend/src/homepage.css b/frontend/src/homepage.css
-index cc5c2d6..80ab02f 100644
+index cc5c2d6..c32718b 100644
 --- a/frontend/src/homepage.css
 +++ b/frontend/src/homepage.css
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,79 @@
  .sl-home{--sl-ink:#183842;--sl-teal:#167d74;--sl-muted:#60716f;--sl-line:#dfe7e3;background:#fff;color:var(--sl-ink);font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.6}
 -.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(32px,3.7vw,49px);font-weight:600;line-height:1.15;letter-spacing:-1.9px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1200px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:108px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:14px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:14px;font-weight:650;min-height:50px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:11px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:54px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(42px,5.5vw,72px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:24px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:28px}.sl-secondary-link{font-size:14px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:62px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:8px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:10px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:9px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:9px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:11px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:11px}.sl-warning p{font-size:10px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:8px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:9px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:11px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:10px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:9px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:11px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:9px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:9px}.sl-scenario-result>p{font-size:9px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:9px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:100px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.8;color:var(--sl-muted);margin-top:22px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:48px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:14px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:54px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:390px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:75px;padding-top:100px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story-image{width:100%;height:100%;max-height:750px;min-height:570px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:22px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:13px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:10px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:14px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:100px;border-top:1px solid var(--sl-line);padding-top:75px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:11px;color:var(--sl-muted);margin-top:45px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:13px;text-align:left}.sl-comparison th,.sl-comparison td{padding:19px 22px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:105px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:12px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:9px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:11px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:75px;align-items:center;padding-top:110px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:465px;padding:40px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:13px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:11px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;list-style:none;padding:0;margin:46px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:60px;font-weight:400;letter-spacing:-3px;color:#99aaa3;display:block;margin-bottom:25px}.sl-steps h3{font-size:17px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:70px}.sl-final-cta>div{padding:49px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:12px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:70px;padding-block:30px;font-size:12px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 13px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
 +.sl-home *{box-sizing:border-box}.sl-home a{color:inherit;text-decoration:none}.sl-home button,.sl-home input{font:inherit}.sl-home button,.sl-home a,.sl-home input{touch-action:manipulation}.sl-home :focus,.sl-home :focus-visible{outline:none}.sl-home h1,.sl-home h2,.sl-home h3,.sl-home h4,.sl-home p,.sl-home figure{margin:0}.sl-home h2{font-size:clamp(30px,3.1vw,42px);font-weight:600;line-height:1.18;letter-spacing:-1.5px}.sl-home h3{font-size:18px;font-weight:650;line-height:1.4;letter-spacing:-.5px}.sl-home section[id]{scroll-margin-top:28px}.sl-container{width:min(1420px,calc(100% - 80px));margin-inline:auto}.sl-nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px}.sl-nav nav{display:flex;gap:30px;font-size:15px;font-weight:650}.sl-nav nav a:hover,.sl-footer a:hover{color:var(--sl-teal)}.sl-button{display:inline-flex;align-items:center;justify-content:center;gap:24px;background:var(--sl-teal);color:white!important;padding:15px 22px;border-radius:7px;font-size:15px;font-weight:650;min-height:52px;transition:background .15s,transform .15s}.sl-button:hover{background:#105e58;transform:translateY(-2px)}.sl-button span{font-size:20px;line-height:1}.sl-button--small{padding:11px 18px;min-height:44px}.sl-kicker{display:block;color:var(--sl-teal);font-size:12px;line-height:1.5;font-weight:750;letter-spacing:1.8px}.sl-hero{text-align:center;padding-top:36px}.sl-hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px!important}.sl-hero-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#bd8b35}.sl-home h1{font-size:clamp(40px,5vw,64px);font-weight:600;letter-spacing:-3.8px;line-height:1.06}.sl-home h1 em{font-style:normal;color:#cd8c24}.sl-hero-copy{color:var(--sl-muted);font-size:17px;margin:17px auto 0!important}.sl-hero-actions{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:20px}.sl-secondary-link{font-size:15px;font-weight:600}.sl-secondary-link span{margin-left:12px}.sl-secondary-link:hover{text-decoration:underline}.sl-mobile-break{display:none}.sl-preview-stage{position:relative;padding:0 65px;margin-top:42px}.sl-preview-stage:before{content:"";position:absolute;inset:100px 0 0;background:#146b66;border-radius:26px}.sl-demo{position:relative;background:#f8fbfa;border:7px solid #1c2728;border-radius:20px;text-align:left;box-shadow:0 6px 28px #15393324;overflow:hidden}.sl-demo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px;background:#fff;border-bottom:1px solid var(--sl-line);font-size:8px;font-weight:700;letter-spacing:1.1px}.sl-window-dots{letter-spacing:3px;color:#bccbc6}.sl-demo-label{color:var(--sl-teal);background:#edf5f1;padding:3px 8px;border-radius:4px;letter-spacing:0;font-size:10px}.sl-demo-grid{display:grid;grid-template-columns:1.8fr 1fr}.sl-evidence{padding:24px;background:#fff}.sl-product{display:flex;justify-content:space-between;align-items:center;gap:12px}.sl-demo .sl-kicker{font-size:9px;letter-spacing:1px}.sl-product h3{margin-top:3px;font-size:21px}.sl-risk{border-radius:30px;background:#e7f3eb;color:#276151;padding:5px 9px;font-size:9px;white-space:nowrap}.sl-risk--high{background:#fbedeb;color:#b34c3a}.sl-warning{display:flex;gap:11px;background:#edf6f1;border:1px solid #cee2d7;border-radius:9px;padding:14px;margin-top:22px;font-size:11px;color:#375a4b}.sl-warning--high{background:#fcf0ed;border-color:#f1d8d0;color:#914637}.sl-warning>span{width:18px;height:18px;flex:none;border-radius:50%;background:currentColor;text-align:center;font-weight:800;font-size:0}.sl-warning>span:after{content:"!";color:#fff;font-size:12px}.sl-warning strong{font-size:11px}.sl-warning p{font-size:10px;line-height:1.7;margin-top:5px}.sl-chart{padding-top:23px}.sl-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.sl-chart h4{font-size:12px;margin-top:5px}.sl-chart-heading>span{font-size:8px;white-space:nowrap}.sl-chart-heading i{display:inline-block;width:7px;height:3px;background:#254854;margin:0 4px 2px 7px}.sl-chart-heading .sl-mint-dot{background:#86b7ad}.sl-chart>svg{width:100%;display:block;margin-top:12px}.sl-demo-baseline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--sl-line);padding-top:13px;font-size:9px;color:var(--sl-muted)}.sl-demo-baseline b{display:block;color:var(--sl-ink);font-size:13px;margin-top:4px}.sl-scenario{padding:24px 22px;border-left:1px solid var(--sl-line)}.sl-scenario h3{font-size:18px;margin-top:5px}.sl-scenario>p{font-size:11px;color:var(--sl-muted);margin-top:8px}.sl-scenario label{display:block;font-size:10px;margin-top:19px}.sl-scenario output{display:block;font-size:30px;font-weight:650;line-height:1.5}.sl-scenario output small{font-size:12px;font-weight:400;color:var(--sl-muted)}.sl-scenario input{display:block;width:100%;accent-color:var(--sl-teal);cursor:pointer;margin:6px 0;min-height:22px}.sl-range-ends{display:flex;justify-content:space-between;font-size:9px;color:var(--sl-muted)}.sl-text-button{background:none;border:0;border-bottom:1px solid #8dbbb2;padding:3px 0;color:var(--sl-teal);cursor:pointer;font-size:11px!important;margin-top:10px}.sl-scenario-result{background:#e5f2ed;border-radius:9px;padding:14px;margin-top:17px}.sl-scenario-result>span{display:block;font-size:9px}.sl-scenario-result>strong{font-size:29px;letter-spacing:-1px;line-height:1.5}.sl-scenario-result>div{display:flex;justify-content:space-between;gap:6px;padding-top:8px;border-top:1px solid #c6ded5;font-size:9px}.sl-scenario-result>p{font-size:9px;line-height:1.5;color:#4c6c60;margin-top:8px}.sl-demo-note{font-size:9px;text-align:center;color:var(--sl-muted);padding:10px 12px;border-top:1px solid var(--sl-line)}.sl-section{padding-top:66px}.sl-section h2,.sl-story h2,.sl-impact h2{margin-top:18px}.sl-muted-heading{color:#738680}.sl-section-copy{font-size:17px;line-height:1.75;color:var(--sl-muted);margin-top:16px!important;max-width:750px}.sl-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:32px}.sl-benefits article{border-top:1px solid var(--sl-line);padding-top:25px}.sl-benefits svg{height:27px;width:27px;color:var(--sl-teal);margin-bottom:19px}.sl-benefits p,.sl-steps p{font-size:15px;line-height:1.85;color:var(--sl-muted);margin-top:12px}.sl-wide-photo{margin-top:36px!important;border-radius:19px;overflow:hidden;position:relative;background:#e7ece5}.sl-wide-photo img{width:100%;height:320px;object-fit:cover;display:block}.sl-wide-photo:after{position:absolute;content:"";inset:50% 0 0;background:linear-gradient(transparent,#10291b85)}.sl-wide-photo figcaption{position:absolute;bottom:27px;left:32px;color:white;z-index:1;font-size:15px;font-weight:600}.sl-story{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-top:66px;align-items:stretch}.sl-story>div{padding-top:12px}.sl-story>*,.sl-impact>*{min-width:0}.sl-story-image{width:100%;max-width:100%;height:100%;max-height:620px;min-height:470px;object-fit:cover;border-radius:19px}.sl-statistics{margin:28px 0 0}.sl-statistics>div{display:grid;grid-template-columns:145px 1fr;gap:20px;border-top:1px solid var(--sl-line);padding:15px 0;align-items:center}.sl-statistics dt{font-size:34px;font-weight:600;letter-spacing:-1.5px}.sl-statistics dt span{font-size:15px;letter-spacing:0;font-weight:400}.sl-statistics dd{margin:0;font-size:15px;color:var(--sl-muted);line-height:1.7}.sl-source{font-size:12px;color:var(--sl-muted)}.sl-source a{text-decoration:underline}.sl-story-takeaway{font-size:15px;font-weight:650;border-top:1px solid var(--sl-line);padding-top:21px;margin-top:22px!important}.sl-story-takeaway span{color:var(--sl-teal);margin-left:6px}.sl-comparison{margin-top:66px;border-top:1px solid var(--sl-line);padding-top:50px}.sl-centered{text-align:center}.sl-centered .sl-section-copy{margin-inline:auto!important}.sl-table-hint{font-size:13px;color:var(--sl-muted);margin-top:30px!important;margin-bottom:10px!important}.sl-table-hint span{display:none}.sl-table-scroll{overflow-x:auto;border-bottom:1px solid var(--sl-line)}.sl-comparison table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px;table-layout:fixed;font-size:15px;text-align:left}.sl-comparison th,.sl-comparison td{padding:14px 18px;border-bottom:1px solid var(--sl-line);font-weight:400;vertical-align:middle}.sl-comparison thead th{height:78px;font-size:21px;letter-spacing:-.7px;vertical-align:middle}.sl-comparison thead th:first-child{font-size:13px;letter-spacing:0;color:var(--sl-muted)}.sl-comparison thead .sl-kicker{font-size:9px;margin-bottom:4px}.sl-comparison tbody th{font-weight:550}.sl-comparison tbody td:not(.sl-featured){color:var(--sl-muted)}.sl-comparison .sl-featured{background:#eef6f2;border-left:1px solid #d6e7df;border-right:1px solid #d6e7df}.sl-comparison thead .sl-featured{border-radius:13px 13px 0 0;border-top:1px solid #d6e7df}.sl-comparison tbody tr:last-child>*{border-bottom:0}.sl-check{color:var(--sl-teal);margin-right:9px}.sl-comparison-note{text-align:center;font-size:13px;color:var(--sl-muted);margin-top:17px!important}.sl-comparison-tagline{text-align:center;font-size:18px;font-weight:600;margin-top:28px!important;letter-spacing:-.3px}.sl-impact{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding-top:70px}.sl-sdg{background:#bd8c2b;color:white;border-radius:18px;min-height:380px;padding:30px;display:flex;flex-direction:column;justify-content:space-between}.sl-sdg>div{display:flex;gap:17px;align-items:center}.sl-sdg>div>span{font-size:87px;font-weight:750;line-height:1;letter-spacing:-6px}.sl-sdg b{font-size:18px;line-height:1.25;font-weight:750}.sl-sdg svg{width:100%;margin-block:20px}.sl-sdg-caption{font-size:15px}.sl-impact-lede{font-size:20px;line-height:1.65;margin-top:24px!important}.sl-impact p:not(.sl-kicker):not(.sl-impact-lede){font-size:15px;color:var(--sl-muted);margin-top:20px;line-height:1.85}.sl-sdg-link{display:flex;align-items:center;gap:10px;border-top:1px solid var(--sl-line);padding-top:22px;margin-top:28px;font-size:13px}.sl-sdg-link>span:first-child{background:#f7f0df;color:#86601b;padding:5px 9px;border-radius:4px;font-weight:700}.sl-sdg-link:hover{text-decoration:underline}.sl-section-header{display:flex;align-items:center;justify-content:space-between;gap:24px}.sl-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;list-style:none;padding:0;margin:32px 0 0}.sl-steps li{border-top:1px solid var(--sl-line);padding-top:18px}.sl-step-number{font-size:48px;font-weight:400;letter-spacing:-2.4px;color:#99aaa3;display:block;margin-bottom:16px}.sl-steps h3{font-size:18px}.sl-final-cta{background:#edf3ec;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;margin-top:50px}.sl-final-cta>div{padding:34px}.sl-final-cta h2{font-size:40px}.sl-final-cta .sl-button{margin-top:28px}.sl-final-cta>div>p:last-child{font-size:13px;color:var(--sl-muted);margin-top:15px}.sl-final-cta img{width:100%;height:100%;object-fit:cover;min-height:350px}.sl-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--sl-line);margin-top:50px;padding-block:24px;font-size:13px;color:var(--sl-muted)}.sl-skip{position:fixed;left:12px;top:-80px;z-index:20;background:#fff;padding:12px;border:2px solid var(--sl-teal)}.sl-skip:focus{top:12px}.sl-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.workspace-home-link{font:600 15px var(--body);color:var(--teal);text-decoration:none;margin-left:auto;margin-right:20px;white-space:nowrap}.workspace-home-link:hover{text-decoration:underline}
@@ -496,8 +589,80 @@ index cc5c2d6..80ab02f 100644
 +@media(max-width:760px){.sl-container{width:calc(100% - 36px)}.sl-nav{min-height:88px;gap:12px;flex-wrap:wrap;padding-top:18px;padding-bottom:15px}.sl-nav .brand__logo{height:35px!important}.sl-nav nav{order:3;width:100%;justify-content:center;gap:26px;font-size:13px;padding-top:7px}.sl-nav>.sl-button{font-size:12px;min-height:40px;padding:9px 12px;gap:14px}.sl-hero{padding-top:40px}.sl-home h1{font-size:clamp(37px,7.5vw,55px);letter-spacing:-2px}.sl-hero-eyebrow{font-size:9px;letter-spacing:1.2px}.sl-hero-copy{font-size:15px}.sl-mobile-break{display:block}.sl-hero-actions{gap:20px;flex-wrap:wrap;margin-top:23px}.sl-hero-actions .sl-button{font-size:14px;padding:13px 16px}.sl-preview-stage{margin-top:37px;padding-inline:10px}.sl-preview-stage:before{inset:60px 0 0;border-radius:16px}.sl-demo{border-width:4px;border-radius:13px}.sl-demo-bar{padding:10px;font-size:7px}.sl-demo-bar>span:nth-child(2){display:none}.sl-demo-grid{grid-template-columns:1fr}.sl-evidence{padding:19px}.sl-product h3{font-size:20px}.sl-warning p{font-size:12px}.sl-warning strong{font-size:12px}.sl-chart-heading{flex-direction:row}.sl-chart-heading>span{font-size:8px}.sl-chart h4{font-size:11px}.sl-demo-baseline{font-size:10px}.sl-demo-baseline b{font-size:12px}.sl-scenario{border-left:0;border-top:1px solid var(--sl-line);padding:22px}.sl-scenario h3{font-size:21px}.sl-scenario>p,.sl-scenario label{font-size:13px}.sl-scenario input{min-height:32px}.sl-text-button{font-size:13px!important;min-height:35px}.sl-scenario-result{padding:18px}.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:12px}.sl-range-ends{font-size:11px}.sl-demo-note{font-size:10px}.sl-section{padding-top:68px}.sl-home h2{font-size:34px;letter-spacing:-1.4px}.sl-section-copy{font-size:16px;margin-top:17px!important}.sl-benefits,.sl-steps{grid-template-columns:1fr 1fr;gap:28px 22px;margin-top:33px}.sl-benefits h3{font-size:16px}.sl-benefits p,.sl-steps p{font-size:15px}.sl-wide-photo{margin-top:36px!important;border-radius:13px}.sl-wide-photo img{height:250px}.sl-wide-photo figcaption{left:20px;bottom:20px;font-size:12px;right:20px}.sl-story,.sl-impact{grid-template-columns:1fr;gap:32px;padding-top:68px}.sl-story-image{height:380px;min-height:0;object-position:center 35%}.sl-statistics>div{grid-template-columns:125px 1fr}.sl-statistics dd{font-size:15px}.sl-source{font-size:12px}.sl-comparison{margin-top:65px;padding-top:55px}.sl-table-hint{display:flex;justify-content:space-between}.sl-table-hint span{display:inline}.sl-comparison table{min-width:760px}.sl-comparison th,.sl-comparison td{padding:16px}.sl-comparison-tagline{font-size:16px}.sl-impact{gap:35px}.sl-sdg{min-height:360px;max-width:500px;width:100%;margin-inline:auto}.sl-sdg svg{height:170px}.sl-sdg b{font-size:18px}.sl-impact-lede{font-size:18px}.sl-section-header{align-items:flex-start;flex-direction:column;gap:20px}.sl-steps{margin-top:32px}.sl-step-number{font-size:48px;margin-bottom:13px}.sl-steps h3{font-size:16px}.sl-final-cta{grid-template-columns:1fr;margin-top:40px}.sl-final-cta>div{padding:30px}.sl-final-cta h2{font-size:34px}.sl-final-cta img{height:250px;min-height:0}.sl-footer{flex-wrap:wrap;margin-top:45px;padding-block:25px}.sl-footer p{order:3;width:100%;font-size:13px}.sl-desktop-break{display:none}.workspace-home-link{margin-right:10px;font-size:13px}}
  @media(prefers-reduced-motion:no-preference){html:has(.sl-home){scroll-behavior:smooth}}
  @media(prefers-reduced-motion:reduce){.sl-button{transition:none}}
++
++/* ===== readable floor for the interactive demo =====
++   The demo panel is drawn as a miniature browser, and its labels had drifted
++   down to 7-9px chasing that illusion. It is not a screenshot: the slider
++   moves and the numbers recalculate, so people actually read it. Nothing on
++   the page now renders below 10px, and on a phone the floor is 11px. */
++.sl-demo-bar{font-size:10px}
++.sl-window-dots{font-size:10px}
++.sl-demo .sl-kicker{font-size:10px}
++.sl-risk{font-size:10px}
++.sl-chart-heading>span{font-size:10px}
++.sl-demo-baseline{font-size:10px}
++.sl-range-ends{font-size:10px}
++.sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p{font-size:10px}
++.sl-demo-note{font-size:10px}
++.sl-comparison thead .sl-kicker{font-size:10px}
++.sl-preview-pattern,.sl-preview-source{font-size:10px}
++
++/* ===== thumb ergonomics on a phone =====
++   Same rule as the app: standalone controls reach 44px. The source citations
++   stay inline in their sentence - WCAG 2.5.8 exempts a link inside a block of
++   text, and boxing them out would break the paragraph. */
++@media(max-width:760px){
++  .sl-demo-bar{font-size:11px}
++  .sl-window-dots,.sl-demo .sl-kicker,.sl-risk,.sl-chart-heading>span,
++  .sl-demo-baseline,.sl-range-ends,.sl-demo-note,
++  .sl-scenario-result>span,.sl-scenario-result>div,.sl-scenario-result>p,
++  .sl-preview-pattern,.sl-preview-source{font-size:11px}
++  .sl-hero-eyebrow{font-size:11px}
++
++  .sl-nav nav a{display:inline-flex;align-items:center;min-height:44px}
++  .sl-secondary-link{display:inline-flex;align-items:center;min-height:44px}
++  .sl-text-button{min-height:44px}
++  .sl-scenario input[type=range]{min-height:44px}
++  .sl-footer>a{display:inline-flex;align-items:center;min-height:44px}
++  .workspace-home-link{display:inline-flex;align-items:center;min-height:44px}
++}
++
++/* ===== learn more on the homepage =====
++   Same component as the app (.learn in styles.css), stepped up to the
++   homepage's larger type. The heading uses the page's h2 rule rather than
++   the app's section-head token so it sits level with "Why StockLess?" above
++   it, and the cards stay deliberately smaller than the reference video's —
++   this page already carries a lot. */
++.sl-home .learn{margin-top:0}
++.sl-home .learn__title{font-size:clamp(30px,3.1vw,42px);font-weight:600;
++  line-height:1.18;letter-spacing:-1.5px;margin-top:18px}
++.sl-home .learn__lede{font-size:17px;line-height:1.75;color:var(--sl-muted);
++  margin-top:16px!important;max-width:750px}
++.sl-home .learn__list{margin-top:30px;gap:14px}
++.sl-home .learn__q{font-size:17px;padding:17px 19px;gap:13px}
++.sl-home .learn__icon{font-size:20px}
++.sl-home .learn__a{font-size:15px;line-height:1.75;padding:0 19px 18px 51px}
++
++/* "Still have questions?" is itself a <details>, so the extra questions
++   open in place — no second page, no JavaScript. */
++.sl-home .learn__all{margin-top:26px;border-top:1px solid var(--sl-line);padding-top:22px}
++.sl-home .learn__all-q{display:flex;align-items:center;justify-content:space-between;
++  gap:20px;cursor:pointer;list-style:none;min-height:44px;font-size:17px}
++.sl-home .learn__all-q::-webkit-details-marker{display:none}
++.sl-home .learn__all-cta{color:var(--sl-teal);font-weight:650;font-size:15px;white-space:nowrap}
++.sl-home .learn__all[open] .learn__all-cta{text-decoration:underline}
++.sl-home .learn__all-q:hover .learn__all-cta{text-decoration:underline}
++.sl-home .learn__all .learn__list{margin-top:18px;grid-template-columns:1fr}
++
++@media(max-width:760px){
++  .sl-home .learn__title{font-size:34px;letter-spacing:-1.4px}
++  .sl-home .learn__lede{font-size:16px}
++  .sl-home .learn__q{font-size:16px;padding:15px 16px}
++  .sl-home .learn__a{font-size:15px;padding:0 16px 16px 16px}
++  .sl-home .learn__all-q{align-items:flex-start;flex-direction:column;gap:6px}
++}
 diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
-index 86a9cd1..f89c97d 100644
+index 86a9cd1..9c35a06 100644
 --- a/frontend/src/i18n/messages.ts
 +++ b/frontend/src/i18n/messages.ts
 @@ -300,10 +300,6 @@ export const messages: Record<string, readonly [string, string]> = {
@@ -529,42 +694,42 @@ index 86a9cd1..f89c97d 100644
 -  "Import your existing sales CSV, or explore the sample data to see how StockLess works.": [
 -    "导入现有销售 CSV，或使用示例数据了解 StockLess。",
 -    "Import CSV jualan sedia ada atau cuba data contoh untuk memahami StockLess."
--  ],
--  "Prepare it with StockLess": [
--    "使用 StockLess 整理数据",
--    "Sediakan data dengan StockLess"
 +  "Import your existing sales CSV, or try the sample data first.": [
 +    "导入您现有的销售 CSV 文件，或先试用示例数据。",
 +    "Import fail CSV jualan sedia ada anda, atau cuba data contoh dahulu."
    ],
--  "Confirm your columns and review missing values or date formats with guided checks.": [
--    "通过引导式检查确认字段，并复核缺失值或日期格式。",
--    "Sahkan lajur dan semak nilai hilang atau format tarikh melalui semakan berpandu."
+-  "Prepare it with StockLess": [
+-    "使用 StockLess 整理数据",
+-    "Sediakan data dengan StockLess"
 +  "Map your columns": [
 +    "匹配您的列",
 +    "Padankan lajur anda"
    ],
--  "Understand your demand": [
--    "了解商品需求",
--    "Fahami permintaan anda"
+-  "Confirm your columns and review missing values or date formats with guided checks.": [
+-    "通过引导式检查确认字段，并复核缺失值或日期格式。",
+-    "Sahkan lajur dan semak nilai hilang atau format tarikh melalui semakan berpandu."
 +  "Tell StockLess which columns hold your sale date, product and quantity.": [
 +    "告诉 StockLess 哪些列包含销售日期、产品和数量。",
 +    "Beritahu StockLess lajur mana yang mengandungi tarikh jualan, produk dan kuantiti anda."
    ],
--  "See sales patterns, expected demand, and where your data needs more confidence.": [
--    "查看销售模式、预计需求，以及数据仍需补充的部分。",
--    "Lihat corak jualan, jangkaan permintaan dan bahagian data yang perlu diperkukuh."
+-  "Understand your demand": [
+-    "了解商品需求",
+-    "Fahami permintaan anda"
 +  "StockLess looks for gaps, duplicates and unusual rows before any analysis.": [
 +    "StockLess 会在分析前检查缺口、重复和异常行。",
 +    "StockLess mencari jurang, pendua dan baris luar biasa sebelum sebarang analisis."
    ],
--  "Review your restocking plan": [
--    "复核补货计划",
--    "Semak pelan tambahan stok"
+-  "See sales patterns, expected demand, and where your data needs more confidence.": [
+-    "查看销售模式、预计需求，以及数据仍需补充的部分。",
+-    "Lihat corak jualan, jangkaan permintaan dan bahagian data yang perlu diperkukuh."
 +  "Plan your purchases": [
 +    "规划您的采购",
 +    "Rancang belian anda"
    ],
+-  "Review your restocking plan": [
+-    "复核补货计划",
+-    "Semak pelan tambahan stok"
+-  ],
 -  "Compare purchase scenarios to spot potential excess stock and control costs.": [
 -    "比较不同采购方案，识别潜在过量库存并控制成本。",
 -    "Bandingkan senario pembelian untuk mengenal pasti lebihan stok dan mengawal kos."
@@ -583,7 +748,7 @@ index 86a9cd1..f89c97d 100644
      "Semak kesediaan"
    ],
    "Plan purchases": [
-@@ -2483,5 +2471,677 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -2483,5 +2471,881 @@ export const messages: Record<string, readonly [string, string]> = {
    "Stale stock": [
      "库存数据过旧",
      "Data stok terlalu lama"
@@ -1259,13 +1424,310 @@ index 86a9cd1..f89c97d 100644
 +  "of the value of food purchased was lost to food waste across five Malaysian hospitality and food service operations.": [
 +    "马来西亚五家餐旅与餐饮服务场所中，因食物浪费而损失的采购食材价值比例。",
 +    "daripada nilai makanan yang dibeli hilang akibat pembaziran makanan di lima operasi hospitaliti dan perkhidmatan makanan di Malaysia."
++  ],
++  "LEARN MORE": [
++    "了解更多",
++    "KETAHUI LEBIH LANJUT"
++  ],
++  "Learn more about StockLess": [
++    "了解 StockLess",
++    "Ketahui lebih lanjut tentang StockLess"
++  ],
++  "Find answers to common questions about how StockLess works and how it can help your business.": [
++    "了解 StockLess 的运作方式，以及它如何帮助您的生意。",
++    "Temui jawapan kepada soalan lazim tentang cara StockLess berfungsi dan bagaimana ia boleh membantu perniagaan anda."
++  ],
++  "Still have questions?": [
++    "还有其他问题？",
++    "Masih ada soalan?"
++  ],
++  "View all FAQs": [
++    "查看全部常见问题",
++    "Lihat semua soalan lazim"
++  ],
++  "How does StockLess work?": [
++    "StockLess 如何运作？",
++    "Bagaimanakah StockLess berfungsi?"
++  ],
++  "StockLess reads your sales and stock data to show expected demand, flag the products that need attention, and suggest purchase quantities you stay in control of.": [
++    "StockLess 读取您的销售与库存数据，估算预期需求，标出需要留意的商品，并建议采购数量——最终决定权仍在您手中。",
++    "StockLess membaca data jualan dan stok anda untuk menunjukkan permintaan yang dijangka, menandakan produk yang perlu diberi perhatian, dan mencadangkan kuantiti pembelian yang anda tetap kawal."
++  ],
++  "What data do I need?": [
++    "我需要哪些数据？",
++    "Data apakah yang saya perlukan?"
++  ],
++  "Sale date, product identification and quantity sold are enough to get started. Optional stock information adds stock freshness and sharper purchase suggestions.": [
++    "销售日期、商品识别和销售数量就足以开始。可选的库存信息还能加上库存新鲜度，并让采购建议更精准。",
++    "Tarikh jualan, pengenalan produk dan kuantiti jualan sudah memadai untuk bermula. Maklumat stok pilihan menambah kesegaran stok dan cadangan pembelian yang lebih tepat."
++  ],
++  "How are purchase recommendations made?": [
++    "采购建议是如何得出的？",
++    "Bagaimanakah cadangan pembelian dibuat?"
++  ],
++  "StockLess compares the demand it expects over the coming weeks against the stock you already hold, and suggests the quantity that covers the gap.": [
++    "StockLess 会把未来几周的预期需求与您现有的库存相比较，并建议足以补足差额的数量。",
++    "StockLess membandingkan permintaan yang dijangka pada minggu-minggu akan datang dengan stok yang anda sedia ada, dan mencadangkan kuantiti yang menutup jurang itu."
++  ],
++  "How does StockLess help reduce food waste?": [
++    "StockLess 如何帮助减少食物浪费？",
++    "Bagaimanakah StockLess membantu mengurangkan pembaziran makanan?"
++  ],
++  "By matching what you buy to what you are likely to sell, StockLess aims to cut the overstock that turns into avoidable waste.": [
++    "让采购量贴近可能的销量，StockLess 希望减少那些最终变成可避免浪费的过量库存。",
++    "Dengan memadankan apa yang anda beli dengan apa yang mungkin anda jual, StockLess bertujuan mengurangkan lebihan stok yang menjadi pembaziran yang boleh dielakkan."
++  ],
++  "Is my sales data uploaded?": [
++    "我的销售数据会被上传吗？",
++    "Adakah data jualan saya dimuat naik?"
++  ],
++  "No. StockLess processes your CSV directly in your browser. Your sales rows and product identifiers are not uploaded to an AI or API service.": [
++    "不会。StockLess 直接在您的浏览器中处理 CSV。您的销售记录和商品识别码不会上传到任何 AI 或 API 服务。",
++    "Tidak. StockLess memproses CSV anda terus dalam pelayar anda. Baris jualan dan pengenalan produk anda tidak dimuat naik ke mana-mana perkhidmatan AI atau API."
++  ],
++  "How does StockLess estimate demand?": [
++    "StockLess 如何估算需求？",
++    "Bagaimanakah StockLess menganggarkan permintaan?"
++  ],
++  "From the weekly sales patterns in the rows that passed the data checks. The estimates reflect the data you provide, so a longer and cleaner history gives a steadier picture.": [
++    "依据通过数据检查的销售记录中的每周销售走势。估算结果取决于您提供的数据，因此更长、更干净的历史记录会得出更稳定的判断。",
++    "Daripada corak jualan mingguan dalam baris yang lulus semakan data. Anggaran ini bergantung pada data yang anda berikan, jadi sejarah yang lebih panjang dan lebih bersih memberikan gambaran yang lebih mantap."
++  ],
++  "Does StockLess automatically place an order?": [
++    "StockLess 会自动下单吗？",
++    "Adakah StockLess membuat pesanan secara automatik?"
++  ],
++  "No. StockLess suggests a quantity and explains its reasoning. You decide the final number, and placing the order stays between you and your supplier.": [
++    "不会。StockLess 只会建议数量并说明理由。最终数量由您决定，下单仍然由您与供应商之间完成。",
++    "Tidak. StockLess mencadangkan kuantiti dan menerangkan sebabnya. Anda menentukan jumlah akhir, dan pesanan itu kekal antara anda dan pembekal anda."
++  ],
++  "IMPACT DASHBOARD": [
++    "影响面板",
++    "PAPAN IMPAK"
++  ],
++  "Your impact": [
++    "您的影响",
++    "Impak anda"
++  ],
++  "See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.": [
++    "查看您的采购计划可能带来的效益。以下数字是根据您自己的文件估算的，并非实测结果。",
++    "Lihat manfaat berpotensi daripada pelan pembelian anda. Ini ialah anggaran daripada fail anda sendiri, bukan hasil yang diukur."
++  ],
++  "See your impact →": [
++    "查看您的影响 →",
++    "Lihat impak anda →"
++  ],
++  "← Back to the purchase plan": [
++    "← 返回采购计划",
++    "← Kembali ke pelan pembelian"
++  ],
++  "Environmental impact": [
++    "环境影响",
++    "Impak alam sekitar"
++  ],
++  "Business impact": [
++    "营运影响",
++    "Impak perniagaan"
++  ],
++  "Emissions impact": [
++    "排放影响",
++    "Impak pelepasan"
++  ],
++  "Estimated overstock avoided": [
++    "预计避免的过量库存",
++    "Anggaran lebihan stok yang dielakkan"
++  ],
++  "Estimated cost avoided": [
++    "预计避免的成本",
++    "Anggaran kos yang dielakkan"
++  ],
++  "Estimated emissions avoided": [
++    "预计避免的排放",
++    "Anggaran pelepasan yang dielakkan"
++  ],
++  "Not yet available": [
++    "暂时无法计算",
++    "Belum tersedia"
++  ],
++  "No product in this plan has both a demand estimate and a stock figure yet.": [
++    "此计划中还没有商品同时具备需求估算和库存数字。",
++    "Belum ada produk dalam pelan ini yang mempunyai kedua-dua anggaran permintaan dan angka stok."
++  ],
++  "Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.": [
++    "在步骤 2 中匹配「单位成本」，StockLess 就能把上面的过量库存换算成令吉金额。",
++    "Padankan Kos seunit dalam Langkah 2 dan StockLess boleh menilai lebihan stok di atas dalam ringgit."
++  ],
++  "Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.": [
++    "您的文件以件数而非公斤记录库存，因此暂时无法据此估算排放量。",
++    "Fail anda mengukur stok dalam unit, bukan kilogram, jadi pelepasan belum boleh dianggarkan daripadanya."
++  ],
++  "Where the estimate comes from": [
++    "这个估算从何而来",
++    "Dari mana anggaran ini datang"
++  ],
++  "units above expected demand": [
++    "件高于预期需求",
++    "unit melebihi permintaan yang dijangka"
++  ],
++  "Your contribution to SDG 12.3": [
++    "您对可持续发展目标 12.3 的贡献",
++    "Sumbangan anda kepada SDG 12.3"
++  ],
++  "Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.": [
++    "您的采购计划有助于减少零售环节可避免的食物浪费，从而支持可持续发展目标 12.3。StockLess 并不声称您的计划造成了可测量的减少，它只显示该计划避免的过量库存。",
++    "Pelan pembelian anda menyokong SDG 12.3 dengan membantu mengurangkan pembaziran makanan yang boleh dielakkan di peringkat peruncitan. StockLess tidak mendakwa pelan anda menyebabkan pengurangan yang diukur — ia menunjukkan lebihan stok yang dielakkan oleh pelan itu."
++  ],
++  "Read about SDG 12 ": [
++    "了解可持续发展目标 12 ",
++    "Baca tentang SDG 12 "
++  ],
++  "Understanding your impact": [
++    "理解您的影响",
++    "Memahami impak anda"
++  ],
++  "Learn how these numbers are calculated and what they mean.": [
++    "了解这些数字如何计算，以及它们的含义。",
++    "Ketahui cara nombor ini dikira dan apa maksudnya."
++  ],
++  "How is overstock avoided estimated?": [
++    "避免的过量库存是如何估算的？",
++    "Bagaimanakah lebihan stok yang dielakkan dianggarkan?"
++  ],
++  "For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.": [
++    "对于 StockLess 能够判断的每件商品，它会取您下单后将持有的库存，减去预期四周需求区间的上限。超出该上限的部分，就是您在四周内不太可能售出的库存。缺少需求估算或库存数字的商品会被排除，而不是计为零。",
++    "Bagi setiap produk yang StockLess dapat nilai, ia mengambil stok yang akan anda pegang selepas pesanan yang dirancang dan menolak had atas julat permintaan empat minggu yang dijangka. Apa-apa yang melebihi angka itu ialah stok yang tidak mungkin anda jual dalam empat minggu. Produk tanpa kedua-dua anggaran permintaan dan angka stok ditinggalkan, bukan dikira sebagai sifar."
++  ],
++  "How would cost saving be calculated?": [
++    "成本节省会如何计算？",
++    "Bagaimanakah penjimatan kos akan dikira?"
++  ],
++  "By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.": [
++    "把上面的过量库存件数，按您向供应商支付的单位价格换算。这需要在步骤 2 中匹配「单位成本」列。在此之前，StockLess 只显示件数，并把令吉金额留空，而不是假设一个价格。",
++    "Dengan menilai unit lebihan stok di atas pada harga yang anda bayar kepada pembekal bagi satu unit. Itu memerlukan lajur Kos seunit dipadankan dalam Langkah 2. Sehingga itu, StockLess menunjukkan unit dan membiarkan angka ringgit kosong, bukannya mengandaikan satu harga."
++  ],
++  "What does CO₂e mean, and why is it blank?": [
++    "CO₂e 是什么意思？为什么这里是空的？",
++    "Apakah maksud CO₂e, dan mengapa ia kosong?"
++  ],
++  "CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.": [
++    "CO₂e 即二氧化碳当量——用一个数字涵盖多种温室气体。联合国环境规划署将全球温室气体排放的 8–10% 归因于粮食损失与浪费，但那是全球占比，并非每公斤的换算率。要把您的计划换算成 CO₂e，需要每件商品的重量，而 StockLess 的文件只记录件数，从不记录重量。",
++    "CO₂e ialah setara karbon dioksida — satu angka yang merangkumi beberapa gas rumah hijau. UNEP mengaitkan 8–10% pelepasan gas rumah hijau global dengan kehilangan dan pembaziran makanan, tetapi itu ialah bahagian global, bukan kadar bagi setiap kilogram. Menukar pelan anda kepada CO₂e memerlukan berat setiap unit, dan fail StockLess merekodkan unit, bukan berat."
++  ],
++  "Are these figures exact?": [
++    "这些数字精确吗？",
++    "Adakah angka ini tepat?"
++  ],
++  "No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.": [
++    "不精确。它们是根据您文件中的销售、库存和采购数据做出的估算，用于辅助您做决定，而不是报告经过验证的结果。销售历史越长、越干净，估算越稳定；记录短或不完整，估算就越粗略。",
++    "Tidak. Ia ialah anggaran berdasarkan data jualan, stok dan pembelian dalam fail anda, dan ia bertujuan menyokong keputusan anda, bukan melaporkan hasil yang disahkan. Sejarah jualan yang lebih panjang dan lebih bersih memberikan anggaran yang lebih mantap; yang pendek atau berlubang memberikan anggaran yang lebih kasar."
++  ],
++  "Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.": [
++    "方法：估算使用 StockLess 根据您的销售记录得出的需求区间、您文件中的库存数字，以及您输入的订购数量。文件或计划订单变动时，数字也会随之变化。",
++    "Kaedah: anggaran menggunakan julat permintaan yang StockLess kira daripada baris jualan anda, angka stok dalam fail anda, dan kuantiti pesanan yang anda masukkan. Angka berubah apabila fail atau pesanan yang anda rancang berubah."
++  ],
++  "Across {0} of {1} products StockLess could judge.": [
++    "在 StockLess 能够判断的 {1} 件商品中，有 {0} 件。",
++    "Merentasi {0} daripada {1} produk yang StockLess dapat nilai."
    ]
  };
+diff --git a/frontend/src/purchase-plan/impact.ts b/frontend/src/purchase-plan/impact.ts
+new file mode 100644
+index 0000000..ba1ab55
+--- /dev/null
++++ b/frontend/src/purchase-plan/impact.ts
+@@ -0,0 +1,87 @@
++import type { PurchaseProduct } from "./model.ts";
++import type { ProductPurchasePlan } from "../engine.ts";
++
++/**
++ * What the purchase plan adds up to, for the Impact Dashboard.
++ *
++ * Presentation arithmetic only. Every figure here is a sum over numbers the
++ * domain engine already worked out and already shows on Step 4 — this file
++ * introduces no new rule about what a good purchase is, and must not.
++ *
++ * Deliberately narrow, because the data is narrow. A StockLess file carries
++ * units, never weights: pack size reads "10 sachets", not "1.2 kg". So the
++ * one quantity that can honestly be measured is units, and kilograms and
++ * CO2e stay locked behind evidence nobody has supplied yet. A dashboard that
++ * invented them would be the one part of StockLess a retailer could catch
++ * out, which would cost more trust than the numbers are worth.
++ */
++
++export type ImpactAvailability =
++  | { readonly state: "available" }
++  /** The figure is computable, but a piece of evidence is missing. */
++  | { readonly state: "needs"; readonly evidence: "unit_cost" | "unit_weight" };
++
++export interface ImpactProductLine {
++  readonly key: string;
++  readonly name: string;
++  readonly sku?: string;
++  /** Units that would sit above the top of the expected four-week demand. */
++  readonly avoidedUnits: number;
++}
++
++export interface ImpactSummary {
++  /** Products that produced a verdict, so the sums have a denominator. */
++  readonly productsJudged: number;
++  readonly productsWithOverstock: number;
++  readonly avoidedUnits: number;
++  readonly lines: readonly ImpactProductLine[];
++  readonly cost: ImpactAvailability;
++  readonly weight: ImpactAvailability;
++}
++
++/**
++ * Units above the top of the expected four-week range, per product.
++ *
++ * "Overstock risk" on Step 4 means availableAfterOrder > demandHigh. The gap
++ * between the two is the stock the retailer is unlikely to sell inside four
++ * weeks — the overstock that following the suggestion avoids. Anything not
++ * carrying a verdict contributes nothing rather than a guessed zero.
++ */
++export function avoidedUnitsFor(plan: ProductPurchasePlan | undefined): number {
++  if (!plan || plan.audit.state !== "verdict") return 0;
++  const { availableAfterOrder, demandHigh } = plan.audit.figures;
++  return Math.max(0, availableAfterOrder.value - demandHigh.value);
++}
++
++export function summarizeImpact(
++  products: readonly PurchaseProduct[],
++  planFor: (product: PurchaseProduct) => ProductPurchasePlan | undefined,
++): ImpactSummary {
++  const lines: ImpactProductLine[] = [];
++  let judged = 0;
++
++  for (const product of products) {
++    const plan = planFor(product);
++    if (!plan || plan.audit.state !== "verdict") continue;
++    judged += 1;
++    const avoidedUnits = avoidedUnitsFor(plan);
++    if (avoidedUnits > 0) {
++      lines.push({ key: product.key, name: product.name, sku: product.sku, avoidedUnits });
++    }
++  }
++
++  lines.sort((a, b) => b.avoidedUnits - a.avoidedUnits || a.name.localeCompare(b.name));
++
++  return {
++    productsJudged: judged,
++    productsWithOverstock: lines.length,
++    avoidedUnits: lines.reduce((total, line) => total + line.avoidedUnits, 0),
++    lines,
++    // Unit cost is a mappable field in Step 2 but is not yet carried through
++    // readiness as per-product evidence, so there is nothing to multiply by.
++    cost: { state: "needs", evidence: "unit_cost" },
++    // No StockLess field holds a weight, so kilograms cannot be reached from
++    // the file at all. This stays locked until one does.
++    weight: { state: "needs", evidence: "unit_weight" },
++  };
++}
 diff --git a/frontend/src/screens/HomePage.tsx b/frontend/src/screens/HomePage.tsx
-index c889292..f87b0f9 100644
+index c889292..66855ef 100644
 --- a/frontend/src/screens/HomePage.tsx
 +++ b/frontend/src/screens/HomePage.tsx
-@@ -172,19 +172,19 @@ export function HomePage({ startHref = "#workspace", assetRoot = "/homepage", im
+@@ -172,20 +172,101 @@ export function HomePage({ startHref = "#workspace", assetRoot = "/homepage", im
      <main id="home-main">
        <section className="sl-hero sl-container" aria-labelledby="home-title"><p className="sl-kicker sl-hero-eyebrow"><span /> {t("SMALLER RESTOCKS. BIGGER POSSIBILITIES.")}</p><h1 id="home-title">{t("Less ")}<em>{t("food waste.")}</em><br />{t("Lower costs. Higher profits.")}</h1><p className="sl-hero-copy">{t("Smarter restocking for small retailers.")}<br className="sl-mobile-break" /> {t("Make the most of what you stock.")}</p><div className="sl-hero-actions"><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Start with your sales data ")}<span aria-hidden="true">↗</span></a><a className="sl-secondary-link" href="#how-to">{t("See how it works ")}<span aria-hidden="true">↓</span></a></div><div className="sl-preview-stage"><PurchasePreview /></div></section>
  
@@ -1284,15 +1746,255 @@ index c889292..f87b0f9 100644
 -        ["Prepare it with StockLess", "Confirm your columns and review missing values or date formats with guided checks."],
 -        ["Understand your demand", "See sales patterns, expected demand, and where your data needs more confidence."],
 -        ["Review your restocking plan", "Compare purchase scenarios to spot potential excess stock and control costs."],
+-      ].map(([title, copy], i) => <li key={title}><span className="sl-step-number">0{t(i + 1)}</span><h3>{t(title)}</h3><p>{t(copy)}</p></li>))}</ol><div className="sl-final-cta"><div><p className="sl-kicker">{t("MAKE YOUR NEXT ORDER A SMARTER ONE")}</p><h2>{t("A little less stock.")}<br />{t("A lot more possibility.")}</h2><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Open StockLess ")}<span aria-hidden="true">↗</span></a><p>{t("Use your own CSV or start with a sample.")}</p></div><img src={photo("retail-produce-2.jpg")} alt={t("Fresh produce ready for customers in a small shop")} loading="lazy" width="1147" height="860"/></div></section>
 +        ["Upload your sales data", "Import your existing sales CSV, or try the sample data first."],
 +        ["Map your columns", "Tell StockLess which columns hold your sale date, product and quantity."],
 +        ["Check readiness", "StockLess looks for gaps, duplicates and unusual rows before any analysis."],
 +        ["Plan your purchases", "See the expected demand, then decide what to restock — with the reasoning shown."],
-       ].map(([title, copy], i) => <li key={title}><span className="sl-step-number">0{t(i + 1)}</span><h3>{t(title)}</h3><p>{t(copy)}</p></li>))}</ol><div className="sl-final-cta"><div><p className="sl-kicker">{t("MAKE YOUR NEXT ORDER A SMARTER ONE")}</p><h2>{t("A little less stock.")}<br />{t("A lot more possibility.")}</h2><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Open StockLess ")}<span aria-hidden="true">↗</span></a><p>{t("Use your own CSV or start with a sample.")}</p></div><img src={photo("retail-produce-2.jpg")} alt={t("Fresh produce ready for customers in a small shop")} loading="lazy" width="1147" height="860"/></div></section>
++      ].map(([title, copy], i) => <li key={title}><span className="sl-step-number">0{t(i + 1)}</span><h3>{t(title)}</h3><p>{t(copy)}</p></li>))}</ol></section>
++
++      {/* ===== learn more =====
++          Four questions a retailer asks before they trust the tool, answered
++          in place rather than on another page. Built on <details> so the
++          keyboard, the open state and the screen-reader announcement come
++          from the browser; "View all FAQs" is itself a <details>, which is
++          why none of this needs JavaScript. The number questions live on the
++          Impact Dashboard instead, next to the numbers they explain. */}
++      <section className="sl-section sl-container learn learn--cards" id="learn-more" aria-labelledby="learn-title">
++        <p className="sl-kicker">{t("LEARN MORE")}</p>
++        <h2 className="learn__title" id="learn-title">{t("Learn more about StockLess")}</h2>
++        <p className="learn__lede">{t("Find answers to common questions about how StockLess works and how it can help your business.")}</p>
++        <div className="learn__list">
++            <details className="learn__item">
++              <summary className="learn__q">
++                <span className="learn__icon" aria-hidden="true">{"🌱"}</span>
++                <span className="learn__qtext">{t("How does StockLess work?")}</span>
++                <span className="learn__chevron" aria-hidden="true" />
++              </summary>
++              <p className="learn__a">{t("StockLess reads your sales and stock data to show expected demand, flag the products that need attention, and suggest purchase quantities you stay in control of.")}</p>
++            </details>
++            <details className="learn__item">
++              <summary className="learn__q">
++                <span className="learn__icon" aria-hidden="true">{"📄"}</span>
++                <span className="learn__qtext">{t("What data do I need?")}</span>
++                <span className="learn__chevron" aria-hidden="true" />
++              </summary>
++              <p className="learn__a">{t("Sale date, product identification and quantity sold are enough to get started. Optional stock information adds stock freshness and sharper purchase suggestions.")}</p>
++            </details>
++            <details className="learn__item">
++              <summary className="learn__q">
++                <span className="learn__icon" aria-hidden="true">{"🛒"}</span>
++                <span className="learn__qtext">{t("How are purchase recommendations made?")}</span>
++                <span className="learn__chevron" aria-hidden="true" />
++              </summary>
++              <p className="learn__a">{t("StockLess compares the demand it expects over the coming weeks against the stock you already hold, and suggests the quantity that covers the gap.")}</p>
++            </details>
++            <details className="learn__item">
++              <summary className="learn__q">
++                <span className="learn__icon" aria-hidden="true">{"♻️"}</span>
++                <span className="learn__qtext">{t("How does StockLess help reduce food waste?")}</span>
++                <span className="learn__chevron" aria-hidden="true" />
++              </summary>
++              <p className="learn__a">{t("By matching what you buy to what you are likely to sell, StockLess aims to cut the overstock that turns into avoidable waste.")}</p>
++            </details>
++        </div>
++        <details className="learn__all">
++          <summary className="learn__all-q">
++            <b>{t("Still have questions?")}</b>
++            <span className="learn__all-cta">{t("View all FAQs")} <span aria-hidden="true">→</span></span>
++          </summary>
++          <div className="learn__list">
++                <details className="learn__item">
++                  <summary className="learn__q">
++                    <span className="learn__icon" aria-hidden="true">{"🔒"}</span>
++                    <span className="learn__qtext">{t("Is my sales data uploaded?")}</span>
++                    <span className="learn__chevron" aria-hidden="true" />
++                  </summary>
++                  <p className="learn__a">{t("No. StockLess processes your CSV directly in your browser. Your sales rows and product identifiers are not uploaded to an AI or API service.")}</p>
++                </details>
++                <details className="learn__item">
++                  <summary className="learn__q">
++                    <span className="learn__icon" aria-hidden="true">{"📊"}</span>
++                    <span className="learn__qtext">{t("How does StockLess estimate demand?")}</span>
++                    <span className="learn__chevron" aria-hidden="true" />
++                  </summary>
++                  <p className="learn__a">{t("From the weekly sales patterns in the rows that passed the data checks. The estimates reflect the data you provide, so a longer and cleaner history gives a steadier picture.")}</p>
++                </details>
++                <details className="learn__item">
++                  <summary className="learn__q">
++                    <span className="learn__icon" aria-hidden="true">{"🧾"}</span>
++                    <span className="learn__qtext">{t("Does StockLess automatically place an order?")}</span>
++                    <span className="learn__chevron" aria-hidden="true" />
++                  </summary>
++                  <p className="learn__a">{t("No. StockLess suggests a quantity and explains its reasoning. You decide the final number, and placing the order stays between you and your supplier.")}</p>
++                </details>
++          </div>
++        </details>
++      </section>
++
++      <section className="sl-container"><div className="sl-final-cta"><div><p className="sl-kicker">{t("MAKE YOUR NEXT ORDER A SMARTER ONE")}</p><h2>{t("A little less stock.")}<br />{t("A lot more possibility.")}</h2><a className="sl-button" href={localizedWorkspaceHref(startHref)}>{t("Open StockLess ")}<span aria-hidden="true">↗</span></a><p>{t("Use your own CSV or start with a sample.")}</p></div><img src={photo("retail-produce-2.jpg")} alt={t("Fresh produce ready for customers in a small shop")} loading="lazy" width="1147" height="860"/></div></section>
      </main><footer className="sl-footer sl-container"><a href="#home" aria-label={t("Back to StockLess home")}><Logo height={35}/></a><p>{t("Smarter restocking. Less food waste.")}</p><a href="#home">{t("Back to top ↑")}</a></footer>
    </div>;
+ }
+diff --git a/frontend/src/screens/ImpactScreen.tsx b/frontend/src/screens/ImpactScreen.tsx
+new file mode 100644
+index 0000000..c7fbd07
+--- /dev/null
++++ b/frontend/src/screens/ImpactScreen.tsx
+@@ -0,0 +1,151 @@
++import { t, useLanguage } from "../i18n/index.ts";
++import { LearnMore } from "../components/LearnMore.tsx";
++import type { ImpactSummary } from "../purchase-plan/impact.ts";
++
++interface Props {
++  readonly summary: ImpactSummary;
++  readonly onBack: () => void;
++}
++
++/**
++ * The Impact Dashboard.
++ *
++ * Reached from Step 4 rather than added to the stepper: US4.3 AC3 fixes the
++ * workflow at four steps, and this is where the workflow arrives, not another
++ * thing to complete.
++ *
++ * Every number on this page is an estimate from the retailer's own file, and
++ * the page says so in three places rather than one — on each card, in the
++ * methodology note, and in the questions at the bottom. Two of the three
++ * cards have no number at all, because nothing in a StockLess file carries a
++ * cost or a weight yet. Showing what they need is honest; showing a figure
++ * would not be.
++ */
++export function ImpactScreen({ summary, onBack }: Props) {
++  useLanguage();
++
++  const hasNumbers = summary.productsJudged > 0;
++
++  return (
++    <section className="impact" aria-labelledby="impact-title">
++      <p className="eyebrow">{t("IMPACT DASHBOARD")}</p>
++      <h1 className="impact__title" id="impact-title">{t("Your impact")}</h1>
++      <p className="impact__lede">
++        {t("See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.")}
++      </p>
++
++      <div className="impact__cards">
++        <article className="icard icard--figure">
++          <span className="icard__icon" aria-hidden="true">♻️</span>
++          <span className="icard__label">{t("Environmental impact")}</span>
++          <p className="icard__value">
++            {t(hasNumbers ? summary.avoidedUnits : "—")}
++            <span className="icard__unit">{t(hasNumbers ? "units" : "")}</span>
++          </p>
++          <p className="icard__caption">{t("Estimated overstock avoided")}</p>
++          <p className="icard__basis">
++            {/* a {0}/{1} template, so the sentence can be reordered in
++                Chinese and Malay rather than translated word by word */}
++            {t(hasNumbers
++              ? `Across ${summary.productsWithOverstock} of ${summary.productsJudged} products StockLess could judge.`
++              : "No product in this plan has both a demand estimate and a stock figure yet.")}
++          </p>
++        </article>
++
++        <article className="icard icard--locked">
++          <span className="icard__icon" aria-hidden="true">💰</span>
++          <span className="icard__label">{t("Business impact")}</span>
++          <p className="icard__value icard__value--locked">{t("Not yet available")}</p>
++          <p className="icard__caption">{t("Estimated cost avoided")}</p>
++          <p className="icard__basis">
++            {t("Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.")}
++          </p>
++        </article>
++
++        <article className="icard icard--locked">
++          <span className="icard__icon" aria-hidden="true">🌍</span>
++          <span className="icard__label">{t("Emissions impact")}</span>
++          <p className="icard__value icard__value--locked">{t("Not yet available")}</p>
++          <p className="icard__caption">{t("Estimated emissions avoided")}</p>
++          <p className="icard__basis">
++            {t("Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.")}
++          </p>
++        </article>
++      </div>
++
++      {t(summary.lines.length > 0 && (
++        <section className="impact__lines" aria-labelledby="impact-lines-title">
++          <h2 id="impact-lines-title">{t("Where the estimate comes from")}</h2>
++          <ul>
++            {summary.lines.map((line) => (
++              <li key={line.key}>
++                <span className="impact__lname">
++                  <b>{line.name}</b>
++                  {t(line.sku && <span className="num">{line.sku}</span>)}
++                </span>
++                <span className="impact__lunits">
++                  {t(line.avoidedUnits)} <span>{t("units above expected demand")}</span>
++                </span>
++              </li>
++            ))}
++          </ul>
++        </section>
++      ))}
++
++      <section className="impact__sdg" aria-labelledby="impact-sdg-title">
++        <span className="impact__sdg-mark" aria-hidden="true">12</span>
++        <div>
++          <h2 id="impact-sdg-title">{t("Your contribution to SDG 12.3")}</h2>
++          <p>
++            {t("Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.")}
++          </p>
++          <a className="impact__sdg-link" href="https://sdgs.un.org/goals/goal12"
++            target="_blank" rel="noreferrer noopener">
++            {t("Read about SDG 12 ")}<span aria-hidden="true">↗</span>
++          </a>
++        </div>
++      </section>
++
++      <LearnMore
++        title="Understanding your impact"
++        lede="Learn how these numbers are calculated and what they mean."
++        items={[
++          {
++            icon: "♻️",
++            question: "How is overstock avoided estimated?",
++            answer:
++              "For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.",
++          },
++          {
++            icon: "💰",
++            question: "How would cost saving be calculated?",
++            answer:
++              "By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.",
++          },
++          {
++            icon: "🌍",
++            question: "What does CO₂e mean, and why is it blank?",
++            answer:
++              "CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.",
++          },
++          {
++            icon: "📈",
++            question: "Are these figures exact?",
++            answer:
++              "No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.",
++          },
++        ]}
++      />
++
++      <p className="impact__method">
++        {t("Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.")}
++      </p>
++
++      <div className="impact__actions">
++        <button type="button" className="btn btn--ghost" onClick={onBack}>
++          {t("← Back to the purchase plan")}
++        </button>
++      </div>
++    </section>
++  );
++}
 diff --git a/frontend/src/screens/MappingScreen.tsx b/frontend/src/screens/MappingScreen.tsx
-index 5d2f91a..fe748e0 100644
+index 5d2f91a..e3c0b25 100644
 --- a/frontend/src/screens/MappingScreen.tsx
 +++ b/frontend/src/screens/MappingScreen.tsx
 @@ -1,13 +1,13 @@
@@ -1411,7 +2113,7 @@ index 5d2f91a..fe748e0 100644
            <div className="mapping-bulk">
              <div>
                <b>{t("All matches look right?")}</b>
-@@ -108,7 +162,7 @@ export function MappingScreen(props: MappingScreenProps) {
+@@ -108,16 +162,16 @@ export function MappingScreen(props: MappingScreenProps) {
              <button type="button" className="btn btn--primary"
                disabled={bulkBlockers.length > 0 || props.checking}
                aria-busy={props.checking} onClick={props.onConfirmAllAndContinue}>
@@ -1420,7 +2122,9 @@ index 5d2f91a..fe748e0 100644
              </button>
            </div>
            <div className="table-scroll">
-@@ -117,7 +171,7 @@ export function MappingScreen(props: MappingScreenProps) {
+-            <table className="dtable">
++            <table className="dtable dtable--cards">
+               <thead>
                  <tr>
                    <th style={{ width: "28%" }}>{t("StockLess field")}</th>
                    <th style={{ width: "27%" }}>{t("Your column")}</th>
@@ -1429,13 +2133,17 @@ index 5d2f91a..fe748e0 100644
                    <th style={{ width: "20%" }}>{t("Status")}</th>
                  </tr>
                </thead>
-@@ -131,9 +185,16 @@ export function MappingScreen(props: MappingScreenProps) {
+@@ -130,12 +184,21 @@ export function MappingScreen(props: MappingScreenProps) {
+ 
                    return (
                      <tr key={field}>
-                       <td>
+-                      <td>
 -                        <b className="dtable__label">{t(definition.label)}</b>
 -                        {t(required && <span className="req">{t("Required")}</span>)}
 -                        <div className="dtable__hint">{t(definition.description)}</div>
++                      {/* data-label feeds the phone layout: below 768px the row
++                          becomes a card and each cell shows its column name. */}
++                      <td className="dtable__title">
 +                        <span className="field-head">
 +                          <b className="dtable__label">{t(definition.label)}</b>
 +                          <span className="hint">
@@ -1447,16 +2155,22 @@ index 5d2f91a..fe748e0 100644
 +                          {t(required && <span className="req">{t("Required")}</span>)}
 +                        </span>
                        </td>
-                       <td>
+-                      <td>
++                      <td data-label={t("Your column")}>
                          <select
-@@ -154,14 +215,14 @@ export function MappingScreen(props: MappingScreenProps) {
+                           className="select"
+                           disabled={props.checking}
+@@ -153,15 +216,15 @@ export function MappingScreen(props: MappingScreenProps) {
+                           ))}
                          </select>
                        </td>
-                       <td className="num">
+-                      <td className="num">
 -                        {column ? column.previewValues.slice(0, 5).join(" · ") || "—" : "—"}
++                      <td className="num" data-label={t("Preview")}>
 +                        {column ? formatPreview(column.previewValues) : "—"}
                        </td>
-                       <td>
+-                      <td>
++                      <td data-label={t("Status")}>
                          {t(current?.confirmed ? (
 -                          <span className="pill pill--teal">{t("Confirmed")}</span>
 +                          <span className="pill pill--confirmed">{t("✓ Confirmed")}</span>
@@ -1467,7 +2181,7 @@ index 5d2f91a..fe748e0 100644
                              <button
                                type="button"
                                className="btn btn--small btn--ghost"
-@@ -182,31 +243,37 @@ export function MappingScreen(props: MappingScreenProps) {
+@@ -182,31 +245,37 @@ export function MappingScreen(props: MappingScreenProps) {
            </div>
  
            <div className="identity">
@@ -1526,7 +2240,7 @@ index 5d2f91a..fe748e0 100644
                  );
                }))}
              </div>
-@@ -240,14 +307,62 @@ export function MappingScreen(props: MappingScreenProps) {
+@@ -240,14 +309,62 @@ export function MappingScreen(props: MappingScreenProps) {
            {t(props.error && <p className="notice notice--error" role="alert">{t(props.error)}</p>)}
          </section>
  
@@ -1596,7 +2310,7 @@ index 5d2f91a..fe748e0 100644
          </aside>
        </div>
  
-@@ -266,7 +381,7 @@ export function MappingScreen(props: MappingScreenProps) {
+@@ -266,7 +383,7 @@ export function MappingScreen(props: MappingScreenProps) {
              aria-busy={props.checking}
            >
              {t(props.checking && <span className="btn__spinner" aria-hidden="true" />)}
@@ -1605,7 +2319,7 @@ index 5d2f91a..fe748e0 100644
            </button>
          </div>
        </div>
-@@ -275,34 +390,3 @@ export function MappingScreen(props: MappingScreenProps) {
+@@ -275,34 +392,3 @@ export function MappingScreen(props: MappingScreenProps) {
  }
  
  /** Renders one capability section with its engine-supplied reasons. */
@@ -1640,8 +2354,73 @@ index 5d2f91a..fe748e0 100644
 -    </>
 -  );
 -}
+diff --git a/frontend/src/screens/PurchasePlanScreen.tsx b/frontend/src/screens/PurchasePlanScreen.tsx
+index 6e50c10..c6ac14c 100644
+--- a/frontend/src/screens/PurchasePlanScreen.tsx
++++ b/frontend/src/screens/PurchasePlanScreen.tsx
+@@ -19,6 +19,8 @@ import {
+   ProductPurchaseDialog,
+ } from "../purchase-plan/ProductPurchaseDialog.tsx";
+ import { SourceTag, numberText } from "../purchase-plan/SourceTag.tsx";
++import { summarizeImpact } from "../purchase-plan/impact.ts";
++import { ImpactScreen } from "./ImpactScreen.tsx";
+ import {
+   purchasePlanFilename,
+   serializePurchasePlanCsv,
+@@ -60,6 +62,10 @@ export function PurchasePlanScreen({
+   useLanguage();
+   const [query, setQuery] = useState("");
+   const [orderingOnly, setOrderingOnly] = useState(false);
++  // The Impact Dashboard is where this step arrives, not a fifth step:
++  // US4.3 AC3 fixes the workflow at four, so it is a view of Step 4 rather
++  // than another node in the stepper.
++  const [showImpact, setShowImpact] = useState(false);
+   const products = useMemo(
+     () => joinPurchaseEvidence(snapshot, forecast),
+     [snapshot, forecast],
+@@ -111,6 +117,11 @@ export function PurchasePlanScreen({
+   );
+   const inputsFor = (product: (typeof products)[number]) =>
+     drafts[product.key] ?? product.fileInputs;
++  // A sum over the plans already worked out above — no second calculation.
++  const impact = useMemo(
++    () => summarizeImpact(products, (product) => plans.get(product.key)),
++    [products, plans],
++  );
+   const hasPlans = products.some(
+     (product) => inputsFor(product).plannedOrder.state === "value",
+   );
+@@ -176,6 +187,15 @@ export function PurchasePlanScreen({
+     link.click();
+     setTimeout(() => URL.revokeObjectURL(url), 0);
+   }
++  // Every hook above has run by here, so this early return is safe.
++  if (showImpact) {
++    return (
++      <main className="purchase-plan">
++        <ImpactScreen summary={impact} onBack={() => setShowImpact(false)} />
++      </main>
++    );
++  }
++
+   return (
+     <main className="purchase-plan">
+       <section className="heading-row">
+@@ -409,6 +429,12 @@ export function PurchasePlanScreen({
+             onClick={onBack}
+           >
+             {t("← Back to readiness")}</button>
++          <button
++            className="btn btn--primary btn--small"
++            type="button"
++            onClick={() => setShowImpact(true)}
++          >
++            {t("See your impact →")}</button>
+         </div>
+       </section>
+       {selected && (
 diff --git a/frontend/src/screens/ReadinessScreen.tsx b/frontend/src/screens/ReadinessScreen.tsx
-index 3f56a34..1c4979a 100644
+index 3f56a34..8978bb5 100644
 --- a/frontend/src/screens/ReadinessScreen.tsx
 +++ b/frontend/src/screens/ReadinessScreen.tsx
 @@ -13,8 +13,9 @@ import {
@@ -1900,7 +2679,7 @@ index 3f56a34..1c4979a 100644
  
    function download() {
      const blob = new Blob([report.csvText], { type: "text/csv;charset=utf-8" });
-@@ -165,59 +264,141 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+@@ -165,59 +264,143 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
    return (
      <>
        <p className="eyebrow">{t("Data readiness · snapshot ")}{props.snapshot.analysisDate}</p>
@@ -2050,7 +2829,7 @@ index 3f56a34..1c4979a 100644
 +            </span>
 +          </summary>
 +          <div className="table-scroll table-scroll--x">
-+            <table className="dtable dtable--ready">
++            <table className="dtable dtable--ready dtable--cards">
 +              <thead>
 +                <tr>
 +                  <th>{t("Product")}</th>
@@ -2063,7 +2842,9 @@ index 3f56a34..1c4979a 100644
 +              <tbody>
 +                {t(readyProducts.map((product) => (
 +                  <tr key={product.productKey}>
-+                    <td>
++                    {/* data-label feeds the phone layout: below 768px the row
++                        becomes a card and each cell shows its column name. */}
++                    <td className="dtable__title">
 +                      <b>{product.name ?? product.productKey}</b>
 +                      {t(product.name && (
 +                        <span className="cell-detail num">
@@ -2071,10 +2852,10 @@ index 3f56a34..1c4979a 100644
 +                        </span>
 +                      ))}
 +                    </td>
-+                    <td className="num">{product.countDate ?? "—"}</td>
-+                    <td className="num">{t(product.ageDays === undefined ? "—" : `${product.ageDays} days`)}</td>
-+                    <td><ProductSpark weeks={product.weeks} /></td>
-+                    <td><span className="pill pill--confirmed">{t("Ready")}</span></td>
++                    <td className="num" data-label={t("Last stock count")}>{product.countDate ?? "—"}</td>
++                    <td className="num" data-label={t("Stock age")}>{t(product.ageDays === undefined ? "—" : `${product.ageDays} days`)}</td>
++                    <td data-label={t("Weekly sales")}><ProductSpark weeks={product.weeks} /></td>
++                    <td data-label={t("Status")}><span className="pill pill--confirmed">{t("Ready")}</span></td>
 +                  </tr>
 +                )))}
 +              </tbody>
@@ -2085,7 +2866,7 @@ index 3f56a34..1c4979a 100644
  
        {(dateEvidence.length > 0 || props.snapshot.duplicateGroups.length > 0) && (
          <section className="decision-grid" aria-label={t("Readiness decisions")}>
-@@ -248,250 +429,228 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+@@ -248,250 +431,228 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
              </article>
            ))}
  
@@ -2663,7 +3444,7 @@ index 9aa26c6..2f2049c 100644
              </p>
            </div>
 diff --git a/frontend/src/styles.css b/frontend/src/styles.css
-index 862cb48..c654b79 100644
+index 862cb48..d09e2bf 100644
 --- a/frontend/src/styles.css
 +++ b/frontend/src/styles.css
 @@ -4,7 +4,12 @@
@@ -3166,7 +3947,7 @@ index 862cb48..c654b79 100644
  .all-products tbody tr:hover td{background:#FAFCFB}
  .row--selected td{background:var(--teal-tint)}
  .all-products .dtable td{vertical-align:middle}
-@@ -408,3 +442,494 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -408,3 +442,709 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    .picker .select{min-width:0;width:100%}
    .saved-setup{align-items:flex-start;flex-direction:column}
  }
@@ -3661,3 +4442,218 @@ index 862cb48..c654b79 100644
 +.unlocks__list li:last-child{margin-bottom:0}
 +.unlocks__list b{display:block;font-size:var(--text-secondary);color:var(--ink)}
 +.unlocks__list span{color:var(--muted)}
++
++/* ===== thumb ergonomics on a phone =====
++   Everything above was sized for a mouse pointer. A finger is about 9mm
++   across, so on a touch-width screen the standalone controls grow to 44px —
++   Apple's and Material's floor — and the small text token goes up a step so
++   nothing sits at 10px in the hand.
++
++   The inline "i" dots are the deliberate exception. They live mid-sentence
++   next to a label; pushing them to 44px would either break the line box or
++   overlap the control beside them and steal its taps. They go to 28px, which
++   clears WCAG 2.5.8 Target Size (Minimum, 24x24) on its own, and the label
++   they belong to stays tappable too. */
++@media (max-width:768px){
++  :root{--text-label:11px}
++
++  /* standalone controls: full thumb target */
++  .btn--small{min-height:44px;padding:10px 16px}
++  .btn--link{min-height:44px;display:inline-flex;align-items:center;padding:1px 8px}
++  .topbar .workspace-home-link{min-height:44px;padding-top:12px;padding-bottom:12px}
++  .language-switcher select,
++  .frame .language-switcher select{min-height:44px}
++  .pcard__action{min-height:44px}
++
++  /* selects and search fields: the row height is the target */
++  .frame select,
++  .frame input[type="text"],
++  .frame input[type="search"]{min-height:44px}
++
++  /* inline help dots: 28px, still inside the line */
++  .hint__btn{width:28px;height:28px;font-size:13px}
++}
++
++/* ===== a table is not a phone layout =====
++   Step 2's mapping grid and Step 3's ready list are four and five columns
++   wide. On a 390px screen they either squeeze every column to nothing or
++   force the page sideways, and neither is readable. Below 768px each row
++   becomes its own card: the first cell is the card's title, and every other
++   cell states the column it came from, taken from its data-label.
++
++   The header row goes to screen readers only, because the labels now sit
++   inside each card and a visible header would just repeat them. */
++@media (max-width:768px){
++  .dtable--cards{display:block;min-width:0;table-layout:auto}
++
++  .dtable--cards thead{position:absolute;width:1px;height:1px;
++    overflow:hidden;clip-path:inset(50%);white-space:nowrap}
++
++  .dtable--cards tbody{display:block}
++  .dtable--cards tbody tr{display:block;padding:15px 16px;margin-bottom:12px;
++    border:1px solid var(--line);border-radius:14px;background:#fff}
++  .dtable--cards tbody tr:last-child{margin-bottom:0}
++
++  /* label left, value right — the row reads as "Stock age … 12 days" */
++  .dtable--cards td{display:flex;gap:14px;align-items:baseline;
++    justify-content:space-between;text-align:right;
++    padding:9px 0;border-bottom:1px solid var(--line-soft)}
++  .dtable--cards td::before{content:attr(data-label);flex:none;text-align:left;
++    font-family:var(--body);font-size:var(--text-description);font-weight:700;
++    color:var(--muted);text-transform:uppercase;letter-spacing:.55px}
++  .dtable--cards tbody tr td:last-child{border-bottom:0;padding-bottom:0}
++
++  /* the first cell is the heading of the card, so it keeps the full width */
++  .dtable--cards td.dtable__title{display:block;text-align:left;
++    padding:0 0 11px;border-bottom:1px solid var(--line)}
++  .dtable--cards td.dtable__title::before{content:none}
++
++  /* controls inside a card take the room the value side has */
++  .dtable--cards td .select{flex:1;min-width:0;width:100%}
++  .dtable--cards td .mapping-status{align-items:flex-end}
++  .dtable--cards td .spark{justify-content:flex-end}
++
++  /* nothing to scroll sideways any more */
++  .table-scroll:has(.dtable--cards),
++  .table-scroll--x:has(.dtable--cards){overflow-x:visible}
++}
++
++/* ===== learn more =====
++   Borrowed from the reference video's status bands rather than its layout: a
++   soft tinted row with no hard border, the question on the left behind a
++   decorative icon, a chevron on the right. Built on <details>/<summary>, so
++   the keyboard, the expanded state and the screen-reader announcement are the
++   browser's job rather than ours.
++
++   Two shapes off one component. "rows" is the compact contextual list that
++   sits under a step; "cards" is the 2x2 grid the homepage uses. */
++.learn{margin-top:28px}
++.learn__title{font-family:var(--display);font-size:var(--text-section-head);
++  font-weight:700;margin:0;letter-spacing:-.2px}
++.learn__lede{margin:7px 0 0;font-size:var(--text-body);color:var(--muted);max-width:56ch}
++.learn__list{margin-top:14px}
++
++.learn__item{background:var(--teal-tint);border-radius:14px;overflow:hidden}
++.learn__item + .learn__item{margin-top:8px}
++
++.learn__q{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;
++  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink);
++  list-style:none;min-height:44px}
++.learn__q::-webkit-details-marker{display:none}
++.learn__q:hover{background:#DDEDE8}
++.learn__item:focus-within .learn__q{outline:2px solid var(--teal);outline-offset:-2px}
++.learn__icon{font-size:17px;line-height:1;flex:none}
++.learn__qtext{flex:1;min-width:0}
++
++/* the chevron is drawn, not typed, so it can rotate when the row opens */
++.learn__chevron{flex:none;width:9px;height:9px;margin-right:3px;
++  border-right:2px solid var(--teal-deep);border-bottom:2px solid var(--teal-deep);
++  transform:rotate(45deg) translate(-2px,-2px);transition:transform .16s ease}
++.learn__item[open] .learn__chevron{transform:rotate(-135deg) translate(-3px,-3px)}
++
++.learn__a{margin:0;padding:0 15px 15px 43px;font-size:var(--text-secondary);
++  line-height:1.6;color:var(--ink-2);max-width:62ch}
++
++@media(prefers-reduced-motion:reduce){.learn__chevron{transition:none}}
++
++/* the homepage grid: four cards, two up */
++.learn--cards .learn__list{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
++.learn--cards .learn__item + .learn__item{margin-top:0}
++.learn--cards .learn__q{padding:15px 17px}
++.learn--cards .learn__a{padding:0 17px 16px 45px}
++
++@media (max-width:900px){
++  .learn--cards .learn__list{grid-template-columns:1fr}
++}
++@media (max-width:768px){
++  .learn__q{padding:14px;gap:10px}
++  .learn__a{padding-left:15px;font-size:var(--text-body)}
++  .learn--cards .learn__a{padding-left:17px}
++}
++
++/* ===== impact dashboard =====
++   An impact story, not an analytics console: one figure per card, its unit
++   next to it, and the basis for it underneath in plain words. Two of the
++   three cards carry no number, so they are styled as clearly unlocked-later
++   rather than as a zero or an error — a muted fill, no big figure, and the
++   sentence that says what would fill them. */
++/* The page shell already sets the width. Capping the section at 1000px left
++   a third of a 1440 screen empty, which §5 asks us to avoid — so the cards
++   and the SDG band use the full shell and only the prose is measured. */
++.impact{max-width:none}
++.impact__title{font-family:var(--display);font-size:var(--text-page-title);
++  font-weight:700;margin:6px 0 0;letter-spacing:-.8px}
++.impact__lede{margin:10px 0 0;font-size:var(--text-lead);line-height:1.55;
++  color:var(--muted);max-width:68ch}
++
++.impact__cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
++.icard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;
++  box-shadow:var(--shadow-card);display:flex;flex-direction:column}
++.icard--figure{background:var(--teal-tint);border-color:#CFE4DE}
++.icard--locked{background:#F7FAF9}
++.icard__icon{font-size:22px;line-height:1}
++.icard__label{margin-top:12px;font-family:var(--display);font-size:var(--text-description);
++  font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
++.icard__value{margin:7px 0 0;font-family:var(--display);font-size:38px;font-weight:700;
++  line-height:1.1;letter-spacing:-1.4px;color:var(--ink)}
++.icard__unit{margin-left:7px;font-size:var(--text-body);font-weight:600;color:var(--muted)}
++/* An unlocked-later card must not shout as loudly as the card that has a
++   real number — at 18px bold it out-weighed the one figure on the page. */
++.icard__value--locked{font-size:var(--text-body);font-weight:600;color:var(--muted-2);
++  letter-spacing:0;line-height:1.4}
++.icard__caption{margin:6px 0 0;font-size:var(--text-body);font-weight:600;color:var(--ink-2)}
++.icard__basis{margin:9px 0 0;font-size:var(--text-secondary);line-height:1.55;color:var(--muted)}
++
++/* the per-product working behind the one real figure */
++.impact__lines{margin-top:24px;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
++.impact__lines h2{font-family:var(--display);font-size:var(--text-section-head);
++  font-weight:700;margin:0 0 4px}
++.impact__lines ul{list-style:none;margin:0;padding:0}
++.impact__lines li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
++  padding:11px 0;border-bottom:1px solid var(--line-soft)}
++.impact__lines li:last-child{border-bottom:0;padding-bottom:0}
++.impact__lname{display:flex;align-items:baseline;gap:9px;min-width:0;flex-wrap:wrap}
++.impact__lname .num{font-size:var(--text-secondary);color:var(--muted)}
++.impact__lunits{flex:none;font-family:var(--display);font-weight:700;text-align:right}
++.impact__lunits span{font-family:var(--body);font-weight:400;font-size:var(--text-secondary);
++  color:var(--muted);margin-left:6px}
++
++.impact__sdg{display:flex;gap:18px;align-items:flex-start;margin-top:24px;padding:22px;
++  border-radius:18px;background:#BD8C2B;color:#fff}
++.impact__sdg-mark{flex:none;font-family:var(--display);font-size:46px;font-weight:800;
++  line-height:1;letter-spacing:-3px}
++.impact__sdg h2{font-family:var(--display);font-size:var(--text-section-head);
++  font-weight:700;margin:0}
++.impact__sdg p{margin:8px 0 0;font-size:var(--text-body);line-height:1.6;max-width:62ch}
++.impact__sdg-link{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;
++  color:#fff;font-weight:700;font-size:var(--text-secondary);text-decoration:underline}
++
++.impact__method{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);
++  font-size:var(--text-secondary);line-height:1.6;color:var(--muted);max-width:76ch}
++.impact__actions{margin-top:20px}
++
++@media (max-width:1100px){
++  .impact__cards{grid-template-columns:1fr 1fr}
++}
++@media (max-width:768px){
++  .impact__cards{grid-template-columns:1fr;gap:12px}
++  .impact__title{font-size:30px}
++  .impact__lede{font-size:var(--text-body)}
++  .icard__value{font-size:34px}
++  .impact__lines li{align-items:flex-start;flex-direction:column;gap:3px}
++  .impact__lunits{text-align:left}
++  .impact__sdg{gap:14px;padding:18px}
++  .impact__sdg-mark{font-size:38px}
++  .impact__actions .btn{width:100%}
++}
++
++/* ===== stepper on a phone =====
++   Four labels across 390px left "Check readiness" and "Plan purchases"
++   touching. The labels stay — they are how someone knows where they are —
++   but they wrap inside their own column and the columns get a gutter. */
++@media (max-width:560px){
++  .stepper__inner{gap:2px}
++  .step__label{font-size:var(--text-description);line-height:1.25;
++    text-align:center;padding-inline:3px;hyphens:auto}
++  .step__button{gap:5px}
++}

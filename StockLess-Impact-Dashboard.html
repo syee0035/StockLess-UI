@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StockLess &mdash; Impact Dashboard (preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Source+Sans+3:wght@400;600;700&family=Inter:wght@400;600&family=Noto+Sans+SC:wght@400;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --ink:#16313B; --ink-2:#243238; --muted:#66767D; --muted-2:#86949A;
+  --line:#D7E0DD; --line-soft:#E8EEEC; --border-strong:#B8C8C4;
+  --teal:#167D74; --teal-deep:#11655E; --teal-tint:#E8F3F0; --mint:#8FD2C8;
+  --red:#9B3939; --red-tint:#FBE8E8;
+  --amber:#8B5C10; --amber-tint:#FFF4DF; --amber-strong:#D99120;
+  --page:#FFFFFF;
+  /* Type scale — the same tokens and values the homepage uses, so the app and
+     the marketing site read as one product. Sizes below are set from these. */
+  --text-page-title:36px; --text-lead:18px; --text-section-head:20px;
+  --text-body:15px; --text-secondary:13px; --text-description:12px;
+  --text-eyebrow:11px; --text-label:10px;
+  --shadow-card:0 10px 30px rgba(22,49,59,.05);
+  --display:"Manrope",-apple-system,BlinkMacSystemFont,sans-serif;
+  --body:"Source Sans 3",-apple-system,BlinkMacSystemFont,sans-serif;
+  --data:"Inter",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body,#root{margin:0;min-height:100%}
+body{background:var(--page);font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+:focus,:focus-visible{outline:none}
+code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;border-radius:4px}
+
+/* One token drives the content column and the gutter art. The pages read as
+   "too big" on a wide monitor because a 1180px column leaves ~400px of empty
+   gutter each side; widening it there fits more without shrinking any text. */
+.frame{min-height:100vh;display:flex;flex-direction:column;align-items:center;background:var(--page);
+  --shell:clamp(1180px, 92vw, 1420px)}
+
+/* topbar + stepper */
+.topbar{align-self:stretch;height:66px;padding:0 40px;background:rgba(255,255,255,.94);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;text-decoration:none;padding:4px;margin-left:-4px;border-radius:8px}
+.brand--button{background:none;border:0;cursor:pointer}
+.session-status{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
+.session-status__name{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-family:var(--data);font-size:var(--text-description);color:var(--muted)}
+.stepper{align-self:stretch;height:62px;padding:0 40px;background:#fff;
+  border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.stepper__inner{width:790px;max-width:100%;display:flex;align-items:flex-start;list-style:none;margin:0;padding:0}
+.step{flex:1 1 0;position:relative;display:flex;flex-direction:column;align-items:center}
+.step__button{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;
+  padding:0;font-family:inherit;cursor:pointer}
+.step__button:disabled{cursor:default}
+.step__dot{width:30px;height:30px;border-radius:15px;background:#fff;border:2px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:var(--text-secondary);
+  font-weight:700;color:#7D8D93;transition:background-color .15s ease,border-color .15s ease}
+.step__label{font-size:var(--text-secondary);font-weight:700;color:var(--muted-2)}
+.step__line{position:absolute;top:14px;left:calc(50% + 19px);width:calc(100% - 38px);height:2px;background:var(--line)}
+.step:last-child .step__line{display:none}
+.step--done .step__dot,.step--current .step__dot{background:var(--teal);border-color:var(--teal);color:#fff}
+.step--done .step__label,.step--current .step__label{color:var(--ink)}
+.step--done .step__line{background:var(--teal)}
+.step__button:not(:disabled):hover .step__dot{border-color:var(--teal)}
+
+.page{width:var(--shell);max-width:100%;padding:36px 40px 44px;display:flex;flex-direction:column;align-items:flex-start}
+
+/* type */
+.eyebrow{font-family:var(--display);font-size:var(--text-secondary);font-weight:800;color:var(--teal);
+  text-transform:uppercase;letter-spacing:1.32px;margin:0}
+.title{font-family:var(--display);font-size:var(--text-page-title);font-weight:700;line-height:1.1;margin:6px 0 0}
+.lede{font-size:var(--text-lead);line-height:1.3;color:var(--muted);margin:8px 0 0;max-width:680px}
+.card-title{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
+.card-sub{font-size:var(--text-body);color:var(--muted);margin:8px 0 0}
+
+/* atoms */
+.pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:var(--text-secondary);font-weight:700;white-space:nowrap}
+.pill--teal{background:var(--teal-tint);color:var(--teal-deep)}
+.pill--amber{background:var(--amber-tint);color:var(--amber)}
+.pill--grey{background:#EDF1F0;color:#647278}
+.req{font-size:var(--text-eyebrow);font-weight:700;text-transform:uppercase;color:#C94C4C;margin-left:8px}
+
+.btn{min-height:44px;padding:12px 18px;border-radius:11px;border:0;cursor:pointer;
+  font-family:var(--body);font-size:var(--text-body);font-weight:700;line-height:1.3;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background-color .15s ease,border-color .15s ease,opacity .15s ease}
+.btn--small{min-height:32px;padding:6px 12px;font-size:var(--text-secondary);border-radius:8px}
+.btn--primary{background:var(--teal);color:#fff}
+.btn--primary:hover:not(:disabled){background:var(--teal-deep)}
+.btn--ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
+.btn--ghost:hover:not(:disabled){border-color:#93A8A3}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn__spinner{width:15px;height:15px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:button-spin .7s linear infinite;flex:none}
+@keyframes button-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.btn__spinner{animation-duration:1.4s}}
+.btn--link{background:none;border:0;padding:1px 6px;color:var(--muted);font-family:var(--body);
+  font-size:16px;font-weight:700;cursor:pointer}
+.btn--link:hover{color:var(--ink)}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-card)}
+.card__head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+
+.select{width:100%;min-width:140px;padding:8px 30px 8px 10px;background:#fff;
+  border:1px solid var(--border-strong);border-radius:9px;
+  font-family:var(--body);font-size:var(--text-body);font-weight:600;color:var(--ink);appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' fill='none' stroke='%2316313B' stroke-width='1.6' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 11px center}
+
+.dtable{width:100%;border-collapse:collapse;table-layout:fixed}
+.dtable th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);
+  font-size:var(--text-description);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.55px}
+.dtable td{padding:10px 10px;border-bottom:1px solid var(--line-soft);font-size:var(--text-body);color:var(--ink-2);vertical-align:top}
+.dtable tr:last-child td{border-bottom:0}
+.dtable__label{font-weight:700}
+.dtable__hint{font-size:var(--text-description);line-height:1.45;color:var(--muted);margin-top:5px}
+.mapping-status{display:inline-flex;flex-direction:column;align-items:flex-start;gap:6px}
+.mapping-status small{color:var(--muted);white-space:nowrap}
+.num{font-family:var(--data);word-break:break-word}
+/* overflow-x:auto would clip the field tooltips, which sit above the row and
+   hang past the table box. The table is table-layout:fixed at 100%, so it only
+   needs to scroll once the viewport is too narrow to hold four columns. */
+.table-scroll{margin-top:17px}
+@media (max-width:900px){ .table-scroll{overflow-x:auto} }
+/* the readiness problem table has many columns and no tooltips inside it, so
+   it scrolls at any width rather than pushing the page sideways */
+.table-scroll--x{overflow-x:auto}
+
+.notice{align-self:stretch;margin-top:14px;padding:11px 14px;border-radius:4px 12px 12px 4px;
+  font-size:var(--text-body);line-height:1.35}
+.notice--info{background:var(--amber-tint);border-left:4px solid var(--amber-strong);color:#765A2D}
+.notice--error{background:var(--red-tint);border-left:4px solid var(--red);color:var(--red);margin-top:16px}
+
+/* screen 01 */
+.s1-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,1fr);gap:32px;align-items:start;margin-top:26px;align-self:stretch}
+.attribute-guide__intro{margin-top:7px}
+.attribute-section{margin-top:16px}
+.attribute-section__head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.attribute-section__head h3{font-family:var(--display);font-size:var(--text-body);margin:0}
+.attribute-list{display:flex;flex-direction:column;gap:9px}
+.attribute-card{padding:13px 14px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-card)}
+.attribute-card__head{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:9px}
+.attribute-card__number{width:30px;height:30px;border-radius:9px;background:var(--teal-tint);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:var(--text-description);font-weight:800;color:var(--teal-deep)}
+.attribute-card h4{font-family:var(--display);font-size:var(--text-body);line-height:1.25;margin:0}
+.attribute-card>p{font-size:var(--text-secondary);line-height:1.45;color:var(--muted);margin:7px 0 0 39px}
+.attribute-mark{padding:4px 7px;border-radius:7px;font-size:var(--text-label);font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.attribute-mark--required{background:var(--teal-tint);color:var(--teal-deep)}
+.attribute-mark--optional{background:var(--amber-tint);color:#765A2D}
+.accepted-forms{display:grid;grid-template-columns:1fr 1fr;gap:8px;list-style:none;counter-reset:form;margin:10px 0 0 39px;padding:0}
+.accepted-forms li{counter-increment:form;position:relative;min-height:42px;padding:9px 9px 9px 31px;border:1px solid #C8DAD6;border-radius:10px;background:#F8FCFB;font-size:var(--text-description);line-height:1.4;color:var(--ink-2)}
+.accepted-forms li::before{content:counter(form);position:absolute;left:9px;top:9px;width:15px;height:15px;border-radius:50%;background:var(--teal);color:#fff;font-size:var(--text-label);font-weight:800;display:flex;align-items:center;justify-content:center}
+.attribute-card__features{display:flex;align-items:flex-start;gap:9px;margin:10px 0 0 39px}
+.attribute-card__features>b{flex:none;font-size:var(--text-eyebrow);line-height:1.4;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.attribute-card__features ul{display:flex;flex-wrap:wrap;gap:5px;list-style:none;margin:0;padding:0}
+.attribute-card__features li{padding:3px 7px;border-radius:7px;background:#EDF6F4;color:var(--teal-deep);font-size:var(--text-eyebrow);font-weight:700;line-height:1.4}
+.upload-card{padding:20px;display:flex;flex-direction:column;gap:14px}
+.dropzone{min-height:170px;border-radius:18px;border:2px dashed #9BC8C1;
+  background:linear-gradient(180deg,#F8FCFB 0%,#EDF7F4 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px;text-align:center;transition:border-color .15s ease,background .15s ease}
+.dropzone--active{border-color:var(--teal);background:#E8F3F0}
+.dropzone--error{border-color:#E0AFAF}
+.csv-badge{width:54px;height:64px;background:#fff;border:2px solid var(--teal);border-radius:10px;
+  display:flex;align-items:flex-end;justify-content:center;padding:0 7px 10px;margin-bottom:24px}
+.csv-badge span{display:block;width:36px;padding:4px 0;background:var(--teal-tint);border-radius:5px;
+  font-size:var(--text-eyebrow);font-weight:800;color:var(--teal-deep);text-align:center}
+.dropzone h3{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
+.dropzone p{font-size:var(--text-body);color:var(--muted);margin:8px 0 0}
+.dropzone__actions{display:flex;gap:11px;margin-top:16px;flex-wrap:wrap;justify-content:center}
+.dropzone__limits{font-size:var(--text-secondary);color:var(--muted);margin-top:12px}
+.progress{width:220px;height:4px;border-radius:2px;background:#CFE0DC;margin-top:18px;overflow:hidden}
+.progress__fill{display:block;height:100%;background:var(--teal);transition:width .12s linear}
+
+/* A reassurance, not a warning — so it reads as a soft note rather than a
+   black slab shouting at the end of the card. */
+.privacy{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;
+  background:#F1F8F3;border:1px solid #D8E9DD;border-radius:16px}
+.privacy__tick{width:28px;height:28px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
+  display:flex;align-items:center;justify-content:center}
+.privacy p{margin:0}
+.privacy b{display:block;color:var(--ink);font-size:var(--text-body);line-height:1.4;margin-bottom:3px}
+.privacy span{color:var(--muted);font-size:var(--text-secondary);line-height:1.5}
+.saved-setup{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;
+  border:1px solid var(--line);border-radius:12px;background:#fff}
+.saved-setup div{display:flex;flex-direction:column;gap:3px}
+.saved-setup b{font-size:var(--text-secondary);color:var(--ink)}
+.saved-setup span{font-size:var(--text-description);line-height:1.4;color:var(--muted)}
+
+.alert{display:flex;gap:14px;padding:15px;border-radius:14px}
+.alert--error{background:var(--red-tint);border:1px solid #EFC8C3}
+.alert--warn{background:var(--amber-tint);border:1px solid #F0D29F;margin-top:16px}
+.alert__icon{width:26px;height:26px;flex:none;border-radius:13px;background:var(--red);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:var(--text-body);font-weight:700}
+.alert__icon--warn{background:var(--amber-strong)}
+.alert__title{font-size:var(--text-body);font-weight:700;margin:0;color:#6F2E27}
+.alert--warn .alert__title{color:#765A2D}
+.alert__body{font-size:var(--text-secondary);line-height:1.45;color:#71443E;margin:6px 0 0}
+.alert__code{font-family:var(--data);font-size:var(--text-eyebrow);color:#9A6560;margin:8px 0 0}
+.alert__list{margin:8px 0 0;padding-left:18px;font-size:var(--text-secondary);line-height:1.6;color:#765A2D}
+
+/* screen 02 */
+.filebar{align-self:stretch;margin-top:15px;padding:11px 15px;background:#fff;
+  border:1px solid var(--line);border-radius:14px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.filebar__left{display:flex;align-items:center;gap:12px}
+.filebar__icon{width:36px;height:36px;border-radius:10px;background:var(--teal-tint);
+  display:flex;align-items:center;justify-content:center;font-size:var(--text-description);font-weight:800;color:var(--teal-deep)}
+.filebar__name{font-size:var(--text-body);font-weight:700}
+.filebar__meta{font-size:var(--text-secondary);color:var(--muted);margin-top:1px}
+.split{align-self:stretch;display:flex;align-items:flex-start;gap:16px;margin-top:10px}
+.split__main{flex:1 1 0;min-width:0;padding:24px}
+
+.identity{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.identity__title{font-family:var(--display);font-size:16px;font-weight:700;margin:0}
+.identity__lede{font-size:var(--text-body);color:var(--muted);margin:6px 0 0}
+.identity__paths{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.identity__path{padding:14px;border:1px solid var(--line);border-radius:14px;background:#FCFDFC}
+.identity__path--on{border-color:var(--teal);background:var(--teal-tint)}
+.identity__path-name{font-size:var(--text-body);font-weight:700}
+.identity__path-fields{font-size:var(--text-secondary);color:var(--muted);margin:4px 0 12px}
+
+.panel-dark{width:330px;flex:none;padding:24px;background:var(--ink);border-radius:22px;
+  position:relative;overflow:hidden;color:#fff}
+.panel-dark::after{content:"";position:absolute;width:170px;height:170px;border-radius:85px;
+  background:rgba(143,210,200,.12);left:240px;top:-90px}
+.panel-dark h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0;position:relative}
+.panel-dark__lede{font-size:var(--text-body);line-height:1.35;color:#B9CBC8;margin:7px 0 0;position:relative}
+.panel-dark__eyebrow{font-size:var(--text-description);font-weight:800;letter-spacing:.88px;text-transform:uppercase;
+  color:#9FCAC3;margin:20px 0 9px;position:relative}
+.unlock{display:flex;align-items:flex-start;gap:11px;margin-bottom:10px;position:relative}
+.unlock__tick{width:20px;height:20px;flex:none;border-radius:10px;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:var(--text-description);font-weight:800}
+.unlock__tick--on{background:var(--teal)}
+.unlock__tick--off{background:rgba(255,255,255,.16)}
+.unlock__tick--locked{background:rgba(255,255,255,.08);color:#8A9C9A}
+.unlock span{font-size:var(--text-body);line-height:1.45;color:#F3FAF8}
+.unlock__state{color:#9FCAC3;font-style:normal}
+.unlock__reason{display:block;font-size:var(--text-description);line-height:1.45;color:#93A6A4;margin-top:3px}
+
+.footer-row{align-self:stretch;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;margin-top:22px;flex-wrap:wrap}
+.footer-row__right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+.blockers{font-size:var(--text-secondary);color:var(--muted);margin:0;max-width:420px;text-align:right}
+
+/* placeholder screens */
+.pending{align-self:stretch;margin-top:28px;padding:24px}
+.pending__list{margin:14px 0;padding-left:20px;font-size:var(--text-body);line-height:2;color:var(--ink-2)}
+
+@media (max-width:1240px){
+  .page{padding-left:32px;padding-right:32px}
+  .topbar,.stepper{padding-left:32px;padding-right:32px}
+  .split{flex-direction:column}
+  .panel-dark{width:100%}
+  .s1-grid{grid-template-columns:1fr;gap:36px}
+}
+@media (max-width:760px){
+  .page{padding-left:20px;padding-right:20px}
+  .topbar,.stepper{padding-left:20px;padding-right:20px}
+  .step__label{font-size:var(--text-eyebrow);text-align:center}
+  .title{font-size:28px;line-height:1.2}
+  .lede{font-size:16px;line-height:1.35}
+  .identity__paths{grid-template-columns:1fr}
+  .footer-row{flex-direction:column;align-items:stretch}
+  .blockers{text-align:left}
+  .session-status__name{display:none}
+  .accepted-forms{grid-template-columns:1fr}
+}
+
+/* ── screen 03 ──────────────────────────────────────────────────────────── */
+.ready{align-self:stretch;margin-top:16px;padding:15px 17px;background:var(--teal-tint);
+  border:1px solid #B9DBD5;border-radius:18px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.ready__left{display:flex;align-items:center;gap:14px}
+.ready__tick{width:44px;height:44px;flex:none;border-radius:13px;background:var(--teal);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:var(--text-section-head);font-weight:800}
+.ready h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0;
+  display:flex;align-items:center;gap:6px}
+.ready p{font-size:var(--text-body);color:var(--muted);margin:3px 0 0;max-width:560px}
+.ready__count{font-family:var(--display);font-size:22px;font-weight:700;text-align:right}
+.ready__unit{font-size:var(--text-secondary);color:var(--muted);text-align:right;margin-top:4px}
+
+.issues{align-self:stretch;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.issues--five{grid-template-columns:repeat(5,1fr)}
+/* The card is a div with a full-bleed hit button behind its content, so the
+   ⓘ tooltip can sit on top of it without nesting one button inside another. */
+.issue{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;
+  padding:16px;background:#fff;border:1px solid var(--line);border-radius:14px;
+  font-family:var(--body);cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
+.issue:has(.issue__hit:hover:not(:disabled)){border-color:#9FB4AF}
+.issue:has(.issue__hit:focus-visible){outline:2px solid var(--teal);outline-offset:2px}
+.issue--empty{opacity:.6}
+.issue__hit{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;
+  border:0;background:none;border-radius:inherit;cursor:pointer}
+.issue__hit:disabled{cursor:default}
+.issue__hit:focus-visible{outline:none}
+/* content sits above the hit area; only the tooltip takes the pointer back */
+.issue__head,.issue__value,.issue__hint{position:relative;pointer-events:none}
+.issue .hint{pointer-events:auto;z-index:3}
+.issue--active{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.issue__head{display:flex;align-items:center;gap:6px;width:100%}
+.issue__head .pill{margin-left:auto}
+.issue__label{font-size:var(--text-secondary);font-weight:600;color:var(--muted)}
+.issue__value{font-family:var(--display);font-size:27px;font-weight:800;margin-top:6px;color:var(--ink)}
+.issue__hint{font-size:var(--text-description);color:var(--muted)}
+.pill--red{background:var(--red-tint);color:var(--red)}
+.tag{display:inline-flex;padding:4px 7px;border-radius:7px;font-size:var(--text-description);font-weight:700}
+.tag--red{background:var(--red-tint);color:var(--red)}
+.tag--amber{background:var(--amber-tint);color:var(--amber)}
+.split--wide{margin-top:18px}
+.empty{font-size:var(--text-body);color:var(--muted);padding:26px 2px 8px;margin:0}
+
+.panel-warn{width:310px;flex:none;padding:22px;background:var(--amber-tint);
+  border:1px solid #F0D29F;border-radius:22px}
+.panel-warn--calm{background:var(--teal-tint);border-color:#B9DBD5}
+.panel-warn__icon{width:40px;height:40px;border-radius:12px;background:var(--amber-strong);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-size:16px;font-weight:800}
+.panel-warn--calm .panel-warn__icon{background:var(--teal)}
+.panel-warn h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:17px 0 0}
+.panel-warn p{font-size:var(--text-body);line-height:1.35;color:#765A2D;margin:7px 0 16px}
+.panel-warn--calm p{color:var(--muted)}
+.panel-warn hr{border:0;border-top:1px solid #EBCF9F;margin:0}
+.warn-item{margin-top:14px;font-size:var(--text-secondary);line-height:1.5;color:#765A2D}
+.warn-item b{display:block;font-weight:700}
+.validity{display:flex;align-items:center;gap:9px;font-size:var(--text-secondary);color:var(--muted);margin:0}
+.validity i{width:18px;height:18px;border-radius:9px;background:var(--teal);color:#fff;font-style:normal;
+  display:flex;align-items:center;justify-content:center;font-size:var(--text-description);font-weight:800}
+.back-link{align-self:flex-start;margin-top:18px}
+
+.decision-grid{align-self:stretch;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.decision-card{padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-card)}
+.decision-card h2{font-family:var(--display);font-size:17px;margin:12px 0 0}
+.decision-card p{font-size:var(--text-secondary);line-height:1.55;color:var(--muted);margin:6px 0 0}
+.decision-card__actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+/* a duplicate group StockLess already settled: a record, not a question */
+.decision-card--settled{background:var(--teal-tint);border-color:#CFE3DE;box-shadow:none}
+.decision-card__scope{font-size:var(--text-description);color:var(--muted);margin:8px 0 0}
+
+.evidence-section{align-self:stretch;margin-top:13px;padding:17px}
+.dtable--readiness{min-width:1040px}
+.dtable--readiness th:nth-child(1){width:7%}
+.dtable--readiness th:nth-child(2){width:15%}
+.dtable--readiness th:nth-child(3){width:17%}
+.dtable--readiness th:nth-child(4){width:14%}
+.dtable--readiness th:nth-child(5){width:37%}
+.dtable--readiness th:nth-child(6){width:10%}
+.tidy-up-list{margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.dtable--tidy-ups{min-width:900px}
+.dtable--tidy-ups th:nth-child(1){width:10%}
+.dtable--tidy-ups th:nth-child(2){width:18%}
+.dtable--tidy-ups th:nth-child(3),.dtable--tidy-ups th:nth-child(4){width:24%}
+.dtable--tidy-ups th:nth-child(5){width:24%}
+.trace-value{display:inline-block;max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);background:#EEF3F1;border:1px solid var(--line);border-radius:5px;padding:3px 6px}
+.table-pager{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:16px;color:var(--muted);font-size:var(--text-body)}
+.table-pager__actions{display:flex;align-items:center;gap:10px}
+@media(max-width:720px){.table-pager{align-items:flex-start;flex-direction:column}.table-pager__actions{flex-wrap:wrap}}
+.cell-detail{display:block;margin-top:5px;color:var(--muted);line-height:1.45}
+
+.timeline-list{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+.timeline-row{padding:14px;border:1px solid var(--line-soft);border-radius:14px;background:#FCFDFD}
+.timeline-row__summary{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:var(--text-secondary);color:var(--muted)}
+.timeline-row__summary>b{color:var(--ink);margin-right:auto}
+.week-strip{display:flex;gap:7px;overflow-x:auto;margin-top:12px;padding-bottom:3px}
+.week-chip{min-width:94px;padding:8px;border-radius:9px;border:1px solid var(--line);font-size:var(--text-eyebrow);line-height:1.35;color:var(--muted);background:#fff}
+.week-chip b{display:block;font-family:var(--data);font-size:var(--text-eyebrow);color:var(--ink);margin-bottom:3px}
+.week-chip--missing{border-style:dashed;background:#F2F5F4;color:#6E7B80}
+.week-chip--confirmed_zero_sales{background:#EDF4F8;border-color:#C7DCE7;color:#416879}
+.week-chip--net_zero_with_activity{background:var(--amber-tint);border-color:#EBCF9F;color:#765A2D}
+.week-chip--observed_demand{background:var(--teal-tint);border-color:#B9DBD5;color:var(--teal-deep)}
+
+.freshness-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.freshness-card{display:flex;flex-direction:column;gap:5px;padding:14px;border:1px solid var(--line);border-radius:13px;background:#fff;font-size:var(--text-secondary);color:var(--muted)}
+.freshness-card strong{font-size:var(--text-secondary);color:var(--ink)}
+.freshness-card small{line-height:1.4}
+.freshness-card--current{border-left:4px solid var(--teal)}
+.freshness-card--limited{border-left:4px solid var(--amber-strong)}
+.freshness-card--unusable{border-left:4px solid var(--red)}
+
+/* ── screen 04 ──────────────────────────────────────────────────────────── */
+.notice--warn{background:var(--amber-tint);border-left:4px solid var(--amber-strong);color:#765A2D;
+  display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.notice--warn b{font-weight:700}
+.picker{align-self:stretch;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;margin-top:20px;flex-wrap:wrap}
+.picker__left{display:flex;align-items:center;gap:11px}
+.picker__label{font-size:var(--text-secondary);font-weight:700;color:var(--muted)}
+.picker .select{min-width:270px;width:auto;padding:10px 34px 10px 12px;border-radius:10px;font-weight:700}
+.s4-grid{align-self:stretch;display:flex;align-items:stretch;gap:18px;margin-top:12px}
+.chart-card{flex:1 1 0;min-width:0;padding:22px 24px 18px}
+.chart{display:block;width:100%;height:auto;margin-top:14px}
+.chart-head{flex-wrap:wrap}
+.legend{display:flex;gap:10px 14px;flex-wrap:wrap;justify-content:flex-end;flex:none;max-width:410px}
+.legend div{display:flex;align-items:center;gap:6px;font-size:var(--text-description);color:var(--muted)}
+.swatch-bar{width:12px;height:4px;border-radius:5px;background:var(--teal)}
+.swatch-negative{width:12px;height:4px;border-radius:5px;background:var(--red)}
+.swatch-zero{width:8px;height:8px;border-radius:50%;background:#3F7E98}
+.swatch-netzero{width:8px;height:8px;background:#C4872B;transform:rotate(45deg)}
+.swatch-missing{width:12px;height:10px;border-radius:3px;border:1px dashed #9AABAD}
+.cover{width:330px;flex:none;padding:24px;background:var(--ink);border-radius:22px;
+  position:relative;overflow:hidden;color:#fff}
+.cover::after{content:"";position:absolute;width:190px;height:190px;border-radius:95px;
+  background:rgba(143,210,200,.13);right:-60px;bottom:-70px}
+.cover h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0;position:relative}
+.cover__lede{font-size:var(--text-secondary);line-height:1.5;color:#B6C9C6;margin:6px 0 0;position:relative}
+.cover__value{font-family:var(--display);font-size:58px;font-weight:800;line-height:1;margin-top:22px;position:relative}
+.cover__value--muted{color:#63807E}
+.cover__cannot{font-family:var(--display);font-size:30px;font-weight:800;line-height:1.1;margin-top:24px;position:relative;color:#F6DDB7}
+.cover__unit{font-size:16px;font-weight:700;color:#9FCAC3;position:relative;margin-top:6px}
+.cover__reason{font-size:var(--text-secondary);line-height:1.45;color:#F4D6D2;margin-top:13px;position:relative}
+.cover--limited{box-shadow:inset 0 0 0 2px rgba(226,174,88,.55)}
+.cover--cannot_calculate{box-shadow:inset 0 0 0 2px rgba(185,76,68,.55)}
+.cover__maths{margin-top:22px;padding:13px;background:rgba(255,255,255,.08);border-radius:12px;
+  font-size:var(--text-secondary);line-height:1.45;color:#DBE8E5;position:relative}
+.cover__maths b{display:block;color:#fff;font-weight:700;margin-bottom:2px}
+.metrics{align-self:stretch;display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:12px}
+.metrics--four{grid-template-columns:repeat(4,1fr)}
+.metric{padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.metric__label{font-size:var(--text-description);color:var(--muted)}
+.metric__value{font-family:var(--display);font-size:17px;font-weight:700;margin-top:4px;overflow-wrap:anywhere}
+.metric__meta{font-size:var(--text-eyebrow);line-height:1.4;color:var(--muted);margin-top:5px}
+.evidence-note{align-self:stretch;margin:10px 0 0;padding:10px 13px;border-left:4px solid var(--amber-strong);background:var(--amber-tint);border-radius:4px 10px 10px 4px;font-size:var(--text-secondary);line-height:1.5;color:#765A2D}
+.history-table{align-self:stretch;margin-top:12px;padding:22px}
+.dtable--weeks{min-width:900px}
+.dtable--weeks th:nth-child(1){width:18%}
+.dtable--weeks th:nth-child(2),.dtable--weeks th:nth-child(3),.dtable--weeks th:nth-child(4){width:9%}
+.dtable--weeks th:nth-child(5){width:8%}
+.dtable--weeks th:nth-child(6){width:24%}
+.dtable--weeks th:nth-child(7){width:14%}
+.all-products{align-self:stretch;margin-top:12px;padding:20px 18px 12px}
+.all-products tbody tr:hover td{background:#FAFCFB}
+.row--selected td{background:var(--teal-tint)}
+.all-products .dtable td{vertical-align:middle}
+.dtable--products{min-width:850px}
+.dtable--products th:nth-child(1){width:23%}
+.dtable--products th:nth-child(2){width:16%}
+.dtable--products th:nth-child(3){width:14%}
+.dtable--products th:nth-child(4){width:32%}
+.dtable--products th:nth-child(5){width:15%}
+.product-link{padding:0;background:none;border:0;color:var(--ink);font:inherit;font-weight:700;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:#A9C4BF;text-underline-offset:3px}
+.product-link:hover{color:var(--teal-deep);text-decoration-color:var(--teal)}
+
+@media (max-width:1240px){
+  .issues{grid-template-columns:repeat(2,1fr)}
+  .freshness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .metrics--four{grid-template-columns:repeat(2,1fr)}
+  .s4-grid{flex-direction:column}
+  .cover,.panel-warn{width:100%}
+}
+@media (max-width:760px){
+  .issues,.metrics,.metrics--four{grid-template-columns:1fr}
+  .decision-grid,.freshness-grid{grid-template-columns:1fr}
+  .ready{flex-direction:column;align-items:flex-start}
+  .picker .select{min-width:0;width:100%}
+  .saved-setup{align-items:flex-start;flex-direction:column}
+}
+
+
+/* ===== workspace background =====
+   The artwork lives in the two gutters beside the 1180px content column and
+   nowhere else, so nothing is ever drawn under a heading, card or table.
+   Below 1330px there is no gutter left, so it is dropped rather than allowed
+   behind the text. Decorative only — never intercepts a click. */
+.ws-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ws-decor__side{position:absolute;top:0;bottom:0;width:calc((100% - var(--shell)) / 2);overflow:hidden}
+@media (max-width:1180px){ .page{padding-left:24px;padding-right:24px} }
+.ws-decor__side--left{left:0}
+.ws-decor__side--right{right:0;transform:scaleX(-1)}
+.ws-decor__side svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* everything the shell renders sits above the artwork */
+.frame > *:not(.ws-decor){position:relative;z-index:1}
+@media(max-width:1330px){
+  /* the content column now fills the width — no gutter left to draw in */
+  .ws-decor{display:none}
+}
+
+/* ===== upload screen: value chain under the drop zone =====
+   Four steps with a line icon above each label, arrows in between, aligned
+   to the icon row rather than the text so the arrows read as connectors. */
+.value-chain{display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;
+  gap:4px 2px;list-style:none;margin:22px 0 0;padding:0}
+.value-chain li{display:flex;align-items:flex-start;gap:6px}
+.value-chain__step{display:flex;flex-direction:column;align-items:center;gap:8px;
+  width:86px;text-align:center}
+.value-chain__icon{color:var(--teal);line-height:0}
+.value-chain__label{font-family:var(--body);font-size:var(--text-description);font-weight:600;
+  line-height:1.35;color:var(--muted)}
+.value-chain li:not(:last-child)::after{content:"→";margin-top:8px;font-size:var(--text-body);
+  color:var(--border-strong)}
+.value-chain__end .value-chain__label{color:var(--teal-deep);font-weight:700}
+@media(max-width:520px){
+  .value-chain li:not(:last-child)::after{display:none}
+  .value-chain__step{width:120px}
+}
+.card-title--sprout::before{content:"🌱";margin-right:8px}
+
+/* ===== back to the homepage =====
+   A bare text link in the top bar read as body copy; this gives it a button
+   shape so it is obviously somewhere to click. The logo goes home too. */
+.topbar .workspace-home-link{display:inline-flex;align-items:center;gap:7px;margin-left:auto;
+  padding:9px 15px;border:1px solid var(--line);border-radius:999px;background:#fff;
+  font-family:var(--body);font-size:var(--text-secondary);font-weight:700;line-height:1;
+  color:var(--teal-deep);text-decoration:none;white-space:nowrap;
+  transition:background-color .15s ease,border-color .15s ease}
+.topbar .workspace-home-link:hover{background:var(--teal-tint);border-color:var(--mint);text-decoration:none}
+.topbar .workspace-home-link svg{flex:none}
+.brand{transition:opacity .15s ease}
+.brand:hover{opacity:.78}
+
+/* ===== top bar on a narrow screen =====
+   Logo, Homepage and the language switcher need about 460px; below roughly
+   560px they no longer fit on one line. Rather than letting the switcher fall
+   to the left while the button stays right, the logo takes the first row and
+   the two controls sit together, right-aligned, on the second.
+   Selectors are doubled up so this wins wherever language.css is loaded. */
+@media (max-width:560px){
+  .frame .topbar{height:auto;min-height:76px;padding-top:14px;padding-bottom:14px;
+    flex-wrap:wrap;justify-content:flex-end;row-gap:12px;column-gap:10px}
+  .frame .topbar .brand{flex:1 0 100%}
+  .frame .topbar .workspace-home-link{margin-left:0}
+}
+
+/* ===== step 2: confirmation states =====
+   A semantic system rather than green everywhere:
+   sage = confirmed, amber = needs attention, red = error. */
+.pill--confirmed{background:#EDF3EE;color:#3F7A5D;border:1px solid #D8E6DA}
+.all-set{display:flex;align-items:center;gap:9px;margin:18px 0 0;padding:12px 15px;
+  background:#EDF3EE;border:1px solid #D8E6DA;border-radius:12px;
+  font-size:var(--text-body);font-weight:700;color:#3F7A5D}
+
+/* ===== step 2: guidance panel =====
+   Was a dark teal block that read as a separate product. As a sage card it
+   belongs to the same design system as the rest of the screen. */
+.panel-sage{width:330px;flex:none;padding:24px;border-radius:22px;
+  background:#F1F8F3;border:1px solid #D8E6DA;color:var(--ink)}
+.panel-sage__title{display:flex;align-items:center;gap:9px;margin:0;
+  font-family:var(--display);font-size:var(--text-section-head);font-weight:700}
+.panel-sage__subtitle{margin:26px 0 0;font-family:var(--display);
+  font-size:var(--text-body);font-weight:700}
+.panel-sage__lede{margin:7px 0 0;font-size:var(--text-secondary);line-height:1.5;color:var(--muted)}
+
+.sage-steps,.sage-formats{list-style:none;margin:14px 0 0;padding:0;counter-reset:sage}
+.sage-steps li,.sage-formats li{counter-increment:sage;position:relative;
+  padding-left:30px;margin-bottom:11px;font-size:var(--text-secondary);line-height:1.45;color:var(--ink-2)}
+.sage-steps li::before,.sage-formats li::before{content:counter(sage);position:absolute;left:0;top:0;
+  width:20px;height:20px;border-radius:50%;background:#DCEEE2;color:#3F7A5D;
+  font-size:var(--text-label);font-weight:800;display:flex;align-items:center;justify-content:center}
+.sage-formats li b{display:block;font-size:var(--text-secondary);color:var(--ink)}
+.sage-formats li span{color:var(--muted)}
+
+.panel-sage__privacy{display:flex;align-items:flex-start;gap:11px;margin:24px 0 0;padding-top:18px;
+  border-top:1px solid #D8E6DA;font-size:var(--text-description);line-height:1.5;color:var(--muted)}
+.panel-sage__lock{width:28px;height:28px;flex:none;border-radius:50%;background:#DCEEE2;color:var(--teal-deep);
+  display:flex;align-items:center;justify-content:center}
+.panel-sage__privacy b{display:block;color:var(--ink);font-size:var(--text-secondary);margin-bottom:2px}
+
+/* the two identity formats are numbered choices, not a wall of text */
+.identity__path-name{display:flex;align-items:center;gap:9px}
+.identity__path-number{width:20px;height:20px;flex:none;border-radius:50%;
+  background:var(--teal-tint);color:var(--teal-deep);font-size:var(--text-label);font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+
+@media (max-width:1240px){ .panel-sage{width:100%} }
+
+/* The status pill is nowrap everywhere else, which is right — but in the
+   mapping table it runs past the narrow status column, so let it wrap there. */
+.dtable .mapping-status .pill{white-space:normal;line-height:1.35;text-align:left}
+
+/* ===== product readiness =====
+   Step 3 leads with products, not charts: which product, what is wrong,
+   how bad, what now. The charts are still here, one fold down. */
+.summary{align-self:stretch;display:grid;grid-template-columns:minmax(230px,.9fr) minmax(0,2fr);
+  gap:18px;align-items:center;margin-top:16px;padding:16px 18px;
+  background:var(--teal-tint);border:1px solid #CFE3DE;border-radius:16px}
+.summary__verdict{display:flex;align-items:center;gap:13px}
+.summary__tick{width:40px;height:40px;flex:none;border-radius:50%;background:var(--teal);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:19px}
+.summary__verdict h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
+.summary__verdict p{font-size:var(--text-secondary);color:var(--muted);margin:2px 0 0}
+.summary__groups{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.summary__group{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;
+  column-gap:10px;padding:10px 13px;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.summary__group b{grid-row:1 / span 2;align-self:center;font-family:var(--display);font-size:25px;font-weight:800;line-height:1}
+.summary__name{font-size:var(--text-secondary);font-weight:700;color:var(--ink)}
+.summary__note{font-size:var(--text-label);color:var(--muted);line-height:1.35}
+.summary__group--ready{background:#F1F8F5;border-color:#CFE3DE}
+.summary__group--ready b{color:var(--teal-deep)}
+.summary__group--review{background:#FDF7EC;border-color:#EFE0C4}
+.summary__group--review b{color:#8A5A12}
+.summary__group--missing{background:#FDF3F2;border-color:#F0D6D2}
+.summary__group--missing b{color:#9B3939}
+
+.nextstep{align-self:stretch;margin:11px 0 0;font-size:var(--text-body);color:var(--ink-2)}
+.nextstep b{color:var(--ink)}
+
+.attention{align-self:stretch;margin-top:16px}
+.attention__head{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;
+  background:#FDF3F2;border:1px solid #F0D6D2;border-radius:14px}
+.attention__icon{width:30px;height:30px;flex:none;border-radius:50%;background:#9B3939;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800}
+.attention__head h2{font-family:var(--display);font-size:17px;font-weight:700;margin:0;color:#7E2E2E}
+.attention__head p{font-size:var(--text-description);color:var(--muted);margin:3px 0 0}
+.attention__search{display:flex;align-items:center;gap:7px;margin-left:auto;flex:0 1 220px;min-width:0;
+  padding:6px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--muted)}
+.attention__search:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.attention__search input{flex:1;min-width:0;border:0;outline:0;background:none;
+  font-family:var(--body);font-size:var(--text-description);color:var(--ink)}
+.attention__sort{flex:none}
+.attention__sort select{font-family:var(--body);font-size:var(--text-description);color:var(--ink-2);
+  padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
+
+.pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-top:12px}
+.pcard{display:flex;flex-direction:column;gap:10px;padding:15px;background:#fff;
+  border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-card)}
+/* US2.3 AC8 — the freshness state is carried on the card's left edge, in the
+   colours the spec fixes. The product card IS the freshness card now. */
+.pcard--ready{border-left:4px solid #167D74}
+.pcard--review{border-left:4px solid #D99120}
+.pcard--missing{border-left:4px solid #9B3939}
+.pcard__head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pcard__name{display:block;font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
+.pcard__code{display:block;font-size:var(--text-description);color:var(--muted);margin-top:2px}
+.pcard__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.pcard__facts>div{padding:9px 11px;background:#F7FAF9;border-radius:10px}
+.pcard__key{display:block;font-size:var(--text-label);color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.pcard__facts b{font-size:var(--text-secondary);color:var(--ink);font-family:var(--data)}
+.pcard__trend .pcard__key{margin-bottom:5px}
+.pcard__why{display:flex;align-items:flex-start;gap:8px;margin:0;padding:9px 11px;border-radius:10px;
+  font-size:var(--text-description);line-height:1.45}
+.pcard__why>span:first-child{width:15px;height:15px;flex:none;border-radius:50%;font-size:var(--text-label);
+  font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.pcard__why>span:not(:first-child){flex:1;min-width:0}
+.pcard__why--review{background:#FDF7EC;color:#7A5210}
+.pcard__why--review>span:first-child{background:#E8D4AC;color:#7A5210}
+.pcard__why--missing{background:#FDF3F2;color:#7E2E2E}
+.pcard__why--missing>span:first-child{background:#F0D0CC;color:#7E2E2E}
+.pcard__action{align-self:stretch;justify-content:center;margin-top:auto}
+
+/* weekly sales for one product — never called stock: the file carries one
+   stock count, not a weekly stock level */
+.spark{display:flex;align-items:flex-end;gap:3px;height:28px}
+.spark--labelled{height:52px}
+.spark--empty{font-size:var(--text-label);color:var(--muted);align-items:center}
+.spark__col{flex:1;min-width:5px;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-end;height:100%;gap:2px}
+.spark__value,.spark__day{font-size:var(--text-label);color:var(--muted);font-family:var(--data);line-height:1}
+.spark__bar{width:100%;max-width:18px;background:var(--mint);border-radius:3px 3px 0 0;min-height:3px}
+.spark--labelled .spark__bar{background:#B9DED4}
+.spark__bar--missing{height:7px;border:1px dashed #6E7B80;background:transparent;border-radius:3px}
+
+/* US2.3 AC8's "current" colour: the ready group is the products whose stock
+   count is still current, so it carries the same left edge as the cards. */
+.readylist{align-self:stretch;margin-top:16px;padding:13px 16px;background:#F1F8F5;
+  border:1px solid #CFE3DE;border-left:4px solid #167D74;border-radius:14px}
+.readylist>summary{display:flex;align-items:center;gap:11px;cursor:pointer;list-style:none}
+.readylist>summary::-webkit-details-marker{display:none}
+.readylist__tick{width:30px;height:30px;flex:none;border-radius:50%;background:var(--teal);color:#fff;
+  display:flex;align-items:center;justify-content:center}
+.readylist>summary b{font-family:var(--display);font-size:17px;color:var(--ink);display:block}
+.readylist__note{font-size:var(--text-description);color:var(--muted)}
+.readylist .table-scroll{margin-top:11px}
+.dtable--ready td{vertical-align:middle}
+
+.deepdive{align-self:stretch;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:13px}
+.deepdive>summary{cursor:pointer;list-style:none;font-size:var(--text-secondary);font-weight:700;
+  color:var(--ink-2);display:flex;align-items:center;gap:9px}
+.deepdive>summary::-webkit-details-marker{display:none}
+.deepdive>summary::before{content:"";width:0;height:0;flex:none;
+  border:4px solid transparent;border-left-color:var(--muted);transition:transform .15s ease}
+.deepdive[open]>summary::before{transform:rotate(90deg) translateX(-1px)}
+
+@media (max-width:900px){
+  .summary{grid-template-columns:1fr}
+  .attention__head{flex-wrap:wrap}
+  .attention__sort,.attention__search{margin-left:0;width:100%;flex:1 1 100%}
+  .attention__sort select{width:100%}
+}
+
+/* ===== stock-age bands (US2.3) =====
+   Colours are fixed by AC8: #167D74 current, #D99120 getting old,
+   #9B3939 too old. Each band is named in words too, so the colour is
+   never the only signal. */
+.bands{align-self:stretch;margin-top:14px}
+.bands__bar{display:flex;gap:2px;height:14px;border-radius:7px;overflow:hidden;background:var(--line-soft)}
+.bands__seg{min-width:4px}
+.bands__legend{list-style:none;margin:11px 0 0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:7px 18px}
+.bands__legend li{display:grid;grid-template-columns:10px auto minmax(0,1fr) auto;align-items:center;
+  gap:7px;font-size:var(--text-description)}
+.bands__swatch{width:10px;height:10px;border-radius:3px}
+.bands__name{font-weight:700;color:var(--ink-2)}
+.bands__note{color:var(--muted)}
+.bands__count{font-family:var(--data);color:var(--ink-2)}
+
+/* AC2 — count date, age and label on one line */
+.freshness-card__line{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.freshness-card__line i{font-style:normal;color:var(--line)}
+.freshness-card__line strong{font-weight:700;color:var(--ink)}
+
+/* what Used and Left out mean, said in the open rather than on hover */
+.use-key{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0 0;
+  font-size:var(--text-description);color:var(--muted)}
+
+/* the scope statement now leads the screen instead of closing it */
+.validity--top{align-self:stretch;margin-top:14px}
+.footer-row--actions{justify-content:flex-end}
+
+
+/* ===== problems to review =====
+   Grouped by what is wrong, in the retailer's words. The technical wording
+   lives in the tooltip and the download — secondary, not gone. */
+.problems{align-self:stretch;margin-top:16px;padding:16px 18px;background:#fff;
+  border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-card)}
+.problems__head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.problems__head h2{font-family:var(--display);font-size:var(--text-section-head);font-weight:700;margin:0}
+.problems__head p{font-size:var(--text-description);color:var(--muted);margin:3px 0 0}
+.problems__counts{display:flex;gap:7px;flex-wrap:wrap}
+.problems__list{display:grid;gap:9px;margin-top:13px}
+.problems__download{margin-top:13px}
+
+.igroup{border:1px solid var(--line);border-radius:12px}
+.igroup>summary{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;list-style:none;border-radius:11px}
+.igroup[open]>summary{border-radius:11px 11px 0 0}
+.igroup>summary::-webkit-details-marker{display:none}
+.igroup__icon{width:22px;height:22px;flex:none;border-radius:50%;color:#fff;font-weight:800;
+  font-size:var(--text-description);display:flex;align-items:center;justify-content:center}
+.igroup--fix{background:#FDF7F6;border-color:#F0D6D2}
+.igroup--fix .igroup__icon{background:#9B3939}
+.igroup--review{background:#FDFAF4;border-color:#EFE0C4}
+.igroup--review .igroup__icon{background:#B0801E}
+.igroup__title{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;flex:1;min-width:0}
+.igroup__title b{font-size:var(--text-body);color:var(--ink)}
+.igroup__count{font-size:var(--text-description);color:var(--muted)}
+.igroup__rows{list-style:none;margin:0;padding:0 13px 12px;display:grid;gap:9px}
+.igroup__rows li{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.4fr) auto;
+  gap:12px;align-items:start;padding:11px 13px;background:#fff;border:1px solid var(--line-soft);border-radius:10px}
+.igroup__who b{display:block;font-size:var(--text-secondary);color:var(--ink)}
+.igroup__who .num,.igroup__key{display:block;font-size:var(--text-label);color:var(--muted)}
+.igroup__key{text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.igroup__found,.igroup__todo{font-size:var(--text-description);color:var(--ink-2);min-width:0}
+
+/* automatic tidy-ups are not errors, so they never look like one */
+.tidyups__tick{width:22px;height:22px;flex:none;border-radius:50%;background:var(--teal);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:var(--text-description)}
+.tidyups__note{font-size:var(--text-label);color:var(--muted);margin:9px 0 0}
+
+@media (max-width:900px){
+  .igroup__rows li{grid-template-columns:1fr}
+}
+
+/* ===== tidy-ups =====
+   Evidence, not work — one line each, folded away until asked for. */
+.tidyups{margin-top:13px;padding:11px 13px;background:#F1F8F5;border:1px solid #CFE3DE;border-radius:12px}
+.tidyups>summary{display:flex;align-items:center;gap:9px;cursor:pointer;list-style:none;
+  font-size:var(--text-secondary);font-weight:700;color:var(--ink-2)}
+.tidyups>summary::-webkit-details-marker{display:none}
+.tidyups__list{list-style:none;margin:11px 0 0;padding:0;display:grid;gap:7px}
+.tidyups__list li{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:var(--text-description);color:var(--muted)}
+.tidyups__list b{font-family:var(--data);color:var(--ink-2)}
+.tidyups__where{font-weight:600;color:var(--ink-2)}
+.tidyups__what{color:var(--muted)}
+
+
+/* ===== charts =====================================================
+   Thin marks, hairline recessive axes, 4px rounded data-ends anchored to
+   the baseline, a 2px surface gap between touching fills. Text never wears
+   the data colour — the mark beside it carries identity. */
+
+/* sub-cause bars inside an issue card */
+.minibars{position:relative;display:flex;align-items:flex-end;gap:8px;width:100%;margin-top:10px;
+  padding-top:2px;pointer-events:none}
+.minibars__col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
+.minibars__value{font-family:var(--data);font-size:var(--text-label);color:var(--muted);line-height:1}
+.minibars__track{width:100%;max-width:24px;height:30px;display:flex;align-items:flex-end}
+.minibars__fill{width:100%;border-radius:4px 4px 0 0;min-height:2px}
+.minibars__label{font-size:var(--text-label);line-height:1.2;color:var(--muted);text-align:center;
+  overflow-wrap:anywhere}
+
+/* weekly sales columns */
+.chart__plot{display:flex;align-items:flex-end;gap:2px;height:140px;padding-top:18px;
+  border-bottom:1px solid var(--line)}
+.chart__col{position:relative;flex:1;min-width:0;max-width:24px;height:100%;
+  display:flex;align-items:flex-end;justify-content:center}
+.chart__bar{width:100%;background:var(--teal);border-radius:4px 4px 0 0}
+.chart__cap{position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+  font-family:var(--data);font-size:var(--text-label);color:var(--muted);white-space:nowrap}
+.chart__axis{display:flex;justify-content:space-between;margin-top:6px;
+  font-size:var(--text-label);color:var(--muted);font-family:var(--data)}
+
+.chart-row{align-self:stretch;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+  gap:10px;margin-top:13px}
+.chart-card{margin-top:0}
+.chart-card__body{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:18px;align-items:end}
+
+.statgrid{display:grid;gap:10px;margin:0}
+.statgrid div{display:flex;flex-direction:column;gap:1px}
+.statgrid dt{font-size:var(--text-label);color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.statgrid dd{margin:0;font-family:var(--display);font-size:19px;font-weight:800;color:var(--ink);line-height:1.1}
+
+/* part-to-whole; every exact count lives in the legend, not on the arc */
+.donut{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:14px}
+.donut__ring{position:relative;flex:none}
+.donut__centre{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:1px;pointer-events:none}
+.donut__centre b{font-family:var(--display);font-size:22px;font-weight:800;color:var(--ink);line-height:1}
+.donut__centre span{font-size:var(--text-label);color:var(--muted)}
+.donut__legend{flex:1;min-width:190px;list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.donut__legend li{display:grid;grid-template-columns:10px minmax(0,1fr) auto 38px;align-items:center;
+  gap:8px;font-size:var(--text-description)}
+.donut__swatch{width:10px;height:10px;border-radius:3px}
+.donut__name{color:var(--ink-2);overflow-wrap:anywhere}
+.donut__count,.donut__share{font-family:var(--data);color:var(--muted);text-align:right}
+
+/* one column per week; a missing week is a gap, never a zero-height bar */
+.weekchart{display:flex;align-items:flex-end;gap:3px;height:52px;margin-top:10px;
+  padding-bottom:5px;border-bottom:1px solid var(--line)}
+.weekchart__col{position:relative;flex:1;min-width:6px;max-width:22px;height:100%;
+  display:flex;align-items:flex-end}
+.weekchart__mark{width:100%;border-radius:4px 4px 0 0}
+.weekchart__col--observed_demand .weekchart__mark{background:var(--teal)}
+/* recorded a real zero: a solid baseline tick, so it is not mistaken for a gap */
+.weekchart__col--confirmed_zero_sales .weekchart__mark{height:3px;background:var(--teal-deep);border-radius:2px}
+/* activity that nets to zero: outlined, distinct from both zero and missing */
+.weekchart__col--net_zero_with_activity .weekchart__mark{height:9px;border:1.5px solid var(--teal);
+  background:#fff;border-radius:3px}
+/* no data at all: hatched, never a bar — "no data" is not "no sales" */
+.weekchart__col--missing .weekchart__mark{height:9px;border-radius:3px;
+  border:1px dashed #6E7B80;
+  background:repeating-linear-gradient(45deg,#C6D6D1 0 3px,#FFFFFF 3px 6px)}
+
+.weekchart-key{display:flex;flex-wrap:wrap;gap:12px;margin-top:9px;
+  font-size:var(--text-label);color:var(--muted)}
+.weekchart-key span{display:inline-flex;align-items:center;gap:5px}
+.weekchart-key i{width:12px;height:9px;border-radius:3px;display:inline-block}
+
+@media (max-width:1100px){
+  .chart-row{grid-template-columns:1fr}
+  .chart-card__body{grid-template-columns:1fr;align-items:stretch}
+  .statgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .minibars{gap:5px}
+  .minibars__label{display:none}
+}
+
+/* ===== readiness result (US2.1 AC1) =====
+   Can continue / Must fix / Next step, so the outcome is legible before the
+   table. The three cells read left to right as: what works, what does not,
+   what to do about it. */
+.verdict{align-self:stretch;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:11px}
+.verdict__cell{display:flex;flex-direction:column;gap:2px;padding:15px 17px;border-radius:14px;
+  border:1px solid var(--line);background:#fff}
+.verdict__cell--go{background:var(--teal-tint);border-color:#CFE3DE}
+.verdict__cell--fix{background:#FDF3F2;border-color:#F0D6D2}
+.verdict__label{font-size:var(--text-eyebrow);font-weight:800;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--muted)}
+.verdict__value{font-family:var(--display);font-size:27px;font-weight:800;color:var(--ink);line-height:1.1}
+.verdict__note,.verdict__next{font-size:var(--text-description);line-height:1.5;color:var(--muted);margin:0}
+.verdict__next{margin-top:5px}
+.verdict__cell--next .btn{margin-top:10px;align-self:flex-start}
+
+/* ===== find one product without reading the table (US2.1 AC2) ===== */
+.issue-search{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.issue-search__field{display:flex;align-items:center;gap:8px;flex:1 1 240px;min-width:0;
+  padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--muted)}
+.issue-search__field:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.issue-search__field input{flex:1;min-width:0;border:0;outline:0;background:none;
+  font-family:var(--body);font-size:var(--text-body);color:var(--ink)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+@media (max-width:900px){ .verdict{grid-template-columns:1fr} }
+
+/* ===== field help =====
+   The attribute descriptions used to sit under every label, which made the
+   mapping table a wall of prose. They are tooltips now: the table scans, and
+   the explanation is one hover or tap away. aria-label carries the same text,
+   so it reaches screen readers whether or not the bubble is shown. */
+.field-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+/* The bubble is a SIBLING of the button, not its child: a <button> will not
+   size an absolutely positioned descendant from its content, so the text
+   spilled out of the dark box. The wrapper is the positioning context. */
+.hint{position:relative;display:inline-flex;flex:none}
+.hint__btn{width:18px;height:18px;padding:0;border:0;border-radius:50%;
+  background:#E7EFEC;color:#5C7A72;font-family:var(--body);font-size:var(--text-label);font-weight:800;
+  line-height:1;cursor:help;display:inline-flex;align-items:center;justify-content:center}
+.hint__btn:hover,.hint__btn:focus-visible{background:var(--teal-tint);color:var(--teal-deep)}
+.hint__bubble{position:absolute;left:-10px;bottom:calc(100% + 9px);
+  width:260px;max-width:min(260px,calc(100vw - 48px));padding:10px 12px;border-radius:10px;background:var(--ink);color:#F3FAF8;
+  font-size:var(--text-description);font-weight:400;line-height:1.45;text-align:left;
+  opacity:0;visibility:hidden;transition:opacity .13s ease;z-index:5;pointer-events:none;
+  box-shadow:0 8px 24px rgba(22,49,59,.22)}
+.hint__bubble::after{content:"";position:absolute;top:100%;left:19px;
+  border:6px solid transparent;border-top-color:var(--ink)}
+.hint:hover .hint__bubble,.hint__btn:focus-visible ~ .hint__bubble{opacity:1;visibility:visible}
+/* near the top of the table there is no room above, so it flips below */
+.dtable tbody tr:first-child .hint__bubble{bottom:auto;top:calc(100% + 9px)}
+.dtable tbody tr:first-child .hint__bubble::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--ink)}
+/* flipped when a left-anchored bubble would run off the right edge */
+.hint__bubble--end{left:auto;right:-10px}
+.hint__bubble--end::after{left:auto;right:19px}
+@media (max-width:760px){ .hint__bubble{width:210px} }
+
+/* ===== the workflow grows =====
+   🌱 → 🌿 → 🍃 → 🌳 across the four steps. Steps not yet reached are drained
+   of colour, so the row reads as progress at a glance. Purely decorative —
+   aria-hidden, and the dot still carries the number or the tick. */
+.stepper{height:auto;min-height:96px;padding-top:12px;padding-bottom:12px}
+.step__plant{font-size:16px;line-height:1;filter:grayscale(1);opacity:.35;
+  transition:filter .2s ease,opacity .2s ease}
+.step--done .step__plant,.step--current .step__plant{filter:none;opacity:1}
+.step--current .step__plant{transform:scale(1.15)}
+.step__line{top:35px}
+@media(prefers-reduced-motion:reduce){.step__plant{transition:none}}
+@media(max-width:760px){ .step__plant{font-size:14px} }
+
+/* ===== identity choice =====
+   The card is the button. Previously a 14px button sat inside a large card,
+   so the obvious target did nothing. */
+.identity__path{display:flex;flex-direction:column;align-items:flex-start;gap:5px;width:100%;
+  font-family:var(--body);text-align:left;cursor:pointer;
+  transition:border-color .15s ease,background-color .15s ease,box-shadow .15s ease}
+.identity__path:hover:not(:disabled){border-color:var(--mint);background:#F4FAF8}
+.identity__path:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.identity__path:disabled{cursor:not-allowed;opacity:.62}
+.identity__path--on{box-shadow:0 0 0 3px rgba(22,125,116,.12)}
+.identity__path-fields{margin:0}
+.identity__path-state{margin-top:5px;font-size:var(--text-secondary);font-weight:700;color:var(--teal)}
+.identity__path--on .identity__path-state{color:var(--teal-deep)}
+.identity__path:disabled .identity__path-state{color:var(--muted);font-weight:600}
+
+/* ===== what more data would unlock =====
+   A light teal box inside the sage panel. Grouped by the missing column
+   rather than by capability, so it is three short rows instead of seven
+   repeating paragraphs. */
+.unlocks{margin-top:24px;padding:15px 16px;background:var(--teal-tint);
+  border:1px solid #B9DBD5;border-radius:14px}
+.unlocks__title{margin:0;font-family:var(--display);font-size:var(--text-body);
+  font-weight:700;color:var(--teal-deep)}
+.unlocks__lede{margin:4px 0 0;font-size:var(--text-description);color:var(--muted)}
+.unlocks__list{list-style:none;margin:11px 0 0;padding:0}
+.unlocks__list li{margin-bottom:9px;font-size:var(--text-description);line-height:1.45}
+.unlocks__list li:last-child{margin-bottom:0}
+.unlocks__list b{display:block;font-size:var(--text-secondary);color:var(--ink)}
+.unlocks__list span{color:var(--muted)}
+
+/* ===== thumb ergonomics on a phone =====
+   Everything above was sized for a mouse pointer. A finger is about 9mm
+   across, so on a touch-width screen the standalone controls grow to 44px —
+   Apple's and Material's floor — and the small text token goes up a step so
+   nothing sits at 10px in the hand.
+
+   The inline "i" dots are the deliberate exception. They live mid-sentence
+   next to a label; pushing them to 44px would either break the line box or
+   overlap the control beside them and steal its taps. They go to 28px, which
+   clears WCAG 2.5.8 Target Size (Minimum, 24x24) on its own, and the label
+   they belong to stays tappable too. */
+@media (max-width:768px){
+  :root{--text-label:11px}
+
+  /* standalone controls: full thumb target */
+  .btn--small{min-height:44px;padding:10px 16px}
+  .btn--link{min-height:44px;display:inline-flex;align-items:center;padding:1px 8px}
+  .topbar .workspace-home-link{min-height:44px;padding-top:12px;padding-bottom:12px}
+  .language-switcher select,
+  .frame .language-switcher select{min-height:44px}
+  .pcard__action{min-height:44px}
+
+  /* selects and search fields: the row height is the target */
+  .frame select,
+  .frame input[type="text"],
+  .frame input[type="search"]{min-height:44px}
+
+  /* inline help dots: 28px, still inside the line */
+  .hint__btn{width:28px;height:28px;font-size:13px}
+}
+
+/* ===== a table is not a phone layout =====
+   Step 2's mapping grid and Step 3's ready list are four and five columns
+   wide. On a 390px screen they either squeeze every column to nothing or
+   force the page sideways, and neither is readable. Below 768px each row
+   becomes its own card: the first cell is the card's title, and every other
+   cell states the column it came from, taken from its data-label.
+
+   The header row goes to screen readers only, because the labels now sit
+   inside each card and a visible header would just repeat them. */
+@media (max-width:768px){
+  .dtable--cards{display:block;min-width:0;table-layout:auto}
+
+  .dtable--cards thead{position:absolute;width:1px;height:1px;
+    overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+  .dtable--cards tbody{display:block}
+  .dtable--cards tbody tr{display:block;padding:15px 16px;margin-bottom:12px;
+    border:1px solid var(--line);border-radius:14px;background:#fff}
+  .dtable--cards tbody tr:last-child{margin-bottom:0}
+
+  /* label left, value right — the row reads as "Stock age … 12 days" */
+  .dtable--cards td{display:flex;gap:14px;align-items:baseline;
+    justify-content:space-between;text-align:right;
+    padding:9px 0;border-bottom:1px solid var(--line-soft)}
+  .dtable--cards td::before{content:attr(data-label);flex:none;text-align:left;
+    font-family:var(--body);font-size:var(--text-description);font-weight:700;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.55px}
+  .dtable--cards tbody tr td:last-child{border-bottom:0;padding-bottom:0}
+
+  /* the first cell is the heading of the card, so it keeps the full width */
+  .dtable--cards td.dtable__title{display:block;text-align:left;
+    padding:0 0 11px;border-bottom:1px solid var(--line)}
+  .dtable--cards td.dtable__title::before{content:none}
+
+  /* controls inside a card take the room the value side has */
+  .dtable--cards td .select{flex:1;min-width:0;width:100%}
+  .dtable--cards td .mapping-status{align-items:flex-end}
+  .dtable--cards td .spark{justify-content:flex-end}
+
+  /* nothing to scroll sideways any more */
+  .table-scroll:has(.dtable--cards),
+  .table-scroll--x:has(.dtable--cards){overflow-x:visible}
+}
+
+/* ===== learn more =====
+   Borrowed from the reference video's status bands rather than its layout: a
+   soft tinted row with no hard border, the question on the left behind a
+   decorative icon, a chevron on the right. Built on <details>/<summary>, so
+   the keyboard, the expanded state and the screen-reader announcement are the
+   browser's job rather than ours.
+
+   Two shapes off one component. "rows" is the compact contextual list that
+   sits under a step; "cards" is the 2x2 grid the homepage uses. */
+.learn{margin-top:28px}
+.learn__title{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0;letter-spacing:-.2px}
+.learn__lede{margin:7px 0 0;font-size:var(--text-body);color:var(--muted);max-width:56ch}
+.learn__list{margin-top:14px}
+
+.learn__item{background:var(--teal-tint);border-radius:14px;overflow:hidden}
+.learn__item + .learn__item{margin-top:8px}
+
+.learn__q{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;
+  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink);
+  list-style:none;min-height:44px}
+.learn__q::-webkit-details-marker{display:none}
+.learn__q:hover{background:#DDEDE8}
+.learn__item:focus-within .learn__q{outline:2px solid var(--teal);outline-offset:-2px}
+.learn__icon{font-size:17px;line-height:1;flex:none}
+.learn__qtext{flex:1;min-width:0}
+
+/* the chevron is drawn, not typed, so it can rotate when the row opens */
+.learn__chevron{flex:none;width:9px;height:9px;margin-right:3px;
+  border-right:2px solid var(--teal-deep);border-bottom:2px solid var(--teal-deep);
+  transform:rotate(45deg) translate(-2px,-2px);transition:transform .16s ease}
+.learn__item[open] .learn__chevron{transform:rotate(-135deg) translate(-3px,-3px)}
+
+.learn__a{margin:0;padding:0 15px 15px 43px;font-size:var(--text-secondary);
+  line-height:1.6;color:var(--ink-2);max-width:62ch}
+
+@media(prefers-reduced-motion:reduce){.learn__chevron{transition:none}}
+
+/* the homepage grid: four cards, two up */
+.learn--cards .learn__list{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.learn--cards .learn__item + .learn__item{margin-top:0}
+.learn--cards .learn__q{padding:15px 17px}
+.learn--cards .learn__a{padding:0 17px 16px 45px}
+
+@media (max-width:900px){
+  .learn--cards .learn__list{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .learn__q{padding:14px;gap:10px}
+  .learn__a{padding-left:15px;font-size:var(--text-body)}
+  .learn--cards .learn__a{padding-left:17px}
+}
+
+/* ===== impact dashboard =====
+   An impact story, not an analytics console: one figure per card, its unit
+   next to it, and the basis for it underneath in plain words. Two of the
+   three cards carry no number, so they are styled as clearly unlocked-later
+   rather than as a zero or an error — a muted fill, no big figure, and the
+   sentence that says what would fill them. */
+/* The page shell already sets the width. Capping the section at 1000px left
+   a third of a 1440 screen empty, which §5 asks us to avoid — so the cards
+   and the SDG band use the full shell and only the prose is measured. */
+.impact{max-width:none}
+.impact__title{font-family:var(--display);font-size:var(--text-page-title);
+  font-weight:700;margin:6px 0 0;letter-spacing:-.8px}
+.impact__lede{margin:10px 0 0;font-size:var(--text-lead);line-height:1.55;
+  color:var(--muted);max-width:68ch}
+
+.impact__cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.icard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;
+  box-shadow:var(--shadow-card);display:flex;flex-direction:column}
+.icard--figure{background:var(--teal-tint);border-color:#CFE4DE}
+.icard--locked{background:#F7FAF9}
+.icard__icon{font-size:22px;line-height:1}
+.icard__label{margin-top:12px;font-family:var(--display);font-size:var(--text-description);
+  font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.icard__value{margin:7px 0 0;font-family:var(--display);font-size:38px;font-weight:700;
+  line-height:1.1;letter-spacing:-1.4px;color:var(--ink)}
+.icard__unit{margin-left:7px;font-size:var(--text-body);font-weight:600;color:var(--muted)}
+/* An unlocked-later card must not shout as loudly as the card that has a
+   real number — at 18px bold it out-weighed the one figure on the page. */
+.icard__value--locked{font-size:var(--text-body);font-weight:600;color:var(--muted-2);
+  letter-spacing:0;line-height:1.4}
+.icard__caption{margin:6px 0 0;font-size:var(--text-body);font-weight:600;color:var(--ink-2)}
+.icard__basis{margin:9px 0 0;font-size:var(--text-secondary);line-height:1.55;color:var(--muted)}
+
+/* the per-product working behind the one real figure */
+.impact__lines{margin-top:24px;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.impact__lines h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0 0 4px}
+.impact__lines ul{list-style:none;margin:0;padding:0}
+.impact__lines li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.impact__lines li:last-child{border-bottom:0;padding-bottom:0}
+.impact__lname{display:flex;align-items:baseline;gap:9px;min-width:0;flex-wrap:wrap}
+.impact__lname .num{font-size:var(--text-secondary);color:var(--muted)}
+.impact__lunits{flex:none;font-family:var(--display);font-weight:700;text-align:right}
+.impact__lunits span{font-family:var(--body);font-weight:400;font-size:var(--text-secondary);
+  color:var(--muted);margin-left:6px}
+
+.impact__sdg{display:flex;gap:18px;align-items:flex-start;margin-top:24px;padding:22px;
+  border-radius:18px;background:#BD8C2B;color:#fff}
+.impact__sdg-mark{flex:none;font-family:var(--display);font-size:46px;font-weight:800;
+  line-height:1;letter-spacing:-3px}
+.impact__sdg h2{font-family:var(--display);font-size:var(--text-section-head);
+  font-weight:700;margin:0}
+.impact__sdg p{margin:8px 0 0;font-size:var(--text-body);line-height:1.6;max-width:62ch}
+.impact__sdg-link{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;
+  color:#fff;font-weight:700;font-size:var(--text-secondary);text-decoration:underline}
+
+.impact__method{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);
+  font-size:var(--text-secondary);line-height:1.6;color:var(--muted);max-width:76ch}
+.impact__actions{margin-top:20px}
+
+@media (max-width:1100px){
+  .impact__cards{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .impact__cards{grid-template-columns:1fr;gap:12px}
+  .impact__title{font-size:30px}
+  .impact__lede{font-size:var(--text-body)}
+  .icard__value{font-size:34px}
+  .impact__lines li{align-items:flex-start;flex-direction:column;gap:3px}
+  .impact__lunits{text-align:left}
+  .impact__sdg{gap:14px;padding:18px}
+  .impact__sdg-mark{font-size:38px}
+  .impact__actions .btn{width:100%}
+}
+
+/* ===== stepper on a phone =====
+   Four labels across 390px left "Check readiness" and "Plan purchases"
+   touching. The labels stay — they are how someone knows where they are —
+   but they wrap inside their own column and the columns get a gutter. */
+@media (max-width:560px){
+  .stepper__inner{gap:2px}
+  .step__label{font-size:var(--text-description);line-height:1.25;
+    text-align:center;padding-inline:3px;hyphens:auto}
+  .step__button{gap:5px}
+}
+.language-switcher{display:inline-flex;align-items:center;gap:5px;background:#edf7ef;border:1px solid #c3e2cc;border-radius:10px;padding:6px 8px;color:#2f6c49;flex-shrink:0;line-height:1.3}
+.language-switcher select{line-height:1.4;font-family:inherit;font-size:12px;font-weight:600;color:inherit;background:transparent;border:0;padding:4px 0;cursor:pointer;max-width:120px;min-height:28px}
+.language-switcher:focus-within{outline:2px solid #167d74;outline-offset:3px}
+.sl-nav-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.mapping-bulk{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 24px;background:#edf7ef;border-bottom:1px solid #c3e2cc}
+.mapping-bulk p{margin:4px 0;color:#456455}.mapping-bulk small{display:block;color:#456455;line-height:1.5}.mapping-bulk .btn{flex-shrink:0}
+.topbar{gap:16px}.topbar .session-status{flex-wrap:wrap}.topbar .workspace-home-link{margin-left:auto}
+html[lang=zh-Hans] .sl-home h1,html[lang=zh-Hans] .sl-home h2,html[lang=zh-Hans] .sl-home h3{letter-spacing:0;line-height:1.3}
+html[lang=ms] .sl-home h1{font-size:clamp(36px,5.8vw,76px);letter-spacing:-.045em}
+@media(max-width:900px){.topbar{height:auto;min-height:76px;padding:16px 20px;flex-wrap:wrap}.topbar .session-status{width:100%}.sl-nav-actions{gap:8px}.mapping-bulk{align-items:flex-start;flex-direction:column}}
+@media(max-width:600px){.sl-nav{flex-wrap:wrap;gap:12px}.sl-nav-actions{flex:1;justify-content:flex-end}.sl-nav-actions .sl-button--small{padding:10px 12px;font-size:12px}.language-switcher{padding:4px}.language-switcher svg{width:23px}.language-switcher select{max-width:102px}.mapping-bulk .btn{width:100%}.mapping-bulk{padding:18px}}
+
+body{margin:0}
+html[lang="zh-Hans"] .impact__title,html[lang="zh-Hans"] h2,html[lang="zh-Hans"] .learn__title{
+  font-family:"Noto Sans SC","Manrope",sans-serif;letter-spacing:0;line-height:1.3}
+</style></head>
+<body>
+<div class="frame">
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="StockLess"><svg class="brand__logo" style="height:36px;width:auto;display:block" viewBox="46 36 996 249" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="StockLess" > <g transform="translate(18 11) scale(.58)"> <rect x="104" y="48" width="72" height="244" rx="20" fill="#0F6664" /> <rect x="195" y="111" width="72" height="181" rx="20" fill="#16958B" /> <rect x="286" y="164" width="72" height="128" rx="20" fill="#65C9BC" /> <path d="M374 142C374 92 409 63 459 63C459 112 426 142 374 142Z" fill="#0A504F" /> <circle cx="386" cy="222" r="40" fill="#E0A63A" /> <path d="M414 193L437 216L415 236C409 219 409 207 414 193Z" fill="#FFFFFF" /> <path d="M52 242H94C109 242 121 249 130 261L149 285C159 298 175 305 192 305H396C415 305 431 293 437 275L448 242H476V370C476 424 432 468 378 468H150C96 468 52 424 52 370V242Z" fill="#0F6664" /> <path d="M52 242H94C109 242 121 249 130 261L149 285C159 298 175 305 192 305H396C415 305 431 293 437 275L448 242" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" /> <rect x="206" y="382" width="154" height="30" rx="15" fill="#FFFFFF" /> </g> <path fill="#18221D" d="M380.475 217.25Q368.625 217.25 359.1375 213.125Q349.65 209.0 343.5375 201.3125Q337.425 193.625 335.775 183.05L354.525 180.2Q356.925 189.8 364.38750000000005 195.05Q371.85 200.3 381.6 200.3Q387.375 200.3 392.475 198.5Q397.575 196.7 400.7625 193.25Q403.95 189.8 403.95 184.775Q403.95 182.525 403.2 180.6125Q402.45 178.7 400.98749999999995 177.2Q399.525 175.7 397.23749999999995 174.46249999999998Q394.95 173.225 391.95 172.325L364.05 164.075Q360.45 163.025 356.2875 161.2625Q352.125 159.5 348.4125 156.3875Q344.7 153.275 342.3375 148.4375Q339.975 143.60000000000002 339.975 136.47500000000002Q339.975 126.05 345.26250000000005 118.9625Q350.55 111.875 359.51250000000005 108.35Q368.475 104.825 379.425 104.9Q390.525 104.97500000000001 399.225 108.6875Q407.925 112.4 413.775 119.45Q419.625 126.5 422.025 136.47500000000002L402.6 139.85000000000002Q401.4 134.15 397.98749999999995 130.1375Q394.575 126.125 389.6625 124.025Q384.75 121.925 379.2 121.775Q373.8 121.7 369.1875 123.3875Q364.575 125.075 361.7625 128.225Q358.95 131.375 358.95 135.575Q358.95 139.55 361.35 142.0625Q363.75 144.575 367.3125 146.0375Q370.875 147.5 374.55 148.47500000000002L393.9 153.875Q397.875 154.925 402.825 156.72500000000002Q407.775 158.525 412.35 161.75Q416.925 164.975 419.88750000000005 170.225Q422.85 175.475 422.85 183.575Q422.85 191.975 419.3625 198.3125Q415.875 204.65 409.95 208.85000000000002Q404.025 213.05 396.4125 215.15Q388.8 217.25 380.475 217.25Z M481.6 215.0Q473.575 216.5 465.8875 216.3125Q458.2 216.125 452.125 213.4625Q446.05 210.8 442.9 205.025Q440.125 199.775 439.975 194.3Q439.825 188.825 439.825 181.925V148.175H425.125V134.0H439.825V111.5H457.825V134.0H481.6V148.175H457.825V180.875Q457.825 185.75 457.9375 189.425Q458.05 193.1 459.475 195.425Q462.175 199.925 468.1 200.45Q474.025 200.975 481.6 199.85Z M529.85 217.25Q517.7 217.25 508.625 211.775Q499.55 206.3 494.5625 196.66250000000002Q489.575 187.025 489.575 174.5Q489.575 161.75 494.67499999999995 152.15Q499.775 142.55 508.84999999999997 137.15Q517.925 131.75 529.85 131.75Q542.075 131.75 551.1500000000001 137.225Q560.225 142.7 565.25 152.33749999999998Q570.275 161.975 570.275 174.5Q570.275 187.1 565.2125 196.7375Q560.15 206.375 551.075 211.8125Q542.0 217.25 529.85 217.25ZM529.85 200.3Q540.65 200.3 545.9 193.10000000000002Q551.15 185.9 551.15 174.5Q551.15 162.725 545.825 155.71249999999998Q540.5 148.7 529.85 148.7Q522.575 148.7 517.8875 151.96249999999998Q513.2 155.225 510.95000000000005 161.0375Q508.7 166.85 508.7 174.5Q508.7 186.275 514.0625 193.28750000000002Q519.425 200.3 529.85 200.3Z M616.9499999999999 217.25Q604.425 217.25 595.575 211.6625Q586.725 206.075 582.0375 196.39999999999998Q577.35 186.725 577.275 174.5Q577.35 162.05 582.1875 152.41250000000002Q587.025 142.775 595.95 137.2625Q604.875 131.75 617.175 131.75Q630.975 131.75 640.5375 138.6875Q650.1 145.625 653.025 157.625L635.025 162.5Q632.925 155.975 628.05 152.33749999999998Q623.175 148.7 616.9499999999999 148.7Q609.9 148.7 605.325 152.0375Q600.75 155.375 598.575 161.225Q596.4 167.075 596.4 174.5Q596.4 186.05 601.575 193.175Q606.75 200.3 616.9499999999999 200.3Q624.15 200.3 628.3125 197.0Q632.475 193.7 634.5749999999999 187.475L653.025 191.6Q649.275 203.975 639.9 210.6125Q630.525 217.25 616.9499999999999 217.25Z M662.95 215.0 663.1 107.0H681.4V173.0L711.025 134.0H733.6L702.1750000000001 174.5L736.3000000000001 215.0H712.375L681.4 176.0V215.0Z" /> <path fill="#0F6664" d="M740.3000000000001 215.0V107.0H758.3750000000001V198.05H806.075V215.0Z M850.6500000000001 217.25Q838.35 217.25 829.05 211.925Q819.75 206.6 814.5375 197.14999999999998Q809.325 187.7 809.325 175.4Q809.325 162.125 814.4250000000001 152.3375Q819.5250000000001 142.55 828.6000000000001 137.15Q837.6750000000001 131.75 849.6 131.75Q862.2 131.75 871.0125 137.6375Q879.825 143.525 884.1 154.25Q888.375 164.975 887.325 179.525H828.6750000000001Q829.575 188.225 833.85 193.55Q839.25 200.3 849.6 200.3Q856.2750000000001 200.3 861.1125000000001 197.3375Q865.95 194.375 868.575 188.75L886.4250000000001 194.15Q881.7750000000001 205.1 872.0625 211.175Q862.35 217.25 850.6500000000001 217.25ZM868.95 165.875Q867.975 158.0 864.75 153.65Q860.1750000000001 147.575 850.35 147.575Q839.25 147.575 833.85 154.4Q830.4000000000001 158.825 829.125 165.875Z M930.4 217.25Q915.4 217.25 906.025 210.5Q896.65 203.75 894.625 191.525L913.075 188.675Q914.5 194.675 919.375 198.125Q924.25 201.575 931.675 201.575Q938.2 201.575 941.7625 198.9875Q945.325 196.4 945.325 191.9Q945.325 189.125 944.0125 187.4375Q942.7 185.75 938.2750000000001 184.175Q933.85 182.6 924.7 180.2Q914.5 177.5 908.5 174.3875Q902.5 171.275 899.875 167.0Q897.25 162.725 897.25 156.65Q897.25 149.075 901.225 143.45Q905.2 137.825 912.325 134.7875Q919.45 131.75 929.125 131.75Q938.575 131.75 945.8875 134.675Q953.2 137.60000000000002 957.7 143.0Q962.2 148.4 963.25 155.675L944.8 158.975Q944.125 153.8 940.1125 150.8Q936.1 147.8 929.425 147.425Q923.05 147.05 919.15 149.3375Q915.25 151.625 915.25 155.75Q915.25 158.075 916.825 159.725Q918.4 161.375 923.1624999999999 163.025Q927.925 164.675 937.375 167.075Q947.05 169.55 952.8625 172.7375Q958.675 175.925 961.2625 180.35000000000002Q963.85 184.775 963.85 191.075Q963.85 203.3 954.9625000000001 210.275Q946.075 217.25 930.4 217.25Z M1006.625 217.25Q991.625 217.25 982.25 210.5Q972.875 203.75 970.85 191.525L989.3000000000001 188.675Q990.725 194.675 995.6 198.125Q1000.475 201.575 1007.9 201.575Q1014.4250000000001 201.575 1017.9875000000001 198.9875Q1021.5500000000001 196.4 1021.5500000000001 191.9Q1021.5500000000001 189.125 1020.2375000000001 187.4375Q1018.9250000000001 185.75 1014.5 184.175Q1010.075 182.6 1000.9250000000001 180.2Q990.725 177.5 984.725 174.3875Q978.725 171.275 976.1 167.0Q973.475 162.725 973.475 156.65Q973.475 149.075 977.45 143.45Q981.4250000000001 137.825 988.5500000000001 134.7875Q995.6750000000001 131.75 1005.35 131.75Q1014.8000000000001 131.75 1022.1125 134.675Q1029.425 137.60000000000002 1033.925 143.0Q1038.425 148.4 1039.475 155.675L1021.025 158.975Q1020.35 153.8 1016.3375000000001 150.8Q1012.325 147.8 1005.65 147.425Q999.275 147.05 995.375 149.3375Q991.475 151.625 991.475 155.75Q991.475 158.075 993.05 159.725Q994.625 161.375 999.3875 163.025Q1004.15 164.675 1013.6 167.075Q1023.275 169.55 1029.0875 172.7375Q1034.9 175.925 1037.4875000000002 180.35000000000002Q1040.075 184.775 1040.075 191.075Q1040.075 203.3 1031.1875 210.275Q1022.3000000000001 217.25 1006.625 217.25Z" /> </svg></a>
+    <a class="workspace-home-link" href="#home"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2M6 9.8V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9.8"/></svg><span data-i18n="Homepage">Homepage</span></a>
+    <label class="language-switcher"><svg viewBox="0 0 36 32" width="28" height="26" aria-hidden="true"><path d="M3 2h18v23H9l-6 5Z" fill="#86c7a1"/><path d="M20 2h10a3 3 0 0 1 3 3v20H20Z" fill="#d6eddd"/><path d="m7 20 5-13 5 13m-8-4h6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 10h9m-5-3v3m-3 3c1 4 4 6 7 8m-1-11c-1 5-3 8-7 11" fill="none" stroke="#347452" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <select aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="ms" lang="ms">Bahasa Melayu</option>
+        <option value="zh" lang="zh-Hans">&#20013;&#25991;</option>
+      </select>
+    </label>
+  </header>
+  <nav class="stepper" aria-label="Progress"><ol class="stepper__inner"><li class="step step--done"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌱</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Upload">Upload</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step step--done"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌿</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Map columns">Map columns</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step step--done"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🪴</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Check readiness">Check readiness</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step step--current"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌳</span><span class="step__dot">4</span><span class="step__label" data-i18n="Plan purchases">Plan purchases</span></button><span class="step__line" aria-hidden="true"></span></li></ol></nav>
+  <div class="page">
+    <section class="impact" aria-labelledby="impact-title">
+      <p class="eyebrow" data-i18n="IMPACT DASHBOARD">IMPACT DASHBOARD</p>
+      <h1 class="impact__title" data-i18n="Your impact" id="impact-title">Your impact</h1>
+      <p class="impact__lede" data-i18n="See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.">See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.</p>
+
+      <div class="impact__cards">
+        <article class="icard icard--figure">
+          <span class="icard__icon" aria-hidden="true">&#9851;&#65039;</span>
+          <span class="icard__label" data-i18n="Environmental impact">Environmental impact</span>
+          <p class="icard__value">24<span class="icard__unit" data-i18n="units">units</span></p>
+          <p class="icard__caption" data-i18n="Estimated overstock avoided">Estimated overstock avoided</p>
+          <p class="icard__basis"><span data-basis>Across 3 of 7 products StockLess could judge.</span></p>
+        </article>
+        <article class="icard icard--locked">
+          <span class="icard__icon" aria-hidden="true">&#128176;</span>
+          <span class="icard__label" data-i18n="Business impact">Business impact</span>
+          <p class="icard__value icard__value--locked" data-i18n="Not yet available">Not yet available</p>
+          <p class="icard__caption" data-i18n="Estimated cost avoided">Estimated cost avoided</p>
+          <p class="icard__basis" data-i18n="Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.">Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.</p>
+        </article>
+        <article class="icard icard--locked">
+          <span class="icard__icon" aria-hidden="true">&#127757;</span>
+          <span class="icard__label" data-i18n="Emissions impact">Emissions impact</span>
+          <p class="icard__value icard__value--locked" data-i18n="Not yet available">Not yet available</p>
+          <p class="icard__caption" data-i18n="Estimated emissions avoided">Estimated emissions avoided</p>
+          <p class="icard__basis" data-i18n="Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.">Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.</p>
+        </article>
+      </div>
+
+      <section class="impact__lines" aria-labelledby="impact-lines-title">
+        <h2 data-i18n="Where the estimate comes from" id="impact-lines-title">Where the estimate comes from</h2>
+        <ul><li><span class="impact__lname"><b>Kopi O Kaw 2in1</b><span class="num">MM0001</span></span><span class="impact__lunits">11 <span data-i18n="units above expected demand">units above expected demand</span></span></li><li><span class="impact__lname"><b>Milo 3in1</b><span class="num">MM0014</span></span><span class="impact__lunits">8 <span data-i18n="units above expected demand">units above expected demand</span></span></li><li><span class="impact__lname"><b>Milo 3in1</b><span class="num">MM0027</span></span><span class="impact__lunits">5 <span data-i18n="units above expected demand">units above expected demand</span></span></li></ul>
+      </section>
+
+      <section class="impact__sdg" aria-labelledby="impact-sdg-title">
+        <span class="impact__sdg-mark" aria-hidden="true">12</span>
+        <div>
+          <h2 data-i18n="Your contribution to SDG 12.3" id="impact-sdg-title">Your contribution to SDG 12.3</h2>
+          <p data-i18n="Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.">Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.</p>
+          <a class="impact__sdg-link" href="https://sdgs.un.org/goals/goal12" target="_blank" rel="noreferrer noopener"><span data-i18n="Read about SDG 12 ">Read about SDG 12 </span> <span aria-hidden="true">&#8599;</span></a>
+        </div>
+      </section>
+
+      <section class="learn learn--rows" aria-labelledby="learn-rows">
+        <h2 class="learn__title" data-i18n="Understanding your impact" id="learn-rows">Understanding your impact</h2>
+        <p class="learn__lede" data-i18n="Learn how these numbers are calculated and what they mean.">Learn how these numbers are calculated and what they mean.</p>
+        <div class="learn__list"><details class="learn__item"><summary class="learn__q"><span class="learn__icon" aria-hidden="true">♻️</span><span class="learn__qtext" data-i18n="How is overstock avoided estimated?">How is overstock avoided estimated?</span><span class="learn__chevron" aria-hidden="true"></span></summary><p class="learn__a" data-i18n="For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.">For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.</p></details><details class="learn__item"><summary class="learn__q"><span class="learn__icon" aria-hidden="true">💰</span><span class="learn__qtext" data-i18n="How would cost saving be calculated?">How would cost saving be calculated?</span><span class="learn__chevron" aria-hidden="true"></span></summary><p class="learn__a" data-i18n="By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.">By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.</p></details><details class="learn__item"><summary class="learn__q"><span class="learn__icon" aria-hidden="true">🌍</span><span class="learn__qtext" data-i18n="What does CO₂e mean, and why is it blank?">What does CO₂e mean, and why is it blank?</span><span class="learn__chevron" aria-hidden="true"></span></summary><p class="learn__a" data-i18n="CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.">CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.</p></details><details class="learn__item"><summary class="learn__q"><span class="learn__icon" aria-hidden="true">📈</span><span class="learn__qtext" data-i18n="Are these figures exact?">Are these figures exact?</span><span class="learn__chevron" aria-hidden="true"></span></summary><p class="learn__a" data-i18n="No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.">No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.</p></details></div>
+      </section>
+
+      <p class="impact__method" data-i18n="Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.">Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.</p>
+
+      <div class="impact__actions">
+        <button type="button" class="btn btn--ghost"><span data-i18n="← Back to the purchase plan">← Back to the purchase plan</span></button>
+      </div>
+    </section>
+</div>
+</div>
+<script>
+(function () {
+  var T = {"en": {"Upload": "Upload", "Map columns": "Map columns", "Check readiness": "Check readiness", "Plan purchases": "Plan purchases", "units above expected demand": "units above expected demand", "IMPACT DASHBOARD": "IMPACT DASHBOARD", "Your impact": "Your impact", "See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.": "See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.", "Environmental impact": "Environmental impact", "Estimated overstock avoided": "Estimated overstock avoided", "Business impact": "Business impact", "Not yet available": "Not yet available", "Estimated cost avoided": "Estimated cost avoided", "Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.": "Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.", "Emissions impact": "Emissions impact", "Estimated emissions avoided": "Estimated emissions avoided", "Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.": "Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.", "Where the estimate comes from": "Where the estimate comes from", "Your contribution to SDG 12.3": "Your contribution to SDG 12.3", "Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.": "Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.", "Read about SDG 12 ": "Read about SDG 12 ", "Understanding your impact": "Understanding your impact", "Learn how these numbers are calculated and what they mean.": "Learn how these numbers are calculated and what they mean.", "How is overstock avoided estimated?": "How is overstock avoided estimated?", "For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.": "For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.", "How would cost saving be calculated?": "How would cost saving be calculated?", "By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.": "By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.", "What does CO₂e mean, and why is it blank?": "What does CO₂e mean, and why is it blank?", "CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.": "CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.", "Are these figures exact?": "Are these figures exact?", "No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.": "No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.", "Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.": "Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.", "← Back to the purchase plan": "← Back to the purchase plan"}, "ms": {"Upload": "Muat naik", "Map columns": "Padankan lajur", "Check readiness": "Semak kesediaan", "Plan purchases": "Rancang pembelian", "units above expected demand": "unit melebihi permintaan yang dijangka", "IMPACT DASHBOARD": "PAPAN IMPAK", "Your impact": "Impak anda", "See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.": "Lihat manfaat berpotensi daripada pelan pembelian anda. Ini ialah anggaran daripada fail anda sendiri, bukan hasil yang diukur.", "Environmental impact": "Impak alam sekitar", "Estimated overstock avoided": "Anggaran lebihan stok yang dielakkan", "Business impact": "Impak perniagaan", "Not yet available": "Belum tersedia", "Estimated cost avoided": "Anggaran kos yang dielakkan", "Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.": "Padankan Kos seunit dalam Langkah 2 dan StockLess boleh menilai lebihan stok di atas dalam ringgit.", "Emissions impact": "Impak pelepasan", "Estimated emissions avoided": "Anggaran pelepasan yang dielakkan", "Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.": "Fail anda mengukur stok dalam unit, bukan kilogram, jadi pelepasan belum boleh dianggarkan daripadanya.", "Where the estimate comes from": "Dari mana anggaran ini datang", "Your contribution to SDG 12.3": "Sumbangan anda kepada SDG 12.3", "Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.": "Pelan pembelian anda menyokong SDG 12.3 dengan membantu mengurangkan pembaziran makanan yang boleh dielakkan di peringkat peruncitan. StockLess tidak mendakwa pelan anda menyebabkan pengurangan yang diukur — ia menunjukkan lebihan stok yang dielakkan oleh pelan itu.", "Read about SDG 12 ": "Baca tentang SDG 12 ", "Understanding your impact": "Memahami impak anda", "Learn how these numbers are calculated and what they mean.": "Ketahui cara nombor ini dikira dan apa maksudnya.", "How is overstock avoided estimated?": "Bagaimanakah lebihan stok yang dielakkan dianggarkan?", "For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.": "Bagi setiap produk yang StockLess dapat nilai, ia mengambil stok yang akan anda pegang selepas pesanan yang dirancang dan menolak had atas julat permintaan empat minggu yang dijangka. Apa-apa yang melebihi angka itu ialah stok yang tidak mungkin anda jual dalam empat minggu. Produk tanpa kedua-dua anggaran permintaan dan angka stok ditinggalkan, bukan dikira sebagai sifar.", "How would cost saving be calculated?": "Bagaimanakah penjimatan kos akan dikira?", "By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.": "Dengan menilai unit lebihan stok di atas pada harga yang anda bayar kepada pembekal bagi satu unit. Itu memerlukan lajur Kos seunit dipadankan dalam Langkah 2. Sehingga itu, StockLess menunjukkan unit dan membiarkan angka ringgit kosong, bukannya mengandaikan satu harga.", "What does CO₂e mean, and why is it blank?": "Apakah maksud CO₂e, dan mengapa ia kosong?", "CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.": "CO₂e ialah setara karbon dioksida — satu angka yang merangkumi beberapa gas rumah hijau. UNEP mengaitkan 8–10% pelepasan gas rumah hijau global dengan kehilangan dan pembaziran makanan, tetapi itu ialah bahagian global, bukan kadar bagi setiap kilogram. Menukar pelan anda kepada CO₂e memerlukan berat setiap unit, dan fail StockLess merekodkan unit, bukan berat.", "Are these figures exact?": "Adakah angka ini tepat?", "No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.": "Tidak. Ia ialah anggaran berdasarkan data jualan, stok dan pembelian dalam fail anda, dan ia bertujuan menyokong keputusan anda, bukan melaporkan hasil yang disahkan. Sejarah jualan yang lebih panjang dan lebih bersih memberikan anggaran yang lebih mantap; yang pendek atau berlubang memberikan anggaran yang lebih kasar.", "Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.": "Kaedah: anggaran menggunakan julat permintaan yang StockLess kira daripada baris jualan anda, angka stok dalam fail anda, dan kuantiti pesanan yang anda masukkan. Angka berubah apabila fail atau pesanan yang anda rancang berubah.", "← Back to the purchase plan": "← Kembali ke pelan pembelian"}, "zh": {"Upload": "上传", "Map columns": "匹配字段", "Check readiness": "检查就绪", "Plan purchases": "采购计划", "units above expected demand": "件高于预期需求", "IMPACT DASHBOARD": "影响面板", "Your impact": "您的影响", "See the potential benefits from your purchase plan. These are estimates from your own file, not measured outcomes.": "查看您的采购计划可能带来的效益。以下数字是根据您自己的文件估算的，并非实测结果。", "Environmental impact": "环境影响", "Estimated overstock avoided": "预计避免的过量库存", "Business impact": "营运影响", "Not yet available": "暂时无法计算", "Estimated cost avoided": "预计避免的成本", "Map Unit cost in Step 2 and StockLess can price the overstock above in ringgit.": "在步骤 2 中匹配「单位成本」，StockLess 就能把上面的过量库存换算成令吉金额。", "Emissions impact": "排放影响", "Estimated emissions avoided": "预计避免的排放", "Your file measures stock in units, not kilograms, so emissions cannot be estimated from it yet.": "您的文件以件数而非公斤记录库存，因此暂时无法据此估算排放量。", "Where the estimate comes from": "这个估算从何而来", "Your contribution to SDG 12.3": "您对可持续发展目标 12.3 的贡献", "Your purchase plan supports SDG 12.3 by helping reduce avoidable food waste at the retail level. StockLess does not claim your plan caused a measured reduction — it shows the overstock the plan avoids.": "您的采购计划有助于减少零售环节可避免的食物浪费，从而支持可持续发展目标 12.3。StockLess 并不声称您的计划造成了可测量的减少，它只显示该计划避免的过量库存。", "Read about SDG 12 ": "了解可持续发展目标 12 ", "Understanding your impact": "理解您的影响", "Learn how these numbers are calculated and what they mean.": "了解这些数字如何计算，以及它们的含义。", "How is overstock avoided estimated?": "避免的过量库存是如何估算的？", "For each product StockLess could judge, it takes the stock you would hold after your planned order and subtracts the top of the expected four-week demand range. Anything above that top figure is stock you are unlikely to sell inside four weeks. Products without both a demand estimate and a stock figure are left out rather than counted as zero.": "对于 StockLess 能够判断的每件商品，它会取您下单后将持有的库存，减去预期四周需求区间的上限。超出该上限的部分，就是您在四周内不太可能售出的库存。缺少需求估算或库存数字的商品会被排除，而不是计为零。", "How would cost saving be calculated?": "成本节省会如何计算？", "By pricing the overstock units above at what you pay your supplier for one unit. That needs the Unit cost column mapped in Step 2. Until it is, StockLess shows the units and leaves the ringgit figure blank rather than assuming a price.": "把上面的过量库存件数，按您向供应商支付的单位价格换算。这需要在步骤 2 中匹配「单位成本」列。在此之前，StockLess 只显示件数，并把令吉金额留空，而不是假设一个价格。", "What does CO₂e mean, and why is it blank?": "CO₂e 是什么意思？为什么这里是空的？", "CO₂e is carbon dioxide equivalent — a single figure covering several greenhouse gases. UNEP attributes 8–10% of global greenhouse gas emissions to food loss and waste, but that is a global share, not a rate per kilogram. Converting your plan into CO₂e would need the weight of each unit, and a StockLess file records units, never weights.": "CO₂e 即二氧化碳当量——用一个数字涵盖多种温室气体。联合国环境规划署将全球温室气体排放的 8–10% 归因于粮食损失与浪费，但那是全球占比，并非每公斤的换算率。要把您的计划换算成 CO₂e，需要每件商品的重量，而 StockLess 的文件只记录件数，从不记录重量。", "Are these figures exact?": "这些数字精确吗？", "No. They are estimates based on the sales, stock and purchase data in your file, and they are meant to support your decision rather than to report a verified outcome. A longer and cleaner sales history gives a steadier estimate; a short or patchy one gives a rougher estimate.": "不精确。它们是根据您文件中的销售、库存和采购数据做出的估算，用于辅助您做决定，而不是报告经过验证的结果。销售历史越长、越干净，估算越稳定；记录短或不完整，估算就越粗略。", "Method: estimates use the demand range StockLess worked out from your sales rows, the stock figures in your file, and the order quantities you entered. Figures change when your file or your planned orders change.": "方法：估算使用 StockLess 根据您的销售记录得出的需求区间、您文件中的库存数字，以及您输入的订购数量。文件或计划订单变动时，数字也会随之变化。", "← Back to the purchase plan": "← 返回采购计划"}}, B = {"en": "Across {0} of {1} products StockLess could judge.", "ms": "Merentasi {0} daripada {1} produk yang StockLess dapat nilai.", "zh": "在 StockLess 能够判断的 {1} 件商品中，有 {0} 件。"};
+  var HTML_LANG = { en: 'en', ms: 'ms', zh: 'zh-Hans' };
+  var sel = document.querySelector('.language-switcher select');
+  function apply(lang) {
+    var dict = T[lang] || T.en;
+    document.documentElement.lang = HTML_LANG[lang] || 'en';
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var v = dict[el.getAttribute('data-i18n')];
+      if (v) el.textContent = v;
+    });
+    var basis = document.querySelector('[data-basis]');
+    if (basis) basis.textContent = (B[lang] || B.en)
+      .replace('{0}', '3').replace('{1}', '7');
+  }
+  sel.addEventListener('change', function () { apply(sel.value); });
+  apply('en');
+})();
+</script>
+</body></html>

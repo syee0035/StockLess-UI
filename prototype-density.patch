@@ -138,7 +138,7 @@ index 0000000..68c752c
 +  );
 +}
 diff --git a/src/components/Layout.tsx b/src/components/Layout.tsx
-index ecd0a99..d15ff18 100644
+index ecd0a99..93226e5 100644
 --- a/src/components/Layout.tsx
 +++ b/src/components/Layout.tsx
 @@ -15,11 +15,6 @@ export function Layout() {
@@ -169,7 +169,27 @@ index ecd0a99..d15ff18 100644
          }}>
            {/* Logo */}
            <a href="/" style={{ marginRight: 'auto', lineHeight: 0 }}>
-@@ -100,44 +91,21 @@ function LayoutInner() {
+@@ -65,7 +56,7 @@ function LayoutInner() {
+             }}>
+               <span style={{
+                 fontFamily: 'var(--font-data)',
+-                fontSize: '9px',
++                fontSize: '10px',
+                 fontWeight: 600,
+                 textTransform: 'uppercase',
+                 letterSpacing: '0.12em',
+@@ -88,7 +79,9 @@ function LayoutInner() {
+                       background: active ? '#8FD2C8' : 'transparent',
+                       border: 'none',
+                       borderRadius: '3px',
+-                      padding: '3px 8px',
++                      // a demo-only switch, but still tappable on a phone
++                      minHeight: '32px',
++                      padding: '3px 10px',
+                       cursor: 'pointer',
+                       transition: 'all 120ms ease',
+                     }}
+@@ -100,44 +93,21 @@ function LayoutInner() {
              </div>
            )}
  
@@ -229,6 +249,28 @@ index ecd0a99..d15ff18 100644
  
            {/* How it works */}
            <button
+diff --git a/src/components/ui.tsx b/src/components/ui.tsx
+index 23c5a71..c1608e7 100644
+--- a/src/components/ui.tsx
++++ b/src/components/ui.tsx
+@@ -50,6 +50,8 @@ export function BtnPrimary({ children, onClick, style }: { children: ReactNode;
+         background: 'var(--teal)',
+         border: '1px solid var(--teal-deep)',
+         borderRadius: 'var(--radius-btn)',
++        // 44px is the live app's .btn height and the touch-target floor
++        minHeight: '44px',
+         padding: '11px 24px',
+         cursor: 'pointer',
+         transition: 'background var(--transition)',
+@@ -81,6 +83,8 @@ export function BtnSecondary({ children, onClick, style }: { children: ReactNode
+         background: 'var(--card)',
+         border: '1px solid var(--line)',
+         borderRadius: 'var(--radius-btn)',
++        // 44px is the live app's .btn height and the touch-target floor
++        minHeight: '44px',
+         padding: '11px 24px',
+         cursor: 'pointer',
+         transition: 'border-color var(--transition), background var(--transition)',
 diff --git a/src/decor.css b/src/decor.css
 new file mode 100644
 index 0000000..5cdfd34
@@ -337,7 +379,7 @@ index 0000000..5cdfd34
 +   sideways. `clip` stops that without making a scroll container. */
 +html, body { overflow-x: clip; }
 diff --git a/src/i18n/translations.ts b/src/i18n/translations.ts
-index 181c2e0..b99f08b 100644
+index 181c2e0..151e184 100644
 --- a/src/i18n/translations.ts
 +++ b/src/i18n/translations.ts
 @@ -3,6 +3,7 @@ export type Lang = 'en' | 'ms' | 'zh';
@@ -406,7 +448,7 @@ index 181c2e0..b99f08b 100644
    'example.productEyebrow': 'Selected product · SKU 000101',
    'example.chip.ready': 'Ready',
    'example.chip.steadySeller': 'Steady seller',
-@@ -151,21 +156,111 @@ const en = {
+@@ -151,21 +156,131 @@ const en = {
    'placeholder.step': 'Step {n} — placeholder',
    'upload.title': 'Upload your sales file',
    'upload.desc': 'This screen will let Aina choose a CSV file from her computer.',
@@ -511,6 +553,26 @@ index 181c2e0..b99f08b 100644
 +  'ex.expiry.none': 'No expiry inside the next 4 weeks',
 +  'ex.expiry.earliest': 'Earliest expiry: 2026-10-30',
 +
++  /* Learn more — mirrors the live homepage */
++  'learn.eyebrow': 'Learn more',
++  'learn.title': 'Learn more about StockLess',
++  'learn.lede': 'Find answers to common questions about how StockLess works and how it can help your business.',
++  'learn.still': 'Still have questions?',
++  'learn.viewAll': 'View all FAQs',
++  'learn.q1': 'How does StockLess work?',
++  'learn.a1': 'StockLess reads your sales and stock data to show expected demand, flag the products that need attention, and suggest purchase quantities you stay in control of.',
++  'learn.q2': 'What data do I need?',
++  'learn.a2': 'Sale date, product identification and quantity sold are enough to get started. Optional stock information adds stock freshness and sharper purchase suggestions.',
++  'learn.q3': 'How are purchase recommendations made?',
++  'learn.a3': 'StockLess compares the demand it expects over the coming weeks against the stock you already hold, and suggests the quantity that covers the gap.',
++  'learn.q4': 'How does StockLess help reduce food waste?',
++  'learn.a4': 'By matching what you buy to what you are likely to sell, StockLess aims to cut the overstock that turns into avoidable waste.',
++  'learn.q5': 'Is my sales data uploaded?',
++  'learn.a5': 'No. StockLess processes your CSV directly in your browser. Your sales rows and product identifiers are not uploaded to an AI or API service.',
++  'learn.q6': 'How does StockLess estimate demand?',
++  'learn.a6': 'From the weekly sales patterns in the rows that passed the data checks. The estimates reflect the data you provide, so a longer and cleaner history gives a steadier picture.',
++  'learn.q7': 'Does StockLess automatically place an order?',
++  'learn.a7': 'No. StockLess suggests a quantity and explains its reasoning. You decide the final number, and placing the order stays between you and your supplier.',
  } as const;
  
  /* ─────────────────────────────────────────────────────────────────────────
@@ -521,7 +583,7 @@ index 181c2e0..b99f08b 100644
    'nav.howItWorks': 'Cara ia berfungsi',
    'nav.close': 'Tutup',
    'lang.en': 'EN',
-@@ -173,14 +268,14 @@ const ms: Record<TranslationKey, string> = {
+@@ -173,14 +288,14 @@ const ms: Record<TranslationKey, string> = {
    'lang.zh': '中文',
    'modal.eyebrow': 'Cara ia berfungsi',
    'modal.heading': 'Empat langkah untuk pesanan yang lebih bijak',
@@ -544,7 +606,7 @@ index 181c2e0..b99f08b 100644
    'whatYouGet.eyebrow': 'Apa yang anda perolehi di akhirnya',
    'whatYouGet.item.1': 'Jualan mingguan bagi produk dipilih',
    'whatYouGet.item.2': 'Purata terkini anda (8 minggu penuh terakhir)',
-@@ -231,10 +326,13 @@ const ms: Record<TranslationKey, string> = {
+@@ -231,10 +346,13 @@ const ms: Record<TranslationKey, string> = {
    'stat.2.figure': '12%',
    'stat.2.desc': 'daripada pembaziran makanan itu datang dari sektor runcit.',
    'stat.3.figure': '2030',
@@ -562,7 +624,7 @@ index 181c2e0..b99f08b 100644
    'sdg.responsible': 'Penggunaan dan Pengeluaran yang Bertanggungjawab',
    'sdg.tagline': 'Matlamat bersama. Tindakan harian.',
    'sdg.eyebrow': 'Baik untuk kedai anda. Lebih baik untuk planet.',
-@@ -244,7 +342,7 @@ const ms: Record<TranslationKey, string> = {
+@@ -244,7 +362,7 @@ const ms: Record<TranslationKey, string> = {
    'footer.tagline': 'Penambahan stok lebih bijak. Kurang pembaziran makanan.',
    'footer.backToTop': 'Kembali ke atas',
    'returning.eyebrow': 'Selamat kembali',
@@ -571,7 +633,7 @@ index 181c2e0..b99f08b 100644
    'returning.subtext': 'Sambung dari mana anda berhenti, atau muat naik fail baharu.',
    'files.privacy': 'Disimpan pada komputer ini sahaja.',
    'files.heading': 'Fail terdahulu',
-@@ -252,6 +350,7 @@ const ms: Record<TranslationKey, string> = {
+@@ -252,6 +370,7 @@ const ms: Record<TranslationKey, string> = {
    'files.delete': 'Padam',
    'files.rows': '{n} baris',
    'example.chip': 'Contoh interaktif',
@@ -579,7 +641,7 @@ index 181c2e0..b99f08b 100644
    'example.productEyebrow': 'Produk dipilih · SKU 000101',
    'example.chip.ready': 'Sedia',
    'example.chip.steadySeller': 'Penjual stabil',
-@@ -281,19 +380,111 @@ const ms: Record<TranslationKey, string> = {
+@@ -281,19 +400,131 @@ const ms: Record<TranslationKey, string> = {
    'placeholder.step': 'Langkah {n} — pemegang tempat',
    'upload.title': 'Muat naik fail jualan anda',
    'upload.desc': 'Skrin ini membolehkan Aina memilih fail CSV dari komputernya.',
@@ -684,6 +746,26 @@ index 181c2e0..b99f08b 100644
 +  'ex.expiry.none': 'Tiada tarikh luput dalam 4 minggu akan datang',
 +  'ex.expiry.earliest': 'Luput terawal: 2026-10-30',
 +
++  /* Learn more — mirrors the live homepage */
++  'learn.eyebrow': 'Ketahui lebih lanjut',
++  'learn.title': 'Ketahui lebih lanjut tentang StockLess',
++  'learn.lede': 'Temui jawapan kepada soalan lazim tentang cara StockLess berfungsi dan bagaimana ia boleh membantu perniagaan anda.',
++  'learn.still': 'Masih ada soalan?',
++  'learn.viewAll': 'Lihat semua soalan lazim',
++  'learn.q1': 'Bagaimanakah StockLess berfungsi?',
++  'learn.a1': 'StockLess membaca data jualan dan stok anda untuk menunjukkan permintaan yang dijangka, menandakan produk yang perlu diberi perhatian, dan mencadangkan kuantiti pembelian yang anda tetap kawal.',
++  'learn.q2': 'Data apakah yang saya perlukan?',
++  'learn.a2': 'Tarikh jualan, pengenalan produk dan kuantiti jualan sudah memadai untuk bermula. Maklumat stok pilihan menambah kesegaran stok dan cadangan pembelian yang lebih tepat.',
++  'learn.q3': 'Bagaimanakah cadangan pembelian dibuat?',
++  'learn.a3': 'StockLess membandingkan permintaan yang dijangka pada minggu-minggu akan datang dengan stok yang anda sedia ada, dan mencadangkan kuantiti yang menutup jurang itu.',
++  'learn.q4': 'Bagaimanakah StockLess membantu mengurangkan pembaziran makanan?',
++  'learn.a4': 'Dengan memadankan apa yang anda beli dengan apa yang mungkin anda jual, StockLess bertujuan mengurangkan lebihan stok yang menjadi pembaziran yang boleh dielakkan.',
++  'learn.q5': 'Adakah data jualan saya dimuat naik?',
++  'learn.a5': 'Tidak. StockLess memproses CSV anda terus dalam pelayar anda. Baris jualan dan pengenalan produk anda tidak dimuat naik ke mana-mana perkhidmatan AI atau API.',
++  'learn.q6': 'Bagaimanakah StockLess menganggarkan permintaan?',
++  'learn.a6': 'Daripada corak jualan mingguan dalam baris yang lulus semakan data. Anggaran ini bergantung pada data yang anda berikan, jadi sejarah yang lebih panjang dan lebih bersih memberikan gambaran yang lebih mantap.',
++  'learn.q7': 'Adakah StockLess membuat pesanan secara automatik?',
++  'learn.a7': 'Tidak. StockLess mencadangkan kuantiti dan menerangkan sebabnya. Anda menentukan jumlah akhir, dan pesanan itu kekal antara anda dan pembekal anda.',
  };
  
  /* ─────────────────────────────────────────────────────────────────────────
@@ -694,7 +776,7 @@ index 181c2e0..b99f08b 100644
    'nav.howItWorks': '使用方法',
    'nav.close': '关闭',
    'lang.en': 'EN',
-@@ -301,14 +492,14 @@ const zh: Record<TranslationKey, string> = {
+@@ -301,14 +532,14 @@ const zh: Record<TranslationKey, string> = {
    'lang.zh': '中文',
    'modal.eyebrow': '使用方法',
    'modal.heading': '四步骤，更明智的订单',
@@ -717,7 +799,7 @@ index 181c2e0..b99f08b 100644
    'whatYouGet.eyebrow': '最终您将获得',
    'whatYouGet.item.1': '所选商品的每周销量',
    'whatYouGet.item.2': '您的近期平均值（最近 8 个完整周）',
-@@ -359,10 +550,13 @@ const zh: Record<TranslationKey, string> = {
+@@ -359,10 +590,13 @@ const zh: Record<TranslationKey, string> = {
    'stat.2.figure': '12%',
    'stat.2.desc': '的食物垃圾来自零售行业。',
    'stat.3.figure': '2030',
@@ -735,7 +817,7 @@ index 181c2e0..b99f08b 100644
    'sdg.responsible': '负责任消费和生产',
    'sdg.tagline': '共同的目标。日常的行动。',
    'sdg.eyebrow': '对您的店铺有益。对地球更好。',
-@@ -372,7 +566,7 @@ const zh: Record<TranslationKey, string> = {
+@@ -372,7 +606,7 @@ const zh: Record<TranslationKey, string> = {
    'footer.tagline': '更聪明的补货。更少的食物浪费。',
    'footer.backToTop': '返回顶部',
    'returning.eyebrow': '欢迎回来',
@@ -744,7 +826,7 @@ index 181c2e0..b99f08b 100644
    'returning.subtext': '继续之前的工作，或上传新文件重新开始。',
    'files.privacy': '仅保存在本机。',
    'files.heading': '历史文件',
-@@ -380,6 +574,7 @@ const zh: Record<TranslationKey, string> = {
+@@ -380,6 +614,7 @@ const zh: Record<TranslationKey, string> = {
    'files.delete': '删除',
    'files.rows': '{n} 行',
    'example.chip': '交互示例',
@@ -752,7 +834,7 @@ index 181c2e0..b99f08b 100644
    'example.productEyebrow': '所选商品 · SKU 000101',
    'example.chip.ready': '数据充足',
    'example.chip.steadySeller': '稳定销售',
-@@ -409,13 +604,103 @@ const zh: Record<TranslationKey, string> = {
+@@ -409,13 +644,123 @@ const zh: Record<TranslationKey, string> = {
    'placeholder.step': '步骤 {n} — 占位页面',
    'upload.title': '上传您的销售文件',
    'upload.desc': '此页面将让 Aina 从电脑中选择 CSV 文件。',
@@ -856,11 +938,31 @@ index 181c2e0..b99f08b 100644
 +  'ex.expiry.none': '未来 4 周内没有到期',
 +  'ex.expiry.earliest': '最早到期：2026-10-30',
 +
++  /* Learn more — mirrors the live homepage */
++  'learn.eyebrow': '了解更多',
++  'learn.title': '了解 StockLess',
++  'learn.lede': '了解 StockLess 的运作方式，以及它如何帮助您的生意。',
++  'learn.still': '还有其他问题？',
++  'learn.viewAll': '查看全部常见问题',
++  'learn.q1': 'StockLess 如何运作？',
++  'learn.a1': 'StockLess 读取您的销售与库存数据，估算预期需求，标出需要留意的商品，并建议采购数量——最终决定权仍在您手中。',
++  'learn.q2': '我需要哪些数据？',
++  'learn.a2': '销售日期、商品识别和销售数量就足以开始。可选的库存信息还能加上库存新鲜度，并让采购建议更精准。',
++  'learn.q3': '采购建议是如何得出的？',
++  'learn.a3': 'StockLess 会把未来几周的预期需求与您现有的库存相比较，并建议足以补足差额的数量。',
++  'learn.q4': 'StockLess 如何帮助减少食物浪费？',
++  'learn.a4': '让采购量贴近可能的销量，StockLess 希望减少那些最终变成可避免浪费的过量库存。',
++  'learn.q5': '我的销售数据会被上传吗？',
++  'learn.a5': '不会。StockLess 直接在您的浏览器中处理 CSV。您的销售记录和商品识别码不会上传到任何 AI 或 API 服务。',
++  'learn.q6': 'StockLess 如何估算需求？',
++  'learn.a6': '依据通过数据检查的销售记录中的每周销售走势。估算结果取决于您提供的数据，因此更长、更干净的历史记录会得出更稳定的判断。',
++  'learn.q7': 'StockLess 会自动下单吗？',
++  'learn.a7': '不会。StockLess 只会建议数量并说明理由。最终数量由您决定，下单仍然由您与供应商之间完成。',
  };
  
  export const translations: Record<Lang, Record<TranslationKey, string>> = { en, ms, zh };
 diff --git a/src/index.css b/src/index.css
-index dd180b7..20f78a9 100755
+index dd180b7..958dd79 100755
 --- a/src/index.css
 +++ b/src/index.css
 @@ -1,6 +1,7 @@
@@ -871,7 +973,7 @@ index dd180b7..20f78a9 100755
  
  *, *::before, *::after {
    box-sizing: border-box;
-@@ -34,3 +35,143 @@ a { text-decoration: none; }
+@@ -34,3 +35,280 @@ a { text-decoration: none; }
  ::-webkit-scrollbar-track { background: transparent; }
  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
  * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
@@ -1015,8 +1117,145 @@ index dd180b7..20f78a9 100755
 +  /* the preview toggle is a demo control — it drops to its own line first */
 +  .sl-topnav > div:nth-of-type(1) { order: 3; margin-right: auto; }
 +}
++
++/* ===== thumb ergonomics on a phone =====
++   The prototype's controls are styled inline (Figma Make output), and an
++   inline style outranks a stylesheet, so the phone breakpoint has to say
++   !important to reach them. Everything standalone gets to 44px - Apple's and
++   Material's floor. Links sitting inside a sentence, like the source
++   citations, are left alone: WCAG 2.5.8 exempts them, and boxing them out
++   would break the paragraph they belong to. */
++.sl-stepper-btn { width: 34px; height: 34px; }
++.sl-stepper-input { width: 62px; height: 34px; }
++
++@media (max-width: 760px) {
++  .sl-stepper-btn { width: 44px !important; height: 44px !important; }
++  .sl-stepper-input { width: 68px !important; height: 44px !important; }
++  .sl-range { min-height: 44px; }
++  .language-switcher select { min-height: 44px !important; }
++
++  /* the top bar: brand, language, "How it works" */
++  .sl-topnav > a,
++  .sl-topnav > button { min-height: 44px !important; display: inline-flex !important;
++                        align-items: center !important; }
++
++  /* standalone links and buttons tagged in the markup */
++  .sl-tap { min-height: 44px !important; display: inline-flex !important;
++            align-items: center !important; }
++}
++
++
++/* ===== learn more =====
++   The same component as the live homepage and the workspace, at this page's
++   type scale. Soft tinted rows, no hard border, question on the left behind a
++   decorative icon, chevron on the right. Built on <details>/<summary>, so the
++   keyboard, the open state and the screen-reader announcement come from the
++   browser rather than from us. */
++.learn__title {
++  font-family: var(--font-display);
++  font-weight: 800;
++  font-size: 28px;
++  letter-spacing: -0.02em;
++  line-height: 1.2;
++  color: var(--ink);
++  margin: 0;
++}
++.learn__lede {
++  margin: var(--space-3) 0 0;
++  font-size: var(--text-lead);
++  color: var(--muted);
++  line-height: 1.65;
++  max-width: 60ch;
++}
++.learn__list { margin-top: var(--space-6); }
++.learn--cards .learn__list {
++  display: grid;
++  grid-template-columns: 1fr 1fr;
++  gap: var(--space-3);
++  align-items: start;
++}
++
++.learn__item { background: var(--teal-tint); border-radius: 14px; overflow: hidden; }
++.learn__q {
++  display: flex;
++  align-items: center;
++  gap: var(--space-3);
++  padding: 15px 17px;
++  cursor: pointer;
++  list-style: none;
++  min-height: 44px;
++  font-family: var(--font-display);
++  font-weight: 700;
++  font-size: var(--text-body);
++  color: var(--ink);
++}
++.learn__q::-webkit-details-marker { display: none; }
++.learn__q:hover { background: #DDEDE8; }
++.learn__item:focus-within .learn__q { outline: 2px solid var(--teal); outline-offset: -2px; }
++.learn__icon { font-size: 19px; line-height: 1; flex: none; }
++.learn__qtext { flex: 1; min-width: 0; }
++
++.learn__chevron {
++  flex: none;
++  width: 9px; height: 9px;
++  margin-right: 3px;
++  border-right: 2px solid var(--teal-deep);
++  border-bottom: 2px solid var(--teal-deep);
++  transform: rotate(45deg) translate(-2px, -2px);
++  transition: transform 160ms ease;
++}
++.learn__item[open] .learn__chevron { transform: rotate(-135deg) translate(-3px, -3px); }
++@media (prefers-reduced-motion: reduce) { .learn__chevron { transition: none; } }
++
++.learn__a {
++  margin: 0;
++  padding: 0 17px 16px 47px;
++  font-size: var(--text-secondary);
++  line-height: 1.7;
++  color: var(--ink-2);
++  max-width: 62ch;
++}
++
++/* "Still have questions?" is a <details> too, so the extra questions open in
++   place — no second page and no JavaScript. */
++.learn__all {
++  margin-top: var(--space-6);
++  border-top: 1px solid var(--line);
++  padding-top: var(--space-5);
++}
++.learn__all-q {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: var(--space-5);
++  cursor: pointer;
++  list-style: none;
++  min-height: 44px;
++  font-size: var(--text-body);
++}
++.learn__all-q::-webkit-details-marker { display: none; }
++.learn__all-cta {
++  color: var(--teal);
++  font-weight: var(--weight-bold);
++  font-size: var(--text-secondary);
++  white-space: nowrap;
++}
++.learn__all-q:hover .learn__all-cta,
++.learn__all[open] .learn__all-cta { text-decoration: underline; }
++.learn__all .learn__list { margin-top: var(--space-4); grid-template-columns: 1fr; }
++
++@media (max-width: 900px) {
++  .learn--cards .learn__list { grid-template-columns: 1fr; }
++}
++@media (max-width: 760px) {
++  .learn__title { font-size: 24px; }
++  .learn__lede { font-size: var(--text-body); }
++  .learn__q { padding: 14px; gap: var(--space-2); }
++  .learn__a { padding: 0 14px 15px 14px; font-size: var(--text-body); }
++  .learn__all-q { align-items: flex-start; flex-direction: column; gap: 6px; }
++}
 diff --git a/src/pages/Home.tsx b/src/pages/Home.tsx
-index b52fbc6..217029d 100644
+index b52fbc6..ecd8170 100644
 --- a/src/pages/Home.tsx
 +++ b/src/pages/Home.tsx
 @@ -5,6 +5,7 @@ import { HowItWorksContent } from '../components/HowItWorksModal';
@@ -1027,7 +1266,7 @@ index b52fbc6..217029d 100644
  
  interface FileRecord {
    id: string; name: string; rows: number; uploadedAt: string;
-@@ -53,14 +54,20 @@ function StepIcon({ n }: { n: number }) {
+@@ -53,14 +54,21 @@ function StepIcon({ n }: { n: number }) {
  function FirstTimeView({ onStart }: { onStart: () => void }) {
    return (
      <>
@@ -1046,12 +1285,22 @@ index b52fbc6..217029d 100644
 +      <div className="sl-band">
 +        <FooterDecor />
 +        <SdgBlock />
++        <LearnMoreSection />
 +        <PageFooter />
 +      </div>
      </>
    );
  }
-@@ -109,183 +116,357 @@ function HeroSection({ onStart }: { onStart: () => void }) {
+@@ -98,7 +106,7 @@ function HeroSection({ onStart }: { onStart: () => void }) {
+ 
+       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-5)', flexWrap: 'wrap' }}>
+         <BtnPrimary onClick={onStart}>{t('hero.cta')}</BtnPrimary>
+-        <a href="#how-it-works" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontFamily: 'var(--font-body)', fontWeight: 'var(--weight-bold)', fontSize: 'var(--text-body)', color: 'var(--teal)' }}>
++        <a href="#how-it-works" className="sl-tap" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontFamily: 'var(--font-body)', fontWeight: 'var(--weight-bold)', fontSize: 'var(--text-body)', color: 'var(--teal)' }}>
+           {t('hero.link')}
+           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+             <path d="M7 2v10M3 8l4 4 4-4" />
+@@ -109,183 +117,359 @@ function HeroSection({ onStart }: { onStart: () => void }) {
    );
  }
  
@@ -1370,7 +1619,7 @@ index b52fbc6..217029d 100644
 +                    {SUGGESTED} <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--muted)' }}>{t('ex.units')}</span>
 +                  </p>
 +                </div>
-+                <button type="button" onClick={() => setPlanned(SUGGESTED)}
++                <button type="button" className="sl-tap" onClick={() => setPlanned(SUGGESTED)}
 +                  style={{ background: 'var(--teal)', color: '#fff', border: 0, borderRadius: 'var(--radius-btn)', padding: '11px 18px',
 +                    fontFamily: 'var(--font-body)', fontSize: 'var(--text-body)', fontWeight: 700, cursor: 'pointer' }}>
 +                  {t('ex.plan.use', { n: SUGGESTED })}
@@ -1482,7 +1731,7 @@ index b52fbc6..217029d 100644
 +
 +function SummaryTile({ label, value, unit, note, highlight }: {
 +  label: string; value: number; unit: string; note?: string; highlight?: boolean;
-+}) {
+ }) {
 +  return (
 +    <div style={{ borderRadius: 'var(--radius)', padding: 'var(--space-3) var(--space-4)',
 +      background: highlight ? 'var(--teal-tint)' : '#F4F8F7',
@@ -1497,8 +1746,14 @@ index b52fbc6..217029d 100644
 +}
 +
 +function NumberTile({ label, value, unit, source }: { label: string; value: number; unit: string; source: 'file' | 'stockless' }) {
-+  const { t } = useTranslation();
-+  return (
+   const { t } = useTranslation();
+   return (
+-    <div>
+-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--space-2)' }}>
+-        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-secondary)', color: 'var(--ink-2)' }}>{t(labelKey)}</label>
+-        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+-          <span style={{ fontFamily: 'var(--font-data)', fontWeight: 600, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>{value} {t('example.restock.units')}</span>
+-          <span style={{ fontFamily: 'var(--font-data)', fontSize: '9px', background: 'var(--line-soft)', border: '1px solid var(--line)', borderRadius: '10px', padding: '1px 6px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{t('example.slider.tag')}</span>
 +    <div style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: 'var(--space-3)' }}>
 +      <p style={{ fontSize: 'var(--text-description)', color: 'var(--muted)', margin: 0 }}>{label}</p>
 +      <p style={{ margin: '3px 0 6px', fontFamily: 'var(--font-data)', fontWeight: 600, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>
@@ -1512,31 +1767,27 @@ index b52fbc6..217029d 100644
 +/** Stepper buttons and a slider, both driving the same value. */
 +function NumberField({ label, value, min, max, onChange, unit, hint }: {
 +  label: string; value: number; min: number; max: number; onChange: (v: number) => void; unit: string; hint?: string;
- }) {
-   const { t } = useTranslation();
++}) {
++  const { t } = useTranslation();
 +  const clamp = (v: number) => Math.min(max, Math.max(min, v));
 +  const pct = ((value - min) / (max - min)) * 100;
++  // Size lives in index.css (.sl-stepper-btn) so the phone breakpoint can grow
++  // it to a 44px thumb target; an inline width would outrank the media query.
 +  const btn: React.CSSProperties = {
-+    width: '34px', height: '34px', flex: 'none', border: '1px solid var(--line)', background: '#fff',
++    flex: 'none', border: '1px solid var(--line)', background: '#fff',
 +    borderRadius: '8px', color: 'var(--ink)', fontSize: '18px', lineHeight: 1, cursor: 'pointer',
 +  };
-   return (
--    <div>
--      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--space-2)' }}>
--        <label style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-secondary)', color: 'var(--ink-2)' }}>{t(labelKey)}</label>
--        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
--          <span style={{ fontFamily: 'var(--font-data)', fontWeight: 600, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>{value} {t('example.restock.units')}</span>
--          <span style={{ fontFamily: 'var(--font-data)', fontSize: '9px', background: 'var(--line-soft)', border: '1px solid var(--line)', borderRadius: '10px', padding: '1px 6px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{t('example.slider.tag')}</span>
++  return (
 +    <div style={{ marginTop: 'var(--space-5)' }}>
 +      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
 +        <label style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'var(--text-body)', color: 'var(--ink)' }}>{label}</label>
 +        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-+          <button type="button" style={btn} aria-label={t('ex.plan.decrease')} onClick={() => onChange(clamp(value - 1))}>−</button>
-+          <input type="number" value={value} min={min} max={max} aria-label={label}
++          <button type="button" className="sl-stepper-btn" style={btn} aria-label={t('ex.plan.decrease')} onClick={() => onChange(clamp(value - 1))}>−</button>
++          <input type="number" className="sl-stepper-input" value={value} min={min} max={max} aria-label={label}
 +            onChange={(e) => onChange(clamp(Number(e.target.value) || 0))}
-+            style={{ width: '62px', height: '34px', textAlign: 'center', border: '1px solid var(--line)', borderRadius: '8px',
++            style={{ textAlign: 'center', border: '1px solid var(--line)', borderRadius: '8px',
 +              fontFamily: 'var(--font-data)', fontSize: 'var(--text-body)', fontWeight: 600, color: 'var(--ink)', background: '#fff' }} />
-+          <button type="button" style={btn} aria-label={t('ex.plan.increase')} onClick={() => onChange(clamp(value + 1))}>+</button>
++          <button type="button" className="sl-stepper-btn" style={btn} aria-label={t('ex.plan.increase')} onClick={() => onChange(clamp(value + 1))}>+</button>
          </span>
        </div>
 -      <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(Number(e.target.value))}
@@ -1553,7 +1804,7 @@ index b52fbc6..217029d 100644
      </div>
    );
  }
-@@ -334,6 +515,7 @@ function StepsSection() {
+@@ -334,6 +518,7 @@ function StepsSection() {
  /* ── What you get + Privacy ──────────────────────────────────────────────── */
  
  function WhatYouGetSection() {
@@ -1561,7 +1812,7 @@ index b52fbc6..217029d 100644
    const { t } = useTranslation();
  
    return (
-@@ -377,7 +559,7 @@ function WhatYouGetSection() {
+@@ -377,7 +562,7 @@ function WhatYouGetSection() {
            ))}
          </div>
          <div style={{ marginTop: 'var(--space-8)' }}>
@@ -1570,7 +1821,7 @@ index b52fbc6..217029d 100644
          </div>
        </Card>
      </section>
-@@ -387,6 +569,7 @@ function WhatYouGetSection() {
+@@ -387,6 +572,7 @@ function WhatYouGetSection() {
  /* ── Produce band ─────────────────────────────────────────────────────────── */
  
  function ProduceBand() {
@@ -1578,7 +1829,7 @@ index b52fbc6..217029d 100644
    const { t } = useTranslation();
  
    return (
-@@ -398,7 +581,7 @@ function ProduceBand() {
+@@ -398,7 +584,7 @@ function ProduceBand() {
              {t('band.heading.plain')}<span style={{ color: 'var(--amber-accent)' }}>{t('band.heading.accent')}</span>
            </h2>
            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
@@ -1587,7 +1838,7 @@ index b52fbc6..217029d 100644
              <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--muted)' }}>{t('band.subtext')}</p>
            </div>
            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
-@@ -422,6 +605,15 @@ function ProduceBand() {
+@@ -422,6 +608,15 @@ function ProduceBand() {
  
  /* ── Food waste problem ──────────────────────────────────────────────────── */
  
@@ -1603,7 +1854,7 @@ index b52fbc6..217029d 100644
  function FoodWasteProblem() {
    const { t } = useTranslation();
  
-@@ -452,9 +644,9 @@ function FoodWasteProblem() {
+@@ -452,9 +647,9 @@ function FoodWasteProblem() {
          </p>
        </div>
  
@@ -1615,7 +1866,7 @@ index b52fbc6..217029d 100644
              <p style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', letterSpacing: '-0.025em', lineHeight: 1.1, color: 'var(--ink)', marginBottom: 'var(--space-2)' }}>
                {t(figKey)}
              </p>
-@@ -465,8 +657,18 @@ function FoodWasteProblem() {
+@@ -465,8 +660,18 @@ function FoodWasteProblem() {
          ))}
        </div>
  
@@ -1636,7 +1887,7 @@ index b52fbc6..217029d 100644
        </p>
      </section>
    );
-@@ -487,8 +689,8 @@ function SdgBlock() {
+@@ -487,8 +692,8 @@ function SdgBlock() {
                {t('sdg.responsible')}
              </p>
            </div>
@@ -1647,6 +1898,81 @@ index b52fbc6..217029d 100644
            </svg>
            <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '15px', color: '#fff', lineHeight: 1.3 }}>
              {t('sdg.tagline')}
+@@ -508,6 +713,65 @@ function SdgBlock() {
+   );
+ }
+ 
++/* ── Learn more ──────────────────────────────────────── */
++
++/* Same four questions and same three follow-ups as the live homepage, so a
++   demo of the prototype and the real site say the same things.
++
++   Built on <details>/<summary>: the browser gives the keyboard handling, the
++   open state and the screen-reader announcement, and "View all FAQs" being a
++   <details> too means the whole section needs no state at all. Styling lives
++   in index.css under .learn. */
++
++const LEARN_CARDS = ['1', '2', '3', '4'] as const;
++const LEARN_MORE = ['5', '6', '7'] as const;
++const LEARN_ICON: Record<string, string> = {
++  '1': '\u{1F331}', '2': '\u{1F4C4}', '3': '\u{1F6D2}', '4': '\u{267B}\u{FE0F}',
++  '5': '\u{1F512}', '6': '\u{1F4CA}', '7': '\u{1F9FE}',
++};
++
++function LearnItem({ n }: { n: string }) {
++  const { t } = useTranslation();
++  return (
++    <details className="learn__item">
++      <summary className="learn__q">
++        <span className="learn__icon" aria-hidden="true">{LEARN_ICON[n]}</span>
++        <span className="learn__qtext">{t(`learn.q${n}`)}</span>
++        <span className="learn__chevron" aria-hidden="true" />
++      </summary>
++      <p className="learn__a">{t(`learn.a${n}`)}</p>
++    </details>
++  );
++}
++
++function LearnMoreSection() {
++  const { t } = useTranslation();
++  return (
++    <section
++      className="learn learn--cards"
++      id="learn-more"
++      aria-labelledby="learn-title"
++      style={{ maxWidth: 'var(--page-max-width)', margin: '0 auto var(--space-20)', padding: '0 var(--space-6)' }}
++    >
++      <Eyebrow>{t('learn.eyebrow')}</Eyebrow>
++      <h2 className="learn__title" id="learn-title">{t('learn.title')}</h2>
++      <p className="learn__lede">{t('learn.lede')}</p>
++      <div className="learn__list">
++        {LEARN_CARDS.map((n) => <LearnItem key={n} n={n} />)}
++      </div>
++      <details className="learn__all">
++        <summary className="learn__all-q">
++          <b>{t('learn.still')}</b>
++          <span className="learn__all-cta">{t('learn.viewAll')} <span aria-hidden="true">&rarr;</span></span>
++        </summary>
++        <div className="learn__list">
++          {LEARN_MORE.map((n) => <LearnItem key={n} n={n} />)}
++        </div>
++      </details>
++    </section>
++  );
++}
++
+ /* ── Footer ──────────────────────────────────────────────────────────────── */
+ 
+ function PageFooter() {
+@@ -517,7 +781,7 @@ function PageFooter() {
+     <footer style={{ borderTop: '1px solid var(--line)', maxWidth: 'var(--page-max-width)', margin: '0 auto', padding: 'var(--space-8) var(--space-6)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-4)', flexWrap: 'wrap' }}>
+       <Logo height={28} />
+       <p style={{ fontSize: 'var(--text-secondary)', color: 'var(--muted)' }}>{t('footer.tagline')}</p>
+-      <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
++      <a href="#" className="sl-tap" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+         style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-secondary)', color: 'var(--teal)', fontWeight: 'var(--weight-bold)' }}>
+         {t('footer.backToTop')} ↑
+       </a>
 diff --git a/src/pages/Upload.tsx b/src/pages/Upload.tsx
 index a9a7c4d..c384948 100644
 --- a/src/pages/Upload.tsx

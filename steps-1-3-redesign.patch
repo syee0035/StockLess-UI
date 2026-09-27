@@ -770,7 +770,7 @@ index cc5c2d6..cd1f1ed 100644
 +}
 +}
 diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
-index 86a9cd1..bbbc6f5 100644
+index 86a9cd1..1fcf338 100644
 --- a/frontend/src/i18n/messages.ts
 +++ b/frontend/src/i18n/messages.ts
 @@ -300,10 +300,6 @@ export const messages: Record<string, readonly [string, string]> = {
@@ -856,7 +856,7 @@ index 86a9cd1..bbbc6f5 100644
      "Semak kesediaan"
    ],
    "Plan purchases": [
-@@ -2483,5 +2471,1217 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -2483,5 +2471,1249 @@ export const messages: Record<string, readonly [string, string]> = {
    "Stale stock": [
      "库存数据过旧",
      "Data stok terlalu lama"
@@ -2072,6 +2072,38 @@ index 86a9cd1..bbbc6f5 100644
 +  "See what is needed →": [
 +    "查看还缺什么 →",
 +    "Lihat apa yang diperlukan →"
++  ],
++  "No suggestion yet": [
++    "暂时没有建议",
++    "Belum ada cadangan"
++  ],
++  "Next: ": [
++    "下一步：",
++    "Seterusnya: "
++  ],
++  "Middle of expected demand: ": [
++    "预期需求的中位数：",
++    "Pertengahan permintaan dijangka: "
++  ],
++  "Stock on hand: ": [
++    "现有库存：",
++    "Stok sedia ada: "
++  ],
++  "Incoming stock: ": [
++    "在途库存：",
++    "Stok dalam perjalanan: "
++  ],
++  "Planned order you entered: ": [
++    "您输入的计划订购量：",
++    "Pesanan dirancang yang anda masukkan: "
++  ],
++  "Expiry adjustment: ": [
++    "有效期调整：",
++    "Pelarasan tarikh luput: "
++  ],
++  "No products match. Try another group or clear the search.": [
++    "没有符合条件的商品。请换一个分组，或清除搜索。",
++    "Tiada produk yang sepadan. Cuba kumpulan lain atau kosongkan carian."
    ]
  };
 diff --git a/frontend/src/purchase-plan/DataLabel.tsx b/frontend/src/purchase-plan/DataLabel.tsx
@@ -3102,7 +3134,7 @@ index 0000000..ba1ab55
 +  };
 +}
 diff --git a/frontend/src/purchase-plan/purchase-plan.css b/frontend/src/purchase-plan/purchase-plan.css
-index 3653223..ce51673 100644
+index 3653223..57a279b 100644
 --- a/frontend/src/purchase-plan/purchase-plan.css
 +++ b/frontend/src/purchase-plan/purchase-plan.css
 @@ -49,7 +49,7 @@
@@ -3219,7 +3251,7 @@ index 3653223..ce51673 100644
        .purchase-plan .steps li:not(:last-child)::after { left:calc(50% + 18px); width:calc(100% - 36px); }
        .purchase-plan .step-dot { width:32px; height:32px; }
        .purchase-plan .page { width:calc(100% - 40px); padding:32px 0 44px; }
-@@ -264,3 +264,326 @@
+@@ -264,3 +264,344 @@
  @media(max-width:760px) {
    .page:has(> .purchase-plan) { padding-top:32px;padding-bottom:44px; }
  }
@@ -3431,6 +3463,8 @@ index 3653223..ce51673 100644
 +  .pp-field__range{min-height:44px}
 +  /* the checkbox is 1px by design — the switch label is the real target */
 +  .purchase-plan .switch{min-height:44px}
++  /* "Clear" only appears once a quantity is entered, so it is a real control */
++  .pp-field__clear{min-height:44px;display:inline-flex;align-items:center}
 +  .pp-nav button{width:44px;height:44px}
 +  .pp-stepper{width:100%}
 +  .pp-stepper__btn{width:52px}
@@ -3546,6 +3580,22 @@ index 3653223..ce51673 100644
 +  .pp-glance{gap:14px}
 +  .pp-money__head .btn{width:100%}
 +}
++
++/* The dashboard's own headline figure, repeated on this page so the plan's
++   total is visible without leaving it. Units, not ringgit — the cost tiles
++   beside it say why they are blank. */
++.pp-impact{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
++  margin-top:14px;padding:13px 16px;border-radius:12px;
++  background:#fff;border:1px solid #CFE4DE}
++.pp-impact__k{font-size:var(--text-body);color:var(--ink-2)}
++.pp-impact__v{font-family:var(--display);font-size:26px;font-weight:800;
++  line-height:1;color:var(--teal-deep)}
++.pp-impact__v small{font-size:var(--text-body);font-weight:700}
++.pp-impact__note{font-size:var(--text-description);color:var(--muted)}
++
++/* the stepper's nodes are links across the previews, so they need the button's
++   look without a button's default styling */
++.stepper a.step__button{text-decoration:none;color:inherit}
 diff --git a/frontend/src/screens/HomePage.tsx b/frontend/src/screens/HomePage.tsx
 index c889292..eeff522 100644
 --- a/frontend/src/screens/HomePage.tsx
@@ -4187,7 +4237,7 @@ index 5d2f91a..e3c0b25 100644
 -  );
 -}
 diff --git a/frontend/src/screens/PurchasePlanScreen.tsx b/frontend/src/screens/PurchasePlanScreen.tsx
-index 6e50c10..2294a12 100644
+index 6e50c10..aca90fc 100644
 --- a/frontend/src/screens/PurchasePlanScreen.tsx
 +++ b/frontend/src/screens/PurchasePlanScreen.tsx
 @@ -14,11 +14,11 @@ import {
@@ -4339,7 +4389,7 @@ index 6e50c10..2294a12 100644
    return (
      <main className="purchase-plan">
        <section className="heading-row">
-@@ -205,20 +279,159 @@ export function PurchasePlanScreen({
+@@ -205,20 +279,171 @@ export function PurchasePlanScreen({
          <span>
            <strong>{t("Your figures stay local.")}</strong> {t("Typed order quantities last for this visit only and are not sent to a supplier.")}</span>
        </p>
@@ -4411,7 +4461,6 @@ index 6e50c10..2294a12 100644
 -        {t(["Ready", "Limited", "Cannot assess"].map((label) => (
 -          <span key={label}>
 -            <b>{t(counts(label))}</b> {t(label)}
--          </span>
 +
 +      {/* The money view. Every figure is blank until a unit cost exists —
 +          showing 0 would read as "this costs nothing", which is a different
@@ -4425,6 +4474,18 @@ index 6e50c10..2294a12 100644
 +          <button type="button" className="btn btn--ghost btn--small"
 +            onClick={() => setShowImpact(true)}>
 +            {t("Open dashboard example →")}</button>
++        </div>
++        {/* The dashboard's headline figure, on this page too, so the plan's
++            total is visible without leaving it. It is the one figure the file
++            supports; the tiles below say why they are blank. */}
++        <div className="pp-impact">
++          <span className="pp-impact__k">{t("Estimated overstock avoided")}</span>
++          <b className="pp-impact__v num">
++            {t(numberText(impact.avoidedUnits))} <small>{t("units")}</small>
++          </b>
++          <span className="pp-impact__note">
++            {t(impact.productsWithOverstock)} / {t(impact.productsJudged)} {t("products")}
+           </span>
 +        </div>
 +        <div className="pp-money__tiles">
 +          {t([
@@ -4512,7 +4573,7 @@ index 6e50c10..2294a12 100644
          )))}
        </div>
        {t(mismatchCount > 0 && (
-@@ -226,6 +439,7 @@ export function PurchasePlanScreen({
+@@ -226,6 +451,7 @@ export function PurchasePlanScreen({
            {t("Evidence mismatch affects ")}{t(mismatchCount)}{t(" ")}
            {t(mismatchCount === 1 ? "product" : "products")}{t(". These products remain listed but cannot be evaluated. Return to readiness and refresh the forecast.")}</p>
        ))}
@@ -4520,7 +4581,7 @@ index 6e50c10..2294a12 100644
        <section className="card list-card">
          <div className="card-head">
            <div>
-@@ -282,108 +496,82 @@ export function PurchasePlanScreen({
+@@ -282,108 +508,82 @@ export function PurchasePlanScreen({
            <p className="expiry-note">
              {t("Expiry not checked — your file has no expiry dates")}</p>
          ))}
@@ -4681,7 +4742,7 @@ index 6e50c10..2294a12 100644
                      </td>
                    </tr>
                  );
-@@ -392,7 +580,7 @@ export function PurchasePlanScreen({
+@@ -392,7 +592,7 @@ export function PurchasePlanScreen({
                  <tr>
                    <td colSpan={5} className="empty-row">
                      {t(products.length
@@ -4690,7 +4751,7 @@ index 6e50c10..2294a12 100644
                        : "No products are available. Return to readiness to review your data.")}
                    </td>
                  </tr>
-@@ -409,19 +597,28 @@ export function PurchasePlanScreen({
+@@ -409,19 +609,28 @@ export function PurchasePlanScreen({
              onClick={onBack}
            >
              {t("← Back to readiness")}</button>
@@ -5748,7 +5809,7 @@ index 9aa26c6..2f2049c 100644
              </p>
            </div>
 diff --git a/frontend/src/styles.css b/frontend/src/styles.css
-index 862cb48..842f9d8 100644
+index 862cb48..54973cd 100644
 --- a/frontend/src/styles.css
 +++ b/frontend/src/styles.css
 @@ -4,7 +4,21 @@
@@ -5812,7 +5873,7 @@ index 862cb48..842f9d8 100644
  .step__line{position:absolute;top:14px;left:calc(50% + 19px);width:calc(100% - 38px);height:2px;background:var(--line)}
  .step:last-child .step__line{display:none}
  .step--done .step__dot,.step--current .step__dot{background:var(--teal);border-color:var(--teal);color:#fff}
-@@ -44,28 +62,28 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -44,28 +62,31 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .step--done .step__line{background:var(--teal)}
  .step__button:not(:disabled):hover .step__dot{border-color:var(--teal)}
  
@@ -5848,10 +5909,13 @@ index 862cb48..842f9d8 100644
    transition:background-color .15s ease,border-color .15s ease,opacity .15s ease}
 -.btn--small{min-height:32px;padding:6px 12px;font-size:12px;border-radius:8px}
 +.btn--small{min-height:32px;padding:6px 12px;font-size:var(--text-secondary);border-radius:8px}
++/* some buttons are links — navigating is a link's job, not a button's — and a
++   link wearing .btn must not also wear a link's underline */
++a.btn,a.btn:hover{text-decoration:none}
  .btn--primary{background:var(--teal);color:#fff}
  .btn--primary:hover:not(:disabled){background:var(--teal-deep)}
  .btn--ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
-@@ -78,56 +96,63 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -78,56 +99,63 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    font-size:16px;font-weight:700;cursor:pointer}
  .btn--link:hover{color:var(--ink)}
  
@@ -5936,7 +6000,7 @@ index 862cb48..842f9d8 100644
    background:linear-gradient(180deg,#F8FCFB 0%,#EDF7F4 100%);
    display:flex;flex-direction:column;align-items:center;justify-content:center;
    padding:32px 24px;text-align:center;transition:border-color .15s ease,background .15s ease}
-@@ -136,85 +161,88 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -136,85 +164,88 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .csv-badge{width:54px;height:64px;background:#fff;border:2px solid var(--teal);border-radius:10px;
    display:flex;align-items:flex-end;justify-content:center;padding:0 7px 10px;margin-bottom:24px}
  .csv-badge span{display:block;width:36px;padding:4px 0;background:var(--teal-tint);border-radius:5px;
@@ -6058,7 +6122,7 @@ index 862cb48..842f9d8 100644
  
  @media (max-width:1240px){
    .page{padding-left:32px;padding-right:32px}
-@@ -226,9 +254,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -226,9 +257,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  @media (max-width:760px){
    .page{padding-left:20px;padding-right:20px}
    .topbar,.stepper{padding-left:20px;padding-right:20px}
@@ -6071,7 +6135,7 @@ index 862cb48..842f9d8 100644
    .identity__paths{grid-template-columns:1fr}
    .footer-row{flex-direction:column;align-items:stretch}
    .blockers{text-align:left}
-@@ -237,35 +265,47 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -237,35 +268,47 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  }
  
  /* ── screen 03 ──────────────────────────────────────────────────────────── */
@@ -6133,7 +6197,7 @@ index 862cb48..842f9d8 100644
  
  .panel-warn{width:310px;flex:none;padding:22px;background:var(--amber-tint);
    border:1px solid #F0D29F;border-radius:22px}
-@@ -274,24 +314,27 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -274,24 +317,27 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    display:flex;align-items:center;justify-content:center;
    font-family:var(--display);font-size:16px;font-weight:800}
  .panel-warn--calm .panel-warn__icon{background:var(--teal)}
@@ -6168,7 +6232,7 @@ index 862cb48..842f9d8 100644
  .dtable--readiness{min-width:1040px}
  .dtable--readiness th:nth-child(1){width:7%}
  .dtable--readiness th:nth-child(2){width:15%}
-@@ -306,26 +349,26 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -306,26 +352,26 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .dtable--tidy-ups th:nth-child(3),.dtable--tidy-ups th:nth-child(4){width:24%}
  .dtable--tidy-ups th:nth-child(5){width:24%}
  .trace-value{display:inline-block;max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);background:#EEF3F1;border:1px solid var(--line);border-radius:5px;padding:3px 6px}
@@ -6201,7 +6265,7 @@ index 862cb48..842f9d8 100644
  .freshness-card small{line-height:1.4}
  .freshness-card--current{border-left:4px solid var(--teal)}
  .freshness-card--limited{border-left:4px solid var(--amber-strong)}
-@@ -338,14 +381,14 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -338,14 +384,14 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .picker{align-self:stretch;display:flex;align-items:center;justify-content:space-between;
    gap:16px;margin-top:20px;flex-wrap:wrap}
  .picker__left{display:flex;align-items:center;gap:11px}
@@ -6218,7 +6282,7 @@ index 862cb48..842f9d8 100644
  .swatch-bar{width:12px;height:4px;border-radius:5px;background:var(--teal)}
  .swatch-negative{width:12px;height:4px;border-radius:5px;background:var(--red)}
  .swatch-zero{width:8px;height:8px;border-radius:50%;background:#3F7E98}
-@@ -355,25 +398,25 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -355,25 +401,25 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    position:relative;overflow:hidden;color:#fff}
  .cover::after{content:"";position:absolute;width:190px;height:190px;border-radius:95px;
    background:rgba(143,210,200,.13);right:-60px;bottom:-70px}
@@ -6251,7 +6315,7 @@ index 862cb48..842f9d8 100644
  .history-table{align-self:stretch;margin-top:12px;padding:22px}
  .dtable--weeks{min-width:900px}
  .dtable--weeks th:nth-child(1){width:18%}
-@@ -381,7 +424,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -381,7 +427,7 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
  .dtable--weeks th:nth-child(5){width:8%}
  .dtable--weeks th:nth-child(6){width:24%}
  .dtable--weeks th:nth-child(7){width:14%}
@@ -6260,7 +6324,7 @@ index 862cb48..842f9d8 100644
  .all-products tbody tr:hover td{background:#FAFCFB}
  .row--selected td{background:var(--teal-tint)}
  .all-products .dtable td{vertical-align:middle}
-@@ -408,3 +451,738 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
+@@ -408,3 +454,738 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
    .picker .select{min-width:0;width:100%}
    .saved-setup{align-items:flex-start;flex-direction:column}
  }

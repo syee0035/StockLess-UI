@@ -90,6 +90,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
   display:inline-flex;align-items:center;justify-content:center;
   transition:background-color .15s ease,border-color .15s ease,opacity .15s ease}
 .btn--small{min-height:32px;padding:6px 12px;font-size:var(--text-secondary);border-radius:8px}
+/* some buttons are links — navigating is a link's job, not a button's — and a
+   link wearing .btn must not also wear a link's underline */
+a.btn,a.btn:hover{text-decoration:none}
 .btn--primary{background:var(--teal);color:#fff}
 .btn--primary:hover:not(:disabled){background:var(--teal-deep)}
 .btn--ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
@@ -1677,6 +1680,8 @@ html[lang=ms] .sl-home h1{font-size:clamp(36px,5.8vw,76px);letter-spacing:-.045e
   .pp-field__range{min-height:44px}
   /* the checkbox is 1px by design — the switch label is the real target */
   .purchase-plan .switch{min-height:44px}
+  /* "Clear" only appears once a quantity is entered, so it is a real control */
+  .pp-field__clear{min-height:44px;display:inline-flex;align-items:center}
   .pp-nav button{width:44px;height:44px}
   .pp-stepper{width:100%}
   .pp-stepper__btn{width:52px}
@@ -1793,15 +1798,32 @@ html[lang=ms] .sl-home h1{font-size:clamp(36px,5.8vw,76px);letter-spacing:-.045e
   .pp-money__head .btn{width:100%}
 }
 
+/* The dashboard's own headline figure, repeated on this page so the plan's
+   total is visible without leaving it. Units, not ringgit — the cost tiles
+   beside it say why they are blank. */
+.pp-impact{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  margin-top:14px;padding:13px 16px;border-radius:12px;
+  background:#fff;border:1px solid #CFE4DE}
+.pp-impact__k{font-size:var(--text-body);color:var(--ink-2)}
+.pp-impact__v{font-family:var(--display);font-size:26px;font-weight:800;
+  line-height:1;color:var(--teal-deep)}
+.pp-impact__v small{font-size:var(--text-body);font-weight:700}
+.pp-impact__note{font-size:var(--text-description);color:var(--muted)}
+
+/* the stepper's nodes are links across the previews, so they need the button's
+   look without a button's default styling */
+.stepper a.step__button{text-decoration:none;color:inherit}
+
 body{margin:0}
 html[lang="zh-Hans"] .page-title,html[lang="zh-Hans"] h2,html[lang="zh-Hans"] h3{
   font-family:"Noto Sans SC","Manrope",sans-serif;letter-spacing:0;line-height:1.3}
 </style></head>
 <body>
 <div class="frame">
+<div class="ws-decor" aria-hidden="true"><div class="ws-decor__side ws-decor__side--left"><svg viewBox="0 0 160 900" preserveAspectRatio="xMinYMid slice"><defs><linearGradient id="gL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DCEFD8" stop-opacity=".6"/><stop offset=".5" stop-color="#EDF7E9" stop-opacity=".4"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient></defs><rect width="160" height="900" fill="url(#gL)"/><path d="M0 900V688c50-28 102 16 160-4v216Z" fill="#B8DFBE" opacity=".45"/><path d="M0 900V772c54-24 106 18 160 0v128Z" fill="#83B480" opacity=".26"/><g transform="translate(14 128) rotate(-16) scale(0.52)" opacity=".55"><path d="M36 2C16 16 4 34 4 52c0 17 14 30 32 30s32-13 32-30C68 34 56 16 36 2Z" fill="#8FBC8B"/><path d="M36 78V12" stroke="#fff" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round"/></g><g transform="translate(22 556) rotate(12) scale(0.44)" opacity=".5"><path d="M36 2C16 16 4 34 4 52c0 17 14 30 32 30s32-13 32-30C68 34 56 16 36 2Z" fill="#A6CEA4"/><path d="M36 78V12" stroke="#fff" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round"/></g><g transform="translate(96 404)" fill="#9CC9A0" opacity=".5"><circle cx="0" cy="0" r="2.3"/><circle cx="0" cy="15" r="2.3"/><circle cx="0" cy="30" r="2.3"/><circle cx="0" cy="45" r="2.3"/><circle cx="15" cy="0" r="2.3"/><circle cx="15" cy="15" r="2.3"/><circle cx="15" cy="30" r="2.3"/><circle cx="15" cy="45" r="2.3"/><circle cx="30" cy="0" r="2.3"/><circle cx="30" cy="15" r="2.3"/><circle cx="30" cy="30" r="2.3"/><circle cx="30" cy="45" r="2.3"/></g><g transform="translate(18 392)" fill="#9CC9A0" opacity=".5"><circle cx="0" cy="0" r="2.3"/><circle cx="0" cy="15" r="2.3"/><circle cx="0" cy="30" r="2.3"/><circle cx="0" cy="45" r="2.3"/><circle cx="15" cy="0" r="2.3"/><circle cx="15" cy="15" r="2.3"/><circle cx="15" cy="30" r="2.3"/><circle cx="15" cy="45" r="2.3"/><circle cx="30" cy="0" r="2.3"/><circle cx="30" cy="15" r="2.3"/><circle cx="30" cy="30" r="2.3"/><circle cx="30" cy="45" r="2.3"/></g></svg></div><div class="ws-decor__side ws-decor__side--right"><svg viewBox="0 0 160 900" preserveAspectRatio="xMinYMid slice"><defs><linearGradient id="gR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DCEFD8" stop-opacity=".6"/><stop offset=".5" stop-color="#EDF7E9" stop-opacity=".4"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient></defs><rect width="160" height="900" fill="url(#gR)"/><path d="M0 900V688c50-28 102 16 160-4v216Z" fill="#B8DFBE" opacity=".45"/><path d="M0 900V772c54-24 106 18 160 0v128Z" fill="#83B480" opacity=".26"/><g transform="translate(14 128) rotate(-16) scale(0.52)" opacity=".55"><path d="M36 2C16 16 4 34 4 52c0 17 14 30 32 30s32-13 32-30C68 34 56 16 36 2Z" fill="#8FBC8B"/><path d="M36 78V12" stroke="#fff" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round"/></g><g transform="translate(22 556) rotate(12) scale(0.44)" opacity=".5"><path d="M36 2C16 16 4 34 4 52c0 17 14 30 32 30s32-13 32-30C68 34 56 16 36 2Z" fill="#A6CEA4"/><path d="M36 78V12" stroke="#fff" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round"/></g><g transform="translate(96 404)" fill="#9CC9A0" opacity=".5"><circle cx="0" cy="0" r="2.3"/><circle cx="0" cy="15" r="2.3"/><circle cx="0" cy="30" r="2.3"/><circle cx="0" cy="45" r="2.3"/><circle cx="15" cy="0" r="2.3"/><circle cx="15" cy="15" r="2.3"/><circle cx="15" cy="30" r="2.3"/><circle cx="15" cy="45" r="2.3"/><circle cx="30" cy="0" r="2.3"/><circle cx="30" cy="15" r="2.3"/><circle cx="30" cy="30" r="2.3"/><circle cx="30" cy="45" r="2.3"/></g><g transform="translate(18 392)" fill="#9CC9A0" opacity=".5"><circle cx="0" cy="0" r="2.3"/><circle cx="0" cy="15" r="2.3"/><circle cx="0" cy="30" r="2.3"/><circle cx="0" cy="45" r="2.3"/><circle cx="15" cy="0" r="2.3"/><circle cx="15" cy="15" r="2.3"/><circle cx="15" cy="30" r="2.3"/><circle cx="15" cy="45" r="2.3"/><circle cx="30" cy="0" r="2.3"/><circle cx="30" cy="15" r="2.3"/><circle cx="30" cy="30" r="2.3"/><circle cx="30" cy="45" r="2.3"/></g></svg></div></div>
   <header class="topbar">
-    <a class="brand" href="#home" aria-label="StockLess"><svg class="brand__logo" style="height:36px;width:auto;display:block" viewBox="46 36 996 249" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="StockLess" > <g transform="translate(18 11) scale(.58)"> <rect x="104" y="48" width="72" height="244" rx="20" fill="#0F6664" /> <rect x="195" y="111" width="72" height="181" rx="20" fill="#16958B" /> <rect x="286" y="164" width="72" height="128" rx="20" fill="#65C9BC" /> <path d="M374 142C374 92 409 63 459 63C459 112 426 142 374 142Z" fill="#0A504F" /> <circle cx="386" cy="222" r="40" fill="#E0A63A" /> <path d="M414 193L437 216L415 236C409 219 409 207 414 193Z" fill="#FFFFFF" /> <path d="M52 242H94C109 242 121 249 130 261L149 285C159 298 175 305 192 305H396C415 305 431 293 437 275L448 242H476V370C476 424 432 468 378 468H150C96 468 52 424 52 370V242Z" fill="#0F6664" /> <path d="M52 242H94C109 242 121 249 130 261L149 285C159 298 175 305 192 305H396C415 305 431 293 437 275L448 242" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" /> <rect x="206" y="382" width="154" height="30" rx="15" fill="#FFFFFF" /> </g> <path fill="#18221D" d="M380.475 217.25Q368.625 217.25 359.1375 213.125Q349.65 209.0 343.5375 201.3125Q337.425 193.625 335.775 183.05L354.525 180.2Q356.925 189.8 364.38750000000005 195.05Q371.85 200.3 381.6 200.3Q387.375 200.3 392.475 198.5Q397.575 196.7 400.7625 193.25Q403.95 189.8 403.95 184.775Q403.95 182.525 403.2 180.6125Q402.45 178.7 400.98749999999995 177.2Q399.525 175.7 397.23749999999995 174.46249999999998Q394.95 173.225 391.95 172.325L364.05 164.075Q360.45 163.025 356.2875 161.2625Q352.125 159.5 348.4125 156.3875Q344.7 153.275 342.3375 148.4375Q339.975 143.60000000000002 339.975 136.47500000000002Q339.975 126.05 345.26250000000005 118.9625Q350.55 111.875 359.51250000000005 108.35Q368.475 104.825 379.425 104.9Q390.525 104.97500000000001 399.225 108.6875Q407.925 112.4 413.775 119.45Q419.625 126.5 422.025 136.47500000000002L402.6 139.85000000000002Q401.4 134.15 397.98749999999995 130.1375Q394.575 126.125 389.6625 124.025Q384.75 121.925 379.2 121.775Q373.8 121.7 369.1875 123.3875Q364.575 125.075 361.7625 128.225Q358.95 131.375 358.95 135.575Q358.95 139.55 361.35 142.0625Q363.75 144.575 367.3125 146.0375Q370.875 147.5 374.55 148.47500000000002L393.9 153.875Q397.875 154.925 402.825 156.72500000000002Q407.775 158.525 412.35 161.75Q416.925 164.975 419.88750000000005 170.225Q422.85 175.475 422.85 183.575Q422.85 191.975 419.3625 198.3125Q415.875 204.65 409.95 208.85000000000002Q404.025 213.05 396.4125 215.15Q388.8 217.25 380.475 217.25Z M481.6 215.0Q473.575 216.5 465.8875 216.3125Q458.2 216.125 452.125 213.4625Q446.05 210.8 442.9 205.025Q440.125 199.775 439.975 194.3Q439.825 188.825 439.825 181.925V148.175H425.125V134.0H439.825V111.5H457.825V134.0H481.6V148.175H457.825V180.875Q457.825 185.75 457.9375 189.425Q458.05 193.1 459.475 195.425Q462.175 199.925 468.1 200.45Q474.025 200.975 481.6 199.85Z M529.85 217.25Q517.7 217.25 508.625 211.775Q499.55 206.3 494.5625 196.66250000000002Q489.575 187.025 489.575 174.5Q489.575 161.75 494.67499999999995 152.15Q499.775 142.55 508.84999999999997 137.15Q517.925 131.75 529.85 131.75Q542.075 131.75 551.1500000000001 137.225Q560.225 142.7 565.25 152.33749999999998Q570.275 161.975 570.275 174.5Q570.275 187.1 565.2125 196.7375Q560.15 206.375 551.075 211.8125Q542.0 217.25 529.85 217.25ZM529.85 200.3Q540.65 200.3 545.9 193.10000000000002Q551.15 185.9 551.15 174.5Q551.15 162.725 545.825 155.71249999999998Q540.5 148.7 529.85 148.7Q522.575 148.7 517.8875 151.96249999999998Q513.2 155.225 510.95000000000005 161.0375Q508.7 166.85 508.7 174.5Q508.7 186.275 514.0625 193.28750000000002Q519.425 200.3 529.85 200.3Z M616.9499999999999 217.25Q604.425 217.25 595.575 211.6625Q586.725 206.075 582.0375 196.39999999999998Q577.35 186.725 577.275 174.5Q577.35 162.05 582.1875 152.41250000000002Q587.025 142.775 595.95 137.2625Q604.875 131.75 617.175 131.75Q630.975 131.75 640.5375 138.6875Q650.1 145.625 653.025 157.625L635.025 162.5Q632.925 155.975 628.05 152.33749999999998Q623.175 148.7 616.9499999999999 148.7Q609.9 148.7 605.325 152.0375Q600.75 155.375 598.575 161.225Q596.4 167.075 596.4 174.5Q596.4 186.05 601.575 193.175Q606.75 200.3 616.9499999999999 200.3Q624.15 200.3 628.3125 197.0Q632.475 193.7 634.5749999999999 187.475L653.025 191.6Q649.275 203.975 639.9 210.6125Q630.525 217.25 616.9499999999999 217.25Z M662.95 215.0 663.1 107.0H681.4V173.0L711.025 134.0H733.6L702.1750000000001 174.5L736.3000000000001 215.0H712.375L681.4 176.0V215.0Z" /> <path fill="#0F6664" d="M740.3000000000001 215.0V107.0H758.3750000000001V198.05H806.075V215.0Z M850.6500000000001 217.25Q838.35 217.25 829.05 211.925Q819.75 206.6 814.5375 197.14999999999998Q809.325 187.7 809.325 175.4Q809.325 162.125 814.4250000000001 152.3375Q819.5250000000001 142.55 828.6000000000001 137.15Q837.6750000000001 131.75 849.6 131.75Q862.2 131.75 871.0125 137.6375Q879.825 143.525 884.1 154.25Q888.375 164.975 887.325 179.525H828.6750000000001Q829.575 188.225 833.85 193.55Q839.25 200.3 849.6 200.3Q856.2750000000001 200.3 861.1125000000001 197.3375Q865.95 194.375 868.575 188.75L886.4250000000001 194.15Q881.7750000000001 205.1 872.0625 211.175Q862.35 217.25 850.6500000000001 217.25ZM868.95 165.875Q867.975 158.0 864.75 153.65Q860.1750000000001 147.575 850.35 147.575Q839.25 147.575 833.85 154.4Q830.4000000000001 158.825 829.125 165.875Z M930.4 217.25Q915.4 217.25 906.025 210.5Q896.65 203.75 894.625 191.525L913.075 188.675Q914.5 194.675 919.375 198.125Q924.25 201.575 931.675 201.575Q938.2 201.575 941.7625 198.9875Q945.325 196.4 945.325 191.9Q945.325 189.125 944.0125 187.4375Q942.7 185.75 938.2750000000001 184.175Q933.85 182.6 924.7 180.2Q914.5 177.5 908.5 174.3875Q902.5 171.275 899.875 167.0Q897.25 162.725 897.25 156.65Q897.25 149.075 901.225 143.45Q905.2 137.825 912.325 134.7875Q919.45 131.75 929.125 131.75Q938.575 131.75 945.8875 134.675Q953.2 137.60000000000002 957.7 143.0Q962.2 148.4 963.25 155.675L944.8 158.975Q944.125 153.8 940.1125 150.8Q936.1 147.8 929.425 147.425Q923.05 147.05 919.15 149.3375Q915.25 151.625 915.25 155.75Q915.25 158.075 916.825 159.725Q918.4 161.375 923.1624999999999 163.025Q927.925 164.675 937.375 167.075Q947.05 169.55 952.8625 172.7375Q958.675 175.925 961.2625 180.35000000000002Q963.85 184.775 963.85 191.075Q963.85 203.3 954.9625000000001 210.275Q946.075 217.25 930.4 217.25Z M1006.625 217.25Q991.625 217.25 982.25 210.5Q972.875 203.75 970.85 191.525L989.3000000000001 188.675Q990.725 194.675 995.6 198.125Q1000.475 201.575 1007.9 201.575Q1014.4250000000001 201.575 1017.9875000000001 198.9875Q1021.5500000000001 196.4 1021.5500000000001 191.9Q1021.5500000000001 189.125 1020.2375000000001 187.4375Q1018.9250000000001 185.75 1014.5 184.175Q1010.075 182.6 1000.9250000000001 180.2Q990.725 177.5 984.725 174.3875Q978.725 171.275 976.1 167.0Q973.475 162.725 973.475 156.65Q973.475 149.075 977.45 143.45Q981.4250000000001 137.825 988.5500000000001 134.7875Q995.6750000000001 131.75 1005.35 131.75Q1014.8000000000001 131.75 1022.1125 134.675Q1029.425 137.60000000000002 1033.925 143.0Q1038.425 148.4 1039.475 155.675L1021.025 158.975Q1020.35 153.8 1016.3375000000001 150.8Q1012.325 147.8 1005.65 147.425Q999.275 147.05 995.375 149.3375Q991.475 151.625 991.475 155.75Q991.475 158.075 993.05 159.725Q994.625 161.375 999.3875 163.025Q1004.15 164.675 1013.6 167.075Q1023.275 169.55 1029.0875 172.7375Q1034.9 175.925 1037.4875000000002 180.35000000000002Q1040.075 184.775 1040.075 191.075Q1040.075 203.3 1031.1875 210.275Q1022.3000000000001 217.25 1006.625 217.25Z" /> </svg></a>
-    <a class="workspace-home-link" href="#home"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2M6 9.8V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9.8"/></svg><span data-i18n="Homepage">Homepage</span></a>
+    <a class="brand" href="StockLess-Homepage.html" aria-label="StockLess"><svg class="brand__logo" style="height:36px;width:auto;display:block" viewBox="46 36 996 249" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="StockLess" > <g transform="translate(18 11) scale(.58)"> <rect x="104" y="48" width="72" height="244" rx="20" fill="#0F6664" /> <rect x="195" y="111" width="72" height="181" rx="20" fill="#16958B" /> <rect x="286" y="164" width="72" height="128" rx="20" fill="#65C9BC" /> <path d="M374 142C374 92 409 63 459 63C459 112 426 142 374 142Z" fill="#0A504F" /> <circle cx="386" cy="222" r="40" fill="#E0A63A" /> <path d="M414 193L437 216L415 236C409 219 409 207 414 193Z" fill="#FFFFFF" /> <path d="M52 242H94C109 242 121 249 130 261L149 285C159 298 175 305 192 305H396C415 305 431 293 437 275L448 242H476V370C476 424 432 468 378 468H150C96 468 52 424 52 370V242Z" fill="#0F6664" /> <path d="M52 242H94C109 242 121 249 130 261L149 285C159 298 175 305 192 305H396C415 305 431 293 437 275L448 242" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" /> <rect x="206" y="382" width="154" height="30" rx="15" fill="#FFFFFF" /> </g> <path fill="#18221D" d="M380.475 217.25Q368.625 217.25 359.1375 213.125Q349.65 209.0 343.5375 201.3125Q337.425 193.625 335.775 183.05L354.525 180.2Q356.925 189.8 364.38750000000005 195.05Q371.85 200.3 381.6 200.3Q387.375 200.3 392.475 198.5Q397.575 196.7 400.7625 193.25Q403.95 189.8 403.95 184.775Q403.95 182.525 403.2 180.6125Q402.45 178.7 400.98749999999995 177.2Q399.525 175.7 397.23749999999995 174.46249999999998Q394.95 173.225 391.95 172.325L364.05 164.075Q360.45 163.025 356.2875 161.2625Q352.125 159.5 348.4125 156.3875Q344.7 153.275 342.3375 148.4375Q339.975 143.60000000000002 339.975 136.47500000000002Q339.975 126.05 345.26250000000005 118.9625Q350.55 111.875 359.51250000000005 108.35Q368.475 104.825 379.425 104.9Q390.525 104.97500000000001 399.225 108.6875Q407.925 112.4 413.775 119.45Q419.625 126.5 422.025 136.47500000000002L402.6 139.85000000000002Q401.4 134.15 397.98749999999995 130.1375Q394.575 126.125 389.6625 124.025Q384.75 121.925 379.2 121.775Q373.8 121.7 369.1875 123.3875Q364.575 125.075 361.7625 128.225Q358.95 131.375 358.95 135.575Q358.95 139.55 361.35 142.0625Q363.75 144.575 367.3125 146.0375Q370.875 147.5 374.55 148.47500000000002L393.9 153.875Q397.875 154.925 402.825 156.72500000000002Q407.775 158.525 412.35 161.75Q416.925 164.975 419.88750000000005 170.225Q422.85 175.475 422.85 183.575Q422.85 191.975 419.3625 198.3125Q415.875 204.65 409.95 208.85000000000002Q404.025 213.05 396.4125 215.15Q388.8 217.25 380.475 217.25Z M481.6 215.0Q473.575 216.5 465.8875 216.3125Q458.2 216.125 452.125 213.4625Q446.05 210.8 442.9 205.025Q440.125 199.775 439.975 194.3Q439.825 188.825 439.825 181.925V148.175H425.125V134.0H439.825V111.5H457.825V134.0H481.6V148.175H457.825V180.875Q457.825 185.75 457.9375 189.425Q458.05 193.1 459.475 195.425Q462.175 199.925 468.1 200.45Q474.025 200.975 481.6 199.85Z M529.85 217.25Q517.7 217.25 508.625 211.775Q499.55 206.3 494.5625 196.66250000000002Q489.575 187.025 489.575 174.5Q489.575 161.75 494.67499999999995 152.15Q499.775 142.55 508.84999999999997 137.15Q517.925 131.75 529.85 131.75Q542.075 131.75 551.1500000000001 137.225Q560.225 142.7 565.25 152.33749999999998Q570.275 161.975 570.275 174.5Q570.275 187.1 565.2125 196.7375Q560.15 206.375 551.075 211.8125Q542.0 217.25 529.85 217.25ZM529.85 200.3Q540.65 200.3 545.9 193.10000000000002Q551.15 185.9 551.15 174.5Q551.15 162.725 545.825 155.71249999999998Q540.5 148.7 529.85 148.7Q522.575 148.7 517.8875 151.96249999999998Q513.2 155.225 510.95000000000005 161.0375Q508.7 166.85 508.7 174.5Q508.7 186.275 514.0625 193.28750000000002Q519.425 200.3 529.85 200.3Z M616.9499999999999 217.25Q604.425 217.25 595.575 211.6625Q586.725 206.075 582.0375 196.39999999999998Q577.35 186.725 577.275 174.5Q577.35 162.05 582.1875 152.41250000000002Q587.025 142.775 595.95 137.2625Q604.875 131.75 617.175 131.75Q630.975 131.75 640.5375 138.6875Q650.1 145.625 653.025 157.625L635.025 162.5Q632.925 155.975 628.05 152.33749999999998Q623.175 148.7 616.9499999999999 148.7Q609.9 148.7 605.325 152.0375Q600.75 155.375 598.575 161.225Q596.4 167.075 596.4 174.5Q596.4 186.05 601.575 193.175Q606.75 200.3 616.9499999999999 200.3Q624.15 200.3 628.3125 197.0Q632.475 193.7 634.5749999999999 187.475L653.025 191.6Q649.275 203.975 639.9 210.6125Q630.525 217.25 616.9499999999999 217.25Z M662.95 215.0 663.1 107.0H681.4V173.0L711.025 134.0H733.6L702.1750000000001 174.5L736.3000000000001 215.0H712.375L681.4 176.0V215.0Z" /> <path fill="#0F6664" d="M740.3000000000001 215.0V107.0H758.3750000000001V198.05H806.075V215.0Z M850.6500000000001 217.25Q838.35 217.25 829.05 211.925Q819.75 206.6 814.5375 197.14999999999998Q809.325 187.7 809.325 175.4Q809.325 162.125 814.4250000000001 152.3375Q819.5250000000001 142.55 828.6000000000001 137.15Q837.6750000000001 131.75 849.6 131.75Q862.2 131.75 871.0125 137.6375Q879.825 143.525 884.1 154.25Q888.375 164.975 887.325 179.525H828.6750000000001Q829.575 188.225 833.85 193.55Q839.25 200.3 849.6 200.3Q856.2750000000001 200.3 861.1125000000001 197.3375Q865.95 194.375 868.575 188.75L886.4250000000001 194.15Q881.7750000000001 205.1 872.0625 211.175Q862.35 217.25 850.6500000000001 217.25ZM868.95 165.875Q867.975 158.0 864.75 153.65Q860.1750000000001 147.575 850.35 147.575Q839.25 147.575 833.85 154.4Q830.4000000000001 158.825 829.125 165.875Z M930.4 217.25Q915.4 217.25 906.025 210.5Q896.65 203.75 894.625 191.525L913.075 188.675Q914.5 194.675 919.375 198.125Q924.25 201.575 931.675 201.575Q938.2 201.575 941.7625 198.9875Q945.325 196.4 945.325 191.9Q945.325 189.125 944.0125 187.4375Q942.7 185.75 938.2750000000001 184.175Q933.85 182.6 924.7 180.2Q914.5 177.5 908.5 174.3875Q902.5 171.275 899.875 167.0Q897.25 162.725 897.25 156.65Q897.25 149.075 901.225 143.45Q905.2 137.825 912.325 134.7875Q919.45 131.75 929.125 131.75Q938.575 131.75 945.8875 134.675Q953.2 137.60000000000002 957.7 143.0Q962.2 148.4 963.25 155.675L944.8 158.975Q944.125 153.8 940.1125 150.8Q936.1 147.8 929.425 147.425Q923.05 147.05 919.15 149.3375Q915.25 151.625 915.25 155.75Q915.25 158.075 916.825 159.725Q918.4 161.375 923.1624999999999 163.025Q927.925 164.675 937.375 167.075Q947.05 169.55 952.8625 172.7375Q958.675 175.925 961.2625 180.35000000000002Q963.85 184.775 963.85 191.075Q963.85 203.3 954.9625000000001 210.275Q946.075 217.25 930.4 217.25Z M1006.625 217.25Q991.625 217.25 982.25 210.5Q972.875 203.75 970.85 191.525L989.3000000000001 188.675Q990.725 194.675 995.6 198.125Q1000.475 201.575 1007.9 201.575Q1014.4250000000001 201.575 1017.9875000000001 198.9875Q1021.5500000000001 196.4 1021.5500000000001 191.9Q1021.5500000000001 189.125 1020.2375000000001 187.4375Q1018.9250000000001 185.75 1014.5 184.175Q1010.075 182.6 1000.9250000000001 180.2Q990.725 177.5 984.725 174.3875Q978.725 171.275 976.1 167.0Q973.475 162.725 973.475 156.65Q973.475 149.075 977.45 143.45Q981.4250000000001 137.825 988.5500000000001 134.7875Q995.6750000000001 131.75 1005.35 131.75Q1014.8000000000001 131.75 1022.1125 134.675Q1029.425 137.60000000000002 1033.925 143.0Q1038.425 148.4 1039.475 155.675L1021.025 158.975Q1020.35 153.8 1016.3375000000001 150.8Q1012.325 147.8 1005.65 147.425Q999.275 147.05 995.375 149.3375Q991.475 151.625 991.475 155.75Q991.475 158.075 993.05 159.725Q994.625 161.375 999.3875 163.025Q1004.15 164.675 1013.6 167.075Q1023.275 169.55 1029.0875 172.7375Q1034.9 175.925 1037.4875000000002 180.35000000000002Q1040.075 184.775 1040.075 191.075Q1040.075 203.3 1031.1875 210.275Q1022.3000000000001 217.25 1006.625 217.25Z" /> </svg></a>
+    <a class="workspace-home-link" href="StockLess-Homepage.html"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2M6 9.8V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9.8"/></svg><span data-i18n="Homepage">Homepage</span></a>
     <label class="language-switcher"><svg viewBox="0 0 36 32" width="28" height="26" aria-hidden="true"><path d="M3 2h18v23H9l-6 5Z" fill="#86c7a1"/><path d="M20 2h10a3 3 0 0 1 3 3v20H20Z" fill="#d6eddd"/><path d="m7 20 5-13 5 13m-8-4h6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 10h9m-5-3v3m-3 3c1 4 4 6 7 8m-1-11c-1 5-3 8-7 11" fill="none" stroke="#347452" stroke-width="1.7" stroke-linecap="round"/></svg>
       <select aria-label="Language">
         <option value="en" lang="en">English</option>
@@ -1810,9 +1832,9 @@ html[lang="zh-Hans"] .page-title,html[lang="zh-Hans"] h2,html[lang="zh-Hans"] h3
       </select>
     </label>
   </header>
-  <nav class="stepper" aria-label="Progress"><ol class="stepper__inner"><li class="step step--done"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌱</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Upload">Upload</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step step--done"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌿</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Map columns">Map columns</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step step--done"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🪴</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Check readiness">Check readiness</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step step--current"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌳</span><span class="step__dot">4</span><span class="step__label" data-i18n="Plan purchases">Plan purchases</span></button><span class="step__line" aria-hidden="true"></span></li></ol></nav>
+  <nav class="stepper" aria-label="Progress"><ol class="stepper__inner"><li class="step step--done"><a class="step__button" href="StockLess-Step1-Upload.html"><span class="step__plant" aria-hidden="true">🌱</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Upload">Upload</span></a><span class="step__line" aria-hidden="true"></span></li><li class="step step--done"><a class="step__button" href="StockLess-Step2-Mapping.html"><span class="step__plant" aria-hidden="true">🌿</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Map columns">Map columns</span></a><span class="step__line" aria-hidden="true"></span></li><li class="step step--done"><a class="step__button" href="StockLess-Step3-Readiness.html"><span class="step__plant" aria-hidden="true">🪴</span><span class="step__dot">✓</span><span class="step__label" data-i18n="Check readiness">Check readiness</span></a><span class="step__line" aria-hidden="true"></span></li><li class="step step--current"><a class="step__button" href="StockLess-Step4-Purchases.html" aria-current="step"><span class="step__plant" aria-hidden="true">🌳</span><span class="step__dot">4</span><span class="step__label" data-i18n="Plan purchases">Plan purchases</span></a><span class="step__line" aria-hidden="true"></span></li></ol></nav>
   <div class="page"><main class="purchase-plan">
-    <p class="eyebrow"><span data-i18n="Purchase plan ·">Purchase plan ·</span> 26 September 2026</p>
+    <p class="eyebrow"><span data-i18n="Purchase plan ·">Purchase plan ·</span> 28 September 2026</p>
     <h1 class="page-title" data-i18n="Plan what to restock, then check it before you order.">Plan what to restock, then check it before you order.</h1>
     <p class="lede" data-i18n="Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.">Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.</p>
     <p class="privacy-note"><span aria-hidden="true">&#9635;</span><span><strong data-i18n="Your figures stay local.">Your figures stay local.</strong> <span data-i18n="Typed order quantities last for this visit only and are not sent to a supplier.">Typed order quantities last for this visit only and are not sent to a supplier.</span></span></p>
@@ -1825,12 +1847,26 @@ html[lang="zh-Hans"] .page-title,html[lang="zh-Hans"] h2,html[lang="zh-Hans"] h3
 
     <section class="pp-glance" aria-label="Your next purchase, at a glance">
       <div class="pp-glance__head"><span class="pp-glance__mark" aria-hidden="true">&#127795;</span>
-        <div><h2 data-i18n="Your next purchase, at a glance">Your next purchase, at a glance</h2><p>7 <span data-i18n="products">products</span> &middot; <span data-i18n="for the next 4 weeks">for the next 4 weeks</span></p></div></div>
-      <div class="pp-glance__tiles"><div class="pp-tile"><b class="num">6</b><span data-i18n="Can plan">Can plan</span><small data-i18n="Usable demand and stock evidence">Usable demand and stock evidence</small></div><div class="pp-tile pp-tile--warn"><b class="num">1</b><span data-i18n="Need more data">Need more data</span><small data-i18n="Open a product to see the next action">Open a product to see the next action</small></div><div class="pp-tile"><b class="num">4</b><span data-i18n="Plans entered">Plans entered</span><small data-i18n="Included in the product totals">Included in the product totals</small></div></div></section>
+        <div><h2 data-i18n="Your next purchase, at a glance">Your next purchase, at a glance</h2><p><span id="gTotal">7</span> <span data-i18n="products">products</span> &middot; <span data-i18n="for the next 4 weeks">for the next 4 weeks</span></p></div></div>
+      <div class="pp-glance__tiles">
+        <div class="pp-tile"><b class="num" id="gCan">0</b><span data-i18n="Can plan">Can plan</span><small data-i18n="Usable demand and stock evidence">Usable demand and stock evidence</small></div>
+        <div class="pp-tile pp-tile--warn"><b class="num" id="gNeed">0</b><span data-i18n="Need more data">Need more data</span><small data-i18n="Open a product to see the next action">Open a product to see the next action</small></div>
+        <div class="pp-tile"><b class="num" id="gEntered">0</b><span data-i18n="Plans entered">Plans entered</span><small data-i18n="Included in the product totals">Included in the product totals</small></div>
+      </div></section>
 
     <section class="pp-money" aria-labelledby="pp-money-title">
       <div class="pp-money__head"><div><h2 data-i18n="What will this plan cost?" id="pp-money-title">What will this plan cost?</h2><p><span data-i18n="Money insights · design preview">Money insights · design preview</span></p></div>
-        <button type="button" class="btn btn--ghost btn--small"><span data-i18n="Open dashboard example →">Open dashboard example →</span></button></div>
+        <a class="btn btn--ghost btn--small" href="StockLess-Impact-Dashboard.html"><span data-i18n="Open dashboard example →">Open dashboard example →</span></a></div>
+
+      <!-- The dashboard's own headline figure, shown here too so the page says
+           what the plan adds up to without making you leave it. Units, not
+           ringgit: the file carries no cost, and the tiles below say so. -->
+      <div class="pp-impact">
+        <span class="pp-impact__k"><span data-i18n="Estimated overstock avoided">Estimated overstock avoided</span></span>
+        <b class="pp-impact__v num"><span id="gAvoided">0</span> <small><span data-i18n="units">units</span></small></b>
+        <span class="pp-impact__note" id="gAvoidedNote"></span>
+      </div>
+
       <div class="pp-money__tiles"><div class="pp-cost"><span data-i18n="Planned purchase spending">Planned purchase spending</span><b aria-label="Not available">&mdash;</b><small data-i18n="Purchase cost and currency required">Purchase cost and currency required</small></div><div class="pp-cost"><span data-i18n="Incoming stock cost">Incoming stock cost</span><b aria-label="Not available">&mdash;</b><small data-i18n="Purchase cost and currency required">Purchase cost and currency required</small></div><div class="pp-cost"><span data-i18n="Potential excess-stock cost">Potential excess-stock cost</span><b aria-label="Not available">&mdash;</b><small data-i18n="Purchase cost and currency required">Purchase cost and currency required</small></div></div>
       <p class="pp-money__note"><span data-i18n="This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.">This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.</span></p></section>
 
@@ -1838,14 +1874,16 @@ html[lang="zh-Hans"] .page-title,html[lang="zh-Hans"] h2,html[lang="zh-Hans"] h3
 
     <section class="pp-priority" aria-labelledby="pp-priority-title">
       <h2 data-i18n="Start with these products" id="pp-priority-title">Start with these products</h2><p class="pp-priority__sub"><span data-i18n="Purchase concerns appear first. Each suggestion uses your current inputs.">Purchase concerns appear first. Each suggestion uses your current inputs.</span></p>
-      <div class="pp-priority__cards"><article class="pp-card pp-card--check_order"><div class="pp-card__head"><div><b>Milo 3in1 &middot; 20 sachets</b><small class="num"><span data-i18n="SKU ">SKU </span> MM0027</small></div><span class="pill pill--ready"><span data-i18n="Ready">Ready</span></span></div><div class="pp-card__verdict pp-card__verdict--ok"><span data-i18n="Purchase check">Purchase check</span><b><span data-i18n="Check your order">Check your order</span></b></div><p class="pp-card__why">You would have 36 units, above the 23-unit four-week range, so the planned order looks too much.</p><button type="button" class="btn btn--ghost btn--small pp-card__action"><span data-i18n="Review and plan →">Review and plan →</span></button></article><article class="pp-card pp-card--need_data"><div class="pp-card__head"><div><b>Horlicks 3in1 &middot; 20 sachets</b><small class="num"><span data-i18n="SKU ">SKU </span> MM0031</small></div><span class="pill pill--limited"><span data-i18n="Limited">Limited</span></span></div><div class="pp-card__verdict pp-card__verdict--none"><span data-i18n="Estimated restock">Estimated restock</span><b><span data-i18n="No reliable estimate">No reliable estimate</span></b></div><p class="pp-card__why">the stock count date is more than 14 days old</p><button type="button" class="btn btn--ghost btn--small pp-card__action"><span data-i18n="See what is needed →">See what is needed →</span></button></article><article class="pp-card pp-card--order_needed"><div class="pp-card__head"><div><b>Kopi O Kaw 2in1 &middot; 10 sachets</b><small class="num"><span data-i18n="SKU ">SKU </span> MM0001</small></div><span class="pill pill--ready"><span data-i18n="Ready">Ready</span></span></div><div class="pp-card__verdict pp-card__verdict--ok"><span data-i18n="Purchase check">Purchase check</span><b><span data-i18n="Order needed">Order needed</span></b></div><p class="pp-card__why">No order entered yet, or below expected demand</p><button type="button" class="btn btn--ghost btn--small pp-card__action"><span data-i18n="Review and plan →">Review and plan →</span></button></article></div></section>
+      <div class="pp-priority__cards" id="priority"></div></section>
 
-    <div class="pp-groups" role="group" aria-label="Filter by what each product needs"><button type="button" class="pp-group pp-group--on" aria-pressed="true" data-g="all"><b class="num">7</b><span data-i18n="All products">All products</span></button><button type="button" class="pp-group pp-group--order_needed" aria-pressed="false" data-g="order_needed"><b class="num">2</b><span data-i18n="Order needed">Order needed</span><small data-i18n="No order entered yet, or below expected demand">No order entered yet, or below expected demand</small></button><button type="button" class="pp-group pp-group--check_order" aria-pressed="false" data-g="check_order"><b class="num">1</b><span data-i18n="Check your order">Check your order</span><small data-i18n="More than even the busiest expected month">More than even the busiest expected month</small></button><button type="button" class="pp-group pp-group--balanced" aria-pressed="false" data-g="balanced"><b class="num">3</b><span data-i18n="Looks balanced">Looks balanced</span><small data-i18n="Within expected demand">Within expected demand</small></button><button type="button" class="pp-group pp-group--need_data" aria-pressed="false" data-g="need_data"><b class="num">1</b><span data-i18n="Need more data">Need more data</span><small data-i18n="StockLess could not judge these yet">StockLess could not judge these yet</small></button></div>
+    <div class="pp-groups" role="group" aria-label="Filter by what each product needs" id="groups"></div>
     <div class="pp-layout">
       <section class="card list-card">
         <div class="toolbar">
-          <label class="search"><input type="search" placeholder="Search by product name or SKU" data-ph="Search by product name or SKU" aria-label="Search by product name or SKU"></label>
-          <label class="switch"><input type="checkbox"><span class="switch-track" aria-hidden="true"></span><span data-i18n="Only products I am ordering">Only products I am ordering</span></label>
+          <label class="search"><input type="search" id="q" placeholder="Search by product name or SKU"
+            data-ph="Search by product name or SKU" aria-label="Search by product name or SKU"></label>
+          <label class="switch"><input type="checkbox" id="mine">
+            <span class="switch-track" aria-hidden="true"></span><span data-i18n="Only products I am ordering">Only products I am ordering</span></label>
         </div>
         <p class="pp-key"><span data-i18n="Key: ">Key: </span>
           <span class="source-tag source--file"><span data-i18n="from your file">from your file</span></span>
@@ -1854,155 +1892,333 @@ html[lang="zh-Hans"] .page-title,html[lang="zh-Hans"] h2,html[lang="zh-Hans"] h3
         <div class="table-scroll table-scroll--x">
           <table class="dtable dtable--cards pp-table">
             <thead><tr><th data-i18n="Product" scope="col">Product</th><th data-i18n="Expected demand" scope="col">Expected demand</th><th data-i18n="In stock" scope="col">In stock</th><th data-i18n="Your order" scope="col">Your order</th><th data-i18n="Check" scope="col">Check</th></tr></thead>
-            <tbody id="rows"><tr class="clickable-row selected" data-sku="MM0001" data-g="order_needed"><td class="dtable__title"><button class="product-button" type="button">Kopi O Kaw 2in1<small class="num"><span data-i18n="SKU ">SKU </span> MM0001 &middot; 10 sachets</small></button></td><td data-label="Expected demand"><span class="range num">18&ndash;26 <span data-i18n="units">units</span><small><span data-i18n="next 4 weeks">next 4 weeks</span></small></span></td><td class="num" data-label="In stock">7</td><td data-label="Your order"><span class="num"><span data-i18n="Not entered">Not entered</span></span><small class="pp-suggested num"><span data-i18n="Suggested ">Suggested </span> 15</small></td><td data-label="Check"><span class="pp-check pp-check--order_needed"><span data-i18n="Order needed">Order needed</span></span></td></tr><tr class="clickable-row" data-sku="MM0014" data-g="balanced"><td class="dtable__title"><button class="product-button" type="button">Milo 3in1<small class="num"><span data-i18n="SKU ">SKU </span> MM0014 &middot; 20 sachets</small></button></td><td data-label="Expected demand"><span class="range num">22&ndash;30 <span data-i18n="units">units</span><small><span data-i18n="next 4 weeks">next 4 weeks</span></small></span></td><td class="num" data-label="In stock">5</td><td data-label="Your order"><span class="num">12</span><small class="pp-suggested num"><span data-i18n="Suggested ">Suggested </span> 21</small></td><td data-label="Check"><span class="pp-check pp-check--balanced"><span data-i18n="Looks balanced">Looks balanced</span></span></td></tr><tr class="clickable-row" data-sku="MM0027" data-g="check_order"><td class="dtable__title"><button class="product-button" type="button">Milo 3in1<small class="num"><span data-i18n="SKU ">SKU </span> MM0027 &middot; 20 sachets</small></button></td><td data-label="Expected demand"><span class="range num">16&ndash;23 <span data-i18n="units">units</span><small><span data-i18n="next 4 weeks">next 4 weeks</span></small></span></td><td class="num" data-label="In stock">2</td><td data-label="Your order"><span class="num">34</span><small class="pp-suggested num"><span data-i18n="Suggested ">Suggested </span> 18</small></td><td data-label="Check"><span class="pp-check pp-check--check_order"><span data-i18n="Check your order">Check your order</span></span></td></tr><tr class="clickable-row" data-sku="MM0002" data-g="balanced"><td class="dtable__title"><button class="product-button" type="button">Kopi O Kaw 2in1<small class="num"><span data-i18n="SKU ">SKU </span> MM0002 &middot; 20 sachets</small></button></td><td data-label="Expected demand"><span class="range num">14&ndash;20 <span data-i18n="units">units</span><small><span data-i18n="next 4 weeks">next 4 weeks</span></small></span></td><td class="num" data-label="In stock">6</td><td data-label="Your order"><span class="num">9</span><small class="pp-suggested num"><span data-i18n="Suggested ">Suggested </span> 11</small></td><td data-label="Check"><span class="pp-check pp-check--balanced"><span data-i18n="Looks balanced">Looks balanced</span></span></td></tr><tr class="clickable-row" data-sku="MM0008" data-g="order_needed"><td class="dtable__title"><button class="product-button" type="button">Teh Tarik 3in1<small class="num"><span data-i18n="SKU ">SKU </span> MM0008 &middot; 15 sachets</small></button></td><td data-label="Expected demand"><span class="range num">12&ndash;18 <span data-i18n="units">units</span><small><span data-i18n="next 4 weeks">next 4 weeks</span></small></span></td><td class="num" data-label="In stock">3</td><td data-label="Your order"><span class="num"><span data-i18n="Not entered">Not entered</span></span><small class="pp-suggested num"><span data-i18n="Suggested ">Suggested </span> 12</small></td><td data-label="Check"><span class="pp-check pp-check--order_needed"><span data-i18n="Order needed">Order needed</span></span></td></tr><tr class="clickable-row" data-sku="MM0019" data-g="balanced"><td class="dtable__title"><button class="product-button" type="button">Nescafe Original<small class="num"><span data-i18n="SKU ">SKU </span> MM0019 &middot; 10 sachets</small></button></td><td data-label="Expected demand"><span class="range num">20&ndash;28 <span data-i18n="units">units</span><small><span data-i18n="next 4 weeks">next 4 weeks</span></small></span></td><td class="num" data-label="In stock">8</td><td data-label="Your order"><span class="num">15</span><small class="pp-suggested num"><span data-i18n="Suggested ">Suggested </span> 16</small></td><td data-label="Check"><span class="pp-check pp-check--balanced"><span data-i18n="Looks balanced">Looks balanced</span></span></td></tr><tr class="clickable-row" data-sku="MM0031" data-g="need_data"><td class="dtable__title"><button class="product-button" type="button">Horlicks 3in1<small class="num"><span data-i18n="SKU ">SKU </span> MM0031 &middot; 20 sachets</small></button></td><td data-label="Expected demand"><span class="range range--none"><span data-i18n="No range yet">No range yet</span></span></td><td class="num" data-label="In stock">4</td><td data-label="Your order"><span class="num"><span data-i18n="Not entered">Not entered</span></span></td><td data-label="Check"><span class="pp-check pp-check--need_data"><span data-i18n="Need more data">Need more data</span></span></td></tr></tbody>
+            <tbody id="rows"></tbody>
           </table>
         </div>
         <div class="list-footer">
-          <span role="status" id="shown"><span data-i18n="Showing ">Showing </span> 7 <span data-i18n="of ">of </span> 7 <span data-i18n="products">products</span></span>
-          <button class="btn btn--ghost btn--small" type="button"><span data-i18n="← Back to readiness">← Back to readiness</span></button>
-          <button class="btn btn--primary btn--small" type="button"><span data-i18n="See your impact →">See your impact →</span></button>
+          <span role="status" id="shown"></span>
+          <a class="btn btn--ghost btn--small" href="StockLess-Step3-Readiness.html"><span data-i18n="← Back to readiness">← Back to readiness</span></a>
+          <a class="btn btn--primary btn--small" href="StockLess-Impact-Dashboard.html"><span data-i18n="See your impact →">See your impact →</span></a>
         </div>
       </section>
-      
-<aside class="pp-panel" aria-label="Purchase details">
-  <div class="pp-nav"><span>Product 1 of 7</span>
-    <span class="pp-nav__buttons">
-      <button type="button" aria-label="Previous product">&lsaquo;</button>
-      <button type="button" aria-label="Next product">&rsaquo;</button></span></div>
-
-  <div class="pp-head">
-    <h2>Kopi O Kaw 2in1</h2>
-    <p class="pp-head__sub">SKU  MM0001 &middot; Stock counted  12 Sep 2026
-      <span class="source-tag source--file">from your file</span> &middot; 3 days ago</p>
-    <div class="pp-head__tags"><span class="pill pill--ready">Ready</span>
-      <span class="pill pill--grey">Steady seller</span></div>
-  </div>
-
-  <section class="pp-block">
-    <h3>What are you planning to order?</h3>
-    <div class="pp-suggest">
-      <div><span class="pp-suggest__k">StockLess suggests</span>
-        <span class="pp-suggest__v num">15<small> units</small></span>
-        <span class="pp-suggest__k">for the next 4 weeks</span></div>
-      <button type="button" class="btn btn--primary btn--small">Use  15</button>
-    </div>
-
-    <div class="pp-field">
-      <div class="pp-field__head"><label for="pp-order">Planned order</label>
-        <output class="pp-field__value pp-field__value--empty">Not entered</output></div>
-      <div class="pp-stepper">
-        <button type="button" class="pp-stepper__btn" aria-label="Decrease planned order">&minus;</button>
-        <input id="pp-order" class="pp-stepper__input num" type="text" inputmode="numeric"
-               value="" placeholder="&mdash;">
-        <button type="button" class="pp-stepper__btn" aria-label="Increase planned order">+</button></div>
-      <input class="pp-field__range" type="range" min="0" max="52" value="0" aria-label="Planned order">
-      <div class="pp-field__foot"><small>Leave it empty until you have decided.</small></div>
-    </div>
-
-    <div class="pp-field">
-      <div class="pp-field__head"><label for="pp-inc">Incoming stock</label>
-        <output class="pp-field__value num">0<small> units</small></output></div>
-      <div class="pp-stepper">
-        <button type="button" class="pp-stepper__btn" aria-label="Decrease incoming stock">&minus;</button>
-        <input id="pp-inc" class="pp-stepper__input num" type="text" inputmode="numeric" value="0">
-        <button type="button" class="pp-stepper__btn" aria-label="Increase incoming stock">+</button></div>
-      <input class="pp-field__range" type="range" min="0" max="52" value="0" aria-label="Incoming stock">
-      <div class="pp-field__foot"><small>Already ordered but not arrived. Not entered is treated as 0.</small></div>
-    </div>
-  </section>
-
-  <section class="pp-block">
-    <h3>Purchase check</h3>
-    <p class="pp-eq num"><span>7 in stock</span> + <span>0 incoming</span>
-      + <span>0 order</span> = <b>7 units</b></p>
-    <div class="pp-bar" role="img" aria-label="7 units 18-26">
-      <span class="pp-bar__band" style="left:60.20%;width:26.76%"></span>
-      <span class="pp-bar__seg pp-bar__seg--stock" style="left:0;width:23.41%"></span>
-    </div>
-    <div class="pp-bar__axis num"><span style="left:60.20%">18 low</span>
-      <span style="left:86.96%">26 high</span></div>
-    <ul class="pp-bar__key">
-      <li><i class="pp-bar__seg--stock"></i>In stock</li>
-      <li><i class="pp-bar__seg--incoming"></i>Incoming</li>
-      <li><i class="pp-bar__seg--order"></i>Your order</li>
-      <li><i class="pp-bar__band"></i>Expected demand</li></ul>
-    <div class="pp-verdict pp-verdict--under"><b>Needs review</b><span>You would have 7 units, below the 18-unit four-week range, so the planned order looks too little.</span></div>
-  </section>
-
-  <section class="pp-block">
-    <div class="pp-expiry"><span class="pp-expiry__mark" aria-hidden="true">&#10003;</span>
-      <div><b>Expiry</b><p>No expiry inside the next 4 weeks</p></div></div>
-  </section>
-
-  <section class="pp-block">
-    <h3>Sales evidence</h3>
-    <svg class="pp-chart" viewBox="0 0 380 165" role="img" aria-label="Weekly sales and expected demand" style="width:100%;height:auto;display:block;margin-top:4px"><style>.pp-chart text{fill:var(--muted);font:13px var(--body)}</style><line x1="30.0" x2="354.0" y1="137.0" y2="137.0" stroke="var(--line)"/><text x="24.0" y="141.0" text-anchor="end">0</text><line x1="30.0" x2="354.0" y1="106.8" y2="106.8" stroke="var(--line)"/><text x="24.0" y="110.8" text-anchor="end">2</text><line x1="30.0" x2="354.0" y1="76.5" y2="76.5" stroke="var(--line)"/><text x="24.0" y="80.5" text-anchor="end">4</text><line x1="30.0" x2="354.0" y1="46.2" y2="46.2" stroke="var(--line)"/><text x="24.0" y="50.2" text-anchor="end">6</text><line x1="30.0" x2="354.0" y1="16.0" y2="16.0" stroke="var(--line)"/><text x="24.0" y="20.0" text-anchor="end">8</text><rect x="236.2" y="38.7" width="117.8" height="30.2" fill="rgba(22,125,116,.14)"/><line x1="236.2" x2="354.0" y1="53.8" y2="53.8" stroke="var(--teal)" stroke-width="2" stroke-dasharray="5 4"/><line x1="236.2" x2="236.2" y1="14.0" y2="137.0" stroke="var(--muted-2)" stroke-dasharray="2 3"/><polyline points="30.0,46.2 59.5,76.5 88.9,31.1 118.4,61.4 147.8,46.2 177.3,91.6 206.7,61.4 236.2,76.5" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><circle cx="30.0" cy="46.2" r="2.5" fill="var(--ink)"/><circle cx="59.5" cy="76.5" r="2.5" fill="var(--ink)"/><circle cx="88.9" cy="31.1" r="2.5" fill="var(--ink)"/><circle cx="118.4" cy="61.4" r="2.5" fill="var(--ink)"/><circle cx="147.8" cy="46.2" r="2.5" fill="var(--ink)"/><circle cx="177.3" cy="91.6" r="2.5" fill="var(--ink)"/><circle cx="206.7" cy="61.4" r="2.5" fill="var(--ink)"/><circle cx="236.2" cy="76.5" r="2.5" fill="var(--ink)"/><text x="30.0" y="157.0" text-anchor="middle">28 Jul</text><text x="147.8" y="157.0" text-anchor="middle">25 Aug</text><text x="236.2" y="157.0" text-anchor="middle">15 Sep</text><text x="354.0" y="157.0" text-anchor="middle">wk 4</text></svg>
-    <div class="pp-stats">
-      <div class="pp-stat"><span>Sells per week</span><b class="num">5.5 units</b></div>
-      <div class="pp-stat"><span>Current stock lasts</span><b class="num">1.3 weeks</b></div></div>
-    <p class="pp-basis">Range based on 8 weeks of sales, 28 Jul to 15 Sep 2026. <span class="source-tag source--worked">worked out by StockLess</span></p>
-  </section>
-
-  <section class="pp-block">
-    <details class="pp-why"><summary>How StockLess got  15 units</summary>
-      <ul><li>Middle of expected demand:  <b class="num">22</b></li>
-        <li>Stock on hand:  <b class="num">&minus;7</b>
-          <span class="source-tag source--file">from your file</span></li>
-        <li>Incoming stock:  <b class="num">&minus;0</b></li>
-        <li>Planned order you entered:  <b class="num">Not entered</b></li>
-        <li>Expiry adjustment:  <b>No expiry inside the next 4 weeks</b></li></ul>
-      <p>Demand comes from 8 weeks of sales, 28 Jul to 15 Sep 2026.</p></details>
-  </section>
-
-  <div class="pp-foot"><span class="pp-foot__note">Stays on this device</span>
-    <button type="button" class="btn btn--primary btn--small">Next product →</button></div>
-</aside>
-
+      <aside class="pp-panel" id="panel" aria-label="Purchase details"></aside>
     </div>
 </main></div>
 </div>
 <script>
 (function () {
-  var T = {"en": {"Upload": "Upload", "Map columns": "Map columns", "Check readiness": "Check readiness", "Plan purchases": "Plan purchases", "units": "units", "next 4 weeks": "next 4 weeks", "Suggested ": "Suggested ", "Not entered": "Not entered", "SKU ": "SKU ", "Expected demand": "Expected demand", "In stock": "In stock", "Your order": "Your order", "Check": "Check", "Order needed": "Order needed", "Looks balanced": "Looks balanced", "Check your order": "Check your order", "No range yet": "No range yet", "Need more data": "Need more data", "Plan what to restock, then check it before you order.": "Plan what to restock, then check it before you order.", "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.": "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.", "Your figures stay local.": "Your figures stay local.", "Typed order quantities last for this visit only and are not sent to a supplier.": "Typed order quantities last for this visit only and are not sent to a supplier.", "Review demand": "Review demand", "See past sales and the four-week range.": "See past sales and the four-week range.", "Enter your quantities": "Enter your quantities", "Add your planned order and incoming stock.": "Add your planned order and incoming stock.", "Check before ordering": "Check before ordering", "Compare the plan with expected demand.": "Compare the plan with expected demand.", "Can plan": "Can plan", "Usable demand and stock evidence": "Usable demand and stock evidence", "Open a product to see the next action": "Open a product to see the next action", "Plans entered": "Plans entered", "Included in the product totals": "Included in the product totals", "Planned purchase spending": "Planned purchase spending", "Not available": "Not available", "Purchase cost and currency required": "Purchase cost and currency required", "Incoming stock cost": "Incoming stock cost", "Potential excess-stock cost": "Potential excess-stock cost", "Ready": "Ready", "Purchase check": "Purchase check", "Review and plan →": "Review and plan →", "Limited": "Limited", "Estimated restock": "Estimated restock", "No reliable estimate": "No reliable estimate", "See what is needed →": "See what is needed →", "How to plan an order": "How to plan an order", "From sales data to your next order": "From sales data to your next order", "Select a product below, then follow these three steps.": "Select a product below, then follow these three steps.", "Your next purchase, at a glance": "Your next purchase, at a glance", "products": "products", "for the next 4 weeks": "for the next 4 weeks", "What will this plan cost?": "What will this plan cost?", "Money insights · design preview": "Money insights · design preview", "Open dashboard example →": "Open dashboard example →", "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.": "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.", "Next step: ": "Next step: ", "Open a product, review the estimate, and enter the quantity you intend to order.": "Open a product, review the estimate, and enter the quantity you intend to order.", "Start with these products": "Start with these products", "Purchase concerns appear first. Each suggestion uses your current inputs.": "Purchase concerns appear first. Each suggestion uses your current inputs.", "Filter by what each product needs": "Filter by what each product needs", "All products": "All products", "No order entered yet, or below expected demand": "No order entered yet, or below expected demand", "More than even the busiest expected month": "More than even the busiest expected month", "Within expected demand": "Within expected demand", "StockLess could not judge these yet": "StockLess could not judge these yet", "Search by product name or SKU": "Search by product name or SKU", "Only products I am ordering": "Only products I am ordering", "Key: ": "Key: ", "from your file": "from your file", "worked out by StockLess": "worked out by StockLess", "input by you": "input by you", "Product": "Product", "Showing ": "Showing ", "of ": "of ", "← Back to readiness": "← Back to readiness", "See your impact →": "See your impact →", "Purchase details": "Purchase details", "Previous product": "Previous product", "Next product": "Next product", "Stock counted ": "Stock counted ", "days ago": "days ago", "Steady seller": "Steady seller", "What are you planning to order?": "What are you planning to order?", "StockLess suggests": "StockLess suggests", "Use ": "Use ", "Planned order": "Planned order", "Decrease planned order": "Decrease planned order", "Increase planned order": "Increase planned order", "Leave it empty until you have decided.": "Leave it empty until you have decided.", "Incoming stock": "Incoming stock", "Decrease incoming stock": "Decrease incoming stock", "Increase incoming stock": "Increase incoming stock", "Already ordered but not arrived. Not entered is treated as 0.": "Already ordered but not arrived. Not entered is treated as 0.", "in stock": "in stock", "incoming": "incoming", "order": "order", "low": "low", "high": "high", "Incoming": "Incoming", "Needs review": "Needs review", "Expiry": "Expiry", "Sales evidence": "Sales evidence", "Sells per week": "Sells per week", "Current stock lasts": "Current stock lasts", "weeks": "weeks", "How StockLess got ": "How StockLess got ", "Stays on this device": "Stays on this device", "Next product →": "Next product →", "Product ": "Product ", "Weekly sales and expected demand": "Weekly sales and expected demand"}, "ms": {"Upload": "Muat naik", "Map columns": "Padankan lajur", "Check readiness": "Semak kesediaan", "Plan purchases": "Rancang pembelian", "units": "unit", "next 4 weeks": "4 minggu akan datang", "Suggested ": "Dicadangkan ", "Not entered": "Belum dimasukkan", "SKU ": "SKU ", "Expected demand": "Jangkaan permintaan", "In stock": "Dalam stok", "Your order": "Pesanan anda", "Check": "Semakan", "Order needed": "Perlu pesanan", "Looks balanced": "Nampak seimbang", "Check your order": "Semak pesanan anda", "No range yet": "Belum ada julat", "Need more data": "Perlu lebih banyak data", "Plan what to restock, then check it before you order.": "Rancang stok tambahan dan semak sebelum memesan.", "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.": "Mulakan dengan anggaran StockLess, masukkan kuantiti pembelian anda dan semak sama ada pelan sesuai dengan jangkaan permintaan.", "Your figures stay local.": "Angka anda kekal setempat.", "Typed order quantities last for this visit only and are not sent to a supplier.": "Kuantiti pesanan yang dimasukkan hanya disimpan untuk lawatan ini dan tidak dihantar kepada pembekal.", "Review demand": "Semak permintaan", "See past sales and the four-week range.": "Lihat jualan lalu dan julat empat minggu.", "Enter your quantities": "Masukkan kuantiti anda", "Add your planned order and incoming stock.": "Tambah pesanan dirancang dan stok dalam perjalanan anda.", "Check before ordering": "Semak sebelum memesan", "Compare the plan with expected demand.": "Bandingkan pelan dengan permintaan yang dijangka.", "Can plan": "Boleh dirancang", "Usable demand and stock evidence": "Bukti permintaan dan stok yang boleh digunakan", "Open a product to see the next action": "Buka produk untuk melihat tindakan seterusnya", "Plans entered": "Pelan dimasukkan", "Included in the product totals": "Termasuk dalam jumlah produk", "Planned purchase spending": "Perbelanjaan pembelian dirancang", "Not available": "Tidak tersedia", "Purchase cost and currency required": "Memerlukan kos pembelian dan mata wang", "Incoming stock cost": "Kos stok dalam perjalanan", "Potential excess-stock cost": "Kos potensi lebihan stok", "Ready": "Sedia", "Purchase check": "Semakan pembelian", "Review and plan →": "Semak dan rancang →", "Limited": "Terhad", "Estimated restock": "Anggaran tambahan stok", "No reliable estimate": "Tiada anggaran yang boleh dipercayai", "See what is needed →": "Lihat apa yang diperlukan →", "How to plan an order": "Cara merancang pesanan", "From sales data to your next order": "Daripada data jualan kepada pesanan anda seterusnya", "Select a product below, then follow these three steps.": "Pilih produk di bawah, kemudian ikut tiga langkah ini.", "Your next purchase, at a glance": "Pembelian anda seterusnya, sekilas pandang", "products": "produk", "for the next 4 weeks": "untuk 4 minggu akan datang", "What will this plan cost?": "Berapakah kos pelan ini?", "Money insights · design preview": "Wawasan kewangan · pratonton reka bentuk", "Open dashboard example →": "Buka contoh papan pemuka →", "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.": "Fail ini belum mempunyai keputusan kewangan yang disambungkan. Contoh ini menggunakan data rekaan yang berasingan dan tidak pernah mengubah pelan pembelian anda.", "Next step: ": "Langkah seterusnya: ", "Open a product, review the estimate, and enter the quantity you intend to order.": "Buka produk, semak anggaran, dan masukkan kuantiti yang anda ingin pesan.", "Start with these products": "Mulakan dengan produk ini", "Purchase concerns appear first. Each suggestion uses your current inputs.": "Kebimbangan pembelian muncul dahulu. Setiap cadangan menggunakan input semasa anda.", "Filter by what each product needs": "Tapis mengikut tindakan yang diperlukan setiap produk", "All products": "Semua produk", "No order entered yet, or below expected demand": "Belum ada kuantiti dimasukkan, atau di bawah permintaan dijangka", "More than even the busiest expected month": "Melebihi bulan tersibuk yang dijangka", "Within expected demand": "Dalam permintaan yang dijangka", "StockLess could not judge these yet": "StockLess belum dapat menilai produk ini", "Search by product name or SKU": "Cari mengikut nama produk atau SKU", "Only products I am ordering": "Hanya produk yang saya pesan", "Key: ": "Petunjuk: ", "from your file": "daripada fail anda", "worked out by StockLess": "dikira oleh StockLess", "input by you": "dimasukkan oleh anda", "Product": "Produk", "Showing ": "Menunjukkan ", "of ": "daripada ", "← Back to readiness": "← Kembali ke semakan kesediaan", "See your impact →": "Lihat impak anda →", "Purchase details": "Butiran pembelian", "Previous product": "Produk sebelumnya", "Next product": "Produk seterusnya", "Stock counted ": "Stok dikira ", "days ago": "hari lalu", "Steady seller": "Jualan stabil", "What are you planning to order?": "Berapakah kuantiti yang ingin dipesan?", "StockLess suggests": "StockLess mencadangkan", "Use ": "Guna ", "Planned order": "Kuantiti pesanan dirancang", "Decrease planned order": "Kurangkan pesanan dirancang", "Increase planned order": "Tambah pesanan dirancang", "Leave it empty until you have decided.": "Biarkan kosong sehingga anda membuat keputusan.", "Incoming stock": "Stok akan tiba", "Decrease incoming stock": "Kurangkan stok dalam perjalanan", "Increase incoming stock": "Tambah stok dalam perjalanan", "Already ordered but not arrived. Not entered is treated as 0.": "Sudah dipesan tetapi belum tiba. Tidak dimasukkan dikira sebagai 0.", "in stock": "dalam stok", "incoming": "dalam perjalanan", "order": "pesanan", "low": "rendah", "high": "atas", "Incoming": "Dalam perjalanan", "Needs review": "Perlu disemak", "Expiry": "Tarikh luput", "Sales evidence": "Bukti jualan", "Sells per week": "Jualan seminggu", "Current stock lasts": "Stok semasa bertahan", "weeks": "minggu", "How StockLess got ": "Bagaimana StockLess mendapat ", "Stays on this device": "Kekal pada peranti ini", "Next product →": "Produk seterusnya →", "Product ": "Produk ", "Weekly sales and expected demand": "Jualan mingguan dan permintaan dijangka"}, "zh": {"Upload": "上传", "Map columns": "匹配字段", "Check readiness": "检查就绪", "Plan purchases": "采购计划", "units": "件", "next 4 weeks": "未来 4 周", "Suggested ": "建议 ", "Not entered": "未输入", "SKU ": "SKU ", "Expected demand": "预计需求", "In stock": "现有库存", "Your order": "您的订购量", "Check": "检查结果", "Order needed": "需要下单", "Looks balanced": "数量适中", "Check your order": "检查订购量", "No range yet": "尚无预估区间", "Need more data": "需要更多数据", "Plan what to restock, then check it before you order.": "规划补货，并在下单前检查。", "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.": "参考 StockLess 的预计数量，输入计划购买量，检查是否符合预计需求。", "Your figures stay local.": "您的数据仅保留在本地。", "Typed order quantities last for this visit only and are not sent to a supplier.": "输入的订购量仅保留在本次访问中，不会发送给供应商。", "Review demand": "查看需求", "See past sales and the four-week range.": "查看过往销量与四周区间。", "Enter your quantities": "输入您的数量", "Add your planned order and incoming stock.": "加入您的计划订购量与在途库存。", "Check before ordering": "下单前先检查", "Compare the plan with expected demand.": "将计划与预期需求作比较。", "Can plan": "可以规划", "Usable demand and stock evidence": "具备可用的需求与库存依据", "Open a product to see the next action": "打开商品查看下一步操作", "Plans entered": "已输入计划", "Included in the product totals": "已计入商品合计", "Planned purchase spending": "计划采购支出", "Not available": "不可用", "Purchase cost and currency required": "需要采购成本与币别", "Incoming stock cost": "在途库存成本", "Potential excess-stock cost": "潜在过量库存成本", "Ready": "可用", "Purchase check": "采购检查", "Review and plan →": "查看并规划 →", "Limited": "有限", "Estimated restock": "预计补货量", "No reliable estimate": "暂无可靠估算", "See what is needed →": "查看还缺什么 →", "How to plan an order": "如何规划一次订购", "From sales data to your next order": "从销售数据到下一次订购", "Select a product below, then follow these three steps.": "请在下方选择一件商品，然后按这三个步骤操作。", "Your next purchase, at a glance": "下一次采购一览", "products": "件商品", "for the next 4 weeks": "未来四周", "What will this plan cost?": "这个计划会花多少钱？", "Money insights · design preview": "金额洞察 · 设计预览", "Open dashboard example →": "打开面板示例 →", "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.": "此文件尚未连接任何财务结果。示例使用另一组虚构数据，不会改动您的采购计划。", "Next step: ": "下一步：", "Open a product, review the estimate, and enter the quantity you intend to order.": "打开一件商品，查看估算，再输入您打算订购的数量。", "Start with these products": "先从这些商品开始", "Purchase concerns appear first. Each suggestion uses your current inputs.": "有采购疑虑的商品会排在前面。每项建议都依据您当前的输入。", "Filter by what each product needs": "按每件商品需要的处理方式筛选", "All products": "全部商品", "No order entered yet, or below expected demand": "尚未输入订购量，或低于预期需求", "More than even the busiest expected month": "超过预期最旺的一个月", "Within expected demand": "在预期需求范围内", "StockLess could not judge these yet": "StockLess 暂时无法判断这些商品", "Search by product name or SKU": "按商品名称或 SKU 搜索", "Only products I am ordering": "只显示我计划订购的商品", "Key: ": "图例：", "from your file": "来自您的文件", "worked out by StockLess": "由 StockLess 计算", "input by you": "由您输入", "Product": "商品", "Showing ": "显示 ", "of ": "／共 ", "← Back to readiness": "← 返回数据检查", "See your impact →": "查看您的影响 →", "Purchase details": "采购详情", "Previous product": "上一件商品", "Next product": "下一件商品", "Stock counted ": "盘点日期 ", "days ago": "天前", "Steady seller": "销售稳定", "What are you planning to order?": "您计划订购多少？", "StockLess suggests": "StockLess 建议", "Use ": "采用 ", "Planned order": "计划订购量", "Decrease planned order": "减少计划订购量", "Increase planned order": "增加计划订购量", "Leave it empty until you have decided.": "在您决定之前可以留空。", "Incoming stock": "在途库存", "Decrease incoming stock": "减少在途库存", "Increase incoming stock": "增加在途库存", "Already ordered but not arrived. Not entered is treated as 0.": "已下单但尚未到货。留空视为 0。", "in stock": "现有库存", "incoming": "在途", "order": "订购", "low": "下限", "high": "上限", "Incoming": "在途库存", "Needs review": "需要复核", "Expiry": "有效期", "Sales evidence": "销售依据", "Sells per week": "每周销量", "Current stock lasts": "现有库存可支撑", "weeks": "周", "How StockLess got ": "StockLess 如何算出 ", "Stays on this device": "只保存在本机", "Next product →": "下一件商品 →", "Product ": "第 ", "Weekly sales and expected demand": "每周销量与预期需求"}};
+  var T = {"en": {"Upload": "Upload", "Map columns": "Map columns", "Check readiness": "Check readiness", "Plan purchases": "Plan purchases", "Product ": "Product ", "of ": "of ", "Previous product": "Previous product", "Next product": "Next product", "Next product →": "Next product →", "SKU ": "SKU ", "Stock counted ": "Stock counted ", "from your file": "from your file", "worked out by StockLess": "worked out by StockLess", "input by you": "input by you", "days ago": "days ago", "Ready": "Ready", "Limited": "Limited", "Steady seller": "Steady seller", "What are you planning to order?": "What are you planning to order?", "StockLess suggests": "StockLess suggests", "units": "units", "for the next 4 weeks": "for the next 4 weeks", "Use ": "Use ", "Planned order": "Planned order", "Not entered": "Not entered", "Incoming stock": "Incoming stock", "Decrease planned order": "Decrease planned order", "Increase planned order": "Increase planned order", "Decrease incoming stock": "Decrease incoming stock", "Increase incoming stock": "Increase incoming stock", "Clear": "Clear", "Leave it empty until you have decided.": "Leave it empty until you have decided.", "Already ordered but not arrived. Not entered is treated as 0.": "Already ordered but not arrived. Not entered is treated as 0.", "Purchase check": "Purchase check", "in stock": "in stock", "incoming": "incoming", "order": "order", "low": "low", "high": "high", "In stock": "In stock", "Incoming": "Incoming", "Your order": "Your order", "Expected demand": "Expected demand", "Looks balanced": "Looks balanced", "Needs review": "Needs review", "Overstock risk": "Overstock risk", "Expiry": "Expiry", "Sales evidence": "Sales evidence", "Sells per week": "Sells per week", "Current stock lasts": "Current stock lasts", "weeks": "weeks", "How StockLess got ": "How StockLess got ", "Stays on this device": "Stays on this device", "No suggestion yet": "No suggestion yet", "Next: ": "Next: ", "Purchase details": "Purchase details", "Estimated restock": "Estimated restock", "No reliable estimate": "No reliable estimate", "Review and plan →": "Review and plan →", "See what is needed →": "See what is needed →", "Not available": "Not available", "products": "products", "Middle of expected demand: ": "Middle of expected demand: ", "Stock on hand: ": "Stock on hand: ", "Incoming stock: ": "Incoming stock: ", "Planned order you entered: ": "Planned order you entered: ", "Expiry adjustment: ": "Expiry adjustment: ", "No expiry inside the next 4 weeks": "No expiry inside the next 4 weeks", "Showing ": "Showing ", "Check": "Check", "No range yet": "No range yet", "next 4 weeks": "next 4 weeks", "Suggested ": "Suggested ", "All products": "All products", "No products match. Try another group or clear the search.": "No products match. Try another group or clear the search.", "Weekly sales and expected demand": "Weekly sales and expected demand", "Search by product name or SKU": "Search by product name or SKU", "Order needed": "Order needed", "No order entered yet, or below expected demand": "No order entered yet, or below expected demand", "Check your order": "Check your order", "More than even the busiest expected month": "More than even the busiest expected month", "Within expected demand": "Within expected demand", "Need more data": "Need more data", "StockLess could not judge these yet": "StockLess could not judge these yet", "Review demand": "Review demand", "See past sales and the four-week range.": "See past sales and the four-week range.", "Enter your quantities": "Enter your quantities", "Add your planned order and incoming stock.": "Add your planned order and incoming stock.", "Check before ordering": "Check before ordering", "Compare the plan with expected demand.": "Compare the plan with expected demand.", "Plan what to restock, then check it before you order.": "Plan what to restock, then check it before you order.", "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.": "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.", "Your figures stay local.": "Your figures stay local.", "Typed order quantities last for this visit only and are not sent to a supplier.": "Typed order quantities last for this visit only and are not sent to a supplier.", "How to plan an order": "How to plan an order", "From sales data to your next order": "From sales data to your next order", "Select a product below, then follow these three steps.": "Select a product below, then follow these three steps.", "Your next purchase, at a glance": "Your next purchase, at a glance", "Can plan": "Can plan", "Usable demand and stock evidence": "Usable demand and stock evidence", "Open a product to see the next action": "Open a product to see the next action", "Plans entered": "Plans entered", "Included in the product totals": "Included in the product totals", "What will this plan cost?": "What will this plan cost?", "Money insights · design preview": "Money insights · design preview", "Open dashboard example →": "Open dashboard example →", "Estimated overstock avoided": "Estimated overstock avoided", "Planned purchase spending": "Planned purchase spending", "Purchase cost and currency required": "Purchase cost and currency required", "Incoming stock cost": "Incoming stock cost", "Potential excess-stock cost": "Potential excess-stock cost", "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.": "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.", "Next step: ": "Next step: ", "Open a product, review the estimate, and enter the quantity you intend to order.": "Open a product, review the estimate, and enter the quantity you intend to order.", "Start with these products": "Start with these products", "Purchase concerns appear first. Each suggestion uses your current inputs.": "Purchase concerns appear first. Each suggestion uses your current inputs.", "Filter by what each product needs": "Filter by what each product needs", "Only products I am ordering": "Only products I am ordering", "Key: ": "Key: ", "Product": "Product", "← Back to readiness": "← Back to readiness", "See your impact →": "See your impact →"}, "ms": {"Upload": "Muat naik", "Map columns": "Padankan lajur", "Check readiness": "Semak kesediaan", "Plan purchases": "Rancang pembelian", "Product ": "Produk ", "of ": "daripada ", "Previous product": "Produk sebelumnya", "Next product": "Produk seterusnya", "Next product →": "Produk seterusnya →", "SKU ": "SKU ", "Stock counted ": "Stok dikira ", "from your file": "daripada fail anda", "worked out by StockLess": "dikira oleh StockLess", "input by you": "dimasukkan oleh anda", "days ago": "hari lalu", "Ready": "Sedia", "Limited": "Terhad", "Steady seller": "Jualan stabil", "What are you planning to order?": "Berapakah kuantiti yang ingin dipesan?", "StockLess suggests": "StockLess mencadangkan", "units": "unit", "for the next 4 weeks": "untuk 4 minggu akan datang", "Use ": "Guna ", "Planned order": "Kuantiti pesanan dirancang", "Not entered": "Belum dimasukkan", "Incoming stock": "Stok akan tiba", "Decrease planned order": "Kurangkan pesanan dirancang", "Increase planned order": "Tambah pesanan dirancang", "Decrease incoming stock": "Kurangkan stok dalam perjalanan", "Increase incoming stock": "Tambah stok dalam perjalanan", "Clear": "Kosongkan", "Leave it empty until you have decided.": "Biarkan kosong sehingga anda membuat keputusan.", "Already ordered but not arrived. Not entered is treated as 0.": "Sudah dipesan tetapi belum tiba. Tidak dimasukkan dikira sebagai 0.", "Purchase check": "Semakan pembelian", "in stock": "dalam stok", "incoming": "dalam perjalanan", "order": "pesanan", "low": "rendah", "high": "atas", "In stock": "Dalam stok", "Incoming": "Dalam perjalanan", "Your order": "Pesanan anda", "Expected demand": "Jangkaan permintaan", "Looks balanced": "Nampak seimbang", "Needs review": "Perlu disemak", "Overstock risk": "Risiko lebihan stok", "Expiry": "Tarikh luput", "Sales evidence": "Bukti jualan", "Sells per week": "Jualan seminggu", "Current stock lasts": "Stok semasa bertahan", "weeks": "minggu", "How StockLess got ": "Bagaimana StockLess mendapat ", "Stays on this device": "Kekal pada peranti ini", "No suggestion yet": "Belum ada cadangan", "Next: ": "Seterusnya: ", "Purchase details": "Butiran pembelian", "Estimated restock": "Anggaran tambahan stok", "No reliable estimate": "Tiada anggaran yang boleh dipercayai", "Review and plan →": "Semak dan rancang →", "See what is needed →": "Lihat apa yang diperlukan →", "Not available": "Tidak tersedia", "products": "produk", "Middle of expected demand: ": "Pertengahan permintaan dijangka: ", "Stock on hand: ": "Stok sedia ada: ", "Incoming stock: ": "Stok dalam perjalanan: ", "Planned order you entered: ": "Pesanan dirancang yang anda masukkan: ", "Expiry adjustment: ": "Pelarasan tarikh luput: ", "No expiry inside the next 4 weeks": "Tiada tarikh luput dalam 4 minggu akan datang", "Showing ": "Menunjukkan ", "Check": "Semakan", "No range yet": "Belum ada julat", "next 4 weeks": "4 minggu akan datang", "Suggested ": "Dicadangkan ", "All products": "Semua produk", "No products match. Try another group or clear the search.": "Tiada produk yang sepadan. Cuba kumpulan lain atau kosongkan carian.", "Weekly sales and expected demand": "Jualan mingguan dan permintaan dijangka", "Search by product name or SKU": "Cari mengikut nama produk atau SKU", "Order needed": "Perlu pesanan", "No order entered yet, or below expected demand": "Belum ada kuantiti dimasukkan, atau di bawah permintaan dijangka", "Check your order": "Semak pesanan anda", "More than even the busiest expected month": "Melebihi bulan tersibuk yang dijangka", "Within expected demand": "Dalam permintaan yang dijangka", "Need more data": "Perlu lebih banyak data", "StockLess could not judge these yet": "StockLess belum dapat menilai produk ini", "Review demand": "Semak permintaan", "See past sales and the four-week range.": "Lihat jualan lalu dan julat empat minggu.", "Enter your quantities": "Masukkan kuantiti anda", "Add your planned order and incoming stock.": "Tambah pesanan dirancang dan stok dalam perjalanan anda.", "Check before ordering": "Semak sebelum memesan", "Compare the plan with expected demand.": "Bandingkan pelan dengan permintaan yang dijangka.", "Plan what to restock, then check it before you order.": "Rancang stok tambahan dan semak sebelum memesan.", "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.": "Mulakan dengan anggaran StockLess, masukkan kuantiti pembelian anda dan semak sama ada pelan sesuai dengan jangkaan permintaan.", "Your figures stay local.": "Angka anda kekal setempat.", "Typed order quantities last for this visit only and are not sent to a supplier.": "Kuantiti pesanan yang dimasukkan hanya disimpan untuk lawatan ini dan tidak dihantar kepada pembekal.", "How to plan an order": "Cara merancang pesanan", "From sales data to your next order": "Daripada data jualan kepada pesanan anda seterusnya", "Select a product below, then follow these three steps.": "Pilih produk di bawah, kemudian ikut tiga langkah ini.", "Your next purchase, at a glance": "Pembelian anda seterusnya, sekilas pandang", "Can plan": "Boleh dirancang", "Usable demand and stock evidence": "Bukti permintaan dan stok yang boleh digunakan", "Open a product to see the next action": "Buka produk untuk melihat tindakan seterusnya", "Plans entered": "Pelan dimasukkan", "Included in the product totals": "Termasuk dalam jumlah produk", "What will this plan cost?": "Berapakah kos pelan ini?", "Money insights · design preview": "Wawasan kewangan · pratonton reka bentuk", "Open dashboard example →": "Buka contoh papan pemuka →", "Estimated overstock avoided": "Anggaran lebihan stok yang dielakkan", "Planned purchase spending": "Perbelanjaan pembelian dirancang", "Purchase cost and currency required": "Memerlukan kos pembelian dan mata wang", "Incoming stock cost": "Kos stok dalam perjalanan", "Potential excess-stock cost": "Kos potensi lebihan stok", "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.": "Fail ini belum mempunyai keputusan kewangan yang disambungkan. Contoh ini menggunakan data rekaan yang berasingan dan tidak pernah mengubah pelan pembelian anda.", "Next step: ": "Langkah seterusnya: ", "Open a product, review the estimate, and enter the quantity you intend to order.": "Buka produk, semak anggaran, dan masukkan kuantiti yang anda ingin pesan.", "Start with these products": "Mulakan dengan produk ini", "Purchase concerns appear first. Each suggestion uses your current inputs.": "Kebimbangan pembelian muncul dahulu. Setiap cadangan menggunakan input semasa anda.", "Filter by what each product needs": "Tapis mengikut tindakan yang diperlukan setiap produk", "Only products I am ordering": "Hanya produk yang saya pesan", "Key: ": "Petunjuk: ", "Product": "Produk", "← Back to readiness": "← Kembali ke semakan kesediaan", "See your impact →": "Lihat impak anda →"}, "zh": {"Upload": "上传", "Map columns": "匹配字段", "Check readiness": "检查就绪", "Plan purchases": "采购计划", "Product ": "第 ", "of ": "／共 ", "Previous product": "上一件商品", "Next product": "下一件商品", "Next product →": "下一件商品 →", "SKU ": "SKU ", "Stock counted ": "盘点日期 ", "from your file": "来自您的文件", "worked out by StockLess": "由 StockLess 计算", "input by you": "由您输入", "days ago": "天前", "Ready": "可用", "Limited": "有限", "Steady seller": "销售稳定", "What are you planning to order?": "您计划订购多少？", "StockLess suggests": "StockLess 建议", "units": "件", "for the next 4 weeks": "未来四周", "Use ": "采用 ", "Planned order": "计划订购量", "Not entered": "未输入", "Incoming stock": "在途库存", "Decrease planned order": "减少计划订购量", "Increase planned order": "增加计划订购量", "Decrease incoming stock": "减少在途库存", "Increase incoming stock": "增加在途库存", "Clear": "清除", "Leave it empty until you have decided.": "在您决定之前可以留空。", "Already ordered but not arrived. Not entered is treated as 0.": "已下单但尚未到货。留空视为 0。", "Purchase check": "采购检查", "in stock": "现有库存", "incoming": "在途", "order": "订购", "low": "下限", "high": "上限", "In stock": "现有库存", "Incoming": "在途库存", "Your order": "您的订购量", "Expected demand": "预计需求", "Looks balanced": "数量适中", "Needs review": "需要复核", "Overstock risk": "库存过量风险", "Expiry": "有效期", "Sales evidence": "销售依据", "Sells per week": "每周销量", "Current stock lasts": "现有库存可支撑", "weeks": "周", "How StockLess got ": "StockLess 如何算出 ", "Stays on this device": "只保存在本机", "No suggestion yet": "暂时没有建议", "Next: ": "下一步：", "Purchase details": "采购详情", "Estimated restock": "预计补货量", "No reliable estimate": "暂无可靠估算", "Review and plan →": "查看并规划 →", "See what is needed →": "查看还缺什么 →", "Not available": "不可用", "products": "件商品", "Middle of expected demand: ": "预期需求的中位数：", "Stock on hand: ": "现有库存：", "Incoming stock: ": "在途库存：", "Planned order you entered: ": "您输入的计划订购量：", "Expiry adjustment: ": "有效期调整：", "No expiry inside the next 4 weeks": "未来四周内不会到期", "Showing ": "显示 ", "Check": "检查结果", "No range yet": "尚无预估区间", "next 4 weeks": "未来 4 周", "Suggested ": "建议 ", "All products": "全部商品", "No products match. Try another group or clear the search.": "没有符合条件的商品。请换一个分组，或清除搜索。", "Weekly sales and expected demand": "每周销量与预期需求", "Search by product name or SKU": "按商品名称或 SKU 搜索", "Order needed": "需要下单", "No order entered yet, or below expected demand": "尚未输入订购量，或低于预期需求", "Check your order": "检查订购量", "More than even the busiest expected month": "超过预期最旺的一个月", "Within expected demand": "在预期需求范围内", "Need more data": "需要更多数据", "StockLess could not judge these yet": "StockLess 暂时无法判断这些商品", "Review demand": "查看需求", "See past sales and the four-week range.": "查看过往销量与四周区间。", "Enter your quantities": "输入您的数量", "Add your planned order and incoming stock.": "加入您的计划订购量与在途库存。", "Check before ordering": "下单前先检查", "Compare the plan with expected demand.": "将计划与预期需求作比较。", "Plan what to restock, then check it before you order.": "规划补货，并在下单前检查。", "Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.": "参考 StockLess 的预计数量，输入计划购买量，检查是否符合预计需求。", "Your figures stay local.": "您的数据仅保留在本地。", "Typed order quantities last for this visit only and are not sent to a supplier.": "输入的订购量仅保留在本次访问中，不会发送给供应商。", "How to plan an order": "如何规划一次订购", "From sales data to your next order": "从销售数据到下一次订购", "Select a product below, then follow these three steps.": "请在下方选择一件商品，然后按这三个步骤操作。", "Your next purchase, at a glance": "下一次采购一览", "Can plan": "可以规划", "Usable demand and stock evidence": "具备可用的需求与库存依据", "Open a product to see the next action": "打开商品查看下一步操作", "Plans entered": "已输入计划", "Included in the product totals": "已计入商品合计", "What will this plan cost?": "这个计划会花多少钱？", "Money insights · design preview": "金额洞察 · 设计预览", "Open dashboard example →": "打开面板示例 →", "Estimated overstock avoided": "预计避免的过量库存", "Planned purchase spending": "计划采购支出", "Purchase cost and currency required": "需要采购成本与币别", "Incoming stock cost": "在途库存成本", "Potential excess-stock cost": "潜在过量库存成本", "This file has no connected financial results yet. The example uses separate fictional data and never changes your purchase plan.": "此文件尚未连接任何财务结果。示例使用另一组虚构数据，不会改动您的采购计划。", "Next step: ": "下一步：", "Open a product, review the estimate, and enter the quantity you intend to order.": "打开一件商品，查看估算，再输入您打算订购的数量。", "Start with these products": "先从这些商品开始", "Purchase concerns appear first. Each suggestion uses your current inputs.": "有采购疑虑的商品会排在前面。每项建议都依据您当前的输入。", "Filter by what each product needs": "按每件商品需要的处理方式筛选", "Only products I am ordering": "只显示我计划订购的商品", "Key: ": "图例：", "Product": "商品", "← Back to readiness": "← 返回数据检查", "See your impact →": "查看您的影响 →"}}, P = [{"name": "Kopi O Kaw 2in1", "sku": "MM0001", "pack": "10 sachets", "stock": 7, "low": 18, "high": 26, "order": null, "incoming": 0, "counted": "12 Sep 2026", "daysAgo": 3, "weeks": [6, 4, 7, 5, 6, 3, 5, 4]}, {"name": "Milo 3in1", "sku": "MM0014", "pack": "20 sachets", "stock": 5, "low": 22, "high": 30, "order": 12, "incoming": 0, "counted": "12 Sep 2026", "daysAgo": 3, "weeks": [6, 4, 7, 5, 6, 3, 5, 4]}, {"name": "Milo 3in1", "sku": "MM0027", "pack": "20 sachets", "stock": 2, "low": 16, "high": 23, "order": 34, "incoming": 0, "counted": "11 Sep 2026", "daysAgo": 4, "weeks": [6, 4, 7, 5, 6, 3, 5, 4]}, {"name": "Kopi O Kaw 2in1", "sku": "MM0002", "pack": "20 sachets", "stock": 6, "low": 14, "high": 20, "order": 9, "incoming": 0, "counted": "12 Sep 2026", "daysAgo": 3, "weeks": [6, 4, 7, 5, 6, 3, 5, 4]}, {"name": "Teh Tarik 3in1", "sku": "MM0008", "pack": "15 sachets", "stock": 3, "low": 12, "high": 18, "order": null, "incoming": 0, "counted": "11 Sep 2026", "daysAgo": 4, "weeks": [6, 4, 7, 5, 6, 3, 5, 4]}, {"name": "Nescafe Original", "sku": "MM0019", "pack": "10 sachets", "stock": 8, "low": 20, "high": 28, "order": 15, "incoming": 0, "counted": "13 Sep 2026", "daysAgo": 2, "weeks": [6, 4, 7, 5, 6, 3, 5, 4]}, {"name": "Horlicks 3in1", "sku": "MM0031", "pack": "20 sachets", "stock": 4, "low": null, "high": null, "order": null, "incoming": 0, "counted": "20 Aug 2026", "daysAgo": 26, "weeks": [6, 4, 7, 5, 6, 3, 5, 4]}], GROUPS = [["order_needed", "Order needed", "No order entered yet, or below expected demand"], ["check_order", "Check your order", "More than even the busiest expected month"], ["balanced", "Looks balanced", "Within expected demand"], ["need_data", "Need more data", "StockLess could not judge these yet"]];
   var HTML_LANG = { en: 'en', ms: 'ms', zh: 'zh-Hans' };
-  var sel = document.querySelector('.language-switcher select');
-  function apply(lang) {
-    var dict = T[lang] || T.en;
+  var lang = 'en', sel = P[0].sku, group = 'all', q = '', mine = false;
+  var $ = function (id) { return document.getElementById(id); };
+  var d = function (k) { return (T[lang] && T[lang][k]) || (T.en && T.en[k]) || k; };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  /* ---- the same arithmetic the app's engine does, for the preview ---- */
+  function mid(p) { return Math.round((p.low + p.high) / 2); }
+  function suggest(p) { return p.low == null ? null : Math.max(0, mid(p) - p.stock - (p.incoming || 0)); }
+  function total(p) { return p.stock + (p.incoming || 0) + (p.order || 0); }
+  function groupOf(p) {
+    if (p.low == null) return 'need_data';
+    if (p.order == null) return 'order_needed';
+    var t = total(p);
+    if (t > p.high) return 'check_order';
+    if (t < p.low) return 'order_needed';
+    return 'balanced';
+  }
+  function avoided(p) { return p.low == null || p.order == null ? 0 : Math.max(0, total(p) - p.high); }
+  function label(g) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][0] === g) return d(GROUPS[i][1]); return g; }
+
+  function visible() {
+    var s = q.trim().toLowerCase();
+    return P.filter(function (p) {
+      if (group !== 'all' && groupOf(p) !== group) return false;
+      if (mine && !(p.order > 0)) return false;
+      return !s || (p.name + ' ' + p.sku).toLowerCase().indexOf(s) >= 0;
+    });
+  }
+
+  /* ---- chips ---- */
+  function renderGroups() {
+    var counts = { all: P.length };
+    GROUPS.forEach(function (g) { counts[g[0]] = 0; });
+    P.forEach(function (p) { counts[groupOf(p)]++; });
+    var html = '<button type="button" class="pp-group' + (group === 'all' ? ' pp-group--on' : '') +
+      '" aria-pressed="' + (group === 'all') + '" data-g="all"><b class="num">' + counts.all +
+      '</b><span>' + esc(d('All products')) + '</span></button>';
+    GROUPS.forEach(function (g) {
+      html += '<button type="button" class="pp-group pp-group--' + g[0] +
+        (group === g[0] ? ' pp-group--on' : '') + '" aria-pressed="' + (group === g[0]) +
+        '" data-g="' + g[0] + '"><b class="num">' + counts[g[0]] + '</b><span>' +
+        esc(d(g[1])) + '</span><small>' + esc(d(g[2])) + '</small></button>';
+    });
+    $('groups').innerHTML = html;
+
+    /* the glance tiles read from the same counts */
+    $('gCan').textContent = P.length - counts.need_data;
+    $('gNeed').textContent = counts.need_data;
+    $('gEntered').textContent = P.filter(function (p) { return p.order != null; }).length;
+    $('gTotal').textContent = P.length;
+
+    /* the dashboard's headline figure, on this page */
+    var units = P.reduce(function (a, p) { return a + avoided(p); }, 0);
+    var over = P.filter(function (p) { return avoided(p) > 0; }).length;
+    $('gAvoided').textContent = units;
+    $('gAvoidedNote').textContent = over + ' / ' + P.length + ' ' + d('products');
+  }
+
+  /* ---- list ---- */
+  function renderRows() {
+    var list = visible();
+    $('rows').innerHTML = list.length ? list.map(function (p) {
+      var g = groupOf(p), s = suggest(p);
+      return '<tr class="clickable-row' + (p.sku === sel ? ' selected' : '') + '" data-sku="' + p.sku + '">' +
+        '<td class="dtable__title"><button class="product-button" type="button">' + esc(p.name) +
+          '<small class="num">' + esc(d('SKU ')) + p.sku + ' · ' + esc(p.pack) + '</small></button></td>' +
+        '<td data-label="' + esc(d('Expected demand')) + '">' + (p.low == null
+          ? '<span class="range range--none">' + esc(d('No range yet')) + '</span>'
+          : '<span class="range num">' + p.low + '–' + p.high + ' ' + esc(d('units')) +
+            '<small>' + esc(d('next 4 weeks')) + '</small></span>') + '</td>' +
+        '<td class="num" data-label="' + esc(d('In stock')) + '">' + p.stock + '</td>' +
+        '<td data-label="' + esc(d('Your order')) + '"><span class="num">' +
+          (p.order == null ? esc(d('Not entered')) : p.order) + '</span>' +
+          (s == null ? '' : '<small class="pp-suggested num">' + esc(d('Suggested ')) + s + '</small>') + '</td>' +
+        '<td data-label="' + esc(d('Check')) + '"><span class="pp-check pp-check--' + g + '">' +
+          esc(label(g)) + '</span></td></tr>';
+    }).join('') : '<tr><td colspan="5" class="empty-row">' +
+      esc(d('No products match. Try another group or clear the search.')) + '</td></tr>';
+    $('shown').textContent = d('Showing ') + ' ' + list.length + ' ' + d('of ') + ' ' + P.length + ' ' + d('products');
+  }
+
+  /* ---- the three products to start with ---- */
+  function renderPriority() {
+    var order = ['check_order', 'need_data', 'order_needed', 'balanced'];
+    var top = P.slice().sort(function (a, b) {
+      return order.indexOf(groupOf(a)) - order.indexOf(groupOf(b));
+    }).slice(0, 3);
+    $('priority').innerHTML = top.map(function (p) {
+      var g = groupOf(p), ok = p.low != null;
+      var head = ok ? d('Purchase check') : d('Estimated restock');
+      var verdict = !ok ? d('No reliable estimate') : label(g);
+      var why = !ok ? d('StockLess could not judge these yet')
+        : g === 'check_order' ? total(p) + ' ' + d('units') + ' > ' + p.high
+        : g === 'order_needed' ? d('No order entered yet, or below expected demand')
+        : d('Within expected demand');
+      return '<article class="pp-card pp-card--' + g + '" data-sku="' + p.sku + '">' +
+        '<div class="pp-card__head"><div><b>' + esc(p.name) + ' · ' + esc(p.pack) + '</b>' +
+          '<small class="num">' + esc(d('SKU ')) + p.sku + '</small></div>' +
+          '<span class="pill pill--' + (ok ? 'ready' : 'limited') + '">' +
+          esc(d(ok ? 'Ready' : 'Limited')) + '</span></div>' +
+        '<div class="pp-card__verdict pp-card__verdict--' + (ok ? 'ok' : 'none') + '">' +
+          '<span>' + esc(head) + '</span><b>' + esc(verdict) + '</b></div>' +
+        '<p class="pp-card__why">' + esc(why) + '</p>' +
+        '<button type="button" class="btn btn--ghost btn--small pp-card__action" data-open="' + p.sku + '">' +
+          esc(d(ok ? 'Review and plan →' : 'See what is needed →')) + '</button></article>';
+    }).join('');
+  }
+
+  /* ---- the eight weeks, then the expected band ---- */
+  function chart(p) {
+    var W = 380, H = 165, L = 30, R = 26, T = 16, B = 28, ymax = 8;
+    var x = function (i) { return L + i * (W - L - R) / 11; };
+    var y = function (v) { return T + (H - T - B) * (1 - v / ymax); };
+    var g = '';
+    for (var v = 0; v <= ymax; v += 2)
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--line)"/>' +
+           '<text x="' + (L - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + v + '</text>';
+    var pts = p.weeks.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ');
+    var dots = p.weeks.map(function (v, i) {
+      return '<circle cx="' + x(i) + '" cy="' + y(v) + '" r="2.5" fill="var(--ink)"/>'; }).join('');
+    var lo = p.low / 4, hi = p.high / 4;
+    var band = '<rect x="' + x(7) + '" y="' + y(hi) + '" width="' + (x(11) - x(7)) +
+      '" height="' + (y(lo) - y(hi)) + '" fill="rgba(22,125,116,.14)"/>' +
+      '<line x1="' + x(7) + '" x2="' + x(11) + '" y1="' + y((lo + hi) / 2) + '" y2="' + y((lo + hi) / 2) +
+      '" stroke="var(--teal)" stroke-width="2" stroke-dasharray="5 4"/>';
+    var today = '<line x1="' + x(7) + '" x2="' + x(7) + '" y1="' + (T - 2) + '" y2="' + (H - B) +
+      '" stroke="var(--muted-2)" stroke-dasharray="2 3"/>';
+    var labs = [[0, '28 Jul'], [4, '25 Aug'], [7, '15 Sep'], [11, 'wk 4']].map(function (a) {
+      return '<text x="' + x(a[0]) + '" y="' + (H - 8) + '" text-anchor="middle">' + a[1] + '</text>'; }).join('');
+    return '<svg class="pp-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' +
+      esc(d('Weekly sales and expected demand')) + '" style="width:100%;height:auto;display:block;margin-top:4px">' +
+      '<style>.pp-chart text{fill:var(--muted);font:13px var(--body)}</style>' +
+      g + band + today + '<polyline points="' + pts + '" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>' +
+      dots + labs + '</svg>';
+  }
+
+  function field(id, labelKey, hintKey, value, max) {
+    var entered = value != null;
+    return '<div class="pp-field"><div class="pp-field__head">' +
+      '<label for="' + id + '">' + esc(d(labelKey)) + '</label>' +
+      '<output class="pp-field__value' + (entered ? '' : ' pp-field__value--empty') + '">' +
+        (entered ? value + '<small> ' + esc(d('units')) + '</small>' : esc(d('Not entered'))) + '</output></div>' +
+      '<div class="pp-stepper">' +
+        '<button type="button" class="pp-stepper__btn" data-step="' + id + ':-1" aria-label="' +
+          esc(d('Decrease ' + labelKey.toLowerCase())) + '">&minus;</button>' +
+        '<input id="' + id + '" class="pp-stepper__input num" type="text" inputmode="numeric" value="' +
+          (entered ? value : '') + '" placeholder="—">' +
+        '<button type="button" class="pp-stepper__btn" data-step="' + id + ':1" aria-label="' +
+          esc(d('Increase ' + labelKey.toLowerCase())) + '">+</button></div>' +
+      '<input class="pp-field__range" type="range" min="0" max="' + max + '" value="' + (value || 0) +
+        '" data-range="' + id + '" aria-label="' + esc(d(labelKey)) + '">' +
+      '<div class="pp-field__foot"><small>' + esc(d(hintKey)) + '</small>' +
+        (entered ? '<button type="button" class="pp-field__clear" data-clear="' + id + '">' +
+          esc(d('Clear')) + '</button>' : '') + '</div></div>';
+  }
+
+  function renderPanel() {
+    var list = visible(), p = null, idx = -1;
+    for (var i = 0; i < P.length; i++) if (P[i].sku === sel) p = P[i];
+    if (!p) p = list[0] || P[0];
+    for (var j = 0; j < list.length; j++) if (list[j].sku === p.sku) idx = j;
+    var ok = p.low != null, s = suggest(p), t = total(p), g = groupOf(p);
+    var smax = Math.max(20, ok ? p.high * 2 : 40, (p.order || 0) + 10);
+    var scale = ok ? Math.max(p.high, t) * 1.15 : 1;
+    var pc = function (v) { return (v / scale * 100).toFixed(2) + '%'; };
+
+    var h = '<div class="pp-nav"><span>' + esc(d('Product ')) + (idx + 1) + ' ' + esc(d('of ')) + list.length +
+      '</span><span class="pp-nav__buttons">' +
+      '<button type="button" data-nav="-1" aria-label="' + esc(d('Previous product')) + '">‹</button>' +
+      '<button type="button" data-nav="1" aria-label="' + esc(d('Next product')) + '">›</button></span></div>';
+
+    h += '<div class="pp-head"><h2>' + esc(p.name) + '</h2><p class="pp-head__sub">' +
+      esc(d('SKU ')) + p.sku + ' · ' + esc(d('Stock counted ')) + esc(p.counted) +
+      ' <span class="source-tag source--file">' + esc(d('from your file')) + '</span> · ' +
+      p.daysAgo + ' ' + esc(d('days ago')) + '</p><div class="pp-head__tags">' +
+      '<span class="pill pill--' + (ok ? 'ready' : 'limited') + '">' + esc(d(ok ? 'Ready' : 'Limited')) +
+      '</span>' + (ok ? '<span class="pill pill--grey">' + esc(d('Steady seller')) + '</span>' : '') + '</div></div>';
+
+    h += '<section class="pp-block"><h3>' + esc(d('What are you planning to order?')) + '</h3>';
+    if (ok) {
+      h += '<div class="pp-suggest"><div><span class="pp-suggest__k">' + esc(d('StockLess suggests')) +
+        '</span><span class="pp-suggest__v num">' + s + '<small> ' + esc(d('units')) + '</small></span>' +
+        '<span class="pp-suggest__k">' + esc(d('for the next 4 weeks')) + '</span></div>' +
+        (p.order === s
+          ? '<span class="pill pill--confirmed">' + esc(d('Using suggestion')) + '</span>'
+          : '<button type="button" class="btn btn--primary btn--small" data-use="' + s + '">' +
+            esc(d('Use ')) + s + '</button>') + '</div>';
+    } else {
+      h += '<div class="pp-blocked"><b>' + esc(d('No suggestion yet')) + '</b><p>' +
+        esc(d('StockLess could not judge these yet')) + '</p><p class="pp-blocked__next"><b>' +
+        esc(d('Next: ')) + '</b>' + esc(d('Open a product, review the estimate, and enter the quantity you intend to order.')) +
+        '</p></div>';
+    }
+    h += field('pp-order', 'Planned order', 'Leave it empty until you have decided.', p.order, smax);
+    h += field('pp-inc', 'Incoming stock', 'Already ordered but not arrived. Not entered is treated as 0.', p.incoming, smax);
+    h += '</section>';
+
+    if (ok && p.order != null) {
+      var vk = g === 'balanced' ? 'ok' : g === 'check_order' ? 'over' : 'under';
+      var vt = g === 'balanced' ? 'Looks balanced' : g === 'check_order' ? 'Overstock risk' : 'Needs review';
+      h += '<section class="pp-block"><h3>' + esc(d('Purchase check')) + '</h3>' +
+        '<p class="pp-eq num"><span>' + p.stock + ' ' + esc(d('in stock')) + '</span> + <span>' +
+        (p.incoming || 0) + ' ' + esc(d('incoming')) + '</span> + <span>' + p.order + ' ' +
+        esc(d('order')) + '</span> = <b>' + t + ' ' + esc(d('units')) + '</b></p>' +
+        '<div class="pp-bar"><span class="pp-bar__band" style="left:' + pc(p.low) + ';width:' + pc(p.high - p.low) + '"></span>' +
+        '<span class="pp-bar__seg pp-bar__seg--stock" style="left:0;width:' + pc(p.stock) + '"></span>' +
+        '<span class="pp-bar__seg pp-bar__seg--incoming" style="left:' + pc(p.stock) + ';width:' + pc(p.incoming || 0) + '"></span>' +
+        '<span class="pp-bar__seg pp-bar__seg--order" style="left:' + pc(p.stock + (p.incoming || 0)) + ';width:' + pc(p.order) + '"></span></div>' +
+        '<div class="pp-bar__axis num"><span style="left:' + pc(p.low) + '">' + p.low + ' ' + esc(d('low')) +
+        '</span><span style="left:' + pc(p.high) + '">' + p.high + ' ' + esc(d('high')) + '</span></div>' +
+        '<ul class="pp-bar__key"><li><i class="pp-bar__seg--stock"></i>' + esc(d('In stock')) +
+        '</li><li><i class="pp-bar__seg--incoming"></i>' + esc(d('Incoming')) +
+        '</li><li><i class="pp-bar__seg--order"></i>' + esc(d('Your order')) +
+        '</li><li><i class="pp-bar__band"></i>' + esc(d('Expected demand')) + '</li></ul>' +
+        '<div class="pp-verdict pp-verdict--' + vk + '"><b>' + esc(d(vt)) + '</b><span>' +
+        t + ' ' + esc(d('units')) + ' · ' + p.low + '–' + p.high + '</span></div></section>';
+    }
+
+    if (ok) {
+      h += '<section class="pp-block"><div class="pp-expiry"><span class="pp-expiry__mark" aria-hidden="true">✓</span>' +
+        '<div><b>' + esc(d('Expiry')) + '</b><p>' + esc(d('No expiry inside the next 4 weeks')) + '</p></div></div></section>';
+      var avgw = (p.weeks.reduce(function (a, b) { return a + b; }, 0) / p.weeks.length);
+      h += '<section class="pp-block"><h3>' + esc(d('Sales evidence')) + '</h3>' + chart(p) +
+        '<div class="pp-stats"><div class="pp-stat"><span>' + esc(d('Sells per week')) +
+        '</span><b class="num">' + avgw.toFixed(1) + ' ' + esc(d('units')) + '</b></div>' +
+        '<div class="pp-stat"><span>' + esc(d('Current stock lasts')) + '</span><b class="num">' +
+        (p.stock / (avgw || 1)).toFixed(1) + ' ' + esc(d('weeks')) + '</b></div></div></section>';
+      h += '<section class="pp-block"><details class="pp-why"><summary>' + esc(d('How StockLess got ')) +
+        s + ' ' + esc(d('units')) + '</summary><ul>' +
+        '<li>' + esc(d('Middle of expected demand: ')) + '<b class="num">' + mid(p) + '</b></li>' +
+        '<li>' + esc(d('Stock on hand: ')) + '<b class="num">−' + p.stock + '</b></li>' +
+        '<li>' + esc(d('Incoming stock: ')) + '<b class="num">−' + (p.incoming || 0) + '</b></li>' +
+        '<li>' + esc(d('Planned order you entered: ')) + '<b class="num">' +
+          (p.order == null ? esc(d('Not entered')) : p.order) + '</b></li>' +
+        '<li>' + esc(d('Expiry adjustment: ')) + '<b>' + esc(d('No expiry inside the next 4 weeks')) + '</b></li>' +
+        '</ul></details></section>';
+    }
+
+    h += '<div class="pp-foot"><span class="pp-foot__note">' + esc(d('Stays on this device')) +
+      '</span><button type="button" class="btn btn--primary btn--small" data-nav="1">' +
+      esc(d('Next product →')) + '</button></div>';
+    $('panel').innerHTML = h;
+  }
+
+  function all() { renderGroups(); renderRows(); renderPriority(); renderPanel(); }
+
+  function current() { for (var i = 0; i < P.length; i++) if (P[i].sku === sel) return P[i]; return P[0]; }
+  function setQty(which, raw) {
+    var p = current();
+    var f = which === 'pp-order' ? 'order' : 'incoming';
+    if (raw === '' || raw == null) { p[f] = f === 'order' ? null : 0; }
+    else if (!/^\d+$/.test(String(raw))) { return; }   /* invalid: change nothing */
+    else { p[f] = Math.max(0, parseInt(raw, 10)); }
+    all();
+  }
+  function step(delta) {
+    var list = visible(); if (!list.length) return;
+    var i = -1; for (var j = 0; j < list.length; j++) if (list[j].sku === sel) i = j;
+    sel = list[(Math.max(0, i) + delta + list.length) % list.length].sku;
+    all();
+  }
+
+  $('groups').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-g]'); if (!b) return;
+    group = b.dataset.g; all();
+  });
+  $('rows').addEventListener('click', function (e) {
+    var tr = e.target.closest('tr[data-sku]'); if (!tr) return;
+    sel = tr.dataset.sku; all();
+    document.querySelector('.pp-panel').scrollIntoView({ block: 'nearest' });
+  });
+  $('priority').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-open]'); if (!b) return;
+    sel = b.dataset.open; all();
+    document.querySelector('.pp-panel').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+  $('panel').addEventListener('click', function (e) {
+    var n = e.target.closest('[data-nav]'); if (n) { step(+n.dataset.nav); return; }
+    var u = e.target.closest('[data-use]'); if (u) { setQty('pp-order', u.dataset.use); return; }
+    var c = e.target.closest('[data-clear]'); if (c) { setQty(c.dataset.clear, ''); return; }
+    var s = e.target.closest('[data-step]'); if (s) {
+      var parts = s.dataset.step.split(':'), p = current();
+      var base = parts[0] === 'pp-order' ? (p.order || 0) : (p.incoming || 0);
+      setQty(parts[0], String(Math.max(0, base + (+parts[1]))));
+    }
+  });
+  $('panel').addEventListener('input', function (e) {
+    if (e.target.dataset.range) setQty(e.target.dataset.range, e.target.value);
+  });
+  $('panel').addEventListener('change', function (e) {
+    if (e.target.classList.contains('pp-stepper__input')) setQty(e.target.id, e.target.value);
+  });
+  $('q').addEventListener('input', function (e) { q = e.target.value; renderRows(); renderPanel(); });
+  $('mine').addEventListener('change', function (e) { mine = e.target.checked; renderRows(); renderPanel(); });
+
+  var langSel = document.querySelector('.language-switcher select');
+  langSel.addEventListener('change', function () {
+    lang = langSel.value;
     document.documentElement.lang = HTML_LANG[lang] || 'en';
+    var dict = T[lang] || T.en;
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var v = dict[el.getAttribute('data-i18n')]; if (v) el.textContent = v;
-    });
-    document.querySelectorAll('[data-label]').forEach(function (el) {
-      var v = dict[el.getAttribute('data-label')]; if (v) el.setAttribute('data-label', v);
     });
     document.querySelectorAll('[data-ph]').forEach(function (el) {
       var v = dict[el.getAttribute('data-ph')]; if (v) el.placeholder = v;
     });
-  }
-  sel.addEventListener('change', function () { apply(sel.value); });
-
-  /* the group chips filter the list, the way US8.2 AC1 asks */
-  var rows = Array.prototype.slice.call(document.querySelectorAll('#rows tr'));
-  document.querySelector('.pp-groups').addEventListener('click', function (e) {
-    var b = e.target.closest('[data-g]'); if (!b) return;
-    document.querySelectorAll('.pp-group').forEach(function (x) {
-      x.setAttribute('aria-pressed', String(x === b));
-      x.classList.toggle('pp-group--on', x === b);
-    });
-    var g = b.dataset.g, n = 0;
-    rows.forEach(function (tr) {
-      var on = g === 'all' || tr.dataset.g === g;
-      tr.hidden = !on; if (on) n++;
-    });
-    var d = T[sel.value] || T.en;
-    document.getElementById('shown').textContent =
-      (d['Showing '] || 'Showing ') + ' ' + n + ' ' + (d['of '] || 'of ') + ' ' + rows.length + ' ' + (d['products'] || 'products');
+    all();
   });
-  document.getElementById('rows').addEventListener('click', function (e) {
-    var tr = e.target.closest('tr'); if (!tr) return;
-    rows.forEach(function (x) { x.classList.toggle('selected', x === tr); });
-  });
-  apply('en');
+  all();
 })();
 </script>
 </body></html>

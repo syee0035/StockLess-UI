@@ -91,6 +91,9 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
   display:inline-flex;align-items:center;justify-content:center;
   transition:background-color .15s ease,border-color .15s ease,opacity .15s ease}
 .btn--small{min-height:32px;padding:6px 12px;font-size:var(--text-secondary);border-radius:8px}
+/* some buttons are links — navigating is a link's job, not a button's — and a
+   link wearing .btn must not also wear a link's underline */
+a.btn,a.btn:hover{text-decoration:none}
 .btn--primary{background:var(--teal);color:#fff}
 .btn--primary:hover:not(:disabled){background:var(--teal-deep)}
 .btn--ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
@@ -1024,69 +1027,75 @@ code{font-family:var(--data);font-size:.92em;background:#EEF3F1;padding:1px 5px;
 }
 
 /* ===== learn more =====
-   Flashcards. Each card shows a question; activating it turns the card over
-   to the answer, and activating it again turns it back.
+   Flashcards. Each card shows a question; activating it turns it over to the
+   answer, and activating it again turns it back.
 
-   Still <details>/<summary> underneath, so the keyboard, the open state and
-   the screen-reader announcement stay the browser's job — the flip is only
-   what [open] looks like. That matters: a hand-rolled flip card is usually a
-   div that no keyboard can reach and no screen reader can describe.
+   Still <details>/<summary>, so the keyboard, the open state and the screen
+   reader announcement stay the browser's job.
 
-   The two faces are stacked in a grid cell rather than absolutely positioned,
-   so the card is as tall as its longest face and the answer can never be
-   clipped (I3-UI AC2). rotateY is applied only where the browser says motion
-   is welcome; otherwise the faces simply cross-fade. */
+   The first attempt rotated the whole card in 3-D, and that quietly broke it.
+   Two reasons, both worth remembering:
+     - Forcing the content to render while closed left the invisible back face
+       lying on top of the question, swallowing every click and covering the
+       page beneath it.
+     - A <summary> that has been rotated away from the viewer with
+       backface-visibility:hidden stops hit-testing, so once a card did flip
+       there was nothing left to click to flip it back.
+   So the summary never moves. It stays flat, on top, and full size — it is
+   always the click target, whichever face is showing. Only the answer swings
+   in, and it takes no pointer events, so a click anywhere on the card always
+   reaches the summary. */
 .learn{margin-top:28px}
 .learn__title{font-family:var(--display);font-size:var(--text-section-head);
   font-weight:700;margin:0;letter-spacing:-.2px}
 .learn__lede{margin:7px 0 0;font-size:var(--text-body);color:var(--muted);max-width:56ch}
-.learn__list{margin-top:14px}
+.learn__list{margin-top:14px;perspective:1200px}
 
-/* <summary> has to be a direct child of <details>, so the flip lives on the
-   <details> itself rather than on an inner wrapper. The perspective belongs
-   to the parent, since it applies to a box's children. */
-.learn__list{perspective:1400px}
-.learn__item{display:grid;border-radius:16px;background:none;
-  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
-/* Chrome renders a <details>'s content inside a UA slot, so the answer is
-   not itself the grid item there — ::details-content is. Browsers without
-   that pseudo-element place the <p> directly, so both are pinned to the same
-   cell and the card ends up as tall as its taller face either way. */
+/* both faces share one grid cell, so the card is as tall as the taller of
+   them and an answer can never be clipped (I3-UI AC2). Chrome puts the
+   content in a UA slot, so ::details-content is pinned to the cell too. */
+.learn__item{display:grid;border-radius:16px;background:var(--teal-tint)}
 .learn__item > *{grid-area:1/1;min-width:0}
-.learn__item::details-content{grid-area:1/1;min-width:0;
-  transform-style:preserve-3d;content-visibility:visible;block-size:auto}
+.learn__item::details-content{grid-area:1/1;min-width:0}
 .learn__item + .learn__item{margin-top:10px}
-.learn__item[open]{transform:rotateY(180deg)}
-
-.learn__q,.learn__a{border-radius:16px;backface-visibility:hidden;
-  -webkit-backface-visibility:hidden}
 
 .learn__q{display:flex;align-items:center;gap:12px;padding:20px 18px;cursor:pointer;
-  background:var(--teal-tint);list-style:none;min-height:104px;
-  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink)}
+  border-radius:16px;list-style:none;min-height:104px;position:relative;z-index:2;
+  background:var(--teal-tint);
+  font-family:var(--display);font-size:var(--text-body);font-weight:700;color:var(--ink);
+  transition:background-color .2s ease}
 .learn__q::-webkit-details-marker{display:none}
 .learn__q:hover{background:#DDEDE8}
-.learn__item:focus-within .learn__q{outline:2px solid var(--teal);outline-offset:2px}
+.learn__item:focus-within{outline:2px solid var(--teal);outline-offset:2px}
+
+/* Open: the question's own contents fade out and its panel goes clear, so the
+   answer shows through — but the summary itself is still there, still on top
+   and still clickable. */
+.learn__icon,.learn__qtext,.learn__chevron{transition:opacity .18s ease}
+.learn__item[open] .learn__q{background:transparent}
+.learn__item[open] .learn__q:hover{background:rgba(255,255,255,.06)}
+.learn__item[open] .learn__icon,
+.learn__item[open] .learn__qtext,
+.learn__item[open] .learn__chevron{opacity:0}
+
 .learn__icon{font-size:24px;line-height:1;flex:none}
 .learn__qtext{flex:1;min-width:0}
-
-/* the corner turn: a folded page edge that says "there is a back to this" */
+/* a folded page corner, to say there is a back to this */
 .learn__chevron{flex:none;align-self:flex-end;width:16px;height:16px;
   border-radius:3px 0 16px 0;background:linear-gradient(135deg,transparent 48%,var(--mint) 50%)}
 
-.learn__a{margin:0;padding:20px 18px;background:var(--ink);color:#EAF5F2;
-  transform:rotateY(180deg);cursor:pointer;
+.learn__a{margin:0;padding:20px 18px;border-radius:16px;
+  background:var(--ink);color:#EAF5F2;
   font-family:var(--body);font-size:var(--text-secondary);line-height:1.6;
-  display:flex;align-items:center}
+  display:flex;align-items:center;
+  pointer-events:none;                 /* every click belongs to the summary */
+  transform:rotateY(-92deg);opacity:0;transform-origin:left center;
+  transition:transform .34s cubic-bezier(.2,.7,.3,1),opacity .2s ease}
+.learn__item[open] .learn__a{transform:none;opacity:1}
 
-/* Without 3-D transforms the back face would sit on top of the front, so the
-   faces are faded instead and only the active one takes pointer events. */
 @media(prefers-reduced-motion:reduce){
-  .learn__item{transition:none;transform:none!important}
-  .learn__q,.learn__a{transform:none;backface-visibility:visible;transition:opacity .15s ease}
-  .learn__a{opacity:0;pointer-events:none}
-  .learn__item[open] .learn__q{opacity:0;pointer-events:none}
-  .learn__item[open] .learn__a{opacity:1;pointer-events:auto}
+  .learn__a{transform:none;transition:opacity .15s ease}
+  .learn__icon,.learn__qtext,.learn__chevron,.learn__q{transition:none}
 }
 
 /* the homepage grid: four cards, two up */
@@ -1222,7 +1231,7 @@ html[lang="zh-Hans"] .title,html[lang="zh-Hans"] .card-title,html[lang="zh-Hans"
     </label>
   </header>
 
-  <nav class="stepper" aria-label="Progress"><ol class="stepper__inner"><li class="step step--current"><button type="button" class="step__button"><span class="step__plant" aria-hidden="true">🌱</span><span class="step__dot">1</span><span class="step__label" data-i18n="step.1">Upload</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🌿</span><span class="step__dot">2</span><span class="step__label" data-i18n="step.2">Map columns</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🪴</span><span class="step__dot">3</span><span class="step__label" data-i18n="step.3">Check readiness</span></button><span class="step__line" aria-hidden="true"></span></li><li class="step"><button type="button" class="step__button" disabled><span class="step__plant" aria-hidden="true">🌳</span><span class="step__dot">4</span><span class="step__label" data-i18n="step.4">Plan purchases</span></button><span class="step__line" aria-hidden="true"></span></li></ol></nav>
+  <nav class="stepper" aria-label="Progress"><ol class="stepper__inner"><li class="step step--current"><a class="step__button" href="StockLess-Step1-Upload.html" aria-current="step"><span class="step__plant" aria-hidden="true">🌱</span><span class="step__dot">1</span><span class="step__label" data-i18n="step.1">Upload</span></a><span class="step__line" aria-hidden="true"></span></li><li class="step"><a class="step__button" href="StockLess-Step2-Mapping.html"><span class="step__plant" aria-hidden="true">🌿</span><span class="step__dot">2</span><span class="step__label" data-i18n="step.2">Map columns</span></a><span class="step__line" aria-hidden="true"></span></li><li class="step"><a class="step__button" href="StockLess-Step3-Readiness.html"><span class="step__plant" aria-hidden="true">🪴</span><span class="step__dot">3</span><span class="step__label" data-i18n="step.3">Check readiness</span></a><span class="step__line" aria-hidden="true"></span></li><li class="step"><a class="step__button" href="StockLess-Step4-Purchases.html"><span class="step__plant" aria-hidden="true">🌳</span><span class="step__dot">4</span><span class="step__label" data-i18n="step.4">Plan purchases</span></a><span class="step__line" aria-hidden="true"></span></li></ol></nav>
 
   <div class="page">
     <p class="eyebrow" data-i18n="s1.eyebrow">Start with what you already have</p>

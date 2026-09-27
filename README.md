@@ -1,136 +1,310 @@
-# StockLess — Step 1 (Upload) redesign + workspace background
+# StockLess UI
 
-Targets **`HansYap/StockLess`** (the live app behind `stockless.pages.dev`), not the Figma Make
-prototype. I checked first: the wording PDF's strings — *"What data can StockLess use?"*,
-*"Drop your CSV file here"*, *"Finishing up"*, *"Use sample file"* — all live in
-`frontend/src/screens/UploadScreen.tsx`, so that's where the changes go.
+**StockLess** is a web-based decision-support system designed to help Malaysian micro and small food retailers make smarter stock purchasing decisions and reduce avoidable food waste.
 
-## What's in here
+StockLess transforms historical sales data into demand insights and purchasing recommendations, helping retailers move from manual or rule-of-thumb stock decisions towards more informed replenishment.
 
-| File | What it is |
+> **Sales data → Demand insights → Smarter restocking → 🌱 Less waste**
+
+---
+
+## 🌱 About StockLess
+
+Small food retailers often rely on spreadsheets, manual calculations, or personal experience when deciding how much inventory to purchase.
+
+StockLess provides a simpler workflow that helps retailers understand their sales data before making their next purchasing decision.
+
+The system focuses on four key questions:
+
+- What products are selling?
+- Is the sales data ready to use?
+- Which products need attention?
+- What should the retailer consider purchasing?
+
+StockLess is designed to bridge the gap between **simple spreadsheets** and **complex ERP systems**, providing a focused workflow for demand understanding and restocking decisions.
+
+---
+
+## ✨ Key Features
+
+### 1. Upload Sales Data
+
+Retailers can upload their sales data using a CSV file.
+
+#### Required data
+
+- Sale date
+- Product identification
+- Quantity sold
+
+#### Product identification
+
+StockLess supports product identification using:
+
+- SKU
+- Barcode
+- Product code
+- Product name + pack size
+
+Optional attributes can also be provided to unlock additional insights.
+
+#### File limits
+
+- `.CSV`
+- Up to **10 MiB**
+- Up to **100,000 rows**
+- Comma, semicolon, or tab-separated files
+
+---
+
+### 2. Flexible Column Matching
+
+After uploading a CSV file, StockLess helps users match their existing column names to the attributes required by the system.
+
+This allows retailers to use their existing sales exports without having to manually restructure their data first.
+
+The workflow helps users identify:
+
+- Required attributes
+- Optional attributes
+- Unmatched columns
+- Product identification fields
+- Sales-related fields
+
+---
+
+### 3. Data Readiness Check
+
+StockLess checks the uploaded data before it is used for purchasing analysis.
+
+The readiness check helps identify issues such as:
+
+- Missing information
+- Invalid values
+- Inconsistent data
+- Product identification problems
+- Stock-related issues
+- Data that requires review
+
+Instead of presenting only technical validation messages, StockLess aims to explain:
+
+**What was found → Why it matters → What to do**
+
+This allows retailers to understand their data problems before continuing to purchase planning.
+
+---
+
+### 4. Purchase Planning
+
+Once the data is ready, StockLess turns sales information into purchasing insights.
+
+The purchase planning workflow helps retailers identify products that may require:
+
+- **Order Needed**
+- **Check Your Order**
+- **Looks Balanced**
+- **Need More Data**
+
+These categories are intended to support the retailer's decision-making rather than automatically place an order.
+
+---
+
+### 5. Sustainability Impact
+
+StockLess connects purchasing decisions with food-waste reduction.
+
+The system can present estimated impacts such as:
+
+- Estimated cost savings
+- Estimated food waste avoided
+- Estimated emissions avoided
+
+These figures are intended as **estimates** to help users understand the potential business and environmental impact of better stock decisions.
+
+---
+
+## 🧭 StockLess Workflow
+
+StockLess uses a four-step workflow:
+
+| Step | Purpose |
 | --- | --- |
-| `step1-upload-redesign.patch` | all seven file changes, 632 lines, +192 / −102 |
-| `WorkspaceDecor.tsx` | the new component on its own, if you'd rather copy it in by hand |
-| `../StockLess-Step1-Upload.html` | a static preview of the result — double-click to open |
+| 🌱 **01 Upload** | Upload sales data |
+| 🌿 **02 Match** | Match CSV columns to StockLess attributes |
+| 🍃 **03 Check** | Check data readiness and review issues |
+| 🌳 **04 Plan** | Review purchasing recommendations |
 
-Apply it:
+The workflow progressively transforms raw sales data into actionable restocking information.
 
-```sh
-git checkout -b step1-upload-redesign
-git apply step1-upload-redesign.patch
-npm run dev
-```
+---
 
-## The wording changes
+## 🔒 Privacy
 
-Everything below comes from *Homepage and Step Suggestion UI Wording.pdf*.
+StockLess is designed to keep users' sales data on their device where supported by the application.
 
-| Where | Before | After |
-| --- | --- | --- |
-| Section heading | What data can StockLess use? | 🌱 **What do you need to get started?** |
-| Intro | (listed every attribute up front) | Start with the three required attributes. Optional attributes unlock additional insights. |
-| Lede | — | Required data is enough to get started. Optional data unlocks deeper insights. |
-| Attribute 02 label | Product identifier | **Product identification** |
-| Attribute 02 desc | — | Choose one of the accepted formats to keep products and pack sizes separate. |
-| Accepted forms | (3 loosely-worded options) | 1. SKU, barcode or product code · 2. Product name + pack size |
-| File limits | (split across two lines) | .CSV · Up to 10 MiB · 100,000 rows · Comma, semicolon or tab separated |
-| Privacy headline | — | **Your data stays on your device.** |
-| Privacy body | — | Your CSV is processed directly in this browser. Your sales rows and product identifiers are not uploaded to an AI or API service. |
-| Final phase label | Finishing up | **You're one step closer to less waste.** |
-| Final phase subline | (generic progress text) | Your data is ready. Let's see what your store actually needs. |
+The Upload screen communicates:
 
-Plus one thing the PDF implies rather than spells out: a **value chain** under the drop zone —
-Sales data → Demand insights → Smarter restocking → 🌱 Less waste. It answers *"why am I uploading
-this?"* at the exact moment someone hesitates over the button.
+> **Your data stays on your device.**
 
-The two backend strings moved too, because the UI reads them from there rather than hard-coding:
-`field-registry.ts` (`coreDescription`, `PRIVACY_NOTICE.beforeUpload`) and `capabilities.ts`
-(the product-identification label, description and accepted forms).
+CSV files are processed directly in the browser, and sales rows and product identifiers are not uploaded to an AI or API service.
 
-## The background
+---
 
-`WorkspaceDecor.tsx` brings the homepage artwork into the app — same waves, leaves and dot grids,
-same colours sampled from your mockup (`#EDF7E9`, `#DCEFD8`, `#B8DFBE`, dots `#9CC9A0`).
+## 📊 Data Requirements
 
-Three deliberate differences from the homepage version, because this is a working screen rather
-than a marketing page:
+### Required Attributes
 
-- **It's quieter.** Lower opacities, fewer leaves, no basket. You're meant to read the screen, not
-  look at the background.
-- **It's pinned to the viewport** (`position: fixed`), so it doesn't stretch and repeat as the
-  upload progresses and the page grows.
-- **The centre column is cleared.** A radial wash of `--page` sits over the middle at full opacity
-  and fades out at the margins, so no artwork ever passes under text — the same rule as the
-  homepage.
+| Attribute | Description |
+| --- | --- |
+| **Sale date** | The date associated with a sales transaction |
+| **Product identification** | SKU, barcode, product code, or product name + pack size |
+| **Quantity sold** | The number of units sold |
 
-It's hidden below 900px. On a phone the content column already fills the screen, so the artwork
-would only ever sit *behind* text, which is the thing you didn't want.
+### Optional Attributes
 
-It mounts as the first child of `.frame` in `AppShell.tsx`, so every screen in the workspace gets
-it — not just Step 1. One line in `styles.css` lifts every other child of `.frame` above it:
+Optional data can unlock additional insights within the StockLess workflow.
 
-```css
-.frame > *:not(.ws-decor){position:relative;z-index:1}
-```
+---
 
-## Typography — the app now uses the homepage's scale
+## 🎨 User Interface
 
-The workspace was set a notch below the marketing site: body copy at 13px, descriptions at 11px,
-labels at 10px, against the homepage's 15 / 12 / 11. Side by side they read as two different
-products, and on the Upload screen — which is nothing *but* wording — it just read as small.
+StockLess uses a sustainability-focused visual language designed to make data-heavy workflows easier to understand.
 
-`styles.css` now declares the homepage's type tokens and every size in the file is set from them:
+The interface uses:
 
-```css
---text-page-title:36px; --text-lead:18px;  --text-section-head:20px;
---text-body:15px;       --text-secondary:13px; --text-description:12px;
---text-eyebrow:11px;    --text-label:10px;
-```
+- Soft green and teal colours
+- Rounded cards
+- Clear status indicators
+- Product-focused information
+- Lightweight visualisations
+- Tooltips for unfamiliar concepts
+- Progressive disclosure
+- Responsive layouts
 
-| Was | Now | Where you'll notice it |
-| --- | --- | --- |
-| 13px, 14px | **15px** | attribute descriptions, drop-zone copy, privacy body, card subheads |
-| 12px | **13px** | file limits, pills, step labels, session status |
-| 11px | **12px** | the value chain, accepted-format chips, fine print |
-| 10px | **11px** | uppercase micro-labels |
-| 9px | **10px** | the smallest badges |
+The workspace uses a quieter version of the homepage visual style so that decorative elements support the experience without interfering with readability.
 
-Headings didn't move — 20px section heads, 18px ledes and the 36px page title already matched the
-homepage. Hard-coded pixel line-heights (`line-height:18.85px` and friends) became ratios, so they
-follow the size instead of fighting it.
+### Workspace background
 
-The same pass ran over `homepage.css`, lifting its small reading copy to the same scale: benefit and
-step paragraphs, the food-waste statistics, comparison table, SDG caption, sources line and footer.
-**The miniature app demo in the hero is deliberately untouched** — it's a scaled-down screenshot, and
-enlarging its type would break both the illusion and its layout.
+The workspace includes a subtle decorative background inspired by the StockLess homepage:
 
-### One bug fixed along the way
+- Soft green waves
+- Leaf illustrations
+- Dot patterns
+- A clear central reading area
 
-`.sl-story` and `.sl-impact` are two-column grids whose children had no `min-width:0`, so the shop
-photo overflowed the page by ~12px at 1440 and the text column blew past the viewport by 135px on a
-phone. That's on the live site today, before any of these changes — the bigger statistics text just
-made it more obvious. One line fixes it:
+The artwork is intentionally reduced in opacity compared with the homepage and is hidden on smaller screens to maintain readability.
 
-```css
-.sl-story>*,.sl-impact>*{min-width:0}
-```
+---
 
-All three widths (1440 / 1280 / 390) now scroll clean.
+## 📱 Responsive Design
 
-## Two things to know before you merge
+StockLess is designed for:
 
-**This is the team repo, not your fork.** The patch applies cleanly to `HansYap/StockLess` as of
-today, but it'll need a PR rather than a direct push.
+- Desktop
+- Tablet
+- Mobile web
 
-**I couldn't run `npm run build`** — the sandbox blocks the npm registry, so dependencies won't
-install. I syntax-checked all five changed source files with esbuild instead (all clean) and rendered both
-the preview and the homepage from the repo's own stylesheets, checking for overflow at 1440, 1280
-and 390px.
-The one thing nobody has verified is a full type-check. Run it once locally before you open the PR.
+The interface adapts its layout and information hierarchy according to screen size.
 
-## Still open from the I3 plan
+On smaller screens:
 
-- Are the I2 verdicts (*High risk / Needs review / Looks balanced / Cannot judge*) the same thing
-  as the I3 groups (*Order Needed / Check Your Order / Looks Balanced / Need More Data*), or a
-  layer above them? Step 4's wording depends on the answer.
-- Screens 2–4 (column matching, data check, results) haven't been touched yet.
+- Multi-column layouts become stacked sections
+- Dense tables can become product cards
+- Content is prioritised progressively
+- Horizontal scrolling is avoided
+- Touch targets remain accessible
+- Decorative artwork is reduced or removed where necessary
+
+The design aims to provide the same workflow across devices without simply shrinking the desktop interface.
+
+---
+
+## 🖥️ Application Screens
+
+The StockLess workflow consists of the following main screens:
+
+### Step 1 — Upload
+
+Users learn what data they need and upload their CSV sales data.
+
+### Step 2 — Match
+
+Users match their uploaded columns with StockLess attributes.
+
+### Step 3 — Check
+
+Users review data readiness, product-level issues, and information that requires attention.
+
+### Step 4 — Plan
+
+Users review purchasing recommendations and determine what action to take.
+
+---
+
+## 🌍 Sustainability Context
+
+StockLess focuses on **UN Sustainable Development Goal 12.3**, which targets the reduction of food waste at the retail and consumer levels.
+
+The project focuses on avoidable food waste associated with purchasing and inventory decisions in small food retailers.
+
+By helping retailers make more informed purchasing decisions, StockLess explores how data-driven decision support can contribute to more efficient inventory management and food-waste reduction.
+
+---
+
+## 🎯 Target Users
+
+StockLess is primarily designed for:
+
+**Malaysian micro and small food retailers**, including:
+
+- Neighbourhood grocery stores
+- Minimarts
+- Small food retailers
+
+The system is designed for retailers who may not have access to sophisticated inventory-management systems but still need practical support when making purchasing decisions.
+
+---
+
+## 🔍 Why StockLess?
+
+StockLess is designed around the gap between:
+
+**Spreadsheets**
+
+and
+
+**Enterprise Resource Planning (ERP) systems**
+
+Traditional spreadsheets can provide flexibility but may require retailers to manually analyse sales information and calculate purchasing needs.
+
+ERP systems can provide broader business functionality but may involve greater complexity and implementation requirements.
+
+StockLess focuses specifically on the purchasing decision workflow, allowing retailers to move from sales data to demand insights and purchase planning through a simpler interface.
+
+---
+
+## 🛠️ Technology
+
+The StockLess UI is built using:
+
+- **React**
+- **TypeScript**
+- **CSS**
+- **Vite**
+
+The application is structured around reusable UI components and dedicated workflow screens.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have Node.js and npm installed.
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/syee0035/StockLess-UI.git

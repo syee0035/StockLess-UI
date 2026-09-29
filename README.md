@@ -307,4 +307,8 @@ Make sure you have Node.js and npm installed.
 Clone the repository:
 
 ```bash
+<<<<<<< HEAD
 git clone https://github.com/syee0035/StockLess-UI.git
+=======
+git clone https://github.com/syee0035/StockLess-UI.git
+>>>>>>> 0ae82e6 (Latest updates of the design)

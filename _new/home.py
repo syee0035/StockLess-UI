@@ -178,8 +178,69 @@ a("hp.lm.less", "Close all FAQs ↑", "Tutup semua soalan lazim ↑", "收起全
 a("hp.foot", "Supports UN SDG 12.3: halving food waste at retail by 2030.", "Menyokong SDG 12.3 PBB: mengurangkan separuh pembaziran makanan runcit menjelang 2030.", "支持联合国 SDG 12.3：在 2030 年前将零售环节的食物浪费减半。")
 a("hp.top", "Back to top ↑", "Kembali ke atas ↑", "回到顶部 ↑")
 
+a("hp.pp.k", "Purchase plan · SKU MM0002", "Pelan belian · SKU MM0002", "进货计划 · SKU MM0002")
+a("hp.pp.sub", "15 sticks · counted 12 Sep · 3 days ago", "15 batang · dikira 12 Sep · 3 hari lalu", "15 条装 · 9 月 12 日盘点 · 3 天前")
+a("hp.pp.ev", "Why this estimate? Demand and stock", "Kenapa anggaran ini? Jualan dan stok", "为什么这样估？看销量和库存")
+a("hp.pp.fc", "forecast to sell in the next 4 weeks", "dijangka terjual dalam 4 minggu akan datang", "预计未来 4 周能卖出")
+a("hp.pp.flab", "Forecast · next 4 weeks", "Ramalan · 4 minggu", "预测 · 未来 4 周")
+a("hp.pp.past", "Past 8 weeks", "8 minggu lepas", "过去 8 周")
+a("hp.pp.next", "Next 4 weeks ≈4.5 a week", "4 minggu akan datang ≈4.5 seminggu", "未来 4 周 每周约 4.5")
+a("hp.pp.sold", "Sold each week", "Terjual setiap minggu", "每周卖出")
+a("hp.pp.frange", "Forecast range per week (line = most likely)", "Julat ramalan seminggu (garis = paling mungkin)", "每周预测范围（线 = 最可能）")
+a("hp.pp.f1", "In stock now", "Stok sekarang", "现有库存"); a("hp.pp.f1s", "from your file", "dari fail anda", "来自您的文件")
+a("hp.pp.f2", "Weekly average", "Purata seminggu", "每周平均"); a("hp.pp.f2s", "last 8 weeks", "8 minggu terakhir", "最近 8 周")
+a("hp.pp.f3", "Weeks of cover", "Cukup untuk (minggu)", "够卖几周"); a("hp.pp.f3s", "at that pace", "pada kadar itu", "按这个速度")
+a("hp.pp.f4", "Stock counted", "Stok dikira", "盘点日期"); a("hp.pp.f4s", "3 days ago", "3 hari lalu", "3 天前")
+a("hp.pp.sg", "Suggested restock", "Cadangan tambah stok", "建议进货量")
+a("hp.pp.sgf", "Middle of forecast (18) − in stock (8) − incoming ({i})", "Titik tengah ramalan (18) − stok (8) − dalam perjalanan ({i})", "预测中间值（18）− 现有库存（8）− 在途（{i}）")
+a("hp.pp.use", "Use suggested {n}", "Guna cadangan {n}", "用建议的 {n}")
+a("hp.pp.yo", "Your order", "Pesanan anda", "您的订单")
+a("hp.pp.inc", "Incoming stock", "Stok dalam perjalanan", "在途库存")
+a("hp.pp.less", "One less", "Kurang satu", "减一"); a("hp.pp.more", "One more", "Tambah satu", "加一")
+a("hp.pp.pc", "Purchase check", "Semakan belian", "进货检查")
+a("hp.pp.eq", "{s} in stock + {i} incoming + {o} order = {t} units", "{s} dalam stok + {i} dalam perjalanan + {o} pesanan = {t} unit", "现有 {s} + 在途 {i} + 进货 {o} = {t} 件")
+a("hp.pp.p.hi", "Check order", "Semak pesanan", "检查订单"); a("hp.pp.p.lo", "Order more", "Pesan lagi", "要多进点"); a("hp.pp.p.ok", "Balanced", "Seimbang", "刚刚好")
+a("hp.pp.v.hi.h", "This plan looks too high.", "Pesanan ini nampak terlalu banyak.", "这次进得有点多。")
+a("hp.pp.v.hi.t", "With this order you'd have {t} units — more than even a busy month ({h}). Ordering {s} would cover expected demand.", "Dengan pesanan ini anda akan ada {t} unit — lebih daripada bulan yang sibuk sekalipun ({h}). Pesan {s} sudah cukup untuk jangkaan jualan.", "这样下单您会有 {t} 件——比生意最好的一个月（{h}）还多。进 {s} 件就够应付预计销量。")
+a("hp.pp.v.lo.h", "This plan looks too low.", "Pesanan ini nampak terlalu sedikit.", "这次进得有点少。")
+a("hp.pp.v.lo.t", "With this order you'd have {t} units — fewer than the {l} expected to sell. Ordering {s} would cover expected demand.", "Dengan pesanan ini anda akan ada {t} unit — kurang daripada {l} yang dijangka terjual. Pesan {s} sudah cukup untuk jangkaan jualan.", "这样下单您会有 {t} 件——少于预计卖出的 {l} 件。进 {s} 件就够应付预计销量。")
+a("hp.pp.v.ok.h", "This plan is within range.", "Pelan ini dalam julat jangkaan.", "这次的数量刚刚好。")
+a("hp.pp.v.ok.t", "You'd have {t} units, inside the expected {l}–{h}.", "Anda akan ada {t} unit, dalam julat jangkaan {l}–{h}.", "您会有 {t} 件，在预计的 {l}–{h} 范围内。")
+a("hp.pp.exp", "Expiry information", "Tarikh luput", "有效期")
+a("hp.pp.exps", "No expiry inside the next 4 weeks (earliest 14 Nov 2026)", "Tiada yang luput dalam 4 minggu akan datang (paling awal 14 Nov 2026)", "未来 4 周内没有快过期的（最早 2026 年 11 月 14 日）")
+a("hp.pp.expb", "Expiry is a separate check; batches close to expiry are not taken off the estimate.", "Tarikh luput ialah semakan berasingan; kelompok yang hampir luput tidak ditolak daripada anggaran.", "有效期是另一项检查，快过期的批次不会从估算中扣除。")
+a("hp.pp.sup", "Supplier terms", "Syarat pembekal", "供应商条件")
+a("hp.pp.sups", "Syarikat Aminah · cases of 12 · 3 days", "Syarikat Aminah · kotak 12 · 3 hari", "Syarikat Aminah · 每箱 12 · 3 天")
+a("hp.pp.supb", "Your supplier sells in cases of 12, so StockLess rounds the order up to whole cases and shows when it should arrive.", "Pembekal anda menjual dalam kotak 12, jadi StockLess membundarkan pesanan kepada kotak penuh dan menunjukkan bila ia akan tiba.", "供应商按每箱 12 件出货，StockLess 会把订单凑成整箱，并显示大约何时到货。")
+a("hp.anim.saved", "units of overstock avoided", "unit stok berlebihan dielakkan", "件多余库存被避免")
+a("hp.anim.pause", "Pause", "Jeda", "暂停"); a("hp.anim.play", "Play", "Main", "播放")
+a("hp.pp.own","Try it with your own data →", "Cuba dengan data anda sendiri →", "用您自己的数据试试 →")
+
 T = I.t
 STEP1 = "StockLess-Step1-Upload.html"
+
+# ---------- Step 4 style purchase plan (hero card + interactive example) ----------
+MW = [4, 2, 6, 2, 4, 6, 6, 6]; MWL = ["20 Jul", "27 Jul", "3 Aug", "10 Aug", "17 Aug", "24 Aug", "31 Aug", "7 Sep"]
+MLOW, MHIGH, MSTOCK = 15, 21, 8
+def fc_chart(small=False):
+    H = 70 if small else 118
+    mx = max(MW + [MHIGH / 4, 1]) * 1.25
+    px = lambda v: max(3, round(H * v / mx))
+    h = f'<div class="fc{" fc--small" if small else ""}"><div class="fc__plot" style="height:{H + 32}px">'
+    for v in MW:
+        h += f'<div class="fc__col"><span class="fc__val">{v}</span><span class="fc__bar" style="height:{px(v)}px"></span></div>'
+    blo, bhi = round(H * (MLOW / 4) / mx), round(H * (MHIGH / 4) / mx)
+    h += f'<div class="fc__future"><span class="fc__flab" data-i18n="hp.pp.flab">Forecast · next 4 weeks</span><span class="fc__bl" style="bottom:{bhi + 6}px">≈4.5</span>'
+    for _ in range(4):
+        h += f'<div class="fc__fcol"><span class="fc__band" style="bottom:{blo}px;height:{max(4, bhi - blo)}px"></span><span class="fc__mid" style="bottom:{(blo + bhi) // 2}px"></span></div>'
+    h += '</div></div>'
+    if not small:
+        h += '<div class="fc__labels">' + "".join(f"<span>{l}</span>" for l in MWL) + '<div class="fc__flabels"><span>15 Sep</span><span>22 Sep</span><span>29 Sep</span><span>6 Oct</span></div></div>'
+        h += f'<div class="fc__mlabels"><span data-i18n="hp.pp.past">Past 8 weeks</span><b data-i18n="hp.pp.next">Next 4 weeks ≈4.5 a week</b></div>'
+        h += f'<ul class="lgd"><li><i class="sw sw--obs"></i>{T("hp.pp.sold")}</li><li><i class="sw sw--e"></i>{T("hp.pp.frange")}</li></ul>'
+    else:
+        h += f'<div class="fc__mlabels fc__mlabels--on"><span data-i18n="hp.pp.past">Past 8 weeks</span><b data-i18n="hp.pp.flab">Forecast · next 4 weeks</b></div>'
+    return h + '</div>'
 
 def ic(path, size=18):
     return f'<svg viewBox="0 0 24 24" width="{size}" height="{size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{path}</svg>'
@@ -206,17 +267,58 @@ def line_chart(w, h, big=False):
     s += '</svg>'
     return s
 
-hero_card = f'''<div class="hp-card-wrap"><div class="hp-card">
-  <div class="hp-card__top"><div><span class="hp-k">{I.s("hp.card.k")}</span><b class="hp-card__name">Kopi O Kaw 2in1 · 10 sachets</b></div><span class="hp-pill">{T("hp.card.steady")}</span></div>
-  <div class="hp-card__chart"><span class="hp-card__today" data-i18n="hp.card.today">Today</span>{line_chart(300, 90)}<div class="hp-card__axis">{T("hp.card.past")}{T("hp.card.next")}</div></div>
-  <div class="hp-card__check"><div><span class="hp-k2">{T("hp.card.pc")}</span><b>{T("hp.card.ok")}</b></div><span class="hp-dot">{T("hp.card.bal")}</span></div>
+hero_card = f'''<div class="hp-card-wrap hp-float"><div class="hp-card">
+  <div class="hp-card__top"><div><span class="hp-k" data-i18n="hp.pp.k">Purchase plan · SKU MM0002</span><b class="hp-card__name">Milo 3in1 · 15 sticks</b></div><span class="hp-pill hp-pill--hi" id="ha-pill" data-i18n="hp.pp.p.hi">Check order</span></div>
+  <p class="hp-card__fc"><b>15–21</b> <span data-i18n="hp.units">units</span> · <span data-i18n="hp.pp.fc">forecast to sell in the next 4 weeks</span></p>
+  {fc_chart(True)}
+  <div class="hp-anim__order"><span><span data-i18n="hp.pp.yo">Your order</span> <b id="ha-order">37</b> <span data-i18n="hp.units">units</span></span><span class="num" id="ha-eq">8 + 37 = 45</span></div>
+  <div class="hp-anim__bar" aria-hidden="true"><div class="hp-anim__track"><span class="hp-anim__s"></span><span class="hp-anim__o" id="ha-seg"></span></div><span class="hp-anim__band"></span></div>
+  <div class="hp-card__check is-hi" id="ha-check" aria-live="polite"><div><span class="hp-k2">{T("hp.card.pc")}</span><b id="ha-title" data-i18n="hp.pp.v.hi.h">This plan looks too high.</b></div><div class="hp-anim__saved"><b id="ha-saved">0</b><small data-i18n="hp.anim.saved">units of overstock avoided</small></div></div>
+  <div class="hp-anim__foot"><div class="hp-anim__dots" aria-hidden="true"><i></i><i></i><i></i></div><button type="button" class="hp-anim__play" id="ha-play" data-i18n="hp.anim.pause">Pause</button></div>
 </div></div>'''
 
-def stat(svg, num, key):
-    return f'<div class="hp-stat"><span class="hp-stat__ic" aria-hidden="true">{ic(svg, 16)}</span><b>{num}</b><p data-i18n="{key}">{I.s(key)}</p></div>'
-stats = (stat('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', "1.05B t", "hp.st1") +
-         stat('<path d="M3 9h18l-1-5H4zM5 9v11h14V9M9 20v-6h6v6"/>', "12%", "hp.st2") +
-         stat('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', "2030", "hp.st3"))
+ICO_LESS = '−'; ICO_MORE = '+'
+BASKET = ('<img class="hp-hero__basket" src="' + IMG['basket'] + '" alt="" width="360" height="300">') if IMG.get('basket') else ''
+example_panel = f'''<div class="hp-pp" id="hp-pp">
+  <div class="pp2-head"><div><span class="pp2-k" data-i18n="hp.pp.k">Purchase plan · SKU MM0002</span><h3>Milo 3in1</h3><span class="pp2-sub" data-i18n="hp.pp.sub">15 sticks · counted 12 Sep · 3 days ago</span></div><span class="pill js-pill" id="hp-pill"></span></div>
+  <section class="pp2-ev">
+    <h4 data-i18n="hp.pp.ev">Why this estimate? Demand and stock</h4>
+    <p class="pp2-fc"><b>15–21 <span data-i18n="hp.units">units</span></b><span data-i18n="hp.pp.fc">forecast to sell in the next 4 weeks</span></p>
+    {fc_chart()}
+    <div class="pp2-facts">
+      <div><small data-i18n="hp.pp.f1">In stock now</small><b>8</b><small data-i18n="hp.pp.f1s">from your file</small></div>
+      <div><small data-i18n="hp.pp.f2">Weekly average</small><b>4.5</b><small data-i18n="hp.pp.f2s">last 8 weeks</small></div>
+      <div><small data-i18n="hp.pp.f3">Weeks of cover</small><b>1.8</b><small data-i18n="hp.pp.f3s">at that pace</small></div>
+      <div><small data-i18n="hp.pp.f4">Stock counted</small><b>12 Sep</b><small data-i18n="hp.pp.f4s">3 days ago</small></div>
+    </div>
+  </section>
+  <div class="pp2-two">
+    <div class="pp2-sugg"><span class="pp2-k" data-i18n="hp.pp.sg">Suggested restock</span><span class="pp2-big"><span id="hp-sugg">10</span> <small data-i18n="hp.units">units</small></span><span class="pp2-f" id="hp-sgf"></span><button type="button" class="btn btn--primary btn--small" id="hp-use"></button></div>
+    <div class="pp2-order"><label class="pp2-k" for="hp-order" data-i18n="hp.pp.yo">Your order</label>
+      <div class="pp2-step"><button type="button" class="pp2-sbtn" data-step="-1" aria-label="One less" data-i18n-label="hp.pp.less">{ICO_LESS}</button><input id="hp-order" type="number" min="0" max="60" value="37" inputmode="numeric"><button type="button" class="pp2-sbtn" data-step="1" aria-label="One more" data-i18n-label="hp.pp.more">{ICO_MORE}</button><span data-i18n="hp.units">units</span></div>
+      <input type="range" class="hp-range" id="hp-order-r" min="0" max="60" value="37" aria-label="Your order" data-i18n-label="hp.pp.yo">
+      <div class="pp2-inc"><label for="hp-inc" data-i18n="hp.pp.inc">Incoming stock</label><input id="hp-inc" type="number" min="0" value="0" inputmode="numeric"><span data-i18n="hp.units">units</span></div>
+    </div>
+  </div>
+  <section class="pp2-check">
+    <div class="pp2-check__head"><h4 data-i18n="hp.pp.pc">Purchase check</h4><span class="num" id="hp-eq"></span></div>
+    <div class="pbar" aria-hidden="true"><div class="pbar__track"><span class="pbar__seg pbar__seg--s" id="hp-seg-s"></span><span class="pbar__seg pbar__seg--i" id="hp-seg-i"></span><span class="pbar__seg pbar__seg--o" id="hp-seg-o"></span></div><span class="pbar__band" id="hp-band"></span><span class="pbar__tick" id="hp-tlo">15</span><span class="pbar__tick" id="hp-thi">21</span></div>
+    <div class="pp2-verdict" id="hp-v" aria-live="polite"><b id="hp-vh"></b><span id="hp-vt"></span></div>
+  </section>
+  <div class="pp2-two pp2-extras">
+    <details class="pp2-x"><summary><span><b data-i18n="hp.pp.exp">Expiry information</b><small data-i18n="hp.pp.exps">No expiry inside the next 4 weeks (earliest 14 Nov 2026)</small></span><i aria-hidden="true">+</i></summary><p data-i18n="hp.pp.expb">{I.s("hp.pp.expb")}</p></details>
+    <details class="pp2-x"><summary><span><b data-i18n="hp.pp.sup">Supplier terms</b><small data-i18n="hp.pp.sups">Syarikat Aminah · cases of 12 · 3 days</small></span><i aria-hidden="true">+</i></summary><p data-i18n="hp.pp.supb">{I.s("hp.pp.supb")}</p></details>
+  </div>
+  <div class="pp2-foot"><a class="btn btn--primary" href="{STEP1}" data-i18n="hp.pp.own">Try it with your own data →</a></div>
+</div>'''
+
+def stat(svg, num, key, to, frm, dec, suf, pct):
+    return (f'<div class="hp-stat"><span class="hp-stat__ic" aria-hidden="true">{ic(svg, 16)}</span>'
+            f'<b class="hp-count" data-to="{to}" data-from="{frm}" data-dec="{dec}" data-suf="{suf}">{num}</b>'
+            f'<p data-i18n="{key}">{I.s(key)}</p><span class="hp-stat__bar" aria-hidden="true"><span data-pct="{pct}"></span></span></div>')
+stats = (stat('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', "1.05B t", "hp.st1", 1.05, 0, 2, "B t", 100) +
+         stat('<path d="M3 9h18l-1-5H4zM5 9v11h14V9M9 20v-6h6v6"/>', "12%", "hp.st2", 12, 0, 0, "%", 12) +
+         stat('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', "2030", "hp.st3", 2030, 2026, 0, "", 70))
 
 steps = ""
 plants = ["🌱", "🌿", "🪴", "🌳"]
@@ -231,7 +333,8 @@ cols = [("sheet", ic('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="
         ("erp", ic('<rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/><path d="M7 7h.01M7 17h.01"/>', 20)),
         ("sl", ic('<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/>', 20))]
 diff = ""
-for ci, (c, svg) in enumerate(cols):
+for ci in (2, 0, 1):  # StockLess first
+    c, svg = cols[ci]
     hl = " hp-col--sl" if c == "sl" else ""
     badge = f'<span class="hp-col__badge">{T("hp.c.best")}</span>' if c == "sl" else ""
     rows = ""
@@ -254,7 +357,11 @@ body = f'''
   <a class="btn btn--primary hp-topcta" href="{STEP1}">{T("hp.cta")}</a>
 </header>
 <main id="top">
-<section class="hp-hero"><div class="wrap hp-hero__in">
+<section class="hp-hero">
+<svg class="hp-hero__leaf hp-hero__leaf--2 hp-sway" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4C12 12 8 24 12 36c10 2 22-2 28-14C36 12 30 6 24 4Z" fill="#A9D3B0"/></svg>
+<svg class="hp-hero__leaf hp-sway" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4C12 12 8 24 12 36c10 2 22-2 28-14C36 12 30 6 24 4Z" fill="#B9DCBE"/><path d="M14 38C20 28 26 20 34 12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+{BASKET}
+<div class="wrap hp-hero__in">
   <div class="hp-hero__text">
     <p class="hp-eyebrow"><span aria-hidden="true">🌱</span> {T("hp.eyebrow")}</p>
     <h1>{T("hp.h1a")}<em data-i18n="hp.h1b">food waste.</em><br>{T("hp.h1c")}</h1>
@@ -282,6 +389,7 @@ body = f'''
 <section class="hp-how" id="how"><div class="wrap">
   <p class="hp-k3 hp-center">{T("hp.how.k")}</p>
   <h2 class="hp-center">{T("hp.how.h1")}<em data-i18n="hp.how.h2">confident order</em></h2>
+  <div class="hp-steps__line" aria-hidden="true"><span id="hs-line"></span></div>
   <div class="hp-steps">{steps}</div>
 </div></section>
 
@@ -294,23 +402,7 @@ body = f'''
 
 <section class="hp-ex" id="example"><div class="wrap">
   <div class="hp-ex__head"><div><p class="hp-k3">{T("hp.ex.k")}</p><h2>{T("hp.ex.h")}</h2></div><p class="hp-ex__t">{T("hp.ex.t")}</p></div>
-  <div class="hp-ex__grid">
-    <div class="hp-panel">
-      <div class="hp-ex__top"><div><span class="hp-k">Kopi O Kaw 2in1 · 10 sachets</span><b>{T("hp.ex.dem")}</b></div><div class="hp-ex__range"><small>{T("hp.ex.exp")}</small><b>7–28 <span data-i18n="hp.units">units</span></b></div></div>
-      {line_chart(420, 170, True)}
-      <div class="hp-ex__axis"><span>W1</span><span>W8 · <span data-i18n="hp.card.today">Today</span></span><span>F4</span></div>
-      <ul class="hp-legend"><li><i class="hp-sw hp-sw--line"></i>{T("hp.lg.past")}</li><li><i class="hp-sw hp-sw--dash"></i>{T("hp.lg.exp")}</li><li><i class="hp-sw hp-sw--fan"></i>{T("hp.lg.range")}</li></ul>
-    </div>
-    <div class="hp-ex__side">
-      <div class="hp-panel">
-        <div class="hp-plan"><label for="hp-plan">{T("hp.ex.plan")}</label><b><span id="hp-plan-n">9</span> <small data-i18n="hp.units">units</small></b></div>
-        <input id="hp-plan" type="range" min="0" max="40" value="9" class="hp-range">
-        <div class="hp-scale"><span>0 <span data-i18n="hp.units">units</span></span><span>{T("hp.ex.sugg")}</span><span>40 <span data-i18n="hp.units">units</span></span></div>
-        <div class="hp-nums"><div><small>{T("hp.ex.soh")}</small><b>7</b></div><div><small>{T("hp.ex.inc")}</small><b>2</b></div><div><small>{T("hp.ex.after")}</small><b id="hp-after">18</b></div></div>
-      </div>
-      <div class="hp-verdict" id="hp-verdict" aria-live="polite"><span class="hp-dot" id="hp-vk" data-i18n="hp.v.ok.k">Looks balanced</span><b id="hp-vh" data-i18n="hp.v.ok.h">This plan is within range.</b><p id="hp-vt"></p></div>
-    </div>
-  </div>
+  {example_panel}
   <p class="hp-src">{T("hp.ex.note")}</p>
 </div></section>
 
@@ -512,6 +604,147 @@ h2 em,.hp-hero h1 em{font-style:normal;color:var(--teal)}
 .hp-foot__in{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:18px;padding-bottom:18px}
 .hp-foot__in p{margin:0;font-size:12px;color:var(--muted)}
 .hp-foot .brand__logo{height:26px!important}
+/* hero background: soft waves, leaf and basket (same art as the original homepage) */
+.hp-hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#F1F8EF 0%,#E3F0E1 55%,#D3E9D5 100%)}
+.hp-hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 600' preserveAspectRatio='none'><path d='M0 170C260 90 520 90 760 150S1200 250 1440 170V600H0Z' fill='%23CFE6CF' fill-opacity='.55'/><path d='M0 380C300 300 620 330 900 390S1300 430 1440 360V600H0Z' fill='%23B9DCBE' fill-opacity='.55'/></svg>") center/100% 100% no-repeat}
+.hp-hero::after{content:"";position:absolute;left:50%;top:30%;width:70%;height:55%;transform:translateX(-60%);border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.75),rgba(255,255,255,0));pointer-events:none}
+.hp-hero__in{position:relative;z-index:1}
+.hp-hero__leaf{position:absolute;left:max(24px,calc((100% - 1180px) / 2 - 20px));top:22px;width:46px;height:46px;opacity:.7;z-index:1;pointer-events:none}
+.hp-hero__basket{position:absolute;right:0;bottom:0;width:190px;height:auto;z-index:2;pointer-events:none}
+@media(max-width:1330px){.hp-hero__basket{display:none}}
+/* ---------- motion ---------- */
+@keyframes hpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes hpSway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes hpPulse{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes hpLift{0%,100%{transform:translateY(0);box-shadow:0 12px 30px rgba(17,101,94,.12)}50%{transform:translateY(-8px);box-shadow:0 22px 40px rgba(17,101,94,.18)}}
+.hp-float{animation:hpFloat 6s ease-in-out infinite}
+.hp-float:hover,.hp-float:focus-within{animation-play-state:paused}
+.hp-sway{animation:hpSway 7s ease-in-out infinite;transform-origin:bottom left}
+.hp-hero__leaf--2{left:auto!important;right:max(24px,calc((100% - 1180px) / 2 + 20px));top:84px!important;width:30px!important;height:30px!important;animation-delay:1.5s}
+.hp-card .fc__band{animation:hpPulse 2.4s ease-in-out infinite}
+.hp-card .fc__fcol:nth-child(2) .fc__band{animation-delay:.3s}.hp-card .fc__fcol:nth-child(3) .fc__band{animation-delay:.6s}.hp-card .fc__fcol:nth-child(4) .fc__band{animation-delay:.9s}
+.hp-col--sl{animation:hpLift 4.5s ease-in-out infinite}
+.hp-pill--hi{background:var(--amber-tint);color:var(--amber)}.hp-pill--lo{background:var(--red-tint);color:var(--red)}.hp-pill--ok{background:var(--teal-tint);color:var(--teal-deep)}
+.hp-pill{transition:background-color .3s,color .3s}
+.hp-anim__order{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:12px;color:#4F6168}
+.hp-anim__order b{font-family:var(--data);font-size:15px;color:var(--ink)}
+.hp-anim__bar{position:relative;height:30px;margin:4px 0 10px}
+.hp-anim__track{position:absolute;left:0;right:0;top:8px;height:14px;border-radius:7px;background:var(--line-soft);display:flex;overflow:hidden}
+.hp-anim__s{display:block;width:16%;background:var(--teal-deep)}
+.hp-anim__o{display:block;width:74%;background:var(--amber-strong)}
+.hp-anim__band{position:absolute;top:2px;height:26px;left:30%;width:12%;border:2px dashed var(--ink);border-radius:7px;box-sizing:border-box}
+.hp-card__check{transition:background-color .4s,border-color .4s}
+.hp-card__check.is-hi{background:var(--amber-tint);border-color:#F1DDB4}
+.hp-card__check.is-lo{background:var(--red-tint);border-color:#F0CACA}
+.hp-anim__saved{display:flex;flex-direction:column;align-items:flex-end}
+.hp-anim__saved b{font-family:var(--display);font-size:20px;font-weight:800;color:var(--teal-deep)}
+.hp-anim__saved small{font-size:11px;color:#4F6168;text-align:right}
+.hp-anim__foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.hp-anim__dots{display:flex;gap:6px}
+.hp-anim__dots i{display:block;width:8px;height:8px;border-radius:4px;background:#CFE4DE;transition:width .3s,background-color .3s}
+.hp-anim__dots i.is-on{width:22px;background:var(--teal-deep)}
+.hp-anim__play{min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-family:var(--display);font-weight:700;font-size:13px;color:var(--teal-deep);cursor:pointer}
+.hp-stat__bar{display:block;height:4px;margin-top:12px;border-radius:2px;background:#F3E7C9;overflow:hidden}
+.hp-stat__bar span{display:block;height:100%;width:0;background:var(--amber-strong);transition:width 1.4s ease-out}
+.hp-steps__line{position:relative;height:4px;margin-top:28px;border-radius:2px;background:#E3EEE9;overflow:hidden}
+.hp-steps__line span{position:absolute;left:0;top:0;bottom:0;width:25%;border-radius:2px;background:var(--teal-deep);transition:width .5s ease}
+.hp-steps{margin-top:18px!important}
+.hp-step{border:2px solid #DDEBE5;transition:transform .35s,box-shadow .35s,background-color .35s,border-color .35s}
+.hp-step.is-on{background:var(--teal-tint);border-color:var(--teal-deep);transform:translateY(-6px);box-shadow:0 16px 32px rgba(17,101,94,.14)}
+.hp-step__n{transition:background-color .35s,color .35s}
+.hp-step:not(.is-on) .hp-step__n{background:#fff;color:var(--teal-deep);border:1px solid #CFE4DE}
+@media(prefers-reduced-motion:reduce){.hp-float,.hp-sway,.hp-card .fc__band,.hp-col--sl{animation:none}.hp-step,.hp-step__n,.hp-stat__bar span{transition:none}}
+/* Step 4 style purchase plan, shared with the workspace */
+.hp-card__fc{margin:10px 0 4px;font-size:13px;color:#4F6168}
+.hp-card__fc b{font-family:var(--display);font-size:20px;font-weight:800;color:var(--teal-deep)}
+.hp-card__eq{display:block;margin-top:2px;font-family:var(--data);font-size:11px;color:var(--muted)}
+.fc{display:flex;flex-direction:column;gap:6px}
+.fc__plot{position:relative;display:flex;align-items:flex-end;gap:8px;padding:0 2px;border-bottom:1px solid #C9D5D2}
+.fc__col{flex:1 1 0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px}
+.fc__val{font-family:var(--data);font-size:11px;font-weight:600;color:var(--ink-2)}
+.fc__bar{display:block;width:100%;max-width:30px;border-radius:5px 5px 2px 2px;background:var(--teal);transform-origin:bottom;animation:hpGrow .7s ease-out both}
+.fc__col:nth-child(2) .fc__bar{animation-delay:.05s}.fc__col:nth-child(3) .fc__bar{animation-delay:.1s}.fc__col:nth-child(4) .fc__bar{animation-delay:.15s}.fc__col:nth-child(5) .fc__bar{animation-delay:.2s}.fc__col:nth-child(6) .fc__bar{animation-delay:.25s}.fc__col:nth-child(7) .fc__bar{animation-delay:.3s}.fc__col:nth-child(8) .fc__bar{animation-delay:.35s}
+@keyframes hpGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.fc__bar{animation:none}}
+.fc__future{flex:4 1 0;position:relative;height:100%;display:flex;gap:6px;padding:22px 6px 0;box-sizing:border-box;background:#EAF4F0;border-left:2px dashed #8FA9A3;border-radius:0 8px 0 0}
+.fc__flab{position:absolute;top:5px;left:8px;right:8px;font-family:var(--display);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);line-height:1.2}
+.fc__fcol{flex:1 1 0;position:relative;height:100%}
+.fc__band{position:absolute;left:0;right:0;border:2px dashed var(--teal-deep);border-radius:5px;background:rgba(22,125,116,.18);box-sizing:border-box}
+.fc__mid{position:absolute;left:0;right:0;height:3px;border-radius:2px;background:var(--teal-deep)}
+.fc__bl{position:absolute;left:6px;right:6px;text-align:center;font-family:var(--data);font-size:11px;font-weight:600;color:var(--teal-deep);z-index:1}
+.fc__labels{display:flex;gap:8px;padding:0 2px}
+.fc__labels>span{flex:1 1 0;text-align:center;font-family:var(--data);font-size:10px;color:var(--muted)}
+.fc__flabels{flex:4 1 0;display:flex;gap:6px;padding:0 6px}
+.fc__flabels span{flex:1 1 0;text-align:center;font-family:var(--data);font-size:10px;color:var(--teal-deep)}
+.fc__mlabels{display:none;justify-content:space-between;gap:8px;font-size:11px;color:#4F6168}
+.fc__mlabels b{font-family:var(--display);font-weight:800;font-size:11px;color:var(--teal-deep)}
+.fc__mlabels--on{display:flex}
+.fc--small .fc__val,.fc--small .fc__flab,.fc--small .fc__bl{display:none}
+.fc--small .fc__future{padding-top:8px}
+.lgd{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0;padding:0;list-style:none;font-size:12px;color:var(--muted)}
+.lgd li{display:flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px}
+.sw--obs{background:var(--teal)}.sw--e{border:2px dashed var(--teal-deep);background:rgba(22,125,116,.1);box-sizing:border-box}
+.hp-pp{display:flex;flex-direction:column;gap:18px;padding:24px;border-radius:24px;background:#fff;border:1px solid var(--line);box-shadow:0 18px 40px rgba(22,49,59,.08)}
+.pp2-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pp2-head h3{margin:4px 0 2px;font-family:var(--display);font-size:26px}
+.pp2-k{display:block;font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pp2-sub{font-size:14px;color:var(--muted)}
+.hp-pp .pill{padding:5px 12px;border-radius:999px;font-family:var(--display);font-weight:700;font-size:12px;white-space:nowrap}
+.pill--hi{background:var(--amber-tint);color:var(--amber)}.pill--lo{background:var(--red-tint);color:var(--red)}.pill--ok{background:var(--teal-tint);color:var(--teal-deep)}
+.pp2-ev{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;background:#F6FAF8;border:1px solid #E3ECE9}
+.pp2-ev h4,.pp2-check h4{margin:0;font-family:var(--display);font-size:17px}
+.pp2-fc{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.pp2-fc b{font-family:var(--display);font-size:28px;font-weight:800;color:var(--teal-deep)}
+.pp2-fc span{font-size:14px;color:#4F6168}
+.pp2-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pp2-facts>div{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:#fff;border:1px solid #E3ECE9}
+.pp2-facts small{font-size:12px;color:var(--muted)}
+.pp2-facts b{font-family:var(--display);font-size:20px;font-weight:800}
+.pp2-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pp2-sugg{display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:var(--teal-tint)}
+.pp2-sugg .pp2-k{color:var(--teal-deep)}
+.pp2-big{font-family:var(--display);font-size:44px;line-height:1;font-weight:800;color:var(--teal-deep)}
+.pp2-big small{font-size:18px;font-weight:700}
+.pp2-f{font-size:14px;line-height:1.45;color:var(--ink-2)}
+.pp2-sugg .btn{align-self:flex-start;min-height:44px}
+.pp2-order{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;border:1px solid var(--line)}
+.pp2-step{display:flex;align-items:center;gap:8px}
+.pp2-step input{width:92px;height:44px;box-sizing:border-box;padding:0 10px;border:1px solid var(--border-strong);border-radius:12px;font-family:var(--data);font-size:22px;font-weight:700;color:var(--ink);text-align:center}
+.pp2-step span,.pp2-inc span{color:var(--muted);font-size:15px}
+.pp2-sbtn{width:44px;height:44px;border:1px solid var(--border-strong);border-radius:12px;background:#fff;font-size:22px;color:var(--ink);cursor:pointer}
+.pp2-inc{display:flex;align-items:center;gap:8px;font-size:14px;color:#4F6168}
+.pp2-inc input{width:72px;height:36px;box-sizing:border-box;padding:0 8px;border:1px solid var(--border-strong);border-radius:10px;font-family:var(--data);font-size:15px;color:var(--ink)}
+.pp2-check{display:flex;flex-direction:column;gap:10px}
+.pp2-check__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}
+.pp2-check__head span{font-size:14px;color:#4F6168}
+.pbar{position:relative;height:54px}
+.pbar__track{position:absolute;left:0;right:0;top:12px;height:20px;border-radius:8px;background:var(--line-soft);display:flex;overflow:hidden}
+.pbar__seg{display:block;height:100%;transition:width .35s ease}
+.pbar__seg--s{background:var(--teal-deep)}.pbar__seg--i{background:var(--mint)}.pbar__seg--o{background:var(--amber-strong)}
+.pbar__band{position:absolute;top:4px;height:36px;border:2px dashed var(--ink);border-radius:8px;box-sizing:border-box;transition:left .35s,width .35s}
+.pbar__tick{position:absolute;top:40px;transform:translateX(-50%);font-family:var(--data);font-size:12px;color:#4F6168;transition:left .35s}
+.pp2-verdict{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:14px;transition:background-color .3s,border-color .3s}
+.pp2-verdict b{font-family:var(--display);font-size:16px}
+.pp2-verdict span{font-size:15px;line-height:1.5}
+.pp2-verdict.is-hi{background:var(--amber-tint);border:1px solid #F1DDB4}.pp2-verdict.is-lo{background:var(--red-tint);border:1px solid #F0CACA}.pp2-verdict.is-ok{background:var(--teal-tint);border:1px solid #CFE4DE}
+.pp2-x{border:1px solid var(--line);border-radius:16px;background:#fff;align-self:start}
+.pp2-x summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:56px;padding:8px 16px;cursor:pointer;list-style:none}
+.pp2-x summary::-webkit-details-marker{display:none}
+.pp2-x summary span{display:flex;flex-direction:column}
+.pp2-x summary b{font-family:var(--display);font-size:15px}
+.pp2-x summary small{font-size:13px;color:var(--muted)}
+.pp2-x summary i{font-style:normal;font-size:18px;color:var(--teal)}
+.pp2-x[open] summary i{transform:rotate(45deg)}
+.pp2-x p{margin:0;padding:0 16px 14px;font-size:14px;color:#4F6168}
+.pp2-foot{display:flex;justify-content:flex-end}
+@media(max-width:700px){
+  .hp-pp{padding:16px}
+  .pp2-two{grid-template-columns:minmax(0,1fr)}
+  .pp2-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fc__val,.fc__labels,.fc__bl,.fc__flab{display:none}
+  .fc__mlabels{display:flex}
+}
 .hp-sdg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px;align-items:center;margin-bottom:72px}
 .hp-sdg__card{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:340px;padding:24px;border-radius:22px;background:#BF8B2E;color:#fff}
 .hp-sdg__top{display:flex;align-items:flex-start;gap:14px}
@@ -527,7 +760,6 @@ h2 em,.hp-hero h1 em{font-style:normal;color:var(--teal)}
   .hp-hero__in,.hp-big__in,.hp-get__in,.hp-ex__grid,.hp-band{grid-template-columns:minmax(0,1fr)}
   .hp-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
   .hp-cols{grid-template-columns:minmax(0,1fr)}
-  .hp-col--sl{order:-1}
   .hp-ex__head{flex-direction:column;align-items:flex-start}
 }
 @media(max-width:700px){
@@ -548,17 +780,92 @@ h2 em,.hp-hero h1 em{font-style:normal;color:var(--teal)}
 
 js = r'''
 (function () {
-  var r = document.getElementById('hp-plan'), n = document.getElementById('hp-plan-n'), after = document.getElementById('hp-after');
-  var box = document.getElementById('hp-verdict'), vk = document.getElementById('hp-vk'), vh = document.getElementById('hp-vh'), vt = document.getElementById('hp-vt');
+  var LOW = 15, HIGH = 21, STOCK = 8, MID = 18;
+  var $ = function (id) { return document.getElementById(id); };
+  var order = $('hp-order'), range = $('hp-order-r'), inc = $('hp-inc');
+  var st = { o: 37, i: 0 };
+  function fmt(s, o) { return s.replace(/\{(\w)\}/g, function (_, k) { return o[k]; }); }
   function upd() {
-    var o = +r.value, tot = 7 + 2 + o, k = tot > 28 ? 'hi' : tot < 7 ? 'lo' : 'ok';
-    n.textContent = o; after.textContent = tot;
-    box.className = 'hp-verdict' + (k === 'ok' ? '' : ' is-' + k);
-    vk.setAttribute('data-i18n', 'hp.v.' + k + '.k'); vh.setAttribute('data-i18n', 'hp.v.' + k + '.h');
-    vk.textContent = t('hp.v.' + k + '.k'); vh.textContent = t('hp.v.' + k + '.h');
-    vt.textContent = t('hp.v.' + k + '.t').replace('{n}', tot);
+    var o = st.o, i = st.i, tot = STOCK + i + o, s = Math.max(0, MID - STOCK - i);
+    var k = tot > HIGH ? 'hi' : tot < LOW ? 'lo' : 'ok';
+    if (document.activeElement !== order) order.value = o;
+    if (document.activeElement !== inc) inc.value = i;
+    range.value = o;
+    $('hp-sugg').textContent = s;
+    $('hp-sgf').textContent = fmt(t('hp.pp.sgf'), { i: i });
+    $('hp-use').textContent = fmt(t('hp.pp.use'), { n: s });
+    $('hp-use').hidden = o === s;
+    $('hp-eq').textContent = fmt(t('hp.pp.eq'), { s: STOCK, i: i, o: o, t: tot });
+    var max = Math.max(HIGH * 1.3, tot * 1.08), pc = function (v) { return (100 * v / max).toFixed(2) + '%'; };
+    $('hp-seg-s').style.width = pc(STOCK); $('hp-seg-i').style.width = pc(i); $('hp-seg-o').style.width = pc(o);
+    $('hp-band').style.left = pc(LOW); $('hp-band').style.width = pc(HIGH - LOW);
+    $('hp-tlo').style.left = pc(LOW); $('hp-thi').style.left = pc(HIGH);
+    var pill = $('hp-pill'); pill.className = 'pill pill--' + k; pill.textContent = t('hp.pp.p.' + k);
+    $('hp-v').className = 'pp2-verdict is-' + k;
+    $('hp-vh').textContent = t('hp.pp.v.' + k + '.h');
+    $('hp-vt').textContent = fmt(t('hp.pp.v.' + k + '.t'), { t: tot, h: HIGH, l: LOW, s: s });
   }
-  r.addEventListener('input', upd); document.addEventListener('langchange', upd);
+  function setO(v) { v = Math.max(0, Math.min(60, Math.floor(+v || 0))); st.o = v; upd(); }
+  order.addEventListener('input', function () { if (order.value !== '') setO(order.value); });
+  range.addEventListener('input', function () { setO(range.value); });
+  inc.addEventListener('input', function () { st.i = Math.max(0, Math.floor(+inc.value || 0)); upd(); });
+  document.querySelectorAll('#hp-pp [data-step]').forEach(function (b) { b.addEventListener('click', function () { setO(st.o + +b.dataset.step); }); });
+  $('hp-use').addEventListener('click', function () { setO(Math.max(0, MID - STOCK - st.i)); });
+  function labels() { document.querySelectorAll('[data-i18n-label]').forEach(function (el) { el.setAttribute('aria-label', t(el.getAttribute('data-i18n-label'))); }); }
+  document.addEventListener('langchange', function () { upd(); labels(); });
+
+  /* ---------- hero story loop: 37 too high → slides to 10 → balanced ---------- */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ha = { t: 0, playing: !reduce }, PH = 55;
+  var dots = document.querySelectorAll('.hp-anim__dots i'), play = $('ha-play');
+  function easeIO(x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+  function story() {
+    var phase = reduce ? 2 : Math.floor(ha.t / PH) % 3, p = (ha.t % PH) / PH;
+    var o = phase === 0 ? 37 : phase === 1 ? Math.round(37 - 27 * easeIO(Math.min(1, p * 1.4))) : 10;
+    var tot = 8 + o, k = tot > HIGH ? 'hi' : tot < LOW ? 'lo' : 'ok', max = 50;
+    $('ha-order').textContent = o; $('ha-eq').textContent = '8 + ' + o + ' = ' + tot;
+    $('ha-seg').style.width = (100 * o / max) + '%';
+    var pill = $('ha-pill'); pill.className = 'hp-pill hp-pill--' + k; pill.setAttribute('data-i18n', 'hp.pp.p.' + k); pill.textContent = t('hp.pp.p.' + k);
+    $('ha-check').className = 'hp-card__check is-' + k;
+    var tt = $('ha-title'); tt.setAttribute('data-i18n', 'hp.pp.v.' + k + '.h'); tt.textContent = t('hp.pp.v.' + k + '.h');
+    var sv = phase === 0 ? 0 : 37 - o; $('ha-saved').textContent = sv > 0 ? '−' + sv : '0';
+    dots.forEach(function (d, i) { d.className = i === phase ? 'is-on' : ''; });
+  }
+  setInterval(function () { if (ha.playing) { ha.t++; story(); } }, 60);
+  play.addEventListener('click', function () {
+    ha.playing = !ha.playing; var key = ha.playing ? 'hp.anim.pause' : 'hp.anim.play';
+    play.setAttribute('data-i18n', key); play.textContent = t(key);
+  });
+  if (reduce) { play.hidden = true; }
+  document.addEventListener('langchange', story);
+  story();
+
+  /* ---------- stats count up when they scroll into view ---------- */
+  function countUp(el) {
+    var to = +el.dataset.to, from = +el.dataset.from, dec = +el.dataset.dec, suf = el.dataset.suf, start = null;
+    var bar = el.parentNode.querySelector('.hp-stat__bar span'); if (bar) bar.style.width = bar.dataset.pct + '%';
+    if (reduce) { el.textContent = to.toFixed(dec) + suf; return; }
+    function step(ts) { if (!start) start = ts; var p = Math.min(1, (ts - start) / 1400), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = (from + (to - from) * e).toFixed(dec) + suf; if (p < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  var counts = document.querySelectorAll('.hp-count');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); io.unobserve(e.target); } }); }, { threshold: .4 });
+    counts.forEach(function (c) { c.textContent = (+c.dataset.from).toFixed(+c.dataset.dec) + c.dataset.suf; io.observe(c); });
+  } else counts.forEach(countUp);
+
+  /* ---------- steps light up in turn; click to hold one ---------- */
+  var stepEls = document.querySelectorAll('.hp-step'), line = $('hs-line'), si = 0, held = -1;
+  function showStep(i) { stepEls.forEach(function (s, j) { s.classList.toggle('is-on', j === i); }); line.style.width = ((i + 1) * 25) + '%'; }
+  stepEls.forEach(function (s, i) {
+    s.addEventListener('mouseenter', function () { held = i; showStep(i); });
+    s.addEventListener('mouseleave', function () { held = -1; });
+    s.addEventListener('focus', function () { held = i; showStep(i); });
+    s.addEventListener('blur', function () { held = -1; });
+  });
+  showStep(0);
+  if (!reduce) setInterval(function () { if (held < 0) { si = (si + 1) % stepEls.length; showStep(si); } }, 2400);
   var all = document.getElementById('hp-all');
   all.addEventListener('click', function () {
     var open = all.getAttribute('aria-expanded') !== 'true';
@@ -579,8 +886,12 @@ out = f'''<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>{CSS}{page_css}
+/* type alignment (same as Steps 1-4): names Manrope 700, descriptions Source Sans 3 400, marks uppercase Manrope 800, numbers Inter */
 h1,h2,h3,h4,th,label,legend,summary,dt,b,strong,.btn{{font-family:var(--display);font-weight:700}}
-p,li,dd,td,small,input,select,textarea{{font-family:var(--body)}}
+p,li,dd,td,small,input,select,textarea{{font-family:var(--body);font-weight:400}}
+.num,b.num,.num b,.fc__val,.fc__labels span,.fc__bl,.pbar__tick,.pp2-step input,.pp2-inc input,.hp-anim__order b,.hp-card__eq{{font-family:var(--data)}}
+.hp-k,.hp-k3,.hp-eyebrow,.pp2-k,.fc__flab,.hp-col li small,.hp-case__k,.hp-col__badge,.hp-sdg__top span{{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em}}
+.hp-nav a,.hp-link,.hp-pill,.hp-dot,.hp-chips span,.hp-anim__play,.pill{{font-family:var(--display);font-weight:700}}
 html[lang^="zh"] h1,html[lang^="zh"] h2,html[lang^="zh"] h3,html[lang^="zh"] b,html[lang^="zh"] strong,html[lang^="zh"] label,html[lang^="zh"] .btn,html[lang^="zh"] summary{{font-family:var(--display),"Noto Sans SC",sans-serif}}
 </style></head>
 <body>{body}

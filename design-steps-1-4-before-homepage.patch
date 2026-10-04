@@ -1,0 +1,2091 @@
+From ec90b7f2f698ca89fc602e723a6a793412765184 Mon Sep 17 00:00:00 2001
+From: Serene <syee0035@student.monash.edu>
+Date: Sun, 4 Oct 2026 17:41:54 +0800
+Subject: [PATCH] feat(frontend): Steps 1-4 design refresh
+
+- Mint title band on every step that holds the step's buttons and sticks
+  to the top, shrinking to one slim row on scroll
+- Step 1: upload card first, required/optional columns beside it
+- Step 2: confirm-all card, Required/Optional field groups, What this
+  file unlocks, privacy card
+- Step 3: summary tiles, product cards for every product with category
+  tabs, What we found beside a Ready for planning card
+- Step 4: wide purchase plan with demand evidence on top (past weeks as
+  bars, forecast as one column per coming week), suggested restock beside
+  your order, folded expiry; compact product list on the right
+- Type alignment: Manrope 700 names, Source Sans 3 400 descriptions,
+  uppercase 800 marks; white text on primary buttons
+- New copy translated into Malay and Chinese; tests updated
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01J7sMu9y8dph2gjPsQNsfJW
+---
+ frontend/src/components/AppShell.tsx          |   1 +
+ frontend/src/components/ScreenHero.tsx        |  62 +++
+ frontend/src/design-refresh.css               | 194 +++++++++
+ frontend/src/i18n/messages.ts                 |  37 ++
+ frontend/src/purchase-plan/DemandChart.tsx    | 313 ++++++--------
+ .../purchase-plan/ProductPurchaseDialog.tsx   | 229 +++++-----
+ frontend/src/screens/MappingScreen.tsx        | 398 ++++++++++--------
+ frontend/src/screens/PurchasePlanScreen.tsx   | 159 +++----
+ frontend/src/screens/ReadinessOverview.tsx    |  47 ++-
+ frontend/src/screens/ReadinessScreen.tsx      |  65 +--
+ frontend/src/screens/UploadScreen.tsx         |  55 +--
+ frontend/src/screens/product-category.ts      |  29 ++
+ frontend/tests/purchase-plan.test.tsx         |  45 +-
+ frontend/tests/readiness-redesign.test.tsx    |   7 +-
+ 14 files changed, 979 insertions(+), 662 deletions(-)
+ create mode 100644 frontend/src/components/ScreenHero.tsx
+ create mode 100644 frontend/src/design-refresh.css
+ create mode 100644 frontend/src/screens/product-category.ts
+
+diff --git a/frontend/src/components/AppShell.tsx b/frontend/src/components/AppShell.tsx
+index f0ad85f..f5b8b13 100644
+--- a/frontend/src/components/AppShell.tsx
++++ b/frontend/src/components/AppShell.tsx
+@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
+ import type { SourceMode } from "../engine.ts";
+ import { WorkspaceDecor } from "./WorkspaceDecor.tsx";
+ import { Logo } from "./Logo.tsx";
++import "../design-refresh.css";
+ 
+ export type StepId = 1 | 2 | 3 | 4;
+ 
+diff --git a/frontend/src/components/ScreenHero.tsx b/frontend/src/components/ScreenHero.tsx
+new file mode 100644
+index 0000000..e59a024
+--- /dev/null
++++ b/frontend/src/components/ScreenHero.tsx
+@@ -0,0 +1,62 @@
++import { useEffect, useRef, useState, type ReactNode } from "react";
++import { t, useLanguage } from "../i18n/index.ts";
++
++const PLANTS = ["🌱", "🌿", "🪴", "🌳"] as const;
++
++/**
++ * Mint title band shared by Steps 1–4. It also holds the step's navigation buttons and
++ * sticks to the top of the window; once the page scrolls it shrinks to one slim row.
++ */
++export function ScreenHero({
++  step,
++  detail,
++  title,
++  lede,
++  aside,
++  actions,
++  titleClassName = "title",
++}: {
++  readonly step: 1 | 2 | 3 | 4;
++  readonly detail?: ReactNode;
++  readonly title: ReactNode;
++  readonly lede?: ReactNode;
++  readonly aside?: ReactNode;
++  readonly actions?: ReactNode;
++  readonly titleClassName?: string;
++}) {
++  useLanguage();
++  const [stuck, setStuck] = useState(false);
++  const stuckRef = useRef(false);
++  useEffect(() => {
++    if (typeof window === "undefined") return;
++    // Hysteresis stops the header flickering while its own height changes.
++    const check = () => {
++      const y = window.scrollY;
++      const next = stuckRef.current ? y > 40 : y > 140;
++      if (next !== stuckRef.current) {
++        stuckRef.current = next;
++        setStuck(next);
++      }
++    };
++    check();
++    window.addEventListener("scroll", check, { passive: true });
++    return () => window.removeEventListener("scroll", check);
++  }, []);
++  return (
++    <section className={`screen-hero${stuck ? " screen-hero--stuck" : ""}${actions ? " screen-hero--actions" : ""}`}>
++      <div className="screen-hero__row">
++        <div className="screen-hero__text">
++          <p className="eyebrow screen-hero__eyebrow">
++            <span aria-hidden="true">{PLANTS[step - 1]}</span>
++            {t(`Step ${step} of 4`)}
++            {detail ? <span className="screen-hero__detail"> · {detail}</span> : null}
++          </p>
++          <h1 className={titleClassName}>{title}</h1>
++          {lede ? <p className="lede">{lede}</p> : null}
++        </div>
++        {aside ? <div className="screen-hero__aside">{aside}</div> : null}
++      </div>
++      {actions ? <div className="screen-hero__actions">{actions}</div> : null}
++    </section>
++  );
++}
+diff --git a/frontend/src/design-refresh.css b/frontend/src/design-refresh.css
+new file mode 100644
+index 0000000..dd5e681
+--- /dev/null
++++ b/frontend/src/design-refresh.css
+@@ -0,0 +1,194 @@
++/* ============================================================
++   Steps 1–4 design refresh
++   Rules are prefixed with .frame so they win over the older
++   screen stylesheets, which load later for some steps.
++   ============================================================ */
++
++/* ---------- Type alignment ----------
++   Names Manrope 700 · descriptions Source Sans 3 400 ·
++   marks uppercase Manrope 800 · numbers Inter */
++.frame :is(h1, h2, h3, h4, th, label, legend, summary, dt, b, strong, .btn) { font-family: var(--display); font-weight: 700; }
++.frame :is(p, li, dd, td, small, input, select, textarea) { font-family: var(--body); font-weight: 400; }
++.frame :is(.num, b.num, .num b) { font-family: var(--data); }
++.frame :is(.eyebrow, .attribute-mark, .req, .attribute-mark-heading, .screen-hero__eyebrow, .pp2-k) { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
++.frame .btn--primary, .frame .btn--primary :is(span, b) { color: #fff; }
++html[lang^="zh"] .frame :is(h1, h2, h3, b, strong, label, .btn) { font-family: var(--display), "Noto Sans SC", sans-serif; }
++
++/* ---------- Mint title band, sticky ---------- */
++.frame .screen-hero {
++  position: sticky; top: 0; z-index: 20;
++  align-self: stretch; box-sizing: border-box; width: 100%;
++  margin: 0 0 24px; padding: 30px 32px 26px;
++  border-radius: 24px; background: #EEF6F2; border: 1px solid #E1EEE8;
++  transition: box-shadow .2s ease, padding .2s ease;
++}
++.frame .screen-hero__row { display: flex; justify-content: space-between; align-items: center; gap: 28px; }
++.frame .screen-hero__text { min-width: 0; }
++.frame .screen-hero__eyebrow { display: flex; align-items: center; gap: 8px; margin: 0; font-size: var(--text-eyebrow); color: var(--teal-deep); }
++.frame .screen-hero__detail { text-transform: none; letter-spacing: 0; font-weight: 700; color: var(--muted); }
++.frame .screen-hero h1 { margin: 8px 0 0; font-size: var(--text-page-title); line-height: 1.12; }
++.frame .screen-hero .lede { margin: 10px 0 0; font-size: var(--text-body); line-height: 1.6; max-width: 62ch; }
++.frame .screen-hero__aside { flex: none; max-width: 420px; }
++.frame .screen-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 18px; }
++.frame .screen-hero__spacer { flex: 1; }
++.frame .screen-hero__actions .btn--link { font-weight: 700; color: var(--ink); }
++.frame .screen-hero__actions .blockers { margin: 0; font-size: var(--text-description); color: var(--muted); text-align: right; }
++.frame .screen-hero--stuck { padding-top: 12px; padding-bottom: 12px; box-shadow: 0 8px 24px rgba(22,49,59,.10); }
++.frame .screen-hero--stuck .screen-hero__eyebrow,
++.frame .screen-hero--stuck .lede,
++.frame .screen-hero--stuck .screen-hero__aside { display: none; }
++.frame .screen-hero--stuck h1 { margin: 0; font-size: 22px; }
++.frame .screen-hero--stuck.screen-hero--actions { display: flex; align-items: center; gap: 20px; }
++.frame .screen-hero--stuck .screen-hero__row { flex: 1 1 auto; min-width: 0; }
++.frame .screen-hero--stuck .screen-hero__actions { flex: 2 1 auto; margin-top: 0; }
++.frame .filebar--chip { margin: 0; background: #fff; border-radius: 16px; }
++.frame .validity--chip { margin: 0; padding: 12px 16px; border-radius: 16px; background: #fff; border: 1px solid var(--line); font-size: var(--text-description); }
++.frame .map-progress-wrap { display: inline-flex; align-items: center; gap: 10px; font-size: var(--text-description); color: var(--muted); }
++.frame .map-progress { display: inline-block; width: 110px; height: 6px; border-radius: 999px; background: #D6E8DF; overflow: hidden; }
++.frame .map-progress > span { display: block; height: 100%; border-radius: inherit; background: var(--teal-deep); }
++
++/* ---------- Step 1 ---------- */
++.frame .s1-grid--upload-first { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 24px; align-items: start; width: 100%; }
++.frame .s1-columns { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
++.frame .cols-card { padding: 20px; border-radius: 20px; background: #F4F9F7; border: 1px solid #E1EEE8; }
++.frame .cols-card--optional { background: #fff; border-color: var(--line); }
++.frame .cols-card .card-title { margin: 0; font-size: 19px; }
++.frame .cols-card .attribute-section { margin-top: 12px; }
++.frame .cols-card .attribute-list { gap: 8px; }
++.frame .cols-card .attribute-card { padding: 12px 14px; border-radius: 14px; box-shadow: none; }
++.frame .cols-card .attribute-card p { margin: 4px 0 0; font-size: var(--text-description); color: var(--muted); }
++.frame .cols-card .attribute-mark { font-size: 11px; }
++
++/* ---------- Step 2 ---------- */
++.frame .split--mapping { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(300px, 1fr); gap: 24px; align-items: start; width: 100%; }
++.frame .map-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
++.frame .mapping-bulk--card { margin: 0; padding: 18px 20px; border-radius: 18px; border: 1px solid #D6E8DF; background: #EEF6F2; }
++.frame .map-card { margin: 0; }
++.frame .map-group { margin-top: 16px; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
++.frame .map-group__head { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-bottom: 1px solid var(--line-soft); }
++.frame .map-group__head > div { flex: 1; }
++.frame .map-group__head h3 { margin: 0; font-size: var(--text-secondary); color: var(--ink); }
++.frame .map-group__head p { margin: 2px 0 0; font-size: var(--text-description); color: var(--muted); }
++.frame .map-group__icon { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--teal-tint); font-size: 20px; }
++.frame .map-group__icon--optional { background: var(--amber-tint); }
++.frame .map-group .table-scroll { border: 0; border-radius: 0; }
++.frame .field-desc { display: block; margin-top: 2px; font-size: var(--text-description); color: var(--muted); }
++.frame .map-side .panel-sage { width: auto; max-width: none; }
++.frame .cols-card.optional-fields { margin-top: 0; }
++.frame .map-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
++.frame .file-unlocks { padding: 20px; border-radius: 20px; background: #F4F9F7; border: 1px solid #E1EEE8; }
++.frame .file-unlocks__list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
++.frame .file-unlocks__item { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #fff; border: 1px solid var(--line-soft); opacity: .7; }
++.frame .file-unlocks__item--on { opacity: 1; border-color: #CFE4DE; }
++.frame .file-unlocks__item b { font-size: var(--text-secondary); }
++.frame .file-unlocks__state { font-size: 12px; color: var(--muted); white-space: nowrap; }
++.frame .file-unlocks__item--on .file-unlocks__state { color: var(--teal-deep); font-weight: 700; }
++.frame .privacy-card { display: flex; gap: 12px; align-items: flex-start; margin: 0; padding: 16px 18px; border-radius: 18px; background: #fff; border: 1px solid var(--line); font-size: var(--text-description); color: var(--muted); }
++.frame .privacy-card b { display: block; color: var(--ink); font-size: var(--text-secondary); }
++
++/* ---------- Step 3 ---------- */
++.frame .summary--tiles { width: 100%; }
++.frame .catalog { width: 100%; box-sizing: border-box; margin-top: 18px; padding: 20px; border-radius: 22px; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-card); }
++.frame .catalog__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 14px; }
++.frame .catalog__head h2 { margin: 0; font-size: var(--text-section-head); }
++.frame .catalog__head p { margin: 4px 0 0; font-size: var(--text-description); color: var(--muted); }
++.frame .catalog__tabs { display: flex; gap: 4px; margin: 16px 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
++.frame .catalog__tab { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border: 0; border-bottom: 3px solid transparent; background: none; color: var(--muted); font-family: var(--display); font-weight: 700; cursor: pointer; }
++.frame .catalog__tab span { padding: 1px 8px; border-radius: 999px; background: var(--line-soft); font-family: var(--data); font-size: 12px; color: var(--ink-2); }
++.frame .catalog__tab[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--teal-deep); }
++.frame .catalog .pcards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
++.frame .catalog__more { margin-top: 14px; font-weight: 700; color: var(--teal-deep); }
++.frame .pcard--ready { border-left-color: var(--teal); }
++.frame .s3-found { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr); gap: 24px; align-items: start; width: 100%; margin-top: 24px; }
++.frame .s3-found__main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
++.frame .s3-found .decision-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); width: 100%; margin: 0; }
++.frame .s3-found .problems { width: 100%; box-sizing: border-box; margin: 0; }
++.frame .s3-found__title { margin: 0; font-size: var(--text-section-head); }
++.frame .s3-found__side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 96px; }
++.frame .ready-card { padding: 20px; border-radius: 20px; background: #F4F9F7; border: 1px solid #E1EEE8; }
++.frame .ready-card h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 18px; }
++.frame .ready-card__rows { display: flex; justify-content: space-between; gap: 10px; font-size: var(--text-description); color: var(--muted); }
++.frame .ready-card__bar { display: block; height: 8px; margin: 8px 0 12px; border-radius: 999px; background: #D6E8DF; overflow: hidden; }
++.frame .ready-card__bar > span { display: block; height: 100%; background: var(--teal-deep); }
++.frame .ready-card p { margin: 6px 0 0; font-size: var(--text-description); color: var(--muted); }
++.frame .ready-card__warn { color: var(--amber) !important; }
++
++/* ---------- Step 4: wide plan left, short list right ---------- */
++.frame .purchase-plan .pp-layout--plan-first { grid-template-columns: minmax(0, 1.85fr) minmax(330px, 1fr); align-items: start; gap: 24px; }
++.frame .purchase-plan dialog.purchase-detail { position: static; max-height: none; overflow: visible; display: flex; flex-direction: column; gap: 0; border-radius: 24px; }
++.frame .purchase-plan .purchase-detail .supporting-evidence { margin: 0 18px; padding: 18px; border: 1px solid #E3ECE9; border-radius: 18px; background: #F6FAF8; }
++.frame .purchase-plan .purchase-detail .supporting-evidence > summary { font-size: 17px; }
++.frame .purchase-plan .purchase-detail .evidence-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
++.frame .purchase-plan .pp-plan-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 18px; }
++.frame .purchase-plan .pp-plan-two .dialog-action-first { padding: 0; }
++.frame .purchase-plan .pp-plan-two .estimate-hero { height: 100%; box-sizing: border-box; border-radius: 18px; }
++.frame .purchase-plan .pp-plan-two .estimate-number { font-size: 44px; }
++.frame .purchase-plan .pp-plan-two .order-panel { border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
++.frame .purchase-plan .estimate-use { margin-top: 12px; min-height: 44px; }
++.frame .purchase-plan .purchase-detail .verdict { margin: 0 18px; border: 0; border-top: 0; padding: 0 0 18px; }
++.frame .purchase-plan .pp-fold { margin: 0 18px 18px; border: 1px solid var(--line); border-radius: 16px; background: #fff; padding: 0; }
++.frame .purchase-plan .pp-fold > summary { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 8px 16px; cursor: pointer; }
++.frame .purchase-plan .pp-fold > summary > span:last-child { display: flex; flex-direction: column; }
++.frame .purchase-plan .pp-fold__summary { font-family: var(--body); font-weight: 400; font-size: 13px; color: var(--muted); }
++.frame .purchase-plan .pp-fold__body { padding: 0 16px 14px; font-size: var(--text-description); color: var(--muted); }
++.frame .purchase-plan .purchase-detail .dialog-footer { position: static; border-top: 0; }
++.frame .purchase-plan .pp-excess { display: flex; flex-direction: column; gap: 2px; padding: 14px 18px; border-radius: 18px; background: #fff; border: 1px solid var(--line); }
++.frame .purchase-plan .pp-excess__k, .frame .purchase-plan .pp-excess__note { font-size: 13px; color: var(--muted); }
++.frame .purchase-plan .pp-excess b { font-family: var(--display); font-size: 24px; font-weight: 800; color: var(--ink); }
++.frame .purchase-plan .pp-panel--empty .pp-priority { margin-top: 18px; text-align: left; }
++.frame .purchase-plan .pp-panel--empty .pp-priority__cards { display: grid; gap: 10px; }
++.frame .purchase-plan .pp-panel--empty .pp-card { display: flex; flex-direction: column; gap: 4px; width: 100%; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; cursor: pointer; }
++.frame .purchase-plan .pp-panel--empty .pp-card small { display: block; color: var(--muted); }
++.frame .purchase-plan .pp-panel--empty .pp-card__action { font-weight: 700; color: var(--teal-deep); }
++/* The list is the narrow column: each row becomes a compact card. */
++@media (min-width: 1181px) {
++  .frame .purchase-plan .pp-layout--plan-first .pp-table thead { display: none; }
++  .frame .purchase-plan .pp-layout--plan-first .pp-table,
++  .frame .purchase-plan .pp-layout--plan-first .pp-table tbody { display: block; width: 100%; }
++  .frame .purchase-plan .pp-layout--plan-first .pp-table tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; padding: 12px 16px; border-bottom: 1px solid var(--line-soft); }
++  .frame .purchase-plan .pp-layout--plan-first .pp-table td { display: block; width: auto !important; padding: 0; border: 0; min-width: 0; }
++  .frame .purchase-plan .pp-layout--plan-first .pp-table td:last-child { grid-column: 1 / -1; }
++  .frame .purchase-plan .pp-layout--plan-first .pp-table td:first-child { grid-column: 1 / -1; }
++  .frame .purchase-plan .pp-layout--plan-first .pp-table td:not(:first-child)::before { content: attr(data-label); display: block; font-size: 11px; color: var(--muted); }
++}
++/* Demand chart: bars + forecast columns */
++.frame .demand-chart__mobile { display: none; justify-content: space-between; gap: 10px; margin: 4px 0 0; font-size: 12px; color: #4F6168; }
++.frame .demand-chart__mobile b { color: var(--teal-deep); }
++.frame .legend-bar { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #167D74; }
++.frame .legend-missing { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #E3EAE8; border: 1px dashed #86949A; box-sizing: border-box; }
++
++/* ---------- Responsive ---------- */
++@media (max-width: 1180px) {
++  .frame .purchase-plan .pp-layout--plan-first { grid-template-columns: minmax(0, 1fr); }
++  .frame .catalog .pcards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++}
++@media (max-width: 960px) {
++  .frame .s1-grid--upload-first,
++  .frame .split--mapping,
++  .frame .s3-found { grid-template-columns: minmax(0, 1fr); }
++  .frame .s3-found__side { position: static; }
++  .frame .screen-hero__row { flex-direction: column; align-items: flex-start; }
++  .frame .screen-hero__aside { max-width: 100%; }
++}
++@media (max-width: 700px) {
++  .frame .screen-hero { padding: 22px 18px 18px; border-radius: 18px; }
++  .frame .screen-hero h1 { font-size: 30px; }
++  .frame .screen-hero--stuck { display: block !important; }
++  .frame .screen-hero--stuck h1 { font-size: 18px; }
++  .frame .screen-hero--stuck .screen-hero__actions { margin-top: 8px; }
++  .frame .screen-hero--stuck .screen-hero__actions > :not(.btn--primary) { display: none; }
++  .frame .catalog .pcards { grid-template-columns: minmax(0, 1fr); }
++  .frame .purchase-plan .pp-plan-two { grid-template-columns: minmax(0, 1fr); }
++  .frame .purchase-plan .purchase-detail .evidence-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++  .frame .demand-chart :is(.demand-chart__label, .demand-chart__value, .demand-chart__likely, .demand-chart__flabel) { display: none; }
++  .frame .demand-chart__mobile { display: flex; }
++}
++
++/* Fine-tuning */
++.frame .purchase-plan .pp-layout--plan-first .toolbar { grid-template-columns: minmax(0, 1fr); }
++.frame .screen-hero--stuck h1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
++.frame .screen-hero--stuck .screen-hero__actions { flex-wrap: nowrap; }
++.frame .screen-hero--stuck .screen-hero__actions .btn { white-space: nowrap; }
++.frame .screen-hero--stuck .screen-hero__actions .blockers { display: none; }
++.frame .screen-hero__text { max-width: 100%; }
++.frame .screen-hero--stuck .screen-hero__row { align-items: stretch; }
+diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
+index a9c1627..3151f2b 100644
+--- a/frontend/src/i18n/messages.ts
++++ b/frontend/src/i18n/messages.ts
+@@ -3085,3 +3085,40 @@ Object.assign(messages, {
+   "Filter": ["筛选", "Tapis"],
+   "Other": ["其他", "Lain-lain"],
+ });
++
++// Steps 1–4 design refresh.
++Object.assign(messages, {
++  "Step {0} of 4": ["第 {0} 步，共 4 步", "Langkah {0} daripada 4"],
++  "matched": ["已配对", "dipadankan"],
++  "Needed to continue": ["要有这些才能继续", "Diperlukan untuk meneruskan"],
++  "Each one adds to your results. Choose \"Not in this file\" to skip.": ["每多一项，结果就更完整。没有的话选“文件里没有”就行。", "Setiap satu menambah hasil anda. Pilih \"Tiada dalam fail ini\" untuk langkau."],
++  "What this file unlocks": ["这个文件能用来做什么", "Apa yang fail ini boleh buka"],
++  "Based on the columns matched so far.": ["根据目前配对好的栏位。", "Berdasarkan lajur yang sudah dipadankan."],
++  "Later iteration": ["之后的版本才有", "Dalam versi akan datang"],
++  "Needs more columns": ["还要更多栏位", "Perlukan lebih banyak lajur"],
++  "Products by category": ["按类别查看商品", "Produk mengikut kategori"],
++  "Categories come from each product name. Products to check are listed first.": ["类别按商品名称分。需要检查的商品排在前面。", "Kategori ikut nama produk. Produk yang perlu disemak disenaraikan dahulu."],
++  "Product categories": ["商品类别", "Kategori produk"],
++  "Beverages": ["饮料", "Minuman"],
++  "Staples": ["主食", "Barang asas"],
++  "Snacks": ["零食", "Snek"],
++  "Fresh & dairy": ["生鲜乳品", "Segar & tenusu"],
++  "Cooking & canned": ["烹饪与罐头", "Masakan & tin"],
++  "Non-food": ["非食品", "Bukan makanan"],
++  "Show fewer products": ["少显示一些", "Tunjuk kurang produk"],
++  "Show all {0} products": ["显示全部 {0} 个商品", "Tunjuk semua {0} produk"],
++  "What we found": ["我们发现了什么", "Apa yang kami jumpa"],
++  "Ready for planning": ["可以开始规划了", "Sedia untuk dirancang"],
++  "Rows used": ["用到的行数", "Baris yang digunakan"],
++  "Missing weeks are never counted as zero sales.": ["没有数据的周，绝不会被当成零销量。", "Minggu tanpa data tidak pernah dikira sebagai jualan sifar."],
++  "Your data stays on your device": ["您的数据留在您的设备上", "Data anda kekal dalam peranti anda"],
++  "Checked in your browser. Your file isn't changed.": ["在您的浏览器里检查，原文件不会被改动。", "Disemak dalam pelayar anda. Fail anda tidak diubah."],
++  "Use suggested {0}": ["用建议的 {0}", "Guna cadangan {0}"],
++  "Forecast · next 4 weeks": ["预测 · 未来 4 周", "Ramalan · 4 minggu"],
++  "Week {0}": ["第 {0} 周", "Minggu {0}"],
++  "Next 4 weeks ≈{0} a week": ["未来 4 周 每周约 {0}", "4 minggu akan datang ≈{0} seminggu"],
++  "Sold each week": ["每周卖出", "Terjual setiap minggu"],
++  "Forecast range per week (line = most likely)": ["每周预测范围（线 = 最可能）", "Julat ramalan seminggu (garis = paling mungkin)"],
++  "No data that week": ["该周没有数据", "Tiada data minggu itu"],
++  "Potential excess stock": ["可能多出的库存", "Stok berlebihan berpotensi"],
++});
+diff --git a/frontend/src/purchase-plan/DemandChart.tsx b/frontend/src/purchase-plan/DemandChart.tsx
+index 8a75327..3cc2b31 100644
+--- a/frontend/src/purchase-plan/DemandChart.tsx
++++ b/frontend/src/purchase-plan/DemandChart.tsx
+@@ -1,8 +1,20 @@
+-import { t, useLanguage } from "../i18n/index.ts";
++import { getLocale, t, useLanguage } from "../i18n/index.ts";
+ import type { DemandRangeEvidence, WeeklyEvidence } from "../engine.ts";
+-import { SourceTag } from "./SourceTag.tsx";
++import { SourceTag, oneDecimalText } from "./SourceTag.tsx";
+ 
+-/** SVG coordinates only: the four-week range is projected onto a weekly chart, not re-forecast. */
++function shortDate(iso: string): string {
++  const date = new Date(`${iso}T00:00:00Z`);
++  return Number.isNaN(date.getTime())
++    ? iso
++    : date.toLocaleDateString(getLocale(), { day: "numeric", month: "short", timeZone: "UTC" });
++}
++
++/**
++ * Past weekly sales as bars, then the four-week forecast drawn as one column per coming week.
++ * The engine forecasts a range for the four-week total, so each column shows that range spread
++ * evenly across the weeks (low ÷ 4 to high ÷ 4) with the most likely value as a line. No new
++ * week-by-week estimate is produced here.
++ */
+ export function DemandChart({
+   weeks,
+   range,
+@@ -15,28 +27,19 @@ export function DemandChart({
+   useLanguage();
+   const left = 42,
+     right = 622,
+-    top = 22,
++    top = 34,
+     bottom = 184,
+-    today = left + (right - left) * 0.68;
+-  const max = Math.max(
+-    1,
+-    range.high / range.horizonWeeks,
+-    ...weeks.map((w) => w.positiveQuantity ?? 0),
+-  );
++    today = left + (right - left) * 0.64;
++  const horizon = Math.max(1, range.horizonWeeks);
++  const lowWeekly = range.low / horizon,
++    highWeekly = range.high / horizon,
++    likelyWeekly = range.unroundedCentral / horizon;
++  const max = Math.max(1, highWeekly, ...weeks.map((w) => w.positiveQuantity ?? 0)) * 1.15;
+   const y = (value: number) => bottom - (value / max) * (bottom - top);
+-  const x = (index: number) =>
+-    weeks.length <= 1
+-      ? today
+-      : left + (index * (today - left)) / (weeks.length - 1);
+-  const segments: { x: number; y: number }[][] = [];
+-  let segment: { x: number; y: number }[] = [];
+-  weeks.forEach((week, i) => {
+-    if (week.state === "missing" || week.positiveQuantity === null) {
+-      if (segment.length) segments.push(segment);
+-      segment = [];
+-    } else segment.push({ x: x(i), y: y(week.positiveQuantity) });
+-  });
+-  if (segment.length) segments.push(segment);
++  const slot = (today - left) / Math.max(1, weeks.length);
++  const barWidth = Math.min(30, slot * 0.62);
++  const centre = (index: number) => left + slot * index + slot / 2;
++  const futureSlot = (right - today) / horizon;
+   const zero = weeks.some((w) => w.state === "confirmed_zero_sales");
+   const missing = weeks.some((w) => w.state === "missing");
+   const negative = weeks.filter(
+@@ -45,212 +48,166 @@ export function DemandChart({
+   const cancelled = weeks.filter(
+     (w) => w.state === "net_zero_with_activity",
+   ).length;
+-  const highY = y(range.high / range.horizonWeeks),
+-    lowY = y(range.low / range.horizonWeeks);
+-  // Centre of the supplied visual band; no new demand estimate is produced.
+-  const centreY = (highY + lowY) / 2;
+-  const lastObserved = [...weeks].reverse().find(
+-    (week) => week.state !== "missing" && week.positiveQuantity !== null,
+-  );
+-  const forecastStartY = y(
+-    lastObserved?.positiveQuantity ?? (range.unroundedCentral / range.horizonWeeks),
+-  );
+-  const fanControlNear = today + (right - today) * 0.28;
+-  const fanControlFar = today + (right - today) * 0.72;
+-  const upperFanPath = `M ${today} ${forecastStartY} C ${fanControlNear} ${forecastStartY}, ${fanControlFar} ${highY}, ${right} ${highY}`;
+-  const lowerFanPath = `M ${today} ${forecastStartY} C ${fanControlNear} ${forecastStartY}, ${fanControlFar} ${lowY}, ${right} ${lowY}`;
+-  const forecastFanPath = `${upperFanPath} L ${right} ${lowY} C ${fanControlFar} ${lowY}, ${fanControlNear} ${forecastStartY}, ${today} ${forecastStartY} Z`;
+   return (
+     <>
+-      <div className="chart-wrap">
++      <div className="chart-wrap demand-chart">
+         <svg
+           viewBox="0 0 640 235"
+           role="img"
+           aria-label={t(`Observed sales and four-week expected demand range for ${name}`)}
+         >
+-          <text
+-            x={left}
+-            y="11"
+-            fill="#66767D"
+-            fontSize="9"
+-          >
++          <text x={left} y="12" fill="#66767D" fontSize="9">
+             {t("Units per week")}</text>
+           {t([0, 0.5, 1].map((r) => (
+             <g key={r}>
+-              <line
+-                x1={left}
+-                y1={y(max * r)}
+-                x2={right}
+-                y2={y(max * r)}
+-                stroke="#E8EEEC"
+-              />
+-              <text
+-                x={left - 9}
+-                y={y(max * r) + 4}
+-                textAnchor="end"
+-                fill="#66767D"
+-                fontSize="10"
+-              >
++              <line x1={left} y1={y(max * r)} x2={right} y2={y(max * r)} stroke="#E8EEEC" />
++              <text x={left - 9} y={y(max * r) + 4} textAnchor="end" fill="#66767D" fontSize="10">
+                 {t(Math.round(max * r))}
+               </text>
+             </g>
+           )))}
+-          <path
+-            data-testid="forecast-band"
+-            d={forecastFanPath}
+-            fill="rgba(22,125,116,.17)"
+-          />
++          <rect x={today} y={top - 14} width={right - today} height={bottom - top + 14} rx="6" fill="#EAF4F0" />
+           <line
+             data-testid="today-divider"
+             x1={today}
+             x2={today}
+-            y1={top}
++            y1={top - 14}
+             y2={bottom}
+-            stroke="#B8C8C4"
++            stroke="#8FA9A3"
++            strokeWidth="2"
+             strokeDasharray="4 4"
+           />
++          <text x={today + 8} y={top - 2} fill="#11655E" fontSize="10" fontWeight="800" className="demand-chart__flabel">
++            {t("Forecast · next 4 weeks")}</text>
++          {Array.from({ length: horizon }, (_, i) => {
++            const x0 = today + futureSlot * i + futureSlot * 0.12;
++            const width = futureSlot * 0.76;
++            return (
++              <g key={i}>
++                <rect
++                  data-testid="forecast-week"
++                  x={x0}
++                  y={y(highWeekly)}
++                  width={width}
++                  height={Math.max(3, y(lowWeekly) - y(highWeekly))}
++                  rx="4"
++                  fill="rgba(22,125,116,.18)"
++                  stroke="#11655E"
++                  strokeWidth="1.5"
++                  strokeDasharray="5 4"
++                />
++                <line
++                  data-testid="forecast-centre"
++                  x1={x0}
++                  x2={x0 + width}
++                  y1={y(likelyWeekly)}
++                  y2={y(likelyWeekly)}
++                  stroke="#11655E"
++                  strokeWidth="3"
++                  strokeLinecap="round"
++                />
++              </g>
++            );
++          })}
+           <text
+-            x={today - 7}
+-            y={top + 10}
+-            textAnchor="end"
+-            fill="#66767D"
+-            fontSize="9"
++            x={(today + right) / 2}
++            y={y(highWeekly) - 7}
++            textAnchor="middle"
++            fill="#11655E"
++            fontSize="11"
++            fontWeight="700"
++            className="demand-chart__likely"
+           >
+-            {t("Today")}</text>
+-          <path
+-            data-testid="forecast-upper-bound"
+-            d={upperFanPath}
+-            fill="none"
+-            stroke="#167D74"
+-            strokeWidth="1.5"
+-            strokeDasharray="5 5"
+-            opacity=".62"
+-          />
+-          <path
+-            data-testid="forecast-lower-bound"
+-            d={lowerFanPath}
+-            fill="none"
+-            stroke="#167D74"
+-            strokeWidth="1.5"
+-            strokeDasharray="5 5"
+-            opacity=".62"
+-          />
+-          <line
+-            data-testid="forecast-centre"
+-            x1={today}
+-            x2={right}
+-            y1={forecastStartY}
+-            y2={centreY}
+-            stroke="#167D74"
+-            strokeWidth="2.5"
+-            strokeDasharray="7 6"
+-          />
+-          {t(segments.map((points, i) =>
+-            points.length === 1 ? (
+-              <line
+-                key={i}
+-                x1={points[0].x - 5}
+-                x2={points[0].x + 5}
+-                y1={points[0].y}
+-                y2={points[0].y}
+-                stroke="#16313B"
+-                strokeWidth="3"
+-                strokeLinecap="round"
+-              />
+-            ) : (
+-              <polyline
+-                key={i}
+-                points={points.map((p) => `${p.x},${p.y}`).join(" ")}
+-                fill="none"
+-                stroke="#16313B"
+-                strokeWidth="3"
+-                strokeLinecap="round"
+-                strokeLinejoin="round"
+-              />
+-            ),
+-          ))}
+-          {weeks.map((week, i) => (
+-            <g key={week.weekStart}>
+-              {week.state === "missing" && (
+-                <g>
++            ≈{oneDecimalText(likelyWeekly)}</text>
++          {weeks.map((week, i) => {
++            const x = centre(i);
++            const value = week.positiveQuantity;
++            return (
++              <g key={week.weekStart}>
++                {week.state === "missing" ? (
+                   <rect
+                     data-testid="missing-week"
+-                    x={x(i) - 7}
+-                    y={top}
+-                    width="14"
+-                    height={bottom - top}
++                    x={x - barWidth / 2}
++                    y={bottom - 22}
++                    width={barWidth}
++                    height="22"
+                     rx="5"
+-                    fill="none"
++                    fill="#E3EAE8"
+                     stroke="#86949A"
+                     strokeDasharray="4 4"
+                   >
+                     <title>{week.weekStart}{t(": missing week")}</title>
+                   </rect>
+-                  <text
+-                    x={x(i)}
+-                    y={bottom + 17}
+-                    textAnchor="middle"
+-                    fill="#66767D"
+-                    fontSize="9"
++                ) : value !== null && value > 0 ? (
++                  <>
++                    <rect
++                      data-testid="sales-bar"
++                      x={x - barWidth / 2}
++                      y={y(value)}
++                      width={barWidth}
++                      height={Math.max(2, bottom - y(value))}
++                      rx="4"
++                      fill="#167D74"
++                    />
++                    <text x={x} y={y(value) - 5} textAnchor="middle" fill="#243238" fontSize="10" fontWeight="600" className="demand-chart__value">
++                      {t(Math.round(value))}</text>
++                  </>
++                ) : null}
++                {week.state === "confirmed_zero_sales" && (
++                  <circle
++                    data-testid="zero-sales-dot"
++                    cx={x}
++                    cy={y(0)}
++                    r="5"
++                    fill="#D99120"
++                    stroke="#fff"
++                    strokeWidth="2"
+                   >
+-                    {t("Missing")}</text>
+-                </g>
+-              )}
+-              {week.state === "confirmed_zero_sales" && (
+-                <circle
+-                  data-testid="zero-sales-dot"
+-                  cx={x(i)}
+-                  cy={y(0)}
+-                  r="5"
+-                  fill="#D99120"
+-                  stroke="#fff"
+-                  strokeWidth="2"
+-                >
+-                  <title>{week.weekStart}{t(": 0 sales recorded")}</title>
+-                </circle>
+-              )}
+-              <text
+-                x={x(i)}
+-                y="222"
+-                textAnchor="middle"
+-                fill="#66767D"
+-                fontSize="9"
+-              >
+-                {t("W")}{t(i + 1)}
+-                <title>
+-                  {week.weekStart} {t("to ")}{week.weekEnd}
+-                </title>
+-              </text>
+-            </g>
+-          ))}
+-          {t([1, 2, 3, 4].map((i) => (
++                    <title>{week.weekStart}{t(": 0 sales recorded")}</title>
++                  </circle>
++                )}
++                <text x={x} y="204" textAnchor="middle" fill="#66767D" fontSize="9" className="demand-chart__label">
++                  {shortDate(week.weekStart)}
++                  <title>
++                    {week.weekStart} {t("to ")}{week.weekEnd}
++                  </title>
++                </text>
++              </g>
++            );
++          })}
++          {t(Array.from({ length: horizon }, (_, i) => (
+             <text
+               key={i}
+-              x={today + (i * (right - today)) / 4}
+-              y="222"
++              x={today + futureSlot * i + futureSlot / 2}
++              y="204"
+               textAnchor="middle"
+-              fill="#66767D"
++              fill="#11655E"
+               fontSize="9"
++              className="demand-chart__label"
+             >
+-              {t("F")}{t(i)}
++              {t(`Week ${i + 1}`)}
+             </text>
+           )))}
+         </svg>
+       </div>
++      <p className="demand-chart__mobile" aria-hidden="true">
++        <span>{t("Past 8 weeks")}</span>
++        <b>{t(`Next 4 weeks ≈${oneDecimalText(likelyWeekly)} a week`)}</b>
++      </p>
+       <div className="chart-legend">
+         <span>
+-          <i className="legend-line" />
+-          {t("Observed weekly demand ")}<SourceTag source="from your file" />
++          <i className="legend-bar" />
++          {t("Sold each week ")}<SourceTag source="from your file" />
+         </span>
+         <span>
+           <i className="legend-forecast" />
+-          {t("Expected weekly equivalent ")}<SourceTag source="worked out by StockLess" />
++          {t("Forecast range per week (line = most likely) ")}<SourceTag source="worked out by StockLess" />
+         </span>
+         {t(zero && (
+           <span>
+             <i className="legend-dot" />{t("0 sales recorded")}</span>
+         ))}
+-        {t(missing && <span>{t("Dashed column = missing week")}</span>)}
++        {t(missing && <span><i className="legend-missing" />{t("No data that week")}</span>)}
+       </div>
+       {t((negative > 0 || cancelled > 0) && (
+         <p className="evidence-warning">
+diff --git a/frontend/src/purchase-plan/ProductPurchaseDialog.tsx b/frontend/src/purchase-plan/ProductPurchaseDialog.tsx
+index 44c434c..b43c61d 100644
+--- a/frontend/src/purchase-plan/ProductPurchaseDialog.tsx
++++ b/frontend/src/purchase-plan/ProductPurchaseDialog.tsx
+@@ -295,7 +295,101 @@ export function ProductPurchaseDialog({
+           ×
+         </button>
+       </header>
+-      <div className="dialog-action-first">
++      <details className="panel supporting-evidence" open><summary>{t("Why this estimate? See demand and stock")}</summary><div className="supporting-evidence__body">
++            <div className="evidence-top">
++              <div>
++                <p className="eyebrow">{t("Demand evidence")}</p>
++                <h3 className="panel-title">{t("Past sales and expected demand")}</h3>
++                <p className="panel-sub">
++                  {t("Missing weeks remain separate from recorded zero sales.")}</p>
++              </div>
++              <div className="range-callout">
++                <span>{t(range ? "Expected demand" : "Demand range")}</span>
++                <strong>
++                  {t(range
++                    ? `${numberText(range.low)}–${numberText(range.high)} units`
++                    : "No range")}
++                </strong>
++                {t(pattern && <span className="pill pill--neutral range-pattern">{t(pattern)}</span>)}
++                {t(range ? (
++                  <>
++                    <span>{t("total for the next 4 weeks")}</span>
++                    <SourceTag source="worked out by StockLess" />
++                  </>
++                ) : (
++                  <span>{t(reason)}</span>
++                ))}
++              </div>
++            </div>
++            {range && (
++              <>
++                <DemandChart
++                  weeks={
++                    evidence?.timeline.weeks.filter(
++                      (week) => week.weekEnd < analysisDate,
++                    ).slice(-8) ?? []
++                  }
++                  range={range}
++                  name={product.name}
++                />
++                <p className="basis">
++                  {t("Range based on ")}{t(range.basedOnWeekCount)} {t("weeks, from")}{t(" ")}
++                  {t(range.firstWeekUsed)} {t("to ")}{t(range.lastWeekUsed)}.
++                  {t(" ")}
++                  <SourceTag source="worked out by StockLess" />
++                </p>
++                {t(reason && <p className="evidence-warning">{t(reason)}</p>)}
++              </>
++            )}
++            <div className="evidence-metrics">
++              <Metric
++                label="Current stock"
++                value={
++                  stock?.currentStock === undefined
++                    ? "Not available"
++                    : `${numberText(stock.currentStock)} units`
++                }
++                source={
++                  stock?.currentStock === undefined
++                    ? undefined
++                    : "from your file"
++                }
++              />
++              <Metric
++                label="Stock-count date"
++                value={stock?.stockAsOfDate || "Not available"}
++                source={stock?.stockAsOfDate ? "from your file" : undefined}
++              />
++              <Metric
++                label="Recent weekly average"
++                value={
++                  !range || evidence?.recentAverage.value === undefined
++                    ? "Not available"
++                    : `${numberText(evidence.recentAverage.value)} units`
++                }
++                source={
++                  range && evidence?.recentAverage.value !== undefined
++                    ? "worked out by StockLess"
++                    : undefined
++                }
++              />
++              <Metric
++                label="Current weeks of cover"
++                value={
++                  !range || evidence?.cover.value === undefined
++                    ? "Cannot calculate"
++                    : `${oneDecimalText(evidence.cover.value)} weeks`
++                }
++                source={
++                  range && evidence?.cover.value !== undefined
++                    ? "worked out by StockLess"
++                    : undefined
++                }
++              />
++            </div>
++          </div></details>
++      <div className="pp-plan-two">
++      <div className="dialog-action-first pp-plan-two__left">
+           <section className="estimate-hero">
+             {plan?.audit.state === "verdict" && <div className={`hero-concern hero-concern--${plan.audit.verdict === "Overstock risk" ? "high" : plan.audit.verdict === "Needs review" ? "review" : "balanced"}`}>
+               <strong><span aria-hidden="true">●</span> {t(plan.audit.verdict === "Looks balanced" ? "Looks balanced" : plan.audit.verdict)}</strong>
+@@ -314,6 +408,11 @@ export function ProductPurchaseDialog({
+                   {t("Midpoint of demand range − stock on hand − incoming stock")}<br />
+                   <SourceTag source={restock.quantity.source} />
+                 </div>
++                {(inputs.plannedOrder.state !== "value" || inputs.plannedOrder.value !== restock.quantity.value) && (
++                  <button type="button" className="btn btn--primary btn--small estimate-use" onClick={() => update("plannedOrder", String(restock.quantity.value))}>
++                    {t(`Use suggested ${numberText(restock.quantity.value)}`)}
++                  </button>
++                )}
+               </>
+             ) : (
+               <>
+@@ -329,8 +428,6 @@ export function ProductPurchaseDialog({
+           </section>
+         {(!range || restock?.state !== "available") && <div className="correction-route"><p>{t(product.issue ?? (restock?.state === "unavailable" ? restock.reason : reason) ?? "Review the available evidence before planning.")}</p><button type="button" className="btn btn--ghost btn--small" onClick={onReviewData ?? onClose}>{t("Review data in Step 3 →")}</button></div>}
+       </div>
+-      <div className="dialog-layout">
+-        <div className="dialog-column">
+           <section className="panel order-panel">
+             <p className="eyebrow">{t("Your purchase")}</p>
+             <h3 className="panel-title">{t("What are you planning to order?")}</h3>
+@@ -402,127 +499,27 @@ export function ProductPurchaseDialog({
+             <p className="visit-note">
+               {t("Figures you enter are marked “input by you” and last for this visit only.")}</p>
+           </section>
++      </div>
+           <PurchaseVerdict audit={plan?.audit} />
+-          <div className="expiry">
+-            <span aria-hidden="true">◷</span>
+-            <div>
+-              <strong>{t("Expiry information")}</strong>
+-              <br />
+-              <span>
+-                {t(plan?.expiry.message ?? "Expiry not checked — evidence mismatch for this product")}
+-              </span>
++          <details className="pp-fold expiry">
++            <summary>
++              <span aria-hidden="true">◷</span>
++              <span><strong>{t("Expiry information")}</strong><span className="pp-fold__summary">{t(plan?.expiry.message ?? "Expiry not checked — evidence mismatch for this product")}</span></span>
++            </summary>
++            <div className="pp-fold__body">
+               <p className="expiry-scope">{t("This estimate uses general stock and demand. Expiry is a separate check; affected batch quantities are not included in the adjustment.")}</p>
+               {plan?.expiry &&
+                 "earliestDate" in plan.expiry && (
+-                  <>
+-                    <br />
+-                    <SourceTag source="worked out by StockLess" />
+-                    <br />
++                  <p>
+                     {t("Earliest expiry: ")}{plan.expiry.earliestDate}{t(" ")}
+-                    <SourceTag source="from your file" />
+-                  </>
+-                )}
+-            </div>
+-          </div>
+-        </div>
+-        <aside className="dialog-column">
+-          <details className="panel supporting-evidence"><summary>{t("Why this estimate? See demand and stock")}</summary><div className="supporting-evidence__body">
+-            <div className="evidence-top">
+-              <div>
+-                <p className="eyebrow">{t("Demand evidence")}</p>
+-                <h3 className="panel-title">{t("Past sales and expected demand")}</h3>
+-                <p className="panel-sub">
+-                  {t("Missing weeks remain separate from recorded zero sales.")}</p>
+-              </div>
+-              <div className="range-callout">
+-                <span>{t(range ? "Expected demand" : "Demand range")}</span>
+-                <strong>
+-                  {t(range
+-                    ? `${numberText(range.low)}–${numberText(range.high)} units`
+-                    : "No range")}
+-                </strong>
+-                {t(pattern && <span className="pill pill--neutral range-pattern">{t(pattern)}</span>)}
+-                {t(range ? (
+-                  <>
+-                    <span>{t("total for the next 4 weeks")}</span>
++                    <SourceTag source="from your file" />{t(" ")}
+                     <SourceTag source="worked out by StockLess" />
+-                  </>
+-                ) : (
+-                  <span>{t(reason)}</span>
+-                ))}
+-              </div>
+-            </div>
+-            {range && (
+-              <>
+-                <DemandChart
+-                  weeks={
+-                    evidence?.timeline.weeks.filter(
+-                      (week) => week.weekEnd < analysisDate,
+-                    ).slice(-8) ?? []
+-                  }
+-                  range={range}
+-                  name={product.name}
+-                />
+-                <p className="basis">
+-                  {t("Range based on ")}{t(range.basedOnWeekCount)} {t("weeks, from")}{t(" ")}
+-                  {t(range.firstWeekUsed)} {t("to ")}{t(range.lastWeekUsed)}.
+-                  {t(" ")}
+-                  <SourceTag source="worked out by StockLess" />
+-                </p>
+-                {t(reason && <p className="evidence-warning">{t(reason)}</p>)}
+-              </>
+-            )}
+-            <div className="evidence-metrics">
+-              <Metric
+-                label="Current stock"
+-                value={
+-                  stock?.currentStock === undefined
+-                    ? "Not available"
+-                    : `${numberText(stock.currentStock)} units`
+-                }
+-                source={
+-                  stock?.currentStock === undefined
+-                    ? undefined
+-                    : "from your file"
+-                }
+-              />
+-              <Metric
+-                label="Stock-count date"
+-                value={stock?.stockAsOfDate || "Not available"}
+-                source={stock?.stockAsOfDate ? "from your file" : undefined}
+-              />
+-              <Metric
+-                label="Recent weekly average"
+-                value={
+-                  !range || evidence?.recentAverage.value === undefined
+-                    ? "Not available"
+-                    : `${numberText(evidence.recentAverage.value)} units`
+-                }
+-                source={
+-                  range && evidence?.recentAverage.value !== undefined
+-                    ? "worked out by StockLess"
+-                    : undefined
+-                }
+-              />
+-              <Metric
+-                label="Current weeks of cover"
+-                value={
+-                  !range || evidence?.cover.value === undefined
+-                    ? "Cannot calculate"
+-                    : `${oneDecimalText(evidence.cover.value)} weeks`
+-                }
+-                source={
+-                  range && evidence?.cover.value !== undefined
+-                    ? "worked out by StockLess"
+-                    : undefined
+-                }
+-              />
++                  </p>
++                )}
+             </div>
+-          </div></details>
+-        </aside>
+-      </div>
++          </details>
+       <footer className="dialog-footer">
+-        <button className="btn btn--ghost" type="button" onClick={onClose}>
++        <button className="btn btn--primary" type="button" onClick={onClose}>
+           {t("Done")}</button>
+       </footer>
+     </dialog>
+diff --git a/frontend/src/screens/MappingScreen.tsx b/frontend/src/screens/MappingScreen.tsx
+index c80ef0e..536d646 100644
+--- a/frontend/src/screens/MappingScreen.tsx
++++ b/frontend/src/screens/MappingScreen.tsx
+@@ -14,6 +14,7 @@ import {
+   type ParsedDataset,
+ } from "../engine.ts";
+ import { FieldHelp } from "../components/FieldHelp.tsx";
++import { ScreenHero } from "../components/ScreenHero.tsx";
+ import { confirmCurrentMapping } from "../storage/saved-matching.ts";
+ 
+ interface MappingScreenProps {
+@@ -77,46 +78,150 @@ export function MappingScreen(props: MappingScreenProps) {
+       .every((field) => mapping.mappings[field]?.confirmed);
+   }
+ 
+-  return (
+-    <>
+-      <p className="eyebrow">{t("Make sure StockLess understands your data")}</p>
+-      <h1 className="title">
+-        {t("We found your data. Let's make sure it's right.")}</h1>
+-      <p className="lede">
+-        {t("Review the suggested column matches before continuing. Your original file won't be changed.")}</p>
++  const capabilities = evaluateCapabilities(mapping);
++  const isRequiredGroup = (field: CanonicalField) => FIELD_REGISTRY[field].status === "core" || FIELD_REGISTRY[field].status === "conditional_core";
++  const requiredFields = fields.filter(isRequiredGroup);
++  const optionalFields = fields.filter((field) => !isRequiredGroup(field));
+ 
+-      <div className="filebar">
+-        <div className="filebar__left">
+-          <span className="filebar__icon" aria-hidden="true">{t("CSV")}</span>
+-          <div>
+-            <div className="filebar__name">{dataset.sourceName}</div>
+-            <div className="filebar__meta">
+-              {t(dataset.rows.length.toLocaleString("en"))} {t("rows · ")}{t(dataset.columns.length)} {t("columns ·")}{t(" ")}
+-              {t((dataset.sourceByteLength / 1024).toFixed(1))} {t("KB · delimiter")}{t(" ")}
+-              {t(dataset.delimiter === "\t" ? "tab" : dataset.delimiter)}
++  function fieldRow(field: CanonicalField) {
++    const definition = FIELD_REGISTRY[field];
++    const current = mapping.mappings[field];
++    const column = dataset.columns.find((c) => c.id === current?.sourceColumnId);
++    const required = definition.status === "core";
++    return (
++      <tr key={field}>
++        <td className="dtable__title">
++          <div className="field-head"><b className="dtable__label">{t(definition.label)}</b>
++          <FieldHelp description={t(definition.description)} />
++          {required && <span className="req">{t("Required")}</span>}</div>
++          <span className="field-desc">{t(definition.description)}</span>
++        </td>
++        <td data-label={t("Your column")}>
++          <select
++            className="select"
++            disabled={props.checking}
++            aria-label={t(`Source column for ${definition.label}`)}
++            value={current?.sourceColumnId ?? ""}
++            onChange={(event) =>
++              props.onSelectColumn(field, event.target.value || null)
++            }
++          >
++            <option value="">{t("Not in this file")}</option>
++            {dataset.columns.map((sourceColumn) => (
++              <option key={sourceColumn.id} value={sourceColumn.id}>
++                {sourceColumn.header}
++              </option>
++            ))}
++          </select>
++        </td>
++        <td className="num" data-label={t("Preview")}>
++          {column ? formatPreview(column.previewValues) : "—"}
++        </td>
++        <td data-label={t("Status")}>
++          {t(current?.confirmed ? (
++            <span className="pill pill--confirmed">{t("✓ Confirmed")}</span>
++          ) : current ? (
++            <div className="mapping-status">
++              <span className="pill pill--amber">{t("Please confirm")}</span>
++              <button
++                type="button"
++                className="btn btn--small btn--ghost"
++                disabled={props.checking}
++                onClick={() => props.onConfirmField(field)}
++              >
++                {t("Confirm")}</button>
+             </div>
++          ) : (
++            <span className="pill pill--grey">{t("Not matched yet")}</span>
++          ))}
++        </td>
++      </tr>
++    );
++  }
++
++  function fieldGroup(kind: "required" | "optional", group: readonly CanonicalField[]) {
++    const matched = group.filter((field) => mapping.mappings[field]).length;
++    return (
++      <section className={`map-group map-group--${kind}`} aria-labelledby={`map-group-${kind}`}>
++        <div className="map-group__head">
++          <span className={`map-group__icon map-group__icon--${kind}`} aria-hidden="true">{kind === "required" ? "🌱" : "🪴"}</span>
++          <div>
++            <h3 id={`map-group-${kind}`} className="attribute-mark-heading">{t(kind === "required" ? "Required" : "Optional")}</h3>
++            <p>{t(kind === "required" ? "Needed to continue" : "Each one adds to your results. Choose \"Not in this file\" to skip.")}</p>
+           </div>
++          <span className={`pill ${matched === group.length ? "pill--teal" : "pill--grey"}`}>{t(matched)} {t("of ")}{t(group.length)} {t("matched")}</span>
+         </div>
+-        <span className="pill pill--teal">{t("✓ Read successfully")}</span>
+-      </div>
++        <div className="table-scroll">
++          <table className="dtable dtable--cards dtable--map">
++            <thead>
++              <tr>
++                <th style={{ width: "30%" }}>{t("StockLess field")}</th>
++                <th style={{ width: "27%" }}>{t("Your column")}</th>
++                <th style={{ width: "23%" }}>{t("Preview")}</th>
++                <th style={{ width: "20%" }}>{t("Status")}</th>
++              </tr>
++            </thead>
++            <tbody>{group.map(fieldRow)}</tbody>
++          </table>
++        </div>
++      </section>
++    );
++  }
++
++  return (
++    <>
++      <ScreenHero
++        step={2}
++        detail={t("Make sure StockLess understands your data")}
++        title={t("We found your data. Let's make sure it's right.")}
++        lede={t("Review the suggested column matches before continuing. Your original file won't be changed.")}
++        actions={
++          <>
++            <button type="button" className="btn--link" onClick={props.onBack}>
++              {t("← Choose another file")}</button>
++            <span className="screen-hero__spacer" />
++            {t(blockers.length > 0 ? (
++              <p className="blockers">{t("Still needed: ")}{t(blockers.map(t).join(" · "))}</p>
++            ) : (
++              <span className="map-progress-wrap"><span className="map-progress__label">{t(confirmedCount)} {t("of ")}{t(fields.length)} {t("confirmed")}</span><span className="map-progress" aria-hidden="true"><span style={{ width: `${Math.round(confirmedCount / Math.max(1, fields.length) * 100)}%` }} /></span></span>
++            ))}
++            <button
++              type="button"
++              className="btn btn--primary"
++              disabled={blockers.length > 0 || props.checking}
++              onClick={props.onContinue}
++              aria-busy={props.checking}
++            >
++              {t(props.checking && <span className="btn__spinner" aria-hidden="true" />)}
++              {t(props.checking ? "Checking locally…" : "Check my data →")}
++            </button>
++          </>
++        }
++        aside={
++          <div className="filebar filebar--chip">
++            <div className="filebar__left">
++              <span className="filebar__icon" aria-hidden="true">{t("CSV")}</span>
++              <div>
++                <div className="filebar__name">{dataset.sourceName}</div>
++                <div className="filebar__meta">
++                  {t(dataset.rows.length.toLocaleString("en"))} {t("rows · ")}{t(dataset.columns.length)} {t("columns ·")}{t(" ")}
++                  {t((dataset.sourceByteLength / 1024).toFixed(1))} {t("KB · delimiter")}{t(" ")}
++                  {t(dataset.delimiter === "\t" ? "tab" : dataset.delimiter)}
++                </div>
++              </div>
++            </div>
++            <span className="pill pill--teal">{t("✓ Read successfully")}</span>
++          </div>
++        }
++      />
+ 
+       {t(proposals && !proposals.usedSemanticModel && proposals.fallbackNotice && (
+         <p className="notice notice--info">{t(proposals.fallbackNotice)}</p>
+       ))}
+ 
+-      <div className="split">
+-        <section className="card split__main">
+-          <div className="card__head">
+-            <div>
+-              <h2 className="card-title">{t("Column mapping")}</h2>
+-              <p className="card-sub">
+-                {t("Nothing is applied until you confirm it. Sale date, quantity sold and how your products are named or coded are required.")}</p>
+-            </div>
+-            <span className={`pill ${confirmedCount === fields.length ? "pill--teal" : "pill--grey"}`}>
+-              {t(confirmedCount)} {t("of ")}{t(fields.length)} {t("confirmed")}</span>
+-          </div>
+-
+-          <div className="mapping-bulk">
++      <div className="split split--mapping">
++        <div className="split__main map-main">
++          <div className="mapping-bulk mapping-bulk--card">
+             <div>
+               <b>{t("All matches look right?")}</b>
+               <p>{t("Confirm all selected columns and continue in one step.")}</p>
+@@ -129,160 +234,103 @@ export function MappingScreen(props: MappingScreenProps) {
+               {t(props.checking ? "Checking locally…" : "Confirm all and continue →")}
+             </button>
+           </div>
+-          <div className="table-scroll">
+-            <table className="dtable dtable--cards">
+-              <thead>
+-                <tr>
+-                  <th style={{ width: "28%" }}>{t("StockLess field")}</th>
+-                  <th style={{ width: "27%" }}>{t("Your column")}</th>
+-                  <th style={{ width: "25%" }}>{t("Preview")}</th>
+-                  <th style={{ width: "20%" }}>{t("Status")}</th>
+-                </tr>
+-              </thead>
+-              <tbody>
+-                {fields.map((field) => {
+-                  const definition = FIELD_REGISTRY[field];
+-                  const current = mapping.mappings[field];
+-                  const column = dataset.columns.find((c) => c.id === current?.sourceColumnId);
+-                  const required = definition.status === "core";
+ 
++          <section className="card map-card">
++            <div className="card__head">
++              <div>
++                <h2 className="card-title">{t("Column mapping")}</h2>
++                <p className="card-sub">
++                  {t("Nothing is applied until you confirm it. Sale date, quantity sold and how your products are named or coded are required.")}</p>
++              </div>
++              <span className={`pill ${confirmedCount === fields.length ? "pill--teal" : "pill--grey"}`}>
++                {t(confirmedCount)} {t("of ")}{t(fields.length)} {t("confirmed")}</span>
++            </div>
++            {fieldGroup("required", requiredFields)}
++            {fieldGroup("optional", optionalFields)}
++
++            <div className="identity">
++              <h3 className="identity__title">{t("How should StockLess identify your products?")}</h3>
++              <p className="identity__lede">
++                {t("Choose how each product should be identified in your sales data.")}</p>
++              <div className="identity__paths">
++                {t(CORE_COLUMN_PATHS.map((path) => {
++                  const ready = identityPathReady(path.id);
++                  const chosen = mapping.identityMode === path.id && mapping.identityConfirmed;
+                   return (
+-                    <tr key={field}>
+-                      <td className="dtable__title">
+-                        <div className="field-head"><b className="dtable__label">{t(definition.label)}</b>
+-                        <FieldHelp description={t(definition.description)} />
+-                        {required && <span className="req">{t("Required")}</span>}</div>
+-                      </td>
+-                      <td data-label={t("Your column")}>
+-                        <select
+-                          className="select"
+-                          disabled={props.checking}
+-                          aria-label={t(`Source column for ${definition.label}`)}
+-                          value={current?.sourceColumnId ?? ""}
+-                          onChange={(event) =>
+-                            props.onSelectColumn(field, event.target.value || null)
+-                          }
+-                        >
+-                          <option value="">{t("Not in this file")}</option>
+-                          {dataset.columns.map((sourceColumn) => (
+-                            <option key={sourceColumn.id} value={sourceColumn.id}>
+-                              {sourceColumn.header}
+-                            </option>
+-                          ))}
+-                        </select>
+-                      </td>
+-                      <td className="num" data-label={t("Preview")}>
+-                        {column ? formatPreview(column.previewValues) : "—"}
+-                      </td>
+-                      <td data-label={t("Status")}>
+-                        {t(current?.confirmed ? (
+-                          <span className="pill pill--confirmed">{t("✓ Confirmed")}</span>
+-                        ) : current ? (
+-                          <div className="mapping-status">
+-                            <span className="pill pill--amber">{t("Please confirm")}</span>
+-                            <button
+-                              type="button"
+-                              className="btn btn--small btn--ghost"
+-                              disabled={props.checking}
+-                              onClick={() => props.onConfirmField(field)}
+-                            >
+-                              {t("Confirm")}</button>
+-                          </div>
+-                        ) : (
+-                          <span className="pill pill--grey">{t("Not matched yet")}</span>
+-                        ))}
+-                      </td>
+-                    </tr>
++                    <button key={path.id} type="button" className={`identity__path${chosen ? " identity__path--on" : ""}`}
++                      aria-pressed={chosen} disabled={!ready || props.checking}
++                      onClick={() => props.onConfirmIdentity(path.id)}>
++                      <span className="identity__path-name"><span className="identity__path-number" aria-hidden="true">{path.id === 'stable' ? 1 : 2}</span>{t(path.label)}</span>
++                      <span className="identity__path-fields">{t(path.detail)}</span>
++                      <span className="identity__path-state">{t(chosen ? "✓ Selected" : ready ? "Use this option" : "Confirm its columns first")}</span>
++                    </button>
+                   );
+-                })}
+-              </tbody>
+-            </table>
+-          </div>
+-
+-          <div className="identity">
+-            <h3 className="identity__title">{t("How should StockLess identify your products?")}</h3>
+-            <p className="identity__lede">
+-              {t("Choose how each product should be identified in your sales data.")}</p>
+-            <div className="identity__paths">
+-              {t(CORE_COLUMN_PATHS.map((path) => {
+-                const ready = identityPathReady(path.id);
+-                const chosen = mapping.identityMode === path.id && mapping.identityConfirmed;
+-                return (
+-                  <button key={path.id} type="button" className={`identity__path${chosen ? " identity__path--on" : ""}`}
+-                    aria-pressed={chosen} disabled={!ready || props.checking}
+-                    onClick={() => props.onConfirmIdentity(path.id)}>
+-                    <span className="identity__path-name"><span className="identity__path-number" aria-hidden="true">{path.id === 'stable' ? 1 : 2}</span>{t(path.label)}</span>
+-                    <span className="identity__path-fields">{t(path.detail)}</span>
+-                    <span className="identity__path-state">{t(chosen ? "✓ Selected" : ready ? "Use this option" : "Confirm its columns first")}</span>
+-                  </button>
+-                );
+-              }))}
+-            </div>
++                }))}
++              </div>
+ 
+-            {conflicts.length > 0 && (
+-              <div className="alert alert--warn" role="alert">
+-                <span className="alert__icon alert__icon--warn" aria-hidden="true">!</span>
+-                <div>
+-                  <p className="alert__title">
+-                    {t(conflicts.length === 1 ? "One identity conflict" : `${conflicts.length} identity conflicts`)}
+-                  </p>
+-                  <ul className="alert__list">
+-                    {conflicts.slice(0, 4).map((conflict) => (
+-                      <li key={`${conflict.code}-${conflict.productHint}`}>
+-                        <b>{conflict.productHint}</b>{t(" ")}
+-                        {t(conflict.code === "CODE_TO_MULTIPLE_VARIANTS"
+-                          ? "covers more than one pack size"
+-                          : "maps to more than one product code")}
+-                        : {t(conflict.values.join(", "))} {t("(rows")}{t(" ")}
+-                        {conflict.sourceRows.slice(0, 6).join(", ")}
+-                        {conflict.sourceRows.length > 6 ? "…" : ""})
+-                      </li>
+-                    ))}
+-                  </ul>
++              {conflicts.length > 0 && (
++                <div className="alert alert--warn" role="alert">
++                  <span className="alert__icon alert__icon--warn" aria-hidden="true">!</span>
++                  <div>
++                    <p className="alert__title">
++                      {t(conflicts.length === 1 ? "One identity conflict" : `${conflicts.length} identity conflicts`)}
++                    </p>
++                    <ul className="alert__list">
++                      {conflicts.slice(0, 4).map((conflict) => (
++                        <li key={`${conflict.code}-${conflict.productHint}`}>
++                          <b>{conflict.productHint}</b>{t(" ")}
++                          {t(conflict.code === "CODE_TO_MULTIPLE_VARIANTS"
++                            ? "covers more than one pack size"
++                            : "maps to more than one product code")}
++                          : {t(conflict.values.join(", "))} {t("(rows")}{t(" ")}
++                          {conflict.sourceRows.slice(0, 6).join(", ")}
++                          {conflict.sourceRows.length > 6 ? "…" : ""})
++                        </li>
++                      ))}
++                    </ul>
++                  </div>
+                 </div>
+-              </div>
+-            )}
+-          </div>
++              )}
++            </div>
+ 
+-          {t(props.notice && <p className="notice notice--info" role="status">{t(props.notice)}</p>)}
+-          {t(props.error && <p className="notice notice--error" role="alert">{t(props.error)}</p>)}
+-        </section>
++            {t(props.notice && <p className="notice notice--info" role="status">{t(props.notice)}</p>)}
++            {t(props.error && <p className="notice notice--error" role="alert">{t(props.error)}</p>)}
++          </section>
++        </div>
+ 
+-        <aside className="panel-sage">
+-          <h2 className="panel-sage__title"><span aria-hidden="true">🌱</span>{t("Check your data")}</h2>
+-          <p className="panel-sage__lede">{t("Review your columns and make sure StockLess has the information it needs.")}</p>
+-          <ol className="sage-steps">{["Read your column names", "Match each column to a StockLess field", "Review the data preview", "Confirm your column mappings"].map(label => <li key={label}>{t(label)}</li>)}</ol>
+-          <h3 className="panel-sage__subtitle">{t("Identify your products")}</h3>
+-          <p className="panel-sage__lede">{t("Choose how StockLess should tell your products apart.")}</p>
+-          <ol className="sage-formats">{CORE_COLUMN_PATHS.map(path => <li key={path.id}><b>{t(path.label)}</b><span>{t(path.hint)}</span></li>)}</ol>
+-          {missingInformation.length > 0 && <div className="unlocks">
+-            <h3 className="unlocks__title">{t("Add more, see more")}</h3>
+-            <p className="unlocks__lede">{t("Confirm these columns to unlock:")}</p>
+-            <ul className="unlocks__list">{missingInformation.map(group => <li key={group.fields.join('|')}><b>{group.fields.map(t).join(' + ')}</b><span>{group.analyses.map(t).join(', ')}</span></li>)}</ul>
+-          </div>}
+-          <p className="panel-sage__privacy"><span className="panel-sage__lock" aria-hidden="true">🔒</span><span><b>{t("Your data stays on your device.")}</b>{t("Your file is processed directly in your browser. Your sales data and product information are not uploaded to an AI or API service.")}</span></p>
++        <aside className="map-side">
++          <section className="panel-sage">
++            <h2 className="panel-sage__title"><span aria-hidden="true">🌱</span>{t("Check your data")}</h2>
++            <p className="panel-sage__lede">{t("Review your columns and make sure StockLess has the information it needs.")}</p>
++            <ol className="sage-steps">{["Read your column names", "Match each column to a StockLess field", "Review the data preview", "Confirm your column mappings"].map(label => <li key={label}>{t(label)}</li>)}</ol>
++            <h3 className="panel-sage__subtitle">{t("Identify your products")}</h3>
++            <p className="panel-sage__lede">{t("Choose how StockLess should tell your products apart.")}</p>
++            <ol className="sage-formats">{CORE_COLUMN_PATHS.map(path => <li key={path.id}><b>{t(path.label)}</b><span>{t(path.hint)}</span></li>)}</ol>
++            {missingInformation.length > 0 && <div className="unlocks">
++              <h3 className="unlocks__title">{t("Add more, see more")}</h3>
++              <p className="unlocks__lede">{t("Confirm these columns to unlock:")}</p>
++              <ul className="unlocks__list">{missingInformation.map(group => <li key={group.fields.join('|')}><b>{group.fields.map(t).join(' + ')}</b><span>{group.analyses.map(t).join(', ')}</span></li>)}</ul>
++            </div>}
++          </section>
++          <section className="file-unlocks" aria-labelledby="file-unlocks-title">
++            <h2 id="file-unlocks-title" className="panel-sage__title"><span aria-hidden="true">🌱</span>{t("What this file unlocks")}</h2>
++            <p className="panel-sage__lede">{t("Based on the columns matched so far.")}</p>
++            <ul className="file-unlocks__list">
++              {capabilities.map((item) => {
++                const on = item.state === "available" || item.state === "limited";
++                return (
++                  <li key={item.capability} className={`file-unlocks__item${on ? " file-unlocks__item--on" : ""}`}>
++                    <b>{t(item.label)}</b>
++                    <span className="file-unlocks__state">{t(on ? "Ready" : item.state === "locked" ? "Later iteration" : "Needs more columns")}</span>
++                  </li>
++                );
++              })}
++            </ul>
++          </section>
++          <p className="privacy-card"><span className="panel-sage__lock" aria-hidden="true">🔒</span><span><b>{t("Your data stays on your device.")}</b>{t("Your file is processed directly in your browser. Your sales data and product information are not uploaded to an AI or API service.")}</span></p>
+         </aside>
+       </div>
+ 
+-      <div className="footer-row">
+-        <button type="button" className="btn--link" onClick={props.onBack}>
+-          {t("← Choose another file")}</button>
+-        <div className="footer-row__right">
+-          {t(blockers.length > 0 && (
+-            <p className="blockers">{t("Still needed: ")}{t(blockers.map(t).join(" · "))}</p>
+-          ))}
+-          <button
+-            type="button"
+-            className="btn btn--primary"
+-            disabled={blockers.length > 0 || props.checking}
+-            onClick={props.onContinue}
+-            aria-busy={props.checking}
+-          >
+-            {t(props.checking && <span className="btn__spinner" aria-hidden="true" />)}
+-            {t(props.checking ? "Checking locally…" : "Check my data →")}
+-          </button>
+-        </div>
+-      </div>
+     </>
+   );
+ }
+diff --git a/frontend/src/screens/PurchasePlanScreen.tsx b/frontend/src/screens/PurchasePlanScreen.tsx
+index 0d28df9..49aac3b 100644
+--- a/frontend/src/screens/PurchasePlanScreen.tsx
++++ b/frontend/src/screens/PurchasePlanScreen.tsx
+@@ -26,6 +26,7 @@ import {
+ import "../purchase-plan/purchase-plan.css";
+ import "../purchase-plan/step4-design.css";
+ import { calculatePotentialExcess } from "./ImpactDashboard.tsx";
++import { ScreenHero } from "../components/ScreenHero.tsx";
+ 
+ interface Props {
+   snapshot: ReadinessSnapshot;
+@@ -209,78 +210,30 @@ export function PurchasePlanScreen({
+   }
+   return (
+     <main className="purchase-plan">
+-      <section className="pp-heading">
+-          <p className="eyebrow">
+-            {t("Purchase plan ·")}{t(" ")}
+-            {new Date(`${snapshot.analysisDate}T00:00:00Z`).toLocaleDateString(
+-              getLocale(),
+-              {
+-                day: "numeric",
+-                month: "long",
+-                year: "numeric",
+-                timeZone: "UTC",
+-              },
+-            )}
+-          </p>
+-          <h1 className="page-title">
+-            {t("Plan what to restock, then check it before you order.")}</h1>
+-          <p className="lede">
+-            {t("Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.")}</p>
+-      </section>
+-      <p className="privacy-note">
+-        <span aria-hidden="true">▣</span>
+-        <span>
+-          <strong>{t("Your figures stay local.")}</strong> {t("Typed order quantities last for this visit only and are not sent to a supplier.")}</span>
+-      </p>
+-      <details className="pp-how"><summary>{t("How to plan an order")}</summary><section className="pp-how__body" aria-label={t("Purchase planning instructions")}>
+-        <div className="pp-how__head">
+-          <span className="pp-how__mark" aria-hidden="true">🌳</span>
+-          <div>
+-            <h2>{t("From sales data to your next order")}</h2>
+-            <p>{t("Select a product below, then follow these three steps.")}</p>
++      <ScreenHero
++        step={4}
++        detail={<>{t("Purchase plan ·")}{t(" ")}
++          {new Date(`${snapshot.analysisDate}T00:00:00Z`).toLocaleDateString(
++            getLocale(),
++            { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
++          )}</>}
++        titleClassName="title page-title"
++        title={t("Plan what to restock, then check it before you order.")}
++        lede={t("Start with StockLess's estimated quantity, enter what you intend to buy, and see whether the plan fits expected demand.")}
++        aside={
++          <div className="pp-excess" aria-live="polite">
++            <span className="pp-excess__k">{copy("Potential excess stock", "潜在过量库存", "Stok berlebihan berpotensi")}</span>
++            <b className="num">{avoidedLines.length ? numberText(avoidedUnits) : "—"} <small>{avoidedLines.length ? t("units") : ""}</small></b>
++            <span className="pp-excess__note">{avoidedLines.length ? copy(`Across ${avoidedLines.length} checked products`, `基于 ${avoidedLines.length} 件已核对商品`, `Berdasarkan ${avoidedLines.length} produk yang disemak`) : copy("No checked purchase plan yet", "尚无已核对的采购计划", "Belum ada pelan pembelian yang disemak")}</span>
+           </div>
+-        </div>
+-        <ol className="pp-how__steps">
+-          {[
+-            ["Review demand", "See past sales and the four-week range."],
+-            ["Enter your quantities", "Add your planned order and incoming stock."],
+-            ["Check before ordering", "Compare the plan with expected demand."],
+-          ].map(([title, description]) => (
+-            <li key={title}><span className="pp-how__n">{["Review demand", "Enter your quantities", "Check before ordering"].indexOf(title) + 1}</span><div><b>{t(title)}</b><span>{t(description)}</span></div></li>
+-          ))}
+-        </ol>
+-      </section></details>
+-      <section className="pp-glance" aria-label={t("Your next purchase, at a glance")}>
+-        <div className="pp-glance__head"><span className="pp-glance__mark" aria-hidden="true">🌳</span><div><h2>{t("Your next purchase, at a glance")}</h2><p>{products.length} {t("products")} · {t("for the next 4 weeks")}</p></div></div>
+-        <div className="pp-glance__tiles">
+-          <div className="pp-tile"><b className="num">{plannableCount}</b><span>{t("Can plan")}</span><small>{t("Usable demand and stock evidence")}</small></div>
+-          <div className="pp-tile pp-tile--warn"><b className="num">{products.length - plannableCount}</b><span>{t("Need more data")}</span><small>{t("Open a product to see the next action")}</small></div>
+-          <div className="pp-tile"><b className="num">{enteredCount}</b><span>{t("Plans entered")}</span><small>{t("Included in the product totals")}</small></div>
+-        </div>
+-      </section>
+-      <section className="pp-money" aria-labelledby="pp-money-title">
+-        <div className="pp-money__head"><div><h2 id="pp-money-title">{t("What will this plan cost?")}</h2><p>{t("Money insights · design preview")}</p></div><button type="button" className="btn btn--ghost btn--small" onClick={onImpact}>{t("Open dashboard example →")}</button></div>
+-        <div className="pp-impact"><span className="pp-impact__k">{copy("Potential excess stock", "潜在过量库存", "Stok berlebihan berpotensi")}</span><b className="pp-impact__v num">{avoidedLines.length ? numberText(avoidedUnits) : "—"} <small>{avoidedLines.length ? t("units") : ""}</small></b><span className="pp-impact__note">{avoidedLines.length ? copy(`Across ${avoidedLines.length} checked products`, `基于 ${avoidedLines.length} 件已核对商品`, `Berdasarkan ${avoidedLines.length} produk yang disemak`) : copy("No checked purchase plan yet", "尚无已核对的采购计划", "Belum ada pelan pembelian yang disemak")}</span></div>
+-        <div className="pp-money__tiles">{["Planned purchase spending", "Incoming stock cost", "Potential excess-stock cost"].map(label => <div className="pp-cost" key={label}><span>{t(label)}</span><b aria-label={t("Not available")}>—</b><small>{t("Purchase cost and currency required")}</small></div>)}</div>
+-        <p className="pp-money__note">{copy("Money figures need purchase cost and currency. The dashboard shows unit estimates from your current plan.", "金额需要采购单价和币种。Dashboard 显示您当前计划的件数估算。", "Angka wang memerlukan kos belian dan mata wang. Papan pemuka menunjukkan anggaran unit daripada pelan semasa anda.")}</p>
+-      </section>
+-      <p className="pp-next"><b>{t("Next step:")}</b> {t("Open a product, review the estimate, and enter the quantity you intend to order.")}</p>
+-      <section className="pp-priority" aria-label={t("Suggested starting points")}>
+-        <h2>{t("Start with these products")}</h2><p className="pp-priority__sub">{t("Purchase concerns appear first. Each suggestion uses your current inputs.")}</p>
+-        <div className="pp-priority__cards">{highlighted.map(product => {
+-          const plan = plans.get(product.key);
+-          const restock = plan?.estimatedRestock;
+-          const audit = plan?.audit;
+-          const tone = groupFor(product);
+-          return <article className={`pp-card pp-card--${tone}`} key={product.key}>
+-            <div className="pp-card__head"><div><b>{product.name}</b><small>SKU {product.sku ?? "—"}</small></div><DataLabel product={product} /></div>
+-            <div className={`pp-card__verdict${restock?.state !== "available" ? " pp-card__verdict--none" : ""}`}><span>{t(audit?.state === "verdict" ? "Purchase check" : "Estimated restock")}</span><b>{t(audit?.state === "verdict" ? audit.verdict : restock?.state === "available" ? `${numberText(restock.quantity.value)} units` : "No reliable estimate")}</b></div>
+-            <p className="pp-card__why">{t(audit?.state === "verdict" ? audit.reasonSentence : restock?.state === "unavailable" ? restock.reason : product.issue ?? "Review the estimate before entering your plan.")}</p>
+-            {plan?.expiry.state === "expires_within_four_weeks" && <p className="pp-card__expiry">{t(plan.expiry.message)}</p>}
+-            <button type="button" className="btn btn--ghost btn--small pp-card__action" onClick={() => onSelect(product.key)}>{t(restock?.state === "available" ? "Review and plan →" : "See what is needed →")}</button>
+-          </article>;
+-        })}</div>
+-      </section>
++        }
++        actions={<>
++          <button className="btn--link" type="button" onClick={onBack}>{t("← Back to readiness")}</button>
++          <span className="screen-hero__spacer" />
++          <button className="btn btn--ghost" type="button" onClick={download}>{t("↓ Download purchase summary")}</button>
++          {onImpact && <button type="button" className="btn btn--primary" onClick={onImpact}>{t("See your impact →")}</button>}
++        </>}
++      />
+       {t(mismatchCount > 0 && (
+         <p className="evidence-warning" role="alert">
+           {t("Evidence mismatch affects ")}{t(mismatchCount)}{t(" ")}
+@@ -289,7 +242,39 @@ export function PurchasePlanScreen({
+       <div className="pp-groups" role="group" aria-label={t("Filter by what each product needs")}>
+         {groups.map(item => <button type="button" key={item.id} className={`pp-group pp-group--${item.id}${group === item.id ? " pp-group--on" : ""}`} aria-pressed={group === item.id} onClick={() => setGroup(group === item.id ? "all" : item.id)}><b>{products.filter(product => groupFor(product) === item.id).length}</b><span>{t(item.label)}</span><small>{t(item.help)}</small></button>)}
+       </div>
+-      <div className="pp-layout">
++      <div className="pp-layout pp-layout--plan-first">
++      {selected ? (
++        <ProductPurchaseDialog
++          inline
++          key={selected.key}
++          product={selected}
++          plan={plans.get(selected.key)}
++          inputs={inputsFor(selected)}
++          analysisDate={snapshot.analysisDate}
++          onChange={(inputs) => onDraftChange(selected.key, inputs)}
++          onReviewData={() => { onSelect(null); onBack(); }}
++          onClose={() => onSelect(null)}
++          position={selectedIndex >= 0 ? selectedIndex : undefined}
++          total={visible.length}
++          onPrevious={selectedIndex > 0 ? () => onSelect(visible[selectedIndex - 1].key) : undefined}
++          onNext={selectedIndex >= 0 && selectedIndex < visible.length - 1 ? () => onSelect(visible[selectedIndex + 1].key) : undefined}
++        />
++      ) : <aside className="pp-panel pp-panel--empty" aria-label={t("Purchase details")}>
++        <span aria-hidden="true">🌳</span><h2>{t("Purchase details")}</h2><p>{t("Select a product to enter quantities and see its evidence and full calculation.")}</p>
++        {highlighted.length > 0 && <section className="pp-priority" aria-label={t("Suggested starting points")}>
++          <h3>{t("Start with these products")}</h3>
++          <div className="pp-priority__cards">{highlighted.map(product => {
++            const plan = plans.get(product.key);
++            const restock = plan?.estimatedRestock;
++            const audit = plan?.audit;
++            return <button type="button" className={`pp-card pp-card--${groupFor(product)}`} key={product.key} onClick={() => onSelect(product.key)}>
++              <span className="pp-card__head"><b>{product.name}</b><small>SKU {product.sku ?? "—"}</small></span>
++              <span className="pp-card__verdict">{t(audit?.state === "verdict" ? audit.verdict : restock?.state === "available" ? `${numberText(restock.quantity.value)} units` : "No reliable estimate")}</span>
++              <span className="pp-card__action">{t(restock?.state === "available" ? "Review and plan →" : "See what is needed →")}</span>
++            </button>;
++          })}</div>
++        </section>}
++      </aside>}
+       <section className="card list-card">
+         <div className="toolbar">
+           <label className="search">
+@@ -420,34 +405,14 @@ export function PurchasePlanScreen({
+         <div className="list-footer">
+           <span role="status">
+             {t("Showing ")}{t(visible.length)} {t("of ")}{t(products.length)} {t("products. Counts above do not change when filtering.")}</span>
+-          <button className="btn btn--ghost btn--small" type="button" onClick={download}>{t("↓ Download purchase summary")}</button>
+-          <button
+-            className="btn btn--ghost btn--small"
+-            type="button"
+-            onClick={onBack}
+-          >
+-            {t("← Back to readiness")}</button>
+         </div>
+       </section>
+-      {selected ? (
+-        <ProductPurchaseDialog
+-          inline
+-          key={selected.key}
+-          product={selected}
+-          plan={plans.get(selected.key)}
+-          inputs={inputsFor(selected)}
+-          analysisDate={snapshot.analysisDate}
+-          onChange={(inputs) => onDraftChange(selected.key, inputs)}
+-          onReviewData={() => { onSelect(null); onBack(); }}
+-          onClose={() => onSelect(null)}
+-          position={selectedIndex >= 0 ? selectedIndex : undefined}
+-          total={visible.length}
+-          onPrevious={selectedIndex > 0 ? () => onSelect(visible[selectedIndex - 1].key) : undefined}
+-          onNext={selectedIndex >= 0 && selectedIndex < visible.length - 1 ? () => onSelect(visible[selectedIndex + 1].key) : undefined}
+-        />
+-      ) : <aside className="pp-panel pp-panel--empty" aria-label={t("Purchase details")}><span aria-hidden="true">🌳</span><h2>{t("Purchase details")}</h2><p>{t("Select a product to enter quantities and see its evidence and full calculation.")}</p></aside>}
+       </div>
+-      {onImpact && <div className="purchase-impact-action"><button type="button" className="btn btn--primary" onClick={onImpact}>{t("See your impact →")}</button></div>}
++      <p className="privacy-note">
++        <span aria-hidden="true">▣</span>
++        <span>
++          <strong>{t("Your figures stay local.")}</strong> {t("Typed order quantities last for this visit only and are not sent to a supplier.")}</span>
++      </p>
+     </main>
+   );
+ }
+diff --git a/frontend/src/screens/ReadinessOverview.tsx b/frontend/src/screens/ReadinessOverview.tsx
+index b9b4214..ce90f53 100644
+--- a/frontend/src/screens/ReadinessOverview.tsx
++++ b/frontend/src/screens/ReadinessOverview.tsx
+@@ -1,6 +1,9 @@
+ import { useMemo, useState } from "react";
+ import { t, useLanguage } from "../i18n/index.ts";
+ import type { ProductTimeline, ReadinessSnapshot } from "../engine.ts";
++import { CATEGORY_LABELS, categoryOf, type ProductCategory } from "./product-category.ts";
++
++const FIRST_CARDS = 8;
+ 
+ type Status = "ready" | "review" | "missing";
+ const LABELS: Record<Status, string> = { ready: "Ready", review: "Need review", missing: "Missing data" };
+@@ -24,6 +27,8 @@ export function ReadinessOverview({ snapshot, timelines }: { snapshot: Readiness
+   useLanguage();
+   const [search, setSearch] = useState("");
+   const [sort, setSort] = useState("age");
++  const [category, setCategory] = useState<ProductCategory | "all">("all");
++  const [showAll, setShowAll] = useState(false);
+   const products = useMemo(() => {
+     const rowsByKey = new Map<string, (typeof snapshot.rows)[number][]>();
+     const rowKeys = new Map<number, string>();
+@@ -61,18 +66,23 @@ export function ReadinessOverview({ snapshot, timelines }: { snapshot: Readiness
+         ...(!stock?.usableForCover ? ["Stock evidence is incomplete or cannot be relied on."] : stock.freshness.state === "limited" ? ["The stock count is getting old. A fresher count would be better."] : []),
+         ...(timeline?.summary.missingWeekCount ? ["Some weeks are missing — they are not zero sales."] : []),
+       ])];
+-      return { key, name: values?.productName ?? values?.productCode ?? key, code: values?.productCode ?? key, pack: values?.packVariant, stock, timeline, status, reasons };
++      const name = values?.productName ?? values?.productCode ?? key;
++      return { key, name, code: values?.productCode ?? key, pack: values?.packVariant, stock, timeline, status, reasons, category: categoryOf(values?.productName ?? "") };
+     });
+   }, [snapshot, timelines]);
+   const counts = { ready: 0, review: 0, missing: 0 };
+   products.forEach(p => counts[p.status]++);
+   const query = search.trim().replace(/^sku\s*:?\s*/i, "").toLowerCase();
+-  const attention = products.filter(p => p.status !== "ready" && `${p.name} ${p.code} ${p.pack ?? ""}`.toLowerCase().includes(query)).sort((a,b) =>
+-    sort === "name" ? a.name.localeCompare(b.name) : sort === "status" ? a.status.localeCompare(b.status) : (b.stock?.freshness.ageDays ?? -1) - (a.stock?.freshness.ageDays ?? -1));
+-  const ready = products.filter(p => p.status === "ready");
++  const rank: Record<Status, number> = { missing: 0, review: 1, ready: 2 };
++  const categories = (Object.keys(CATEGORY_LABELS) as ProductCategory[])
++    .map(id => ({ id, count: products.filter(p => p.category === id).length }))
++    .filter(item => item.count > 0);
++  const matching = products.filter(p => (category === "all" || p.category === category) && `${p.name} ${p.code} ${p.pack ?? ""}`.toLowerCase().includes(query)).sort((a, b) =>
++    rank[a.status] - rank[b.status]
++    || (sort === "name" ? a.name.localeCompare(b.name) : sort === "status" ? a.status.localeCompare(b.status) : (b.stock?.freshness.ageDays ?? -1) - (a.stock?.freshness.ageDays ?? -1)));
++  const shownCards = showAll || query ? matching : matching.slice(0, FIRST_CARDS);
+   return <>
+-    <p className="validity validity--top"><i aria-hidden="true">✓</i>{t(`Calculations use ${snapshot.reconciliation.rowsUsed.toLocaleString("en")} valid rows only.`)} {snapshot.reconciliation.rowsExcluded} {t("Rows left out")}</p>
+-    <section className="summary" aria-label={t("Product readiness summary")}>
++    <section className="summary summary--tiles" aria-label={t("Product readiness summary")}>
+       <div className="summary__verdict"><span className={`summary__tick${counts.missing > 0 ? " summary__tick--warning" : ""}`} aria-hidden="true">{counts.missing > 0 ? "!" : "✓"}</span><div>
+         <h2>{t(products.length === 0 ? "No products can be assessed" : counts.missing > 0 ? "Some products need more data" : counts.review > 0 ? "Your data is mostly ready" : "Your data is ready")}</h2>
+         <p>{products.length} {t("products checked")}</p></div></div>
+@@ -80,26 +90,27 @@ export function ReadinessOverview({ snapshot, timelines }: { snapshot: Readiness
+         <b>{counts[status]}</b><span className="summary__name">{t(LABELS[status])}</span><span className="summary__note">{t(status === "ready" ? "Complete data, no major issues" : status === "review" ? "Usable evidence with issues to review" : "Stock or sales evidence is incomplete")}</span>
+       </li>)}</ul>
+     </section>
+-    <p className="nextstep"><b>{t("Next step:")}</b> {t("Continue with the usable rows, or download the problem list and correct your file first.")}</p>
+-    {counts.review + counts.missing > 0 && <section className="attention">
+-      <div className="attention__head">
+-        <div className="attention__heading"><span className="attention__icon" aria-hidden="true">!</span><div><h2>{counts.review + counts.missing} {t("products need your attention")}</h2><p>{t("Review data issues and stock age before continuing.")}</p></div></div>
++    {products.length > 0 && <section className="catalog" aria-labelledby="catalog-title">
++      <div className="catalog__head">
++        <div><h2 id="catalog-title">{t("Products by category")}</h2><p>{t("Categories come from each product name. Products to check are listed first.")}</p></div>
+         <div className="attention__filters">
+           <label className="attention__search"><input type="search" aria-label={t("Search by product name or code")} placeholder={t("Search by product name or code")} value={search} onChange={e => setSearch(e.target.value)} /></label>
+           <label className="attention__sort"><select aria-label={t("Sort products")} value={sort} onChange={e => setSort(e.target.value)}><option value="age">{t("Sort by: stock age (oldest)")}</option><option value="name">{t("Sort by: product name")}</option><option value="status">{t("Sort by: issue type")}</option></select></label>
+         </div>
+       </div>
+-      <div className="pcards">{attention.map(p => <article className={`pcard pcard--${p.status}`} key={p.key}>
+-        <header className="pcard__head"><div><b className="pcard__name">{p.name}</b><span className="pcard__code">SKU: {p.code}{p.pack ? ` · ${p.pack}` : ""}</span></div><span className={`pill ${p.status === "missing" ? "pill--red" : "pill--amber"}`}>{t(LABELS[p.status])}</span></header>
++      <div className="catalog__tabs" role="group" aria-label={t("Product categories")}>
++        <button type="button" className="catalog__tab" aria-pressed={category === "all"} onClick={() => { setCategory("all"); setShowAll(false); }}>{t("All")}<span>{products.length}</span></button>
++        {categories.map(item => <button type="button" key={item.id} className="catalog__tab" aria-pressed={category === item.id} onClick={() => { setCategory(item.id); setShowAll(false); }}>{t(CATEGORY_LABELS[item.id])}<span>{item.count}</span></button>)}
++      </div>
++      <div className="pcards">{shownCards.map(p => <article className={`pcard pcard--${p.status}`} key={p.key}>
++        <header className="pcard__head"><div><b className="pcard__name">{p.name}</b><span className="pcard__code">SKU: {p.code}{p.pack ? ` · ${p.pack}` : ""}</span></div><span className={`pill ${p.status === "missing" ? "pill--red" : p.status === "review" ? "pill--amber" : "pill--confirmed"}`}>{t(LABELS[p.status])}</span></header>
+         <div className="pcard__facts"><div><span className="pcard__key">{t("Last stock count")}</span><b>{p.stock?.stockAsOfDate ?? "—"}</b></div><div><span className="pcard__key">{t("Stock age")}</span><b>{p.stock?.freshness.ageDays === undefined ? "—" : t(`${p.stock.freshness.ageDays} days`)}</b></div></div>
+         <WeeklySales timeline={p.timeline} />
+-        <p className={`pcard__why pcard__why--${p.status}`}><span aria-hidden="true">i</span><span>{t(p.reasons[0] ?? "Review the available evidence before planning.")}</span></p>
+-        <details className="pcard__details"><summary className="btn btn--small btn--ghost pcard__action">{t("View details →")}</summary><p>{t("Product")}: {p.name} · {p.code}</p>{p.reasons.map(reason => <p key={reason}>{t(reason)}</p>)}<p>{t("Correct your file and upload again where needed. Original cells remain unchanged.")}</p></details>
++        {p.status !== "ready" && <p className={`pcard__why pcard__why--${p.status}`}><span aria-hidden="true">i</span><span>{t(p.reasons[0] ?? "Review the available evidence before planning.")}</span></p>}
++        <details className="pcard__details"><summary className="btn btn--small btn--ghost pcard__action">{t("View details →")}</summary><p>{t("Product")}: {p.name} · {p.code}</p>{p.reasons.map(reason => <p key={reason}>{t(reason)}</p>)}<p>{t(p.status === "ready" ? "Complete data, no major issues" : "Correct your file and upload again where needed. Original cells remain unchanged.")}</p></details>
+       </article>)}</div>
+-      {attention.length === 0 && <p className="empty" role="status">{t("No matching products.")}</p>}
++      {matching.length === 0 && <p className="empty" role="status">{t("No matching products.")}</p>}
++      {!query && matching.length > FIRST_CARDS && <button type="button" className="btn--link catalog__more" onClick={() => setShowAll(!showAll)}>{t(showAll ? "Show fewer products" : `Show all ${matching.length} products`)}</button>}
+     </section>}
+-    {ready.length > 0 && <details className="readylist" open><summary><span className="readylist__tick" aria-hidden="true">✓</span><span><b>{ready.length} {t(ready.length === 1 ? "product is ready" : "products are ready")}</b><span className="readylist__note">{t("Complete data, no major issues")}</span></span></summary>
+-      <div className="table-scroll"><table className="dtable dtable--ready"><thead><tr><th>{t("Product")}</th><th>{t("Last stock count")}</th><th>{t("Stock age")}</th><th>{t("Weekly sales")}</th><th>{t("Status")}</th></tr></thead><tbody>{ready.map(p => <tr key={p.key}><td><b>{p.name}</b><span className="cell-detail num">{p.code}{p.pack ? ` · ${p.pack}` : ""}</span></td><td>{p.stock?.stockAsOfDate ?? "—"}</td><td>{t(`${p.stock?.freshness.ageDays} days`)}</td><td><WeeklySales timeline={p.timeline} /></td><td><span className="pill pill--confirmed">{t("Ready")}</span></td></tr>)}</tbody></table></div>
+-    </details>}
+   </>;
+ }
+diff --git a/frontend/src/screens/ReadinessScreen.tsx b/frontend/src/screens/ReadinessScreen.tsx
+index b245b8a..a2d11bf 100644
+--- a/frontend/src/screens/ReadinessScreen.tsx
++++ b/frontend/src/screens/ReadinessScreen.tsx
+@@ -3,6 +3,7 @@ import { ReadinessOverview } from "./ReadinessOverview.tsx";
+ import { ReadinessCharts, FILTER_META, issueMatches, type ReadinessIssueFilter } from "./ReadinessCharts.tsx";
+ export type { ReadinessIssueFilter } from "./ReadinessCharts.tsx";
+ import { t, useLanguage } from "../i18n/index.ts";
++import { ScreenHero } from "../components/ScreenHero.tsx";
+ import { useEffect, useMemo, useState } from "react";
+ import {
+   CAPABILITY_LABELS,
+@@ -125,15 +126,37 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+ 
+   return (
+     <div className="readiness-redesign">
+-      <p className="eyebrow">{t("Data readiness · snapshot ")}{props.snapshot.analysisDate}</p>
+-      <h1 className="title">{t("Check your data")}</h1>
+-      <p className="lede">{t("StockLess checked your sales and stock data. Review any issues before planning your purchases.")}</p>
++      <ScreenHero
++        step={3}
++        detail={<>{t("Data readiness · snapshot ")}{props.snapshot.analysisDate}</>}
++        title={t("Check your data")}
++        lede={t("StockLess checked your sales and stock data. Review any issues before planning your purchases.")}
++        aside={<p className="validity validity--chip"><i aria-hidden="true">✓</i>{t(`Calculations use ${props.snapshot.reconciliation.rowsUsed.toLocaleString("en")} valid rows only.`)} {props.snapshot.reconciliation.rowsExcluded} {t("Rows left out")}</p>}
++        actions={<>
++          <button type="button" className="btn--link" onClick={props.onBack}>{t("← Back to mapping")}</button>
++          <span className="screen-hero__spacer" />
++          <button type="button" className="btn btn--ghost" onClick={download}>{t("↓ Download problems")}</button>
++          <button
++            type="button"
++            className="btn btn--primary"
++            onClick={props.onContinue}
++            disabled={props.forecasting}
++            aria-busy={props.forecasting}
++          >
++            {t(props.forecasting && <span className="btn__spinner" aria-hidden="true" />)}
++            {t(props.forecasting ? "Estimating demand locally…" : "Continue to purchase planning →")}
++          </button>
++        </>}
++      />
+ 
+       {t(props.checking && <p className="notice notice--info" role="status">{t("Refreshing the readiness evidence locally…")}</p>)}
+       {t(props.error && <p className="notice notice--error" role="alert">{t(props.error)}</p>)}
+ 
+       <ReadinessOverview snapshot={props.snapshot} timelines={timelines} />
+ 
++      <div className="s3-found">
++      <div className="s3-found__main">
++      <h2 className="s3-found__title">{t("What we found")}</h2>
+       {(dateEvidence.length > 0 || props.snapshot.duplicateGroups.length > 0) && (
+         <section className="decision-grid" aria-label={t("Readiness decisions")}>
+           {dateEvidence.map(({ column, detection, confirmation }) => (
+@@ -231,6 +254,19 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+         <button type="button" className="btn btn--small btn--ghost problems__download" onClick={download}>{t("↓ Download problem list")}</button>
+       </section>
+ 
++      </div>
++      <aside className="s3-found__side">
++        <section className="ready-card" aria-labelledby="ready-card-title">
++          <h2 id="ready-card-title"><span aria-hidden="true">🌳</span>{t("Ready for planning")}</h2>
++          <div className="ready-card__rows"><span>{t("Rows used")}</span><b className="num">{props.snapshot.reconciliation.rowsUsed.toLocaleString("en")} {t("of ")}{(props.snapshot.reconciliation.rowsUsed + props.snapshot.reconciliation.rowsExcluded).toLocaleString("en")}</b></div>
++          <span className="ready-card__bar" aria-hidden="true"><span style={{ width: `${Math.round(props.snapshot.reconciliation.rowsUsed / Math.max(1, props.snapshot.reconciliation.rowsUsed + props.snapshot.reconciliation.rowsExcluded) * 100)}%` }} /></span>
++          <p>{t("Missing weeks are never counted as zero sales.")}</p>
++          {unresolvedDuplicates > 0 && <p className="ready-card__warn">{t(`${unresolvedDuplicates} duplicate decision${unresolvedDuplicates === 1 ? "" : "s"} remain; affected products have Limited data.`)}</p>}
++        </section>
++        <p className="privacy-card"><span className="panel-sage__lock" aria-hidden="true">🔒</span><span><b>{t("Your data stays on your device")}</b>{t("Checked in your browser. Your file isn't changed.")}</span></p>
++      </aside>
++      </div>
++
+       <details className="deepdive"><summary>{t("Show the underlying numbers and charts")}</summary>
+       <ReadinessCharts snapshot={props.snapshot} filter={props.filter} onFilter={props.onFilter} />
+       <section className="card evidence-section">
+@@ -434,29 +470,6 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+ 
+       {t(props.forecastError && <p className="notice notice--error" role="alert">{t(props.forecastError)}</p>)}
+ 
+-      <div className="footer-row">
+-        <p className="validity">
+-          <i aria-hidden="true">✓</i>
+-          {t(unresolvedDuplicates > 0
+-            ? `${unresolvedDuplicates} duplicate decision${unresolvedDuplicates === 1 ? "" : "s"} remain; affected products have Limited data.`
+-            : `Calculations use ${props.snapshot.reconciliation.rowsUsed.toLocaleString("en")} valid rows only.`)}
+-        </p>
+-        <div className="footer-row__right">
+-          <button type="button" className="btn btn--ghost" onClick={download}>{t("↓ Download problems")}</button>
+-          <button
+-            type="button"
+-            className="btn btn--primary"
+-            onClick={props.onContinue}
+-            disabled={props.forecasting}
+-            aria-busy={props.forecasting}
+-          >
+-            {t(props.forecasting && <span className="btn__spinner" aria-hidden="true" />)}
+-            {t(props.forecasting ? "Estimating demand locally…" : "Continue to purchase planning →")}
+-          </button>
+-        </div>
+-      </div>
+-
+-      <button type="button" className="btn--link back-link" onClick={props.onBack}>{t("← Back to mapping")}</button>
+     </div>
+   );
+ }
+diff --git a/frontend/src/screens/UploadScreen.tsx b/frontend/src/screens/UploadScreen.tsx
+index e07cbb0..91f9ced 100644
+--- a/frontend/src/screens/UploadScreen.tsx
++++ b/frontend/src/screens/UploadScreen.tsx
+@@ -2,6 +2,7 @@ import { t, useLanguage } from "../i18n/index.ts";
+ import { useEffect, useRef, useState } from "react";
+ import type { DragEvent } from "react";
+ import { excelToCsvBytes } from "./excel-import.ts";
++import { ScreenHero } from "../components/ScreenHero.tsx";
+ import {
+   CsvImportError,
+   CAPABILITY_LABELS,
+@@ -197,32 +198,14 @@ export function UploadScreen({
+ 
+   return (
+     <>
+-      <p className="eyebrow">{t("Start with what you already have")}</p>
+-      <h1 className="title">{t("Upload your existing sales file.")}</h1>
+-      <p className="lede">{t(UPLOAD_REQUIREMENTS.coreDescription)}</p>
+-
+-      <div className="s1-grid">
+-        <div>
+-          <h2 className="card-title card-title--sprout">{t("What do you need to get started?")}</h2>
+-          <p className="card-sub attribute-guide__intro">
+-            {t("Start with the three required attributes. Optional attributes unlock additional insights.")}</p>
+-
+-          <AttributeSection
+-            id="required-data"
+-            title={t("Required data")}
+-            items={requiredAttributes}
+-            startIndex={0}
+-          />
+-          <div className="optional-fields">
+-            <AttributeSection
+-              id="optional-data"
+-              title={t("Optional data")}
+-              items={optionalAttributes}
+-              startIndex={requiredAttributes.length}
+-            />
+-          </div>
+-        </div>
++      <ScreenHero
++        step={1}
++        detail={t("Start with what you already have")}
++        title={t("Upload your existing sales file.")}
++        lede={t(UPLOAD_REQUIREMENTS.coreDescription)}
++      />
+ 
++      <div className="s1-grid s1-grid--upload-first">
+         <div className="card upload-card">
+           <div
+             className={`dropzone${dragging ? " dropzone--active" : ""}${failure ? " dropzone--error" : ""}`}
+@@ -331,6 +314,28 @@ export function UploadScreen({
+             </div>
+           ))}
+         </div>
++
++        <aside className="s1-columns" aria-label={t("What do you need to get started?")}>
++          <section className="cols-card cols-card--required">
++            <h2 className="card-title card-title--sprout">{t("What do you need to get started?")}</h2>
++            <p className="card-sub attribute-guide__intro">
++              {t("Start with the three required attributes. Optional attributes unlock additional insights.")}</p>
++            <AttributeSection
++              id="required-data"
++              title={t("Required data")}
++              items={requiredAttributes}
++              startIndex={0}
++            />
++          </section>
++          <section className="cols-card cols-card--optional optional-fields">
++            <AttributeSection
++              id="optional-data"
++              title={t("Optional data")}
++              items={optionalAttributes}
++              startIndex={requiredAttributes.length}
++            />
++          </section>
++        </aside>
+       </div>
+     </>
+   );
+diff --git a/frontend/src/screens/product-category.ts b/frontend/src/screens/product-category.ts
+new file mode 100644
+index 0000000..7acc8df
+--- /dev/null
++++ b/frontend/src/screens/product-category.ts
+@@ -0,0 +1,29 @@
++/** Display-only shelf groups for the Step 3 tabs. Matching is by keywords in the product name. */
++export type ProductCategory = "beverages" | "staples" | "snacks" | "fresh" | "cooking" | "nonfood" | "other";
++
++export const CATEGORY_LABELS: Readonly<Record<ProductCategory, string>> = Object.freeze({
++  beverages: "Beverages",
++  staples: "Staples",
++  snacks: "Snacks",
++  fresh: "Fresh & dairy",
++  cooking: "Cooking & canned",
++  nonfood: "Non-food",
++  other: "Other",
++});
++
++const RULES: readonly (readonly [ProductCategory, readonly string[]])[] = [
++  ["beverages", ["kopi", "coffee", "milo", "nescafe", "air mineral", "mineral water", "teh", "tea", "horlicks", "drink", "minuman"]],
++  ["staples", ["beras", "rice", "tepung", "flour", "gula", "sugar", "garam", "salt", "minyak", "oil"]],
++  ["snacks", ["biskut", "biscuit", "keropok", "kerepek", "coklat", "chocolate", "chips", "snack"]],
++  ["fresh", ["roti", "bread", "telur", "egg", "susu", "milk", "yogurt", "cheese"]],
++  ["cooking", ["sardin", "sardine", "sos", "sauce", "kicap", "soy", "cuka", "vinegar", "kari", "curry", "serbuk", "mi segera", "noodle", "cili", "chilli", "tin"]],
++  ["nonfood", ["sabun", "soap", "ubat gigi", "toothpaste", "berus", "brush", "beg", "bag", "tisu", "tissue", "detergent"]],
++];
++
++export function categoryOf(name: string): ProductCategory {
++  const lower = name.toLowerCase();
++  for (const [category, words] of RULES) {
++    if (words.some((word) => lower.includes(word))) return category;
++  }
++  return "other";
++}
+diff --git a/frontend/tests/purchase-plan.test.tsx b/frontend/tests/purchase-plan.test.tsx
+index b43826c..ebc5c9a 100644
+--- a/frontend/tests/purchase-plan.test.tsx
++++ b/frontend/tests/purchase-plan.test.tsx
+@@ -47,10 +47,10 @@ const open = (sku = "000101") =>
+   );
+ 
+ describe("purchase planning", () => {
+-  it("opens the HTML-style impact dashboard from the money section", () => {
++  it("opens the impact dashboard from the sticky header", () => {
+     const onImpact = vi.fn();
+     render(<PurchasePlanScreen {...makeEvidence()} drafts={{}} selectedKey={null} onSelect={() => {}} onDraftChange={() => {}} onBack={() => {}} onImpact={onImpact} />);
+-    fireEvent.click(screen.getByRole("button", { name: "Open dashboard example →" }));
++    fireEvent.click(screen.getByRole("button", { name: "See your impact →" }));
+     expect(onImpact).toHaveBeenCalledOnce();
+     expect(screen.queryByRole("dialog")).toBeNull();
+   });
+@@ -144,8 +144,8 @@ describe("purchase planning", () => {
+   it("enables ordering after a plan, keeps totals unchanged, and restores disabled state after clearing the last plan", async () => {
+     const user = userEvent.setup();
+     render(<Harness />);
+-    const totals = screen.getByRole("region", { name: "Your next purchase, at a glance" }).querySelectorAll(".pp-tile");
+-    const evidenceTotals = Array.from(totals).slice(0, 2).map(tile => tile.textContent);
++    const needDataTotal = () => document.querySelector(".pp-group--need_data b")?.textContent;
++    const evidenceTotal = needDataTotal();
+     open("000202");
+     fireEvent.change(screen.getByLabelText("Planned order"), { target: { value: "1" } });
+     expect((screen.getByRole("checkbox") as HTMLInputElement).disabled).toBe(
+@@ -154,7 +154,7 @@ describe("purchase planning", () => {
+     await user.click(screen.getByRole("button", { name: "Done" }));
+     await user.click(screen.getByRole("checkbox"));
+     expect(screen.getAllByRole("row")).toHaveLength(2);
+-    expect(Array.from(screen.getByRole("region", { name: "Your next purchase, at a glance" }).querySelectorAll(".pp-tile")).slice(0, 2).map(tile => tile.textContent)).toEqual(evidenceTotals);
++    expect(needDataTotal()).toBe(evidenceTotal);
+     open("000202");
+     await user.click(screen.getByRole("button", { name: "Clear planned order" }));
+     await user.click(screen.getByRole("button", { name: "Done" }));
+@@ -283,38 +283,35 @@ describe("purchase planning", () => {
+ });
+ 
+ describe("approved chart semantics", () => {
+-  it("uses lines without ordinary dots for positive weeks and starts the forecast band exactly at Today", () => {
++  it("draws past weeks as bars and the four-week forecast as one column per coming week, starting at Today", () => {
+     const { snapshot, forecast } = makeEvidence();
+     const weeks = buildDemandReview(snapshot).products.find(
+       (p) => p.productKey === "A",
+     )!.timeline.weeks;
++    const range = forecast.products[0].range!;
+     const { container } = render(
+       <DemandChart
+         weeks={weeks}
+-        range={forecast.products[0].range!}
++        range={range}
+         name="Test"
+       />,
+     );
+     expect(container.querySelectorAll("circle")).toHaveLength(0);
+-    expect(container.querySelector("polyline")?.getAttribute("stroke")).toBe(
+-      "#16313B",
+-    );
++    expect(screen.getAllByTestId("sales-bar").length).toBeGreaterThan(0);
+     expect(screen.queryByTestId("missing-week")).toBeNull();
+-    const today = screen.getByTestId("today-divider").getAttribute("x1");
+-    expect(screen.getByTestId("forecast-band").getAttribute("d")).toMatch(
+-      new RegExp(`^M ${today} `),
+-    );
+-    expect(screen.getByTestId("forecast-upper-bound").getAttribute("d")).not.toBe(
+-      screen.getByTestId("forecast-lower-bound").getAttribute("d"),
+-    );
+-    expect(screen.getByTestId("forecast-centre").getAttribute("x1")).toBe(
+-      today,
+-    );
+-    expect(screen.getByTestId("forecast-centre").getAttribute("y1")).not.toBe(
+-      screen.getByTestId("forecast-centre").getAttribute("y2"),
+-    );
++    const today = Number(screen.getByTestId("today-divider").getAttribute("x1"));
++    const columns = screen.getAllByTestId("forecast-week");
++    expect(columns).toHaveLength(range.horizonWeeks);
++    for (const column of columns) expect(Number(column.getAttribute("x"))).toBeGreaterThan(today);
++    const centres = screen.getAllByTestId("forecast-centre");
++    expect(centres).toHaveLength(range.horizonWeeks);
++    const top = Number(columns[0].getAttribute("y"));
++    const bottom = top + Number(columns[0].getAttribute("height"));
++    const centreY = Number(centres[0].getAttribute("y1"));
++    expect(centreY).toBeGreaterThanOrEqual(top);
++    expect(centreY).toBeLessThanOrEqual(bottom);
+     expect(screen.getByText("Units per week")).toBeTruthy();
+-    expect(screen.getByText("Expected weekly equivalent")).toBeTruthy();
++    expect(screen.getByText("Forecast range per week (line = most likely)")).toBeTruthy();
+   });
+   it("shows orange dots only for genuine zero-sales weeks and a dashed marker only for missing weeks", () => {
+     const { snapshot, forecast } = makeEvidence();
+diff --git a/frontend/tests/readiness-redesign.test.tsx b/frontend/tests/readiness-redesign.test.tsx
+index bb43623..06c6b6a 100644
+--- a/frontend/tests/readiness-redesign.test.tsx
++++ b/frontend/tests/readiness-redesign.test.tsx
+@@ -31,13 +31,14 @@ describe("Readiness product overview", () => {
+     fireEvent.click(screen.getByRole("button", { name: "Filter: Date issues" }));
+     expect(onFilter).toHaveBeenCalledWith("dates");
+   });
+-  it("separates clean products from incomplete histories and searches by displayed SKU", () => {
++  it("shows every product as a card, products to check first, and searches by displayed SKU", () => {
+     const { snapshot } = makeEvidence();
+     render(<ReadinessOverview snapshot={snapshot} timelines={buildProductTimelines(snapshot)} />);
+     const summary = screen.getByRole("region", { name: "Product readiness summary" });
+     expect(within(summary).getByText("3 products checked").textContent).toContain("3");
+-    expect(document.querySelectorAll(".pcard")).toHaveLength(2);
+-    expect(document.querySelectorAll(".dtable--ready tbody tr")).toHaveLength(1);
++    const cards = [...document.querySelectorAll(".pcard")];
++    expect(cards).toHaveLength(3);
++    expect(cards.at(-1)?.className).toContain("pcard--ready");
+     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "SKU 000202" } });
+     expect(document.querySelectorAll(".pcard")).toHaveLength(1);
+     expect(document.querySelector(".pcard__code")?.textContent).toContain("000202");
+-- 
+2.43.0
+

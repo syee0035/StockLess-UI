@@ -1,4 +1,4 @@
-From 48667dcfbc9db0b0c11f45e1b48762fcbe4e2cc9 Mon Sep 17 00:00:00 2001
+From e9373b1c73e4477ab315a0c7b42213dbd625d94d Mon Sep 17 00:00:00 2001
 From: Serene <syee0035@student.monash.edu>
 Date: Sun, 4 Oct 2026 16:46:29 +0800
 Subject: [PATCH] i18n: rewrite Malay and Chinese copy in a natural,
@@ -16,13 +16,13 @@ expectations that asserted the old wording.
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01J7sMu9y8dph2gjpsqnsfjw
 ---
- frontend/src/i18n/messages.ts              | 2522 ++++++++++----------
+ frontend/src/i18n/messages.ts              | 2469 ++++++++++----------
  frontend/tests/language-and-bulk.test.tsx  |    2 +-
- frontend/tests/readiness-redesign.test.tsx |    4 +-
- 3 files changed, 1264 insertions(+), 1264 deletions(-)
+ frontend/tests/readiness-redesign.test.tsx |    2 +-
+ 3 files changed, 1237 insertions(+), 1236 deletions(-)
 
 diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
-index 2d473e2..a9c1627 100644
+index 83ccea8..77dd450 100644
 --- a/frontend/src/i18n/messages.ts
 +++ b/frontend/src/i18n/messages.ts
 @@ -5,40 +5,40 @@ export const messages: Record<string, readonly [string, string]> = {
@@ -1077,7 +1077,7 @@ index 2d473e2..a9c1627 100644
    ],
    "up to": [
      "最大",
-@@ -809,71 +809,71 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -809,43 +809,43 @@ export const messages: Record<string, readonly [string, string]> = {
      "baris ·"
    ],
    "comma, semicolon or tab": [
@@ -1090,45 +1090,6 @@ index 2d473e2..a9c1627 100644
 -    "Angka jualan anda kekal dalam pelayar ini."
 +    "销售数据只留在这个浏览器里。",
 +    "Angka jualan anda kekal dalam pelayar ini sahaja."
-   ],
-   "Saved column matching": [
--    "已保存的字段匹配",
--    "Padanan lajur disimpan"
-+    "已保存的栏位对应",
-+    "Padanan lajur yang disimpan"
-   ],
-   "saved column": [
--    "组已保存的字段",
-+    "组已保存的栏位",
-     "padanan lajur disimpan"
-   ],
-   "matching": [
--    "匹配",
-+    "对应",
-     "padanan"
-   ],
-   "matchings": [
--    "匹配",
-+    "对应",
-     "padanan"
-   ],
-   "Only column headings and matching rules are stored for returning use.": [
--    "仅保存列标题与匹配规则，方便下次使用。",
--    "Hanya tajuk lajur dan peraturan padanan disimpan untuk kegunaan seterusnya."
-+    "只会保存栏位名称和对应方式，下次用会更快。",
-+    "Kami cuma simpan nama lajur dan padanan anda supaya lain kali lebih cepat."
-   ],
-   "Deleting…": [
--    "正在删除…",
--    "Memadam…"
-+    "删除中…",
-+    "Sedang dipadam…"
-   ],
-   "Delete saved matching": [
--    "删除已保存的匹配",
--    "Padam padanan disimpan"
-+    "删除已保存的对应",
-+    "Padam padanan yang disimpan"
    ],
    "Import cancelled.": [
      "已取消导入。",
@@ -1176,7 +1137,7 @@ index 2d473e2..a9c1627 100644
      "KB · pemisah"
    ],
    "✓ Read successfully": [
-@@ -881,47 +881,47 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -853,47 +853,47 @@ export const messages: Record<string, readonly [string, string]> = {
      "✓ Berjaya dibaca"
    ],
    "Column mapping": [
@@ -1242,7 +1203,7 @@ index 2d473e2..a9c1627 100644
      "Lajur anda"
    ],
    "Preview": [
-@@ -933,15 +933,15 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -905,15 +905,15 @@ export const messages: Record<string, readonly [string, string]> = {
      "Status"
    ],
    "Not in this file": [
@@ -1261,7 +1222,7 @@ index 2d473e2..a9c1627 100644
      "Cadangan — sila semak"
    ],
    "Confirm": [
-@@ -949,95 +949,95 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -921,112 +921,112 @@ export const messages: Record<string, readonly [string, string]> = {
      "Sahkan"
    ],
    "Not matched yet": [
@@ -1383,21 +1344,6 @@ index 2d473e2..a9c1627 100644
 +    "数据不多",
      "Data terhad"
    ],
-   "We filled in the column matching you saved last time.": [
--    "已填入您上次保存的字段匹配。",
--    "Kami telah mengisi padanan lajur yang anda simpan sebelum ini."
-+    "已帮您填上次保存的栏位对应。",
-+    "Kami dah isi padanan lajur yang anda simpan kali lepas."
-   ],
-   "Check each suggestion, then confirm them all at once": [
--    "检查各项建议后，可一次性全部确认",
-+    "逐项看一下，没问题就一次全部确认",
-     "Semak setiap cadangan, kemudian sahkan semuanya sekali gus"
-   ],
-   "Confirm all": [
-@@ -1045,28 +1045,28 @@ export const messages: Record<string, readonly [string, string]> = {
-     "Sahkan semua"
-   ],
    "Data readiness · snapshot": [
 -    "数据检查 · 快照",
 -    "Kesediaan data · snapshot"
@@ -1435,7 +1381,7 @@ index 2d473e2..a9c1627 100644
    ],
    "rows in =": [
      "行输入 =",
-@@ -1089,72 +1089,72 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1049,72 +1049,72 @@ export const messages: Record<string, readonly [string, string]> = {
      "baris boleh digunakan daripada"
    ],
    "Date issues": [
@@ -1536,7 +1482,7 @@ index 2d473e2..a9c1627 100644
    ],
    "{0} confirmed": [
      "已确认 {0}",
-@@ -1165,60 +1165,60 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1125,60 +1125,60 @@ export const messages: Record<string, readonly [string, string]> = {
      "Sahkan {0}"
    ],
    "Exact duplicate": [
@@ -1623,7 +1569,7 @@ index 2d473e2..a9c1627 100644
    ],
    "Row": [
      "行",
-@@ -1233,40 +1233,40 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1193,40 +1193,40 @@ export const messages: Record<string, readonly [string, string]> = {
      "Isu"
    ],
    "Observed value": [
@@ -1678,7 +1624,7 @@ index 2d473e2..a9c1627 100644
    ],
    "← Previous": [
      "← 上一页",
-@@ -1286,14 +1286,14 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1246,14 +1246,14 @@ export const messages: Record<string, readonly [string, string]> = {
    ],
    "Every tidy-up": [
      "全部整理记录",
@@ -1697,7 +1643,7 @@ index 2d473e2..a9c1627 100644
      "rekod"
    ],
    "Row number": [
-@@ -1305,299 +1305,299 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1265,283 +1265,283 @@ export const messages: Record<string, readonly [string, string]> = {
      "Lajur"
    ],
    "What was there before": [
@@ -1958,18 +1904,6 @@ index 2d473e2..a9c1627 100644
 +    "您的文件已在本机载入。",
 +    "Fail kedai anda dimuatkan dalam peranti ini."
    ],
-   "Saved column matching deleted from this browser.": [
--    "已从本浏览器删除保存的字段匹配。",
--    "Padanan lajur disimpan telah dipadam daripada pelayar ini."
-+    "已删除这个浏览器里保存的栏位对应。",
-+    "Padanan lajur yang disimpan telah dipadam dari pelayar ini."
-   ],
-   "Saved column matching could not be deleted in this browser.": [
--    "无法删除本浏览器中保存的字段匹配。",
--    "Padanan lajur disimpan tidak dapat dipadam dalam pelayar ini."
-+    "删不掉这个浏览器里保存的栏位对应。",
-+    "Padanan lajur yang disimpan tak dapat dipadam dalam pelayar ini."
-   ],
    "The mapping could not be updated.": [
 -    "无法更新字段匹配。",
 -    "Padanan tidak dapat dikemas kini."
@@ -1987,18 +1921,6 @@ index 2d473e2..a9c1627 100644
 -    "Cara pengenalan produk tidak dapat disahkan."
 +    "商品区分方式没能确认。",
 +    "Cara bezakan produk tak dapat disahkan."
-   ],
-   "Matching saved for next time": [
--    "匹配已保存，下次可用",
--    "Padanan disimpan untuk kegunaan seterusnya"
-+    "已保存，下次直接用",
-+    "Padanan disimpan untuk lain kali"
-   ],
-   "Matching could not be saved in this browser. You can still continue.": [
--    "无法在此浏览器保存匹配，您仍可继续。",
--    "Padanan tidak dapat disimpan dalam pelayar ini. Anda masih boleh meneruskan."
-+    "这个浏览器存不了对应设置，但您还是可以继续。",
-+    "Padanan tak dapat disimpan dalam pelayar ini, tapi anda masih boleh teruskan."
    ],
    "Readiness evidence needs to be refreshed": [
 -    "需要更新数据检查结果",
@@ -2124,7 +2046,7 @@ index 2d473e2..a9c1627 100644
      "dipaparkan"
    ],
    "Search products": [
-@@ -1605,203 +1605,203 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1549,203 +1549,203 @@ export const messages: Record<string, readonly [string, string]> = {
      "Cari produk"
    ],
    "Search by product name or SKU": [
@@ -2409,7 +2331,7 @@ index 2d473e2..a9c1627 100644
      "Kosongkan pesanan dirancang"
    ],
    "Clear incoming stock": [
-@@ -1809,20 +1809,20 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1753,20 +1753,20 @@ export const messages: Record<string, readonly [string, string]> = {
      "Kosongkan stok akan tiba"
    ],
    "Figures you enter are marked “input by you” and last for this visit only.": [
@@ -2438,7 +2360,7 @@ index 2d473e2..a9c1627 100644
    ],
    "Done": [
      "完成",
-@@ -1837,925 +1837,925 @@ export const messages: Record<string, readonly [string, string]> = {
+@@ -1781,917 +1781,917 @@ export const messages: Record<string, readonly [string, string]> = {
      "Hari ini"
    ],
    ": missing week": [
@@ -2920,18 +2842,6 @@ index 2d473e2..a9c1627 100644
 -    "Data wajib mencukupi untuk meneruskan. Data pilihan membolehkan lebih banyak fungsi apabila tersedia."
 +    "有必填资料就能继续。有可选资料的话，能用的功能会更多。",
 +    "Data wajib dah cukup untuk teruskan. Data pilihan buka lebih banyak fungsi jika ada."
-   ],
-   "Your raw CSV rows are processed in this browser and no account is required. StockLess may save column headings and confirmed matching rules in this browser, but your preview values, rows, derived series, and product identifiers are not uploaded to an AI or API service.": [
--    "原始 CSV 在此浏览器中处理，无需账户。StockLess 可能保存列标题及已确认的匹配规则，但不会将预览值、原始行、派生序列或商品标识上传至 AI 或 API 服务。",
--    "Baris CSV asal diproses dalam pelayar ini tanpa akaun. StockLess mungkin menyimpan tajuk lajur dan peraturan padanan disahkan, tetapi nilai pratonton, baris, siri terbitan dan pengenal produk tidak dimuat naik ke perkhidmatan AI atau API."
-+    "您的 CSV 只在这个浏览器里处理，不用注册账号。StockLess 可能会在浏览器里记住栏位名称和您确认过的对应方式，但预览内容、每一行数据、计算结果和商品代码都不会上传到任何 AI 或 API 服务。",
-+    "Baris CSV anda diproses dalam pelayar ini dan tak perlu akaun. StockLess mungkin simpan nama lajur dan padanan yang anda sahkan dalam pelayar ini, tapi nilai pratonton, baris data, hasil kiraan dan kod produk tak dimuat naik ke mana-mana perkhidmatan AI atau API."
-   ],
-   "Only saved column matching remains for returning use. Dataset rows, forecasts and purchase plans stay in the active session and are not saved in the browser database.": [
--    "仅保存字段匹配供下次使用。数据行、预测和采购计划仅存在于当前会话，不会保存到浏览器数据库。",
--    "Hanya padanan lajur disimpan untuk kegunaan seterusnya. Baris data, ramalan dan pelan pembelian kekal dalam sesi aktif dan tidak disimpan dalam pangkalan data pelayar."
-+    "只有栏位对应会留着下次用。数据、预测和进货计划只存在这次使用中，不会存进浏览器。",
-+    "Hanya padanan lajur disimpan untuk lain kali. Baris data, ramalan dan pelan belian kekal dalam sesi ini sahaja dan tak disimpan dalam pelayar."
    ],
    "Duplicate rows not yet decided": [
 -    "重复行尚未处理",
@@ -3832,7 +3742,7 @@ index 2d473e2..a9c1627 100644
      "Teruskan ke padanan lajur"
    ],
    "Homepage": [
-@@ -2771,15 +2771,15 @@ Object.assign(messages, {
+@@ -2707,15 +2707,15 @@ Object.assign(messages, {
      "Muat naik"
    ],
    "Map columns": [
@@ -3852,7 +3762,7 @@ index 2d473e2..a9c1627 100644
      "Rancang belian"
    ],
    "Sales data": [
-@@ -2787,32 +2787,32 @@ Object.assign(messages, {
+@@ -2723,32 +2723,32 @@ Object.assign(messages, {
      "Data jualan"
    ],
    "Sample data loaded — review the mappings before continuing.": [
@@ -3897,7 +3807,7 @@ index 2d473e2..a9c1627 100644
    ],
    "of": [
      "/",
-@@ -2823,27 +2823,27 @@ Object.assign(messages, {
+@@ -2759,27 +2759,27 @@ Object.assign(messages, {
      "disahkan"
    ],
    "All matches look right?": [
@@ -3934,7 +3844,7 @@ index 2d473e2..a9c1627 100644
      "Lajur anda"
    ],
    "Preview": [
-@@ -2868,34 +2868,34 @@ Object.assign(messages, {
+@@ -2804,34 +2804,34 @@ Object.assign(messages, {
    ],
    "REQUIRED": [
      "必填",
@@ -3980,7 +3890,7 @@ index 2d473e2..a9c1627 100644
      "Guna pilihan ini"
    ],
    "Check your data": [
-@@ -2903,185 +2903,185 @@ Object.assign(messages, {
+@@ -2839,184 +2839,185 @@ Object.assign(messages, {
      "Semak data anda"
    ],
    "Review your columns and make sure StockLess has the information it needs.": [
@@ -4226,7 +4136,6 @@ index 2d473e2..a9c1627 100644
    "Choose CSV or Excel file": ["选择 CSV 或 Excel 文件", "Pilih fail CSV atau Excel"],
    ".csv, .xlsx or .xls": [".csv、.xlsx 或 .xls", ".csv, .xlsx atau .xls"],
 -  "Excel uses the first worksheet with data": ["Excel 将使用第一个有数据的工作表", "Excel menggunakan helaian pertama yang mengandungi data"],
--  "Your CSV or Excel file is processed in this browser and no account is required. StockLess may save column headings and confirmed matching rules in this browser, but your preview values, rows, derived series, and product identifiers are not uploaded to an AI or API service.": ["CSV 或 Excel 文件仅在此浏览器中处理，无需账户。StockLess 可能保存列标题及已确认的匹配规则，但不会将预览值、原始行、派生序列或商品标识上传至 AI 或 API 服务。", "Fail CSV atau Excel anda diproses dalam pelayar ini tanpa akaun. StockLess mungkin menyimpan tajuk lajur dan peraturan padanan yang disahkan, tetapi nilai pratonton, baris, siri terbitan dan pengecam produk tidak dimuat naik ke perkhidmatan AI atau API."],
 -  "Every source row is tracked through readiness; none is silently discarded.": ["每一行原始数据都会被追踪，不会被悄悄丢弃。", "Setiap baris sumber dijejaki; tiada yang dibuang secara senyap."],
 -  "Matching rows need your decision": ["相同记录需要您作出决定", "Baris sepadan memerlukan keputusan anda"],
 -  "StockLess checks whether each sale date can be interpreted reliably. Invalid or ambiguous dates are flagged.": ["StockLess 检查每个销售日期是否可靠；无效或含糊的日期会被标记。", "StockLess menyemak sama ada setiap tarikh jualan boleh ditafsir dengan yakin. Tarikh tidak sah atau kabur ditandakan."],
@@ -4247,10 +4156,10 @@ index 2d473e2..a9c1627 100644
    "Other": ["其他", "Lain-lain"],
  });
 diff --git a/frontend/tests/language-and-bulk.test.tsx b/frontend/tests/language-and-bulk.test.tsx
-index 3ac8e4a..546c783 100644
+index 44c5fd6..d1af5a0 100644
 --- a/frontend/tests/language-and-bulk.test.tsx
 +++ b/frontend/tests/language-and-bulk.test.tsx
-@@ -63,7 +63,7 @@ describe("persistent language choice across the frontend", () => {
+@@ -73,7 +73,7 @@ describe("persistent language choice across the frontend", () => {
      expect(document.documentElement.lang).toBe("zh-Hans");
      unmount();
      render(mappingPage(suggested()));
@@ -4260,15 +4169,12 @@ index 3ac8e4a..546c783 100644
      expect(screen.getByText("Ready.csv")).toBeTruthy();
      expect(screen.queryByText(/Unique approved/)).toBeNull();
 diff --git a/frontend/tests/readiness-redesign.test.tsx b/frontend/tests/readiness-redesign.test.tsx
-index 9b2c34d..bb43623 100644
+index 096501c..cc84761 100644
 --- a/frontend/tests/readiness-redesign.test.tsx
 +++ b/frontend/tests/readiness-redesign.test.tsx
-@@ -51,8 +51,8 @@ describe("Readiness product overview", () => {
-     render(<ReadinessOverview snapshot={input} timelines={buildProductTimelines(input)} />);
-     const card = [...document.querySelectorAll(".pcard")].find(card => card.textContent?.includes("000202"))!;
+@@ -53,6 +53,6 @@ describe("Readiness product overview", () => {
      expect(card.className).toContain("pcard--missing");
--    expect(card.querySelector(".pill")?.textContent).toBe("数据缺失");
-+    expect(card.querySelector(".pill")?.textContent).toBe("数据不全");
+     expect(card.querySelector(".rd-pill")?.textContent).toBe("数据不全");
      expect(card.querySelectorAll(".spark__bar--missing")).toHaveLength(2);
 -    expect(card.querySelector(".spark")?.getAttribute("aria-label")).toContain("缺失");
 +    expect(card.querySelector(".spark")?.getAttribute("aria-label")).toContain("没有数据");

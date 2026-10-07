@@ -1,0 +1,365 @@
+From 336a4c6324b21dc817fa77bebd2fd6b209034351 Mon Sep 17 00:00:00 2001
+From: Serene <syee0035@student.monash.edu>
+Date: Wed, 7 Oct 2026 19:24:57 +0800
+Subject: [PATCH] feat(frontend): Step 3 Products / Rows tabs
+
+- Tab bar under the page title: Products (today's view) and Rows in your file
+- Rows tab: one used / left-out bar, the reasons rows were left out (each row counted once),
+  and a What to do box; a reason can open its group in What we found
+- The bottom fold no longer repeats the charts; it keeps the full findings table
+- Chinese and Malay copy, tests for the rows summary
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01J7sMu9y8dpH2gjPsQNsfJW
+---
+ frontend/src/i18n/messages.ts             |  21 +++++
+ frontend/src/screens/ReadinessRowsTab.tsx | 104 ++++++++++++++++++++++
+ frontend/src/screens/ReadinessScreen.tsx  |  33 +++++--
+ frontend/src/screens/readiness.css        |  49 ++++++++++
+ frontend/tests/readiness-tabs.test.tsx    |  53 +++++++++++
+ 5 files changed, 251 insertions(+), 9 deletions(-)
+ create mode 100644 frontend/src/screens/ReadinessRowsTab.tsx
+ create mode 100644 frontend/tests/readiness-tabs.test.tsx
+
+diff --git a/frontend/src/i18n/messages.ts b/frontend/src/i18n/messages.ts
+index 357ccda..3894db0 100644
+--- a/frontend/src/i18n/messages.ts
++++ b/frontend/src/i18n/messages.ts
+@@ -3681,3 +3681,24 @@ Object.assign(messages, purchaseMessages);
+ Object.assign(messages, savedWorkspaceMessages);
+ 
+ Object.assign(messages, epic123Messages);
++
++/* Step 3 · Products / Rows tabs. "readiness|" keys are number templates filled by ReadinessRowsTab. */
++Object.assign(messages, {
++  "Readiness view": ["检查结果视图", "Paparan kesediaan"],
++  "Products": ["商品", "Produk"],
++  "Rows in your file": ["文件里的行", "Baris dalam fail anda"],
++  "readiness|of {0} rows will be used": ["行会被使用，共 {0} 行", "daripada {0} baris akan digunakan"],
++  "readiness|{0} rows used, {1} left out": ["使用 {0} 行，未使用 {1} 行", "{0} baris digunakan, {1} diketepikan"],
++  "Used in the plan": ["用于计划", "Digunakan dalam pelan"],
++  "Tidied for you (still used)": ["已帮您整理（仍会使用）", "Dikemas untuk anda (masih digunakan)"],
++  "readiness|Why {0} rows were left out": ["为什么有 {0} 行没用上", "Kenapa {0} baris diketepikan"],
++  "Other reasons": ["其他原因", "Sebab lain"],
++  "Nothing to fix — every row can be used.": ["没有需要修改的，每一行都能用。", "Tiada apa perlu dibaiki — semua baris boleh digunakan."],
++  "readiness|Fix {0} rows in your file": ["在文件里修改这 {0} 行", "Baiki {0} baris dalam fail anda"],
++  "Download the list to see these rows": ["下载清单查看这些行", "Muat turun senarai untuk lihat baris ini"],
++  "Or continue now — these rows are simply left out of the plan.": ["也可以现在继续，这些行只是不会算进计划里。", "Atau teruskan sekarang — baris ini cuma tak dikira dalam pelan."],
++  "Show these rows in “What we found” ↓": ["在「检查结果」里查看这些行 ↓", "Lihat baris ini dalam “Apa yang kami jumpa” ↓"],
++  "Why 1 row was left out": ["为什么有 1 行没用上", "Kenapa 1 baris diketepikan"],
++  "Fix 1 row in your file": ["在文件里修改这 1 行", "Baiki 1 baris dalam fail anda"],
++  "See every finding as a table": ["用表格查看全部检查结果", "Lihat semua dapatan dalam jadual"],
++});
+diff --git a/frontend/src/screens/ReadinessRowsTab.tsx b/frontend/src/screens/ReadinessRowsTab.tsx
+new file mode 100644
+index 0000000..ba7bf59
+--- /dev/null
++++ b/frontend/src/screens/ReadinessRowsTab.tsx
+@@ -0,0 +1,104 @@
++import { useMemo, useState } from "react";
++import { getLocale, t, useLanguage } from "../i18n/index.ts";
++import type { ReadinessSnapshot } from "../engine.ts";
++import type { Finding, FindingType } from "../readiness/model.ts";
++
++/** Plain-language row summary: how many rows are used, why the rest were left out, and what to do. */
++const REASON_ORDER: readonly FindingType[] = ["date", "quantity", "identity", "stock", "other"];
++export const REASON_LABELS: Record<FindingType | "unexplained", string> = {
++  date: "Dates we couldn't read", quantity: "Quantities to check", identity: "Rows with no product",
++  stock: "Stock counts to check", other: "Other things to check", tidy: "Safe tidy-ups applied", unexplained: "Other reasons",
++};
++
++/** "readiness|" keys are number templates; the prefix keeps the patterns away from other screens' strings. */
++const fill = (text: string, values: readonly (string | number)[]) => text.replace(/\{(\d+)\}/g, (_, i: string) => String(values[Number(i)] ?? ""));
++export function tr(english: string, ...values: (string | number)[]) {
++  const key = `readiness|${english}`;
++  const translated = t(key);
++  return fill(translated === key ? english : translated, values);
++}
++
++export interface RowReason {
++  readonly type: FindingType | "unexplained";
++  readonly rows: number;
++  readonly example?: Finding;
++  readonly sourceRows: readonly number[];
++}
++
++/** Each left-out row is counted once, under the first reason (in "What we found" order) that mentions it. */
++export function summariseRows(snapshot: ReadinessSnapshot, findings: readonly Finding[]) {
++  const { rowsIn, rowsUsed, rowsExcluded } = snapshot.reconciliation;
++  const assigned = new Set<number>();
++  const reasons: RowReason[] = [];
++  for (const type of REASON_ORDER) {
++    const group = findings.filter(item => item.type === type && item.status === "out");
++    const rows = [...new Set(group.flatMap(item => item.sourceRows))].filter(row => !assigned.has(row));
++    rows.forEach(row => assigned.add(row));
++    if (rows.length) reasons.push({ type, rows: rows.length, example: group[0], sourceRows: rows.sort((a, b) => a - b) });
++  }
++  const unexplained = Math.max(0, rowsExcluded - assigned.size);
++  if (unexplained) reasons.push({ type: "unexplained", rows: unexplained, sourceRows: [] });
++  const tidied = new Set(findings.filter(item => item.type === "tidy").flatMap(item => item.sourceRows)).size;
++  return { rowsIn, rowsUsed, rowsExcluded, tidied, reasons };
++}
++
++interface Props {
++  readonly snapshot: ReadinessSnapshot;
++  readonly findings: readonly Finding[];
++  /** Shows the chosen group in "What we found" below. */
++  readonly onShowGroup: (type: FindingType) => void;
++  readonly onDownload: () => void;
++}
++
++export function ReadinessRowsTab({ snapshot, findings, onShowGroup, onDownload }: Props) {
++  useLanguage();
++  const summary = useMemo(() => summariseRows(snapshot, findings), [snapshot, findings]);
++  const [picked, setPicked] = useState(0);
++  const number = (value: number) => value.toLocaleString(getLocale());
++  const { rowsIn, rowsUsed, rowsExcluded, tidied, reasons } = summary;
++  const current = reasons[Math.min(picked, reasons.length - 1)];
++  const largest = Math.max(1, ...reasons.map(reason => reason.rows));
++  const listedRows = (rows: readonly number[]) => rows.slice(0, 4).map(number).join(", ") + (rows.length > 4 ? "…" : "");
++
++  return <div className="rd-rows" data-testid="readiness-rows-tab">
++    <div className="rd-rows__head">
++      <p className="rd-rows__headline"><b className="num">{number(rowsUsed)}</b> {tr("of {0} rows will be used", number(rowsIn))}</p>
++      <span className="rd-rows__safe">✓ {t("Your file isn't changed")}</span>
++    </div>
++    <div className="rd-rows__bar" role="img" aria-label={tr("{0} rows used, {1} left out", number(rowsUsed), number(rowsExcluded))}>
++      <span className="rd-rows__used" style={{ flexGrow: rowsUsed }} />
++      {rowsExcluded > 0 && <span className="rd-rows__out" style={{ flexGrow: rowsExcluded }} />}
++    </div>
++    <ul className="rd-rows__legend">
++      <li><i className="rd-rows__key rd-rows__key--used" />{t("Used in the plan")} · <b className="num">{number(rowsUsed)}</b></li>
++      <li><i className="rd-rows__key rd-rows__key--out" />{t("Left out")} · <b className="num">{number(rowsExcluded)}</b></li>
++      {tidied > 0 && <li><i className="rd-rows__key rd-rows__key--tidy" />{t("Tidied for you (still used)")} · <b className="num">{number(tidied)}</b></li>}
++    </ul>
++
++    {reasons.length === 0 ? <p className="rd-rows__none">{t("Nothing to fix — every row can be used.")}</p> :
++      <div className="rd-rows__grid">
++        <div className="rd-rows__reasons">
++          <h3 className="rd-rows__h">{rowsExcluded === 1 ? t("Why 1 row was left out") : tr("Why {0} rows were left out", number(rowsExcluded))}</h3>
++          <div role="radiogroup" aria-label={rowsExcluded === 1 ? t("Why 1 row was left out") : tr("Why {0} rows were left out", number(rowsExcluded))}>
++            {reasons.map((reason, index) => <button key={reason.type} type="button" role="radio" aria-checked={reason === current}
++              className={"rd-rows__reason" + (reason === current ? " is-on" : "")} onClick={() => setPicked(index)}>
++              <span className="rd-rows__label">{t(REASON_LABELS[reason.type])}</span>
++              <span className="rd-rows__meter" aria-hidden="true"><span style={{ width: `${Math.round(100 * reason.rows / largest)}%` }} /></span>
++              <b className="num">{number(reason.rows)}</b>
++            </button>)}
++          </div>
++        </div>
++        <div className="rd-rows__todo" aria-live="polite">
++          <h3 className="rd-rows__h">{t("What to do")}</h3>
++          <b>{current.type === "unexplained" ? t("Download the list to see these rows") : current.rows === 1 ? t("Fix 1 row in your file") : tr("Fix {0} rows in your file", number(current.rows))}</b>
++          {current.example && <p>{t(current.example.action)}</p>}
++          {current.sourceRows.length > 0 && <p className="rd-rows__where">{t("Rows")} <span className="num">{listedRows(current.sourceRows)}</span>{current.example?.observed ? <> · <code>{current.example.observed}</code></> : null}</p>}
++          <p className="rd-rows__note">{t("Or continue now — these rows are simply left out of the plan.")}</p>
++          <div className="rd-rows__links">
++            {current.type !== "unexplained" && <button type="button" className="btn--link" onClick={() => onShowGroup(current.type as FindingType)}>{t("Show these rows in “What we found” ↓")}</button>}
++            <button type="button" className="btn--link" onClick={onDownload}>{t("Download all row evidence")}</button>
++          </div>
++        </div>
++      </div>}
++  </div>;
++}
+diff --git a/frontend/src/screens/ReadinessScreen.tsx b/frontend/src/screens/ReadinessScreen.tsx
+index e973e84..9a57f6d 100644
+--- a/frontend/src/screens/ReadinessScreen.tsx
++++ b/frontend/src/screens/ReadinessScreen.tsx
+@@ -1,7 +1,8 @@
+ import "./readiness.css";
+-import { useEffect, useMemo, useRef, useState } from "react";
++import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+ import { ReadinessOverview } from "./ReadinessOverview.tsx";
+-import { ReadinessCharts, type ReadinessIssueFilter } from "./ReadinessCharts.tsx";
++import { type ReadinessIssueFilter } from "./ReadinessCharts.tsx";
++import { ReadinessRowsTab } from "./ReadinessRowsTab.tsx";
+ export type { ReadinessIssueFilter } from "./ReadinessCharts.tsx";
+ import { t, useLanguage } from "../i18n/index.ts";
+ import { buildProductTimelines, createCorrectionReport, detectDateFormatCandidate, safeSpreadsheetCell, type ConfirmedDateFormat, type DateFormatConfirmation, type MappingState, type ParsedDataset, type ReadinessSnapshot } from "../engine.ts";
+@@ -36,10 +37,13 @@ export function findingsCsv(findings: readonly Finding[], source: string, analys
+     })];
+   return "\uFEFF" + rows.map(row => row.map(value => '"' + safeSpreadsheetCell(String(value)).replace(/"/g, '""') + '"').join(",")).join("\r\n") + "\r\n";
+ }
+-function FindingGroup({ type, label, items }: { type: FindingType; label: string; items: readonly Finding[] }) {
++function FindingGroup({ type, label, items, openToken = 0 }: { type: FindingType; label: string; items: readonly Finding[]; openToken?: number }) {
+   const [expanded, setExpanded] = useState(false);
++  const ref = useRef<HTMLDetailsElement>(null);
+   useEffect(() => setExpanded(false), [items.length]);
+-  return <details className={"rd-finding-group rd-finding-group--" + type}>
++  /* The Rows tab opens a group and brings it into view. */
++  useEffect(() => { if (openToken && ref.current) { ref.current.open = true; ref.current.scrollIntoView?.({ behavior: "smooth", block: "start" }); } }, [openToken]);
++  return <details ref={ref} className={"rd-finding-group rd-finding-group--" + type}>
+     <summary><span className="rd-group-icon" aria-hidden="true">{type === "tidy" ? "✓" : "!"}</span><span><b>{t(label)}</b><small>{items.length} {t(type === "stock" ? "stock checks" : type === "tidy" ? "completed items" : "items")}</small></span><span className="rd-toggle" aria-hidden="true">⌄</span></summary>
+     <ul>{(expanded ? items : items.slice(0, 25)).map(item => <li className="rd-finding" key={item.id}>
+       <div className="rd-finding__who"><b>{item.name === "Unknown product" ? t(item.name) : item.name}</b><small className="num">{item.code}{item.sourceRows.length ? " · " + t("Rows") + " " + item.sourceRows.join(", ") : ""}</small></div>
+@@ -58,8 +62,9 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+   const [filters, setFilters] = useState(EMPTY_FILTERS), [popover, setPopover] = useState(false);
+   const [field, setField] = useState<FilterField | null>(null), [filterSearch, setFilterSearch] = useState("");
+   const [evidencePage, setEvidencePage] = useState(0), [compact, setCompact] = useState(false);
++  const [view, setView] = useState<"products" | "rows">("products"), [openGroup, setOpenGroup] = useState<{ type: FindingType; token: number } | null>(null);
+   const popoverContainer = useRef<HTMLDivElement>(null), filterButton = useRef<HTMLButtonElement>(null), filterInput = useRef<HTMLInputElement>(null);
+-  useEffect(() => { setFilters(EMPTY_FILTERS); setEvidencePage(0); setPopover(false); }, [props.snapshot.id]);
++  useEffect(() => { setFilters(EMPTY_FILTERS); setEvidencePage(0); setPopover(false); setView("products"); setOpenGroup(null); }, [props.snapshot.id]);
+   useEffect(() => { setFilters(current => ({ ...current, type: props.filter ? [CHART_TO_TYPE[props.filter]] : [] })); }, [props.filter]);
+   useEffect(() => {
+     const scroll = () => setCompact(previous => window.scrollY > (previous ? 40 : 140));
+@@ -93,6 +98,13 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+   const title = products.length === 0 || props.snapshot.reconciliation.rowsUsed === 0 ? "Your data needs corrections" : counts.missing > 0 || counts.review > 0 ? "Your data is mostly ready" : "Your data is ready";
+   const unavailable = props.checking || props.forecasting || props.snapshot.reconciliation.rowsUsed === 0;
+   const continueButton = <button type="button" className="btn btn--primary" onClick={props.onContinue} disabled={unavailable} aria-busy={props.forecasting}>{t(props.forecasting ? "Estimating demand locally…" : "Continue to purchase planning →")}</button>;
++  const downloadEvidence = () => downloadText(createCorrectionReport(props.snapshot).csvText, props.reportFilename);
++  const showGroup = (type: FindingType) => { setFilters({ ...EMPTY_FILTERS, type: [type] }); setOpenGroup({ type, token: Date.now() }); };
++  const views = [["products", "🛒", "Products", products.length], ["rows", "📄", "Rows in your file", props.snapshot.reconciliation.rowsIn]] as const;
++  const onViewKey = (event: KeyboardEvent<HTMLButtonElement>) => {
++    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
++    event.preventDefault(); const next = view === "products" ? "rows" : "products"; setView(next); document.getElementById("readiness-view-" + next)?.focus();
++  };
+   const currentEvidencePage = Math.min(evidencePage, Math.max(0, Math.ceil(findings.length / 25) - 1));
+   return <div className="readiness-screen">
+     <section className={"rd-hero" + (compact ? " rd-hero--compact" : "")}><div className="rd-wrap">
+@@ -102,7 +114,10 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+     </div></section>
+     <div className="rd-wrap rd-main">
+       {props.checking && <p className="notice notice--info" role="status">{t("Refreshing the readiness evidence locally…")}</p>}{props.error && <p className="notice notice--error" role="alert">{t(props.error)}</p>}{props.forecastError && <p className="notice notice--error" role="alert">{t(props.forecastError)}</p>}
+-      <ReadinessOverview snapshot={props.snapshot} timelines={timelines} products={products} />
++      <div className="rd-viewtabs" role="tablist" aria-label={t("Readiness view")}>{views.map(([id, icon, label, count]) => <button key={id} type="button" role="tab" id={"readiness-view-" + id} aria-selected={view === id} aria-controls={"readiness-view-panel-" + id} tabIndex={view === id ? 0 : -1} className="rd-viewtab" onClick={() => setView(id)} onKeyDown={onViewKey}>
++        <span aria-hidden="true">{icon}</span> {t(label)} <span className="rd-viewtab__count num">{count.toLocaleString()}</span></button>)}</div>
++      <div id="readiness-view-panel-products" role="tabpanel" aria-labelledby="readiness-view-products" hidden={view !== "products"}><ReadinessOverview snapshot={props.snapshot} timelines={timelines} products={products} /></div>
++      <div id="readiness-view-panel-rows" role="tabpanel" aria-labelledby="readiness-view-rows" hidden={view !== "rows"} className="rd-card rd-rows-card">{view === "rows" && <ReadinessRowsTab snapshot={props.snapshot} findings={findings} onShowGroup={showGroup} onDownload={downloadEvidence} />}</div>
+       <div className="rd-layout"><section className="rd-card rd-findings" aria-labelledby="readiness-findings-title">
+         <div className="rd-card__head"><span className="rd-group-icon" aria-hidden="true">⌕</span><div><h2 id="readiness-findings-title">{t("What we found")}</h2><p>{props.snapshot.reconciliation.rowsExcluded} {t("rows left out of")} {props.snapshot.reconciliation.rowsIn.toLocaleString()} · {t("Your file isn't changed")}</p></div><button type="button" className="btn btn--ghost btn--small" onClick={() => downloadText(findingsCsv(shown, props.dataset.sourceName, props.snapshot.analysisDate, props.dataset.worksheetName, props.snapshot.sourceMode, filtered), props.reportFilename.replace(/\.csv$/i, filtered ? "-filtered.csv" : ".csv"))}>{t("Download list")}</button></div>
+         <div className="rd-filterbar"><div className="rd-add-filter" ref={popoverContainer}><button type="button" ref={filterButton} className="rd-filter-button" aria-expanded={popover} aria-controls="readiness-filter-menu" onClick={() => { setPopover(!popover); setField(null); setFilterSearch(""); }}>{t("Add filter")} +</button>
+@@ -113,12 +128,12 @@ export function ReadinessScreen(props: ReadinessScreenProps) {
+           </div>}
+         </div>{(Object.keys(FIELD_LABELS) as FilterField[]).filter(key => filters[key].length).map(key => <span className="rd-filter-chip" key={key}><b>{t(FIELD_LABELS[key])}:</b> {filters[key].map(value => t(filterValues[key].find(([id]) => id === value)?.[1] ?? value)).join(", ")}<button type="button" aria-label={t("Remove filter") + ": " + t(FIELD_LABELS[key])} onClick={() => { setFilters(current => ({ ...current, [key]: [] })); if (key === "type") props.onFilter(null); }}>×</button></span>)}<span className="rd-filter-count">{shown.length} / {findings.length}</span></div>
+         {dates.length > 0 && <details className="rd-date-options"><summary>{t("Confirm date formats to use these rows")}</summary>{dates.map(({ column, detection }) => <div key={column.id}><b>{column.header}</b><p>{t("Choose the format used by this whole column. Ambiguous dates are excluded until confirmed.")}</p>{detection.candidates.map(format => <button key={format} type="button" className="btn btn--ghost btn--small" disabled={props.checking} onClick={() => props.onConfirmDateFormat(column.id, format)}>{t("Confirm ")}{format}</button>)}</div>)}</details>}
+-        {GROUPS.map(([type, label]) => { const items = shown.filter(item => item.type === type); return items.length ? <FindingGroup key={type} type={type} label={label} items={items} /> : null; })}
++        {GROUPS.map(([type, label]) => { const items = shown.filter(item => item.type === type); return items.length ? <FindingGroup key={type} type={type} label={label} items={items} openToken={openGroup?.type === type ? openGroup.token : 0} /> : null; })}
+         {shown.length === 0 && <p className="rd-empty" role="status">{t(findings.length === 0 ? "No problems found." : "Nothing matches these filters.")}</p>}
+       </section><aside className="rd-sidebar"><section className="rd-card rd-planning"><h2>🌳 {t("Ready for planning")}</h2><div className="rd-used"><span>{t("Rows used")}</span><b className="num">{props.snapshot.reconciliation.rowsUsed.toLocaleString()}</b><small>{t("of ")}{props.snapshot.reconciliation.rowsIn.toLocaleString()}</small></div><ul><li>{counts.ready} {t("products are ready to plan")}</li><li>{counts.review} {t("products can be planned with a note to review")}</li><li>{counts.missing} {t("products need more data before planning")}</li></ul><p>{t("Missing weeks are never counted as zero sales.")}</p>{continueButton}</section><section className="rd-card rd-privacy"><b>✓ {t("Your data stays on your device")}</b><p>{t("Checked in your browser. Your file isn't changed.")}</p></section></aside></div>
+-      <details className="deepdive rd-deepdive"><summary>{t("Show the underlying numbers and charts")}</summary><ReadinessCharts snapshot={props.snapshot} filter={props.filter} onFilter={props.onFilter} />
++      <details className="deepdive rd-deepdive"><summary>{t("See every finding as a table")}</summary>
+         {props.snapshot.duplicateGroups.length > 0 && <div className="rd-card rd-duplicate-summary"><h3>{t("Duplicate rows handled automatically")}</h3><p>{props.snapshot.duplicateGroups.length} {t("duplicate groups")} · {props.snapshot.duplicateGroups.reduce((sum, group) => sum + group.sourceRows.length - 1, 0)} {t("repeated rows left out")}</p></div>}
+-        <section className="rd-card rd-evidence"><div className="rd-card__head"><div><h3>{t("Problems and tidy-ups")}</h3><p>{t("Every finding retains its source rows and original evidence.")}</p></div><button type="button" className="btn btn--ghost btn--small" onClick={() => downloadText(createCorrectionReport(props.snapshot).csvText, props.reportFilename)}>{t("Download all row evidence")}</button></div>
++        <section className="rd-card rd-evidence"><div className="rd-card__head"><div><h3>{t("Problems and tidy-ups")}</h3><p>{t("Every finding retains its source rows and original evidence.")}</p></div><button type="button" className="btn btn--ghost btn--small" onClick={downloadEvidence}>{t("Download all row evidence")}</button></div>
+           <div className="rd-table-scroll"><table><thead><tr><th>{t("Rows")}</th><th>{t("Product")}</th><th>{t("What we found")}</th><th>{t("What to do")}</th><th>{t("Status")}</th></tr></thead><tbody>{findings.slice(currentEvidencePage * 25, currentEvidencePage * 25 + 25).map(item => <tr key={item.id}><td className="num">{item.sourceRows.join(", ") || "—"}</td><td>{item.name} · {item.code}</td><td>{item.observed && <code>{item.observed}</code>}<p>{t(item.reason)}</p></td><td>{t(item.action)}</td><td>{t(OUTCOMES[item.status])}</td></tr>)}</tbody></table></div>
+           {findings.length > 25 && <div className="rd-pager"><button type="button" className="btn btn--ghost btn--small" disabled={currentEvidencePage === 0} onClick={() => setEvidencePage(currentEvidencePage - 1)}>{t("← Previous")}</button><span>{currentEvidencePage + 1} / {Math.ceil(findings.length / 25)}</span><button type="button" className="btn btn--ghost btn--small" disabled={(currentEvidencePage + 1) * 25 >= findings.length} onClick={() => setEvidencePage(currentEvidencePage + 1)}>{t("Next →")}</button></div>}
+         </section>
+diff --git a/frontend/src/screens/readiness.css b/frontend/src/screens/readiness.css
+index 5857694..e65badb 100644
+--- a/frontend/src/screens/readiness.css
++++ b/frontend/src/screens/readiness.css
+@@ -201,3 +201,52 @@
+ 
+ .readiness-screen .rd-filter-chip { max-width: 100%; flex-wrap: wrap; overflow-wrap: anywhere; }
+ @media (max-width: 600px) { .readiness-screen .rd-file { display: grid; grid-template-columns: 40px minmax(0,1fr); width: 100%; } .readiness-screen .rd-file button { grid-column: 2; justify-self: start; text-align: left; } }
++
++/* ===== Products · Rows tabs (the "underlying numbers" moved to the top) ===== */
++.readiness-screen .rd-viewtabs { display: flex; gap: 6px; padding: 6px; margin-bottom: 18px; border-radius: 16px; background: var(--rd-band); border: 1px solid var(--line-soft); }
++.readiness-screen .rd-viewtab { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; border: 0; border-radius: 12px; background: transparent; cursor: pointer; font: 700 16px var(--display); color: var(--muted); transition: background-color .2s, color .2s, box-shadow .2s; }
++.readiness-screen .rd-viewtab:hover { color: var(--ink); }
++.readiness-screen .rd-viewtab[aria-selected="true"] { background: white; color: var(--teal-deep); box-shadow: 0 4px 12px rgba(22,49,59,.10); }
++.readiness-screen .rd-viewtab:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
++.readiness-screen .rd-viewtab__count { flex: none; white-space: nowrap; padding: 2px 9px; border-radius: 999px; background: #dce8e4; font-size: 12px; color: var(--muted); }
++.readiness-screen .rd-viewtab[aria-selected="true"] .rd-viewtab__count { background: var(--teal-deep); color: white; }
++.readiness-screen .rd-rows-card { margin-bottom: 20px; overflow: visible; }
++.readiness-screen .rd-rows { display: flex; flex-direction: column; gap: 14px; padding: 22px 24px; }
++.readiness-screen .rd-rows__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
++.readiness-screen .rd-rows__headline { margin: 0; font-size: 18px; color: var(--muted); }
++.readiness-screen .rd-rows__headline b { font-family: var(--display) !important; font-weight: 800 !important; font-size: 34px !important; line-height: 1; color: var(--teal-deep); }
++.readiness-screen .rd-rows__safe { padding: 6px 12px; border-radius: 999px; background: var(--teal-tint); font: 700 13px var(--display); color: var(--teal-deep); }
++.readiness-screen .rd-rows__bar { display: flex; height: 22px; border-radius: 11px; overflow: hidden; background: var(--line-soft); }
++.readiness-screen .rd-rows__used { background: var(--teal); }
++.readiness-screen .rd-rows__out { min-width: 18px; background: var(--amber-strong); }
++.readiness-screen .rd-rows__legend { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; padding: 0; list-style: none; font-size: 14px; color: var(--muted); }
++.readiness-screen .rd-rows__legend li { display: inline-flex; align-items: center; gap: 6px; }
++.readiness-screen .rd-rows__key { width: 12px; height: 12px; border-radius: 3px; }
++.readiness-screen .rd-rows__key--used { background: var(--teal); }
++.readiness-screen .rd-rows__key--out { background: var(--amber-strong); }
++.readiness-screen .rd-rows__key--tidy { border: 2px solid var(--teal); }
++.readiness-screen .rd-rows__none { margin: 0; padding: 16px; border-radius: 14px; background: var(--teal-tint); color: var(--teal-deep); font-weight: 700; }
++.readiness-screen .rd-rows__grid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 16px; }
++.readiness-screen .rd-rows h3.rd-rows__h { margin: 0 0 6px; font: 800 12px var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
++.readiness-screen .rd-rows__reasons { padding: 16px; border-radius: 16px; background: #f7faf9; }
++.readiness-screen .rd-rows__reason { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border: 1px solid transparent; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; font: inherit; color: var(--ink); }
++.readiness-screen .rd-rows__reason:hover { background: white; border-color: var(--line); }
++.readiness-screen .rd-rows__reason.is-on { background: white; border-color: var(--mint); box-shadow: 0 2px 8px rgba(22,49,59,.06); }
++.readiness-screen .rd-rows__label { flex: 1; font-size: 15px; }
++.readiness-screen .rd-rows__meter { width: 120px; height: 8px; border-radius: 4px; background: var(--line-soft); overflow: hidden; }
++.readiness-screen .rd-rows__meter span { display: block; height: 100%; border-radius: 4px; background: var(--amber-strong); }
++.readiness-screen .rd-rows__reason b { width: 32px; text-align: right; }
++.readiness-screen .rd-rows__todo { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border-radius: 16px; border: 1.5px solid #cfe4de; background: #f3faf7; }
++.readiness-screen .rd-rows__todo h3.rd-rows__h { color: var(--teal-deep); }
++.readiness-screen .rd-rows__todo > b { font: 700 18px var(--display); }
++.readiness-screen .rd-rows__todo p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
++.readiness-screen .rd-rows__where code { font-size: 13px; }
++.readiness-screen .rd-rows__note { color: var(--muted) !important; font-size: 14px !important; }
++.readiness-screen .rd-rows__links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: auto; padding-top: 6px; }
++@media (max-width: 760px) {
++  .readiness-screen .rd-viewtab { font-size: 14px; min-height: 44px; gap: 6px; padding: 4px 6px; line-height: 1.2; }
++  .readiness-screen .rd-viewtab > span[aria-hidden] { display: none; }
++  .readiness-screen .rd-rows { padding: 16px; }
++  .readiness-screen .rd-rows__grid { grid-template-columns: minmax(0,1fr); }
++  .readiness-screen .rd-rows__meter { width: 64px; }
++}
+diff --git a/frontend/tests/readiness-tabs.test.tsx b/frontend/tests/readiness-tabs.test.tsx
+new file mode 100644
+index 0000000..3548865
+--- /dev/null
++++ b/frontend/tests/readiness-tabs.test.tsx
+@@ -0,0 +1,53 @@
++import { afterEach, describe, expect, it, vi } from "vitest";
++import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
++import { ReadinessRowsTab, summariseRows } from "../src/screens/ReadinessRowsTab.tsx";
++import { buildProductTimelines } from "../src/engine.ts";
++import { buildFindings, buildReadinessProducts } from "../src/readiness/model.ts";
++import { setLanguage } from "../src/i18n/index.ts";
++import { makeEvidence } from "./fixtures.ts";
++
++afterEach(() => { cleanup(); setLanguage("en"); });
++
++function withOneBadDate() {
++  const { snapshot } = makeEvidence();
++  const sourceRow = snapshot.rows[0].sourceRow;
++  const issue = { id: "date-issue", sourceRow, issueCode: "INVALID_DATE" as const, observedValue: "2026-13-45", reason: "Invalid date", correctiveAction: "Fix date", resolutionState: "unresolved" as const };
++  const changed = {
++    ...snapshot,
++    rows: snapshot.rows.map((row, index) => index === 0 ? { ...row, useState: "excluded" as const } : row),
++    issues: [issue],
++    reconciliation: { ...snapshot.reconciliation, rowsUsed: snapshot.rows.length - 1, rowsExcluded: 1 },
++  };
++  const findings = buildFindings(changed, buildReadinessProducts(changed, buildProductTimelines(changed)));
++  return { snapshot: changed, findings };
++}
++
++describe("Step 3 rows tab", () => {
++  it("counts every left-out row exactly once", () => {
++    const { snapshot, findings } = withOneBadDate();
++    const summary = summariseRows(snapshot, findings);
++    expect(summary.rowsUsed).toBe(snapshot.rows.length - 1);
++    expect(summary.reasons.reduce((sum, reason) => sum + reason.rows, 0)).toBe(1);
++  });
++
++  it("shows the headline, the reasons and a next step that links to What we found", () => {
++    const { snapshot, findings } = withOneBadDate();
++    const onShowGroup = vi.fn(), onDownload = vi.fn();
++    render(<ReadinessRowsTab snapshot={snapshot} findings={findings} onShowGroup={onShowGroup} onDownload={onDownload} />);
++    const tab = screen.getByTestId("readiness-rows-tab");
++    expect(tab.textContent).toContain(`of ${snapshot.rows.length} rows will be used`);
++    const reasons = screen.getByRole("radiogroup", { name: "Why 1 row was left out" });
++    expect(within(reasons).getAllByRole("radio")).toHaveLength(1);
++    expect(screen.getByText("Fix 1 row in your file")).toBeTruthy();
++    const link = screen.queryByRole("button", { name: /Show these rows/ });
++    if (link) { fireEvent.click(link); expect(onShowGroup).toHaveBeenCalledOnce(); }
++    fireEvent.click(screen.getByRole("button", { name: "Download all row evidence" }));
++    expect(onDownload).toHaveBeenCalledOnce();
++  });
++
++  it("says there is nothing to fix when every row is used", () => {
++    const { snapshot } = makeEvidence();
++    render(<ReadinessRowsTab snapshot={snapshot} findings={[]} onShowGroup={vi.fn()} onDownload={vi.fn()} />);
++    expect(screen.getByText("Nothing to fix — every row can be used.")).toBeTruthy();
++  });
++});
+-- 
+2.43.0
+
